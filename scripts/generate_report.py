@@ -184,7 +184,7 @@ def build_prompt(base_dir: Path) -> str:
         instructions = f.read()
 
     # Load the style reference
-    style_path = base_dir / 'report-style.html'
+    style_path = Path(__file__).resolve().parent / 'report-style.html'
     with open(style_path) as f:
         style_ref = f.read()
 
@@ -249,8 +249,9 @@ def main():
         # Try relative to script location
         base_dir = Path(__file__).resolve().parent.parent
 
-    if not (base_dir / 'report-style.html').exists():
-        print(f"Error: Cannot find report-style.html in {base_dir}", file=sys.stderr)
+    script_dir = Path(__file__).resolve().parent
+    if not (script_dir / 'report-style.html').exists():
+        print(f"Error: Cannot find report-style.html in {script_dir}", file=sys.stderr)
         sys.exit(1)
 
     output_path = args.output or (base_dir / 'dist' / 'public' / 'report.html')
