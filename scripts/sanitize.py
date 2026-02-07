@@ -3,7 +3,7 @@
 Data Sanitization for Publication
 
 Produces two output tiers:
-- dist/anthropic/: Full data with personal paths anonymized
+- dist/private/: Full data with personal paths anonymized
 - dist/public/: Aggregate statistics only, no raw task data
 
 Sanitization:
@@ -212,26 +212,26 @@ def main():
         json.dump(project_mapping, f, indent=2)
     print(f"  Mapping saved to {mapping_file}")
 
-    # --- Anthropic tier: full data, paths sanitized ---
-    anthropic_dir = args.output_dir / 'anthropic'
-    print(f"\nGenerating Anthropic tier → {anthropic_dir}/")
+    # --- Private tier: full data, paths sanitized ---
+    private_dir = args.output_dir / 'private'
+    print(f"\nGenerating Private tier → {private_dir}/")
 
     # Sanitize data/ files
     for json_file in sorted(args.data_dir.glob('*.json')):
-        out_file = anthropic_dir / 'data' / json_file.name
+        out_file = private_dir / 'data' / json_file.name
         sanitize_json_file(json_file, out_file, project_mapping)
         print(f"  Sanitized {json_file.name}")
 
     # Sanitize analysis/ JSON files
     for json_file in sorted(args.analysis_dir.glob('*.json')):
-        out_file = anthropic_dir / 'analysis' / json_file.name
+        out_file = private_dir / 'analysis' / json_file.name
         sanitize_json_file(json_file, out_file, project_mapping)
         print(f"  Sanitized {json_file.name}")
 
     # Copy analysis org/md reports (sanitize text in them too)
     for report_file in sorted(args.analysis_dir.glob('*.*')):
         if report_file.suffix in ('.org', '.md'):
-            out_file = anthropic_dir / 'analysis' / report_file.name
+            out_file = private_dir / 'analysis' / report_file.name
             out_file.parent.mkdir(parents=True, exist_ok=True)
             content = report_file.read_text()
             content = content.replace('/home/shcv/', '/home/user/')
@@ -242,7 +242,7 @@ def main():
 
     # Copy scripts
     src_scripts_dir = base_dir / 'scripts'
-    out_scripts_dir = anthropic_dir / 'scripts'
+    out_scripts_dir = private_dir / 'scripts'
     out_scripts_dir.mkdir(parents=True, exist_ok=True)
     for py_file in sorted(src_scripts_dir.glob('*.py')):
         shutil.copy2(py_file, out_scripts_dir / py_file.name)
@@ -250,12 +250,12 @@ def main():
 
     # Copy methodology
     if (base_dir / 'analysis-process.org').exists():
-        shutil.copy2(base_dir / 'analysis-process.org', anthropic_dir / 'analysis-process.org')
+        shutil.copy2(base_dir / 'analysis-process.org', private_dir / 'analysis-process.org')
 
     # Copy prompts
     prompts_dir = base_dir / 'prompts'
     if prompts_dir.exists():
-        out_prompts = anthropic_dir / 'prompts'
+        out_prompts = private_dir / 'prompts'
         if out_prompts.exists():
             shutil.rmtree(out_prompts)
         shutil.copytree(prompts_dir, out_prompts)
@@ -294,9 +294,9 @@ def main():
     # --- Verification ---
     print("\n--- Verification ---")
 
-    # Check no /home/shcv/ in anthropic output
+    # Check no /home/shcv/ in private output
     violations = 0
-    for out_file in anthropic_dir.rglob('*'):
+    for out_file in private_dir.rglob('*'):
         if out_file.is_file() and out_file.suffix in ('.json', '.org', '.md'):
             content = out_file.read_text()
             if '/home/shcv/' in content:
@@ -304,7 +304,7 @@ def main():
                 violations += 1
 
     if violations == 0:
-        print("  No /home/shcv/ references in anthropic tier")
+        print("  No /home/shcv/ references in private tier")
     else:
         print(f"  {violations} files still contain /home/shcv/")
 
@@ -316,7 +316,7 @@ def main():
         if '"task_id"' in content and '"user_prompt"' in content:
             print(f"  WARNING: {jf} may contain raw task data")
 
-    print(f"\nDone. Anthropic tier: {anthropic_dir}, Public tier: {public_dir}")
+    print(f"\nDone. Private tier: {private_dir}, Public tier: {public_dir}")
 
 
 if __name__ == '__main__':
