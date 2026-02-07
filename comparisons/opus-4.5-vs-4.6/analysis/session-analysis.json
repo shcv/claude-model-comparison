@@ -1,0 +1,120 @@
+{
+  "warmup": [
+    {
+      "model": "opus-4-5",
+      "qualifying_sessions": 91,
+      "early_tasks": 273,
+      "later_tasks": 1515,
+      "early": {
+        "avg_alignment_score": 2.85,
+        "satisfaction_rate": 0.0,
+        "avg_tools_per_file": 4.95,
+        "completion_rate": 24.2
+      },
+      "later": {
+        "avg_alignment_score": 2.85,
+        "satisfaction_rate": 0.0,
+        "avg_tools_per_file": 4.5,
+        "completion_rate": 28.0
+      }
+    },
+    {
+      "model": "opus-4-6",
+      "qualifying_sessions": 28,
+      "early_tasks": 84,
+      "later_tasks": 176,
+      "early": {
+        "avg_alignment_score": 2.95,
+        "satisfaction_rate": 0.0,
+        "avg_tools_per_file": 5.68,
+        "completion_rate": 25.0
+      },
+      "later": {
+        "avg_alignment_score": 3.06,
+        "satisfaction_rate": 0.0,
+        "avg_tools_per_file": 5.11,
+        "completion_rate": 33.5
+      }
+    }
+  ],
+  "effort_distribution": [
+    {
+      "model": "opus-4-5",
+      "tasks_analyzed": 1341,
+      "avg_research_ratio": 0.283,
+      "avg_impl_ratio": 0.27,
+      "tasks_with_frontload_data": 868,
+      "avg_frontload_score": 0.158,
+      "frontload_positive_pct": 54.3
+    },
+    {
+      "model": "opus-4-6",
+      "tasks_analyzed": 268,
+      "avg_research_ratio": 0.351,
+      "avg_impl_ratio": 0.175,
+      "tasks_with_frontload_data": 194,
+      "avg_frontload_score": 0.188,
+      "frontload_positive_pct": 59.3
+    }
+  ],
+  "session_length": [
+    {
+      "model": "opus-4-5",
+      "buckets": {
+        "short (1-3)": {
+          "sessions": 135,
+          "tasks": 198,
+          "avg_alignment_score": 2.93,
+          "satisfaction_rate": 0.0,
+          "completion_rate": 33.3,
+          "avg_tools_per_file": 5.56
+        },
+        "medium (4-8)": {
+          "sessions": 45,
+          "tasks": 261,
+          "avg_alignment_score": 2.93,
+          "satisfaction_rate": 0.0,
+          "completion_rate": 30.3,
+          "avg_tools_per_file": 4.85
+        },
+        "long (9+)": {
+          "sessions": 58,
+          "tasks": 1576,
+          "avg_alignment_score": 2.85,
+          "satisfaction_rate": 0.0,
+          "completion_rate": 27.0,
+          "avg_tools_per_file": 4.49
+        }
+      }
+    },
+    {
+      "model": "opus-4-6",
+      "buckets": {
+        "short (1-3)": {
+          "sessions": 26,
+          "tasks": 60,
+          "avg_alignment_score": 3.53,
+          "satisfaction_rate": 0.0,
+          "completion_rate": 41.7,
+          "avg_tools_per_file": 4.76
+        },
+        "medium (4-8)": {
+          "sessions": 27,
+          "tasks": 139,
+          "avg_alignment_score": 3.16,
+          "satisfaction_rate": 0.0,
+          "completion_rate": 37.4,
+          "avg_tools_per_file": 4.74
+        },
+        "long (9+)": {
+          "sessions": 11,
+          "tasks": 161,
+          "avg_alignment_score": 2.96,
+          "satisfaction_rate": 0.0,
+          "completion_rate": 28.6,
+          "avg_tools_per_file": 5.66
+        }
+      }
+    }
+  ]
+}

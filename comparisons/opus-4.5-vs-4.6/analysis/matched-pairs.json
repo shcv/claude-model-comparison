@@ -1,0 +1,230 @@
+{
+  "pairs": [
+    {
+      "opus_4_5_task_id": "6692fb6b-c7f5-4e38-a701-e945264d4d55-task-2",
+      "opus_4_6_task_id": "3b28b8e1-7f19-48aa-8205-c6846b71909c-task-13",
+      "match_criteria": {
+        "type": "refactor",
+        "opus_4_5_lines": 845,
+        "opus_4_6_lines": 596,
+        "complexity": "complex"
+      },
+      "comparison": {
+        "opus_4_5_tools": 43,
+        "opus_4_6_tools": 64,
+        "opus_4_5_duration": 228.4,
+        "opus_4_6_duration": 1653.7,
+        "opus_4_5_outcome": "dissatisfaction",
+        "opus_4_6_outcome": "dissatisfaction",
+        "opus_4_5_tools_per_100_lines": 5.09,
+        "opus_4_6_tools_per_100_lines": 10.74
+      },
+      "notes": "Opus was faster (228s vs 1654s). Fudge used 21 more tools",
+      "winner": "opus-4-5"
+    },
+    {
+      "opus_4_5_task_id": "05439efe-da57-4de2-9993-76f16f385611-task-4",
+      "opus_4_6_task_id": "27e85e1e-c11d-4b0f-b631-e293802ae138-task-23",
+      "match_criteria": {
+        "type": "unknown",
+        "opus_4_5_lines": 636,
+        "opus_4_6_lines": 822,
+        "complexity": "major/complex"
+      },
+      "comparison": {
+        "opus_4_5_tools": 100,
+        "opus_4_6_tools": 6,
+        "opus_4_5_duration": 3806.0,
+        "opus_4_6_duration": 343.2,
+        "opus_4_5_outcome": "dissatisfaction",
+        "opus_4_6_outcome": "dissatisfaction",
+        "opus_4_5_tools_per_100_lines": 15.72,
+        "opus_4_6_tools_per_100_lines": 0.73
+      },
+      "notes": "Fudge was faster (343s vs 3806s). Opus used 94 more tools",
+      "winner": "opus-4-6"
+    },
+    {
+      "opus_4_5_task_id": "10dc91df-7fa1-4f99-90af-808e96e85bc7-task-20",
+      "opus_4_6_task_id": "a1e1a8c4-c507-4a98-9151-9d1af1e1d64f-task-4",
+      "match_criteria": {
+        "type": "investigation",
+        "opus_4_5_lines": 32,
+        "opus_4_6_lines": 27,
+        "complexity": "moderate"
+      },
+      "comparison": {
+        "opus_4_5_tools": 12,
+        "opus_4_6_tools": 13,
+        "opus_4_5_duration": 456.2,
+        "opus_4_6_duration": 67.7,
+        "opus_4_5_outcome": "satisfaction",
+        "opus_4_6_outcome": "dissatisfaction",
+        "opus_4_5_tools_per_100_lines": 37.5,
+        "opus_4_6_tools_per_100_lines": 48.15
+      },
+      "notes": "Opus achieved satisfaction while Fudge resulted in dissatisfaction. Fudge used 1 more tools",
+      "winner": "opus-4-5"
+    },
+    {
+      "opus_4_5_task_id": "3554856d-b79d-4090-bd88-f255beae3ec1-task-18",
+      "opus_4_6_task_id": "3b28b8e1-7f19-48aa-8205-c6846b71909c-task-11",
+      "match_criteria": {
+        "type": "unknown",
+        "opus_4_5_lines": 0,
+        "opus_4_6_lines": 17,
+        "complexity": "simple"
+      },
+      "comparison": {
+        "opus_4_5_tools": 5,
+        "opus_4_6_tools": 5,
+        "opus_4_5_duration": 20.1,
+        "opus_4_6_duration": 47.6,
+        "opus_4_5_outcome": "satisfaction",
+        "opus_4_6_outcome": "dissatisfaction",
+        "opus_4_5_tools_per_100_lines": null,
+        "opus_4_6_tools_per_100_lines": 29.41
+      },
+      "notes": "Opus achieved satisfaction while Fudge resulted in dissatisfaction",
+      "winner": "opus-4-5"
+    },
+    {
+      "opus_4_5_task_id": "c98c28da-011e-4006-adc3-458aa6cece12-task-38",
+      "opus_4_6_task_id": "a1e1a8c4-c507-4a98-9151-9d1af1e1d64f-task-2",
+      "match_criteria": {
+        "type": "refactor",
+        "opus_4_5_lines": 16,
+        "opus_4_6_lines": 0,
+        "complexity": "simple"
+      },
+      "comparison": {
+        "opus_4_5_tools": 3,
+        "opus_4_6_tools": 6,
+        "opus_4_5_duration": 20.8,
+        "opus_4_6_duration": 86.8,
+        "opus_4_5_outcome": "dissatisfaction",
+        "opus_4_6_outcome": "dissatisfaction",
+        "opus_4_5_tools_per_100_lines": 18.75,
+        "opus_4_6_tools_per_100_lines": null
+      },
+      "notes": "Opus was faster (21s vs 87s). Fudge used 3 more tools",
+      "winner": "opus-4-5"
+    },
+    {
+      "opus_4_5_task_id": "7d0bf8d5-c104-439b-8597-05ea35367b24-task-15",
+      "opus_4_6_task_id": "0b54230d-baaf-481b-aa57-6586c690d52d-task-3",
+      "match_criteria": {
+        "type": "unknown",
+        "opus_4_5_lines": 9,
+        "opus_4_6_lines": 0,
+        "complexity": "trivial"
+      },
+      "comparison": {
+        "opus_4_5_tools": 3,
+        "opus_4_6_tools": 0,
+        "opus_4_5_duration": 26.4,
+        "opus_4_6_duration": 0,
+        "opus_4_5_outcome": "satisfaction",
+        "opus_4_6_outcome": "satisfaction",
+        "opus_4_5_tools_per_100_lines": 33.33,
+        "opus_4_6_tools_per_100_lines": null
+      },
+      "notes": "Fudge was faster (0s vs 26s). Opus used 3 more tools",
+      "winner": "opus-4-6"
+    },
+    {
+      "opus_4_5_task_id": "05439efe-da57-4de2-9993-76f16f385611-task-3",
+      "opus_4_6_task_id": "12411441-e95e-469d-8385-47c7b21d909d-task-4",
+      "match_criteria": {
+        "type": "unknown",
+        "opus_4_5_lines": 0,
+        "opus_4_6_lines": 0,
+        "complexity": "trivial"
+      },
+      "comparison": {
+        "opus_4_5_tools": 0,
+        "opus_4_6_tools": 2,
+        "opus_4_5_duration": 0,
+        "opus_4_6_duration": 18.1,
+        "opus_4_5_outcome": "dissatisfaction",
+        "opus_4_6_outcome": "satisfaction",
+        "opus_4_5_tools_per_100_lines": null,
+        "opus_4_6_tools_per_100_lines": null
+      },
+      "notes": "Fudge achieved satisfaction while Opus resulted in dissatisfaction. Fudge used 2 more tools",
+      "winner": "opus-4-6"
+    },
+    {
+      "opus_4_5_task_id": "2445a502-25d9-4ace-a869-f45073247d21-task-3",
+      "opus_4_6_task_id": "6ec36123-fb43-4691-ab00-383e238641a1-task-5",
+      "match_criteria": {
+        "type": "greenfield",
+        "opus_4_5_lines": 0,
+        "opus_4_6_lines": 0,
+        "complexity": "trivial"
+      },
+      "comparison": {
+        "opus_4_5_tools": 1,
+        "opus_4_6_tools": 0,
+        "opus_4_5_duration": 4.3,
+        "opus_4_6_duration": 3.6,
+        "opus_4_5_outcome": "dissatisfaction",
+        "opus_4_6_outcome": "satisfaction",
+        "opus_4_5_tools_per_100_lines": null,
+        "opus_4_6_tools_per_100_lines": null
+      },
+      "notes": "Fudge achieved satisfaction while Opus resulted in dissatisfaction. Opus used 1 more tools",
+      "winner": "opus-4-6"
+    },
+    {
+      "opus_4_5_task_id": "2445a502-25d9-4ace-a869-f45073247d21-task-5",
+      "opus_4_6_task_id": "3b28b8e1-7f19-48aa-8205-c6846b71909c-task-14",
+      "match_criteria": {
+        "type": "investigation",
+        "opus_4_5_lines": 0,
+        "opus_4_6_lines": 0,
+        "complexity": "trivial"
+      },
+      "comparison": {
+        "opus_4_5_tools": 2,
+        "opus_4_6_tools": 0,
+        "opus_4_5_duration": 38.5,
+        "opus_4_6_duration": 0.8,
+        "opus_4_5_outcome": "dissatisfaction",
+        "opus_4_6_outcome": "dissatisfaction",
+        "opus_4_5_tools_per_100_lines": null,
+        "opus_4_6_tools_per_100_lines": null
+      },
+      "notes": "Fudge was faster (1s vs 38s). Opus used 2 more tools",
+      "winner": "opus-4-6"
+    },
+    {
+      "opus_4_5_task_id": "0d3b2f37-9939-4e07-b887-cadd1ccfb9a2-task-7",
+      "opus_4_6_task_id": "627078d6-250f-4c0a-b164-728eb4b2a9e4-task-11",
+      "match_criteria": {
+        "type": "unknown",
+        "opus_4_5_lines": 1231,
+        "opus_4_6_lines": 979,
+        "complexity": "complex"
+      },
+      "comparison": {
+        "opus_4_5_tools": 17,
+        "opus_4_6_tools": 20,
+        "opus_4_5_duration": 223.3,
+        "opus_4_6_duration": 650.2,
+        "opus_4_5_outcome": "new_task",
+        "opus_4_6_outcome": "dissatisfaction",
+        "opus_4_5_tools_per_100_lines": 1.38,
+        "opus_4_6_tools_per_100_lines": 2.04
+      },
+      "notes": "Similar performance, no clear winner. Fudge used 3 more tools",
+      "winner": "tie"
+    }
+  ],
+  "summary": {
+    "opus_4_5_wins": 4,
+    "opus_4_6_wins": 5,
+    "ties": 1,
+    "avg_efficiency_diff": -0.49
+  }
+}

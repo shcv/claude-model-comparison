@@ -1,0 +1,28 @@
+{
+  "name": "refactoring-extract-module",
+  "description": "Refactoring task: extract a module from monolithic code while keeping tests passing. Tests Opus 4.6's higher dissatisfaction rate on refactoring tasks.",
+  "original_model": "none",
+  "original_metrics": {},
+  "setup": {
+    "type": "greenfield",
+    "context_sources": []
+  },
+  "prompt_file": "../prompts/refactoring.txt",
+  "verification": {
+    "commands": [
+      "python -m pytest tests/ -v 2>&1",
+      "test -f src/parser.py && echo 'parser module exists'",
+      "test -f src/formatter.py && echo 'formatter module exists'",
+      "python -c \"from src.parser import parse_config; print('import ok')\"",
+      "python -c \"from src.formatter import format_output; print('import ok')\""
+    ],
+    "success_patterns": [
+      "passed",
+      "parser module exists",
+      "formatter module exists"
+    ]
+  },
+  "test_both_models": true,
+  "expected_behavioral_difference": "Opus 4.6 showed higher dissatisfaction on refactoring tasks; this tests whether it takes a different approach to refactoring",
+  "measures": ["tool_count", "files_touched", "lines_changed", "test_pass_rate", "duration"]
+}

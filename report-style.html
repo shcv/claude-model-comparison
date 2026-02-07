@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Report Component Reference</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+        <style>
+        :root {
+            --dark: #141413;
+            --light: #faf9f5;
+            --mid-gray: #b0aea5;
+            --light-gray: #e8e6dc;
+            --orange: #d97757;
+            --blue: #6a9bcc;
+            --green: #788c5d;
+            --orange-light: #d9775720;
+            --blue-light: #6a9bcc20;
+            --green-light: #788c5d20;
+            --red-soft: #c4705a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Lora', Georgia, serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .page {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 3rem 2rem 4rem;
+        }
+
+        /* -- Header -- */
+        header {
+            border-bottom: 2px solid var(--dark);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+        header .eyebrow {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--orange);
+            margin-bottom: 0.3rem;
+        }
+        header h1 {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--dark);
+        }
+        header .subtitle {
+            font-family: 'Lora', Georgia, serif;
+            font-style: italic;
+            color: var(--mid-gray);
+            margin-top: 0.4rem;
+            font-size: 1.05rem;
+        }
+        header .meta {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.72rem;
+            color: var(--mid-gray);
+            margin-top: 0.8rem;
+            letter-spacing: 0.03em;
+        }
+
+        /* -- Sections -- */
+        section { margin-bottom: 2.5rem; }
+
+        h2 {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 1px solid var(--light-gray);
+            padding-bottom: 0.35rem;
+            margin-bottom: 1rem;
+        }
+
+        h3 {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 1.4rem 0 0.6rem;
+        }
+
+        p { margin-bottom: 0.8rem; max-width: 680px; }
+
+        /* -- Stat Cards -- */
+        .stat-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+        .stat-card {
+            background: white;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            padding: 0.9rem 1rem;
+        }
+        .stat-card .label {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--mid-gray);
+            margin-bottom: 0.15rem;
+        }
+        .stat-card .value {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .stat-card .detail {
+            font-size: 0.78rem;
+            color: var(--mid-gray);
+        }
+        .v-orange { color: var(--orange); }
+        .v-blue   { color: var(--blue); }
+        .v-green  { color: var(--green); }
+        .v-dark   { color: var(--dark); }
+
+        /* -- Tables -- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.2rem;
+            font-size: 0.85rem;
+        }
+        thead th {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.68rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--mid-gray);
+            text-align: left;
+            padding: 0.45rem 0.6rem;
+            border-bottom: 1.5px solid var(--dark);
+            white-space: nowrap;
+        }
+        thead th.right { text-align: right; }
+        tbody td {
+            padding: 0.4rem 0.6rem;
+            border-bottom: 1px solid var(--light-gray);
+            vertical-align: middle;
+        }
+        tbody tr:last-child td { border-bottom: 1.5px solid var(--dark); }
+        td.right { text-align: right; font-variant-numeric: tabular-nums; }
+        td.label-cell {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        td.mono {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-variant-numeric: tabular-nums;
+            font-size: 0.82rem;
+        }
+
+        /* -- Inline Bars -- */
+        .bar-cell {
+            padding: 0.3rem 0.6rem;
+            min-width: 180px;
+        }
+        .bar-pair {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            height: 16px;
+        }
+        .bar-tag {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.6rem;
+            font-weight: 600;
+            width: 14px;
+            flex-shrink: 0;
+            text-align: right;
+            color: var(--mid-gray);
+        }
+        .bar-track {
+            flex: 1;
+            height: 10px;
+            background: var(--light-gray);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.4s ease;
+        }
+        .bar-fill.a { background: var(--orange); }
+        .bar-fill.b { background: var(--blue); }
+        .bar-fill.green { background: var(--green); }
+        .bar-fill.red { background: var(--red-soft); }
+        .bar-val {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.68rem;
+            font-weight: 500;
+            min-width: 34px;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* single bar variant */
+        .bar-single {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            height: 16px;
+        }
+
+        /* -- Callout -- */
+        .callout {
+            background: white;
+            border-left: 3px solid var(--orange);
+            padding: 0.8rem 1rem;
+            margin: 1rem 0 1.2rem;
+            font-size: 0.88rem;
+        }
+        .callout strong {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.78rem;
+        }
+        .callout.blue { border-left-color: var(--blue); }
+        .callout.green { border-left-color: var(--green); }
+
+        /* -- Legend -- */
+        .legend {
+            display: flex;
+            gap: 1.2rem;
+            margin-bottom: 0.8rem;
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: var(--mid-gray);
+        }
+        .legend span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .legend .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            display: inline-block;
+        }
+        .dot-a { background: var(--orange); }
+        .dot-b { background: var(--blue); }
+
+        /* -- Pipeline -- */
+        .pipeline {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin: 1rem 0 1.5rem;
+            flex-wrap: wrap;
+        }
+        .pipe-step {
+            background: white;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            padding: 0.5rem 0.8rem;
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            text-align: center;
+            min-width: 100px;
+        }
+        .pipe-step small {
+            display: block;
+            font-size: 0.6rem;
+            color: var(--mid-gray);
+            font-weight: 400;
+        }
+        .pipe-arrow {
+            font-size: 0.9rem;
+            color: var(--mid-gray);
+            padding: 0 0.3rem;
+        }
+
+        /* -- Side-by-side profile cards -- */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .profile-card {
+            background: white;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            padding: 0.9rem 1rem;
+        }
+        .profile-card p {
+            font-size: 0.82rem;
+            margin: 0.4rem 0 0;
+        }
+
+        /* -- Footer -- */
+        footer {
+            border-top: 1px solid var(--light-gray);
+            padding-top: 1rem;
+            margin-top: 2rem;
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.7rem;
+            color: var(--mid-gray);
+        }
+
+        /* responsive */
+        @media (max-width: 640px) {
+            .page { padding: 1.5rem 1rem; }
+            header h1 { font-size: 1.5rem; }
+            .stat-row { grid-template-columns: 1fr 1fr; }
+            .bar-cell { min-width: 120px; }
+            .profile-grid { grid-template-columns: 1fr; }
+        }
+        </style>
+    </head>
+    <body>
+        <div class="page">
+
+            <!--
+                COMPONENT REFERENCE
+                ===================
+                This file demonstrates each reusable component.
+                Use these patterns in the generated report.
+                Colors: orange = Model A, blue = Model B, green = positive, red-soft = negative.
+                Bar tags: "A" and "B" refer to the two models being compared.
+            -->
+
+            <!-- ===== HEADER ===== -->
+            <header>
+                <div class="eyebrow">Category Label</div>
+                <h1>Report Title</h1>
+                <div class="subtitle">Subtitle with italics and context</div>
+                <div class="meta">Author &middot; Date &middot; Additional context</div>
+            </header>
+
+            <!-- ===== STAT CARDS ===== -->
+            <!-- Use for key headline numbers. 2-4 cards per row. -->
+            <section>
+                <h2>Stat Cards</h2>
+                <div class="stat-row">
+                    <div class="stat-card">
+                        <div class="label">Metric name</div>
+                        <div class="value v-dark">846</div>
+                        <div class="detail">Supporting detail</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Percentage metric</div>
+                        <div class="value v-blue">+6.2pp</div>
+                        <div class="detail">46.4% vs 40.2%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Rate metric</div>
+                        <div class="value v-orange">90%</div>
+                        <div class="detail">vs comparison 56%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Gap metric</div>
+                        <div class="value v-green">+11pp</div>
+                        <div class="detail">67.4% vs 56.6%</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== DUAL-BAR COMPARISON TABLE ===== -->
+            <!-- The primary visualization. Each row compares two models side by side. -->
+            <!-- bar-tag: short label (A/B). bar-fill width: percentage. bar-val: display value. -->
+            <section>
+                <h2>Dual-Bar Comparison Table</h2>
+
+                <div class="legend">
+                    <span><span class="dot dot-a"></span> Model A</span>
+                    <span><span class="dot dot-b"></span> Model B</span>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr><th>Metric</th><th>Distribution</th><th class="right">Model A</th><th class="right">Model B</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="label-cell">Row label</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:40.2%"></div></div><span class="bar-val">40.2%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:46.4%"></div></div><span class="bar-val">46.4%</span></div>
+                            </div></td>
+                            <td class="right mono">221</td>
+                            <td class="right mono">137</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Another metric</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:30.7%"></div></div><span class="bar-val">30.7%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:28.5%"></div></div><span class="bar-val">28.5%</span></div>
+                            </div></td>
+                            <td class="right mono">169</td>
+                            <td class="right mono">84</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- ===== SINGLE-BAR TABLE ===== -->
+            <!-- For showing each model's distribution independently. -->
+            <section>
+                <h2>Single-Bar Table</h2>
+                <table>
+                    <thead>
+                        <tr><th>Type</th><th>Model A share</th><th>Model B share</th><th class="right">A n</th><th class="right">B n</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="label-cell">Category</td>
+                            <td class="bar-cell"><div class="bar-single"><div class="bar-track"><div class="bar-fill a" style="width:32%"></div></div><span class="bar-val">32%</span></div></td>
+                            <td class="bar-cell"><div class="bar-single"><div class="bar-track"><div class="bar-fill b" style="width:72%"></div></div><span class="bar-val">72%</span></div></td>
+                            <td class="right mono">54</td><td class="right mono">133</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- ===== PLAIN TABLE ===== -->
+            <!-- For numeric data without bars. -->
+            <section>
+                <h2>Plain Data Table</h2>
+                <table>
+                    <thead>
+                        <tr><th>Category</th><th class="right">Duration (A / B)</th><th class="right">Tool calls (A / B)</th><th class="right">Files (A / B)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="label-cell">Row</td><td class="right mono">13s / 13s</td><td class="right mono">0 / 0</td><td class="right mono">0 / 0</td></tr>
+                        <tr><td class="label-cell">Row</td><td class="right mono">228s / 337s</td><td class="right mono">32 / 39</td><td class="right mono">4 / 7</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- ===== CALLOUTS ===== -->
+            <!-- Use for key insights. Variants: default (orange), .blue, .green -->
+            <section>
+                <h2>Callouts</h2>
+                <div class="callout">
+                    <strong>Key takeaway:</strong> Default (orange) callout for primary insights.
+                </div>
+                <div class="callout blue">
+                    <strong>Observation:</strong> Blue callout for secondary insights or counter-intuitive findings.
+                </div>
+                <div class="callout green">
+                    <strong>Positive finding:</strong> Green callout for favorable outcomes or confirmations.
+                </div>
+            </section>
+
+            <!-- ===== PIPELINE ===== -->
+            <section>
+                <h2>Pipeline Diagram</h2>
+                <div class="pipeline">
+                    <div class="pipe-step">Step 1<small>detail</small></div>
+                    <span class="pipe-arrow">&rarr;</span>
+                    <div class="pipe-step">Step 2<small>detail</small></div>
+                    <span class="pipe-arrow">&rarr;</span>
+                    <div class="pipe-step">Step 3<small>detail</small></div>
+                    <span class="pipe-arrow">&rarr;</span>
+                    <div class="pipe-step">Step 4<small>detail</small></div>
+                </div>
+            </section>
+
+            <!-- ===== PROFILE CARDS ===== -->
+            <!-- Side-by-side model profiles. Use border-left color to match model. -->
+            <section>
+                <h2>Model Profiles</h2>
+                <div class="profile-grid">
+                    <div class="profile-card" style="border-left:3px solid var(--orange);">
+                        <div class="label" style="color:var(--orange);">Model A Profile</div>
+                        <p>Description of Model A's behavioral characteristics, strengths, and patterns.</p>
+                    </div>
+                    <div class="profile-card" style="border-left:3px solid var(--blue);">
+                        <div class="label" style="color:var(--blue);">Model B Profile</div>
+                        <p>Description of Model B's behavioral characteristics, strengths, and patterns.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== DELTA COLUMN ===== -->
+            <!-- For tables with a winner indicator column -->
+            <section>
+                <h2>Table with Delta Column</h2>
+                <table>
+                    <thead>
+                        <tr><th>Metric</th><th>Bars</th><th class="right">A</th><th class="right">B</th><th class="right">&Delta;</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="label-cell">Metric where A wins</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:56%"></div></div><span class="bar-val">56%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:43%"></div></div><span class="bar-val">43%</span></div>
+                            </div></td>
+                            <td class="right mono">56%</td><td class="right mono">43%</td>
+                            <td class="right mono" style="color:var(--orange)">A +13pp</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Metric where B wins</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:32%"></div></div><span class="bar-val">32%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:67%"></div></div><span class="bar-val">67%</span></div>
+                            </div></td>
+                            <td class="right mono">32%</td><td class="right mono">67%</td>
+                            <td class="right mono" style="color:var(--blue)">B +35pp</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Near-tie metric</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:48%"></div></div><span class="bar-val">48%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:49%"></div></div><span class="bar-val">49%</span></div>
+                            </div></td>
+                            <td class="right mono">48%</td><td class="right mono">49%</td>
+                            <td class="right mono" style="color:var(--mid-gray)">&asymp; Tie</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <footer>
+                Footer text &middot; Context &middot; Date
+            </footer>
+
+        </div>
+    </body>
+</html>

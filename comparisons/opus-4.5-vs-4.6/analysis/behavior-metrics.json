@@ -1,0 +1,169 @@
+{
+  "opus-4-5": {
+    "model": "opus-4-5",
+    "total_tasks": 349,
+    "total_sessions": 89,
+    "tasks_with_subagents": 57,
+    "total_subagent_calls": 169,
+    "subagent_types": {
+      "Explore": 54,
+      "Bash": 27,
+      "general-purpose": 85,
+      "Plan": 3
+    },
+    "subagent_user_requested": 122,
+    "subagent_autonomous": 47,
+    "gp_total": 85,
+    "gp_user_requested": 62,
+    "gp_autonomous": 23,
+    "gp_create_module": 15,
+    "gp_fix_targeted": 13,
+    "gp_other": 57,
+    "tasks_with_planning": 6,
+    "planning_user_requested": 3,
+    "planning_autonomous": 3,
+    "messages_with_tools": 4952,
+    "messages_with_parallel": 0,
+    "max_parallel_tools": 0,
+    "foreground_tasks": 138,
+    "background_tasks": 31,
+    "parallel_directive_tasks": 6,
+    "parallel_directive_agents": 50,
+    "parallel_directive_background": 0,
+    "parallel_directive_per_task": [
+      {
+        "agents": 22,
+        "background": 0
+      },
+      {
+        "agents": 16,
+        "background": 0
+      },
+      {
+        "agents": 2,
+        "background": 0
+      },
+      {
+        "agents": 5,
+        "background": 0
+      },
+      {
+        "agents": 4,
+        "background": 0
+      },
+      {
+        "agents": 1,
+        "background": 0
+      }
+    ],
+    "useagents_directive_tasks": 13,
+    "useagents_directive_agents": 49,
+    "useagents_directive_background": 9,
+    "useagents_directive_per_task": [
+      {
+        "agents": 6,
+        "background": 0
+      },
+      {
+        "agents": 3,
+        "background": 0
+      },
+      {
+        "agents": 1,
+        "background": 0
+      },
+      {
+        "agents": 4,
+        "background": 4
+      },
+      {
+        "agents": 4,
+        "background": 0
+      },
+      {
+        "agents": 5,
+        "background": 0
+      },
+      {
+        "agents": 4,
+        "background": 0
+      },
+      {
+        "agents": 5,
+        "background": 0
+      },
+      {
+        "agents": 6,
+        "background": 0
+      },
+      {
+        "agents": 3,
+        "background": 0
+      },
+      {
+        "agents": 5,
+        "background": 5
+      },
+      {
+        "agents": 2,
+        "background": 0
+      },
+      {
+        "agents": 1,
+        "background": 0
+      }
+    ]
+  },
+  "opus-4-6": {
+    "model": "opus-4-6",
+    "total_tasks": 217,
+    "total_sessions": 61,
+    "tasks_with_subagents": 86,
+    "total_subagent_calls": 186,
+    "subagent_types": {
+      "Explore": 133,
+      "Plan": 16,
+      "general-purpose": 29,
+      "Bash": 7,
+      "claude-code-guide": 1
+    },
+    "subagent_user_requested": 27,
+    "subagent_autonomous": 159,
+    "gp_total": 29,
+    "gp_user_requested": 6,
+    "gp_autonomous": 23,
+    "gp_create_module": 3,
+    "gp_fix_targeted": 9,
+    "gp_other": 17,
+    "tasks_with_planning": 34,
+    "planning_user_requested": 4,
+    "planning_autonomous": 30,
+    "messages_with_tools": 4095,
+    "messages_with_parallel": 0,
+    "max_parallel_tools": 0,
+    "foreground_tasks": 159,
+    "background_tasks": 27,
+    "parallel_directive_tasks": 2,
+    "parallel_directive_agents": 7,
+    "parallel_directive_background": 6,
+    "parallel_directive_per_task": [
+      {
+        "agents": 6,
+        "background": 6
+      },
+      {
+        "agents": 1,
+        "background": 0
+      }
+    ],
+    "useagents_directive_tasks": 1,
+    "useagents_directive_agents": 2,
+    "useagents_directive_background": 0,
+    "useagents_directive_per_task": [
+      {
+        "agents": 2,
+        "background": 0
+      }
+    ]
+  }
+}

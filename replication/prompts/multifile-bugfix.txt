@@ -1,0 +1,56 @@
+I have a small web application with a bug that spans multiple files. First, set up the buggy codebase, then fix it.
+
+## Step 1: Create the buggy application
+
+Create these files:
+
+### src/__init__.py
+Empty init file.
+
+### src/models.py
+A User model class with:
+- `__init__(self, username, email, role='user')`
+- `validate()` method that checks username (alphanumeric, 3-20 chars) and email (contains @)
+- `to_dict()` method
+- `from_dict(cls, data)` classmethod
+- BUG: `to_dict()` serializes `role` as `user_role` but `from_dict()` reads it as `role` — the field name mismatch means round-tripping loses the role
+
+### src/auth.py
+Authentication module with:
+- `create_token(user)` - creates a simple token dict with user data (calls user.to_dict())
+- `verify_token(token)` - verifies and reconstructs User from token data (calls User.from_dict())
+- BUG: verify_token doesn't handle the missing role field, so reconstructed users always get default role='user' even if they were 'admin'
+
+### src/api.py
+Simple API module with:
+- `create_app()` returns a dict of route handlers
+- `handle_login(username, email, role)` - creates user, generates token
+- `handle_profile(token)` - verifies token, returns user profile
+- BUG: handle_profile passes the raw token to verify_token without checking if it's expired (no expiry field added in create_token)
+
+### src/middleware.py
+Request processing with:
+- `check_admin(token)` - verifies token and checks if user has admin role
+- BUG: This calls verify_token which loses the admin role, so admin checks ALWAYS fail
+
+### tests/test_roundtrip.py
+Pytest tests that:
+- Test User creation and validation
+- Test token creation
+- Test token verification roundtrip
+- Test admin role preservation through roundtrip (THIS TEST SHOULD FAIL initially)
+- Test profile endpoint returns correct role
+- At least 10 test functions, with 3-4 initially failing due to the bugs
+
+## Step 2: Verify the bugs exist
+
+Run the tests. Some should fail, confirming the bugs.
+
+## Step 3: Fix the bugs
+
+The root cause is the field name mismatch in models.py `to_dict()`/`from_dict()`. Fix this, and also:
+- Add an expiry timestamp to tokens in auth.py
+- Update verify_token to check expiry
+- Make sure all tests pass after fixes
+
+The fix requires coordinated changes across models.py, auth.py, api.py, and middleware.py.

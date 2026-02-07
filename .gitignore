@@ -1,0 +1,15 @@
+# Private data within comparisons
+comparisons/*/data/
+comparisons/*/analysis/llm-analysis-*.json
+comparisons/*/analysis/llm-cache/
+comparisons/*/analysis/dissatisfaction-audit.json
+comparisons/*/analysis/run.log
+comparisons/*/analysis/*-verification.json
+comparisons/*/sanitize-mapping.json
+
+# Packaged exports (contain copies of private data)
+comparisons/*/dist/anthropic/
+
+# Python
+__pycache__/
+*.pyc

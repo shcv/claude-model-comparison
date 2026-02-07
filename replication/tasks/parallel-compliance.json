@@ -1,0 +1,26 @@
+{
+  "name": "parallel-compliance-test",
+  "description": "Tests whether models use true parallel execution (run_in_background=true) when explicitly asked to run tasks in parallel",
+  "original_model": "none",
+  "original_metrics": {},
+  "setup": {
+    "type": "greenfield",
+    "context_sources": []
+  },
+  "prompt_file": "../prompts/parallel-compliance.txt",
+  "verification": {
+    "commands": [
+      "test -f report.org && echo 'report exists'",
+      "test -f analysis-a.md && echo 'analysis A exists'",
+      "test -f analysis-b.md && echo 'analysis B exists'",
+      "test -f analysis-c.md && echo 'analysis C exists'"
+    ],
+    "success_patterns": [
+      "report exists",
+      "analysis A exists"
+    ]
+  },
+  "test_both_models": true,
+  "expected_behavioral_difference": "Opus 4.6 expected to use run_in_background=true for true parallelism; Opus 4.5 expected to launch agents sequentially",
+  "measures": ["run_in_background_count", "total_agent_spawns", "wall_clock_time"]
+}

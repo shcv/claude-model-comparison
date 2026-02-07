@@ -1,0 +1,384 @@
+#+TITLE: Planning, Subagents, and Parallelization Analysis: Opus 4.5 vs Opus 4.6
+#+DATE: 2026-02-05
+#+OPTIONS: toc:2 num:t
+
+* Executive Summary
+
+Contrary to the intuition that "Opus 4.6 never uses subagents unless asked," the data shows
+*Opus 4.6 uses subagents 3x more frequently and 90% autonomously* (vs 56% for Opus 4.5).
+Opus 4.6 also uses EnterPlanMode 10x more than Opus 4.5.
+
+Interestingly, *neither model uses parallel tool calls* in a single message—every
+assistant message contains exactly 1 tool call. "Parallelization" manifests through
+sequential subagent delegation, not simultaneous tool invocation.
+
+** Key Findings
+
+| Metric | Opus 4.5 | Opus 4.6 | Winner |
+|--------|------|-------|--------|
+| Tasks using subagents | 9.8% | 29.1% | Opus 4.6 (3x) |
+| Tasks using EnterPlanMode | 1.1% | 11.5% | Opus 4.6 (10x) |
+| Autonomous subagent usage | 56% | 90% | Opus 4.6 |
+| Autonomous planning | 67% | 91% | Opus 4.6 |
+| Parallel tool calls | 0% | 0% | Tie |
+| Background Task calls | 18% | 15% | Opus 4.5 (slight) |
+
+* Subagent (Task Tool) Usage
+
+** Overall Statistics
+
+| Metric | Opus 4.5 | Opus 4.6 |
+|--------|------|-------|
+| Total tasks analyzed | 550 | 296 |
+| Tasks with subagents | 54 (9.8%) | 86 (29.1%) |
+| Total Task tool calls | 169 | 186 |
+| Avg calls per using-task | 3.1 | 2.2 |
+| Tasks with 2+ subagents | 30 (5.5%) | 39 (13.2%) |
+
+** Subagent Type Distribution
+
+| Subagent Type | Opus 4.5 | Opus 4.5 % | Opus 4.6 | Opus 4.6 % |
+|---------------|------|--------|-------|---------|
+| Explore | 54 | 32% | 133 | 72% |
+| general-purpose | 85 | 50% | 29 | 16% |
+| Bash | 27 | 16% | 7 | 4% |
+| Plan | 3 | 2% | 16 | 9% |
+
+*Insight*: Opus 4.6 strongly prefers the lightweight Explore agent for investigations,
+while Opus 4.5 uses the heavier general-purpose agent more often.
+
+** Autonomous vs User-Requested (All Subagents)
+
+| Metric | Opus 4.5 | Opus 4.6 |
+|--------|------|-------|
+| User explicitly requested subagents | 24 (44%) | 9 (10%) |
+| Autonomously chose subagents | 30 (56%) | 77 (90%) |
+
+*Key Finding*: Opus 4.6 uses subagents almost entirely autonomously (90%), while
+Opus 4.5 relies more on explicit user requests (44%). This may explain why Opus 4.6's
+subagent use feels "invisible"—it happens quietly without user prompting.
+
+** General-Purpose Agents: The Implementation Gap
+
+The general-purpose agent is the only subagent type capable of full implementation
+work (Read, Write, Edit, etc.). The usage patterns differ dramatically:
+
+| Metric | Opus 4.5 | Opus 4.6 |
+|--------|------|-------|
+| Total general-purpose calls | 85 | 29 |
+| User explicitly requested | 51 (60%) | 6 (21%) |
+| Autonomous | 34 (40%) | 23 (79%) |
+
+*** What Drives Opus 4.5's Heavy Usage?
+
+60% of Opus 4.5's general-purpose usage comes from explicit user instructions,
+primarily the "Iteration workflow" prompt pattern:
+
+#+begin_quote
+"The 'iteration workflow' is to use multiple rounds of subagents..."
+#+end_quote
+
+This instructs the model to delegate implementation to parallel agents.
+
+*** Autonomous General-Purpose: Different Scope
+
+Even when both models autonomously use general-purpose agents, the *scope* differs:
+
+*Opus 4.5 autonomous examples* (substantial implementation):
+- "Implement Peach-Bridge UCP executor"
+- "Remove storage from settings"
+- "Implement Storage Location Edit Mode"
+
+*Opus 4.6 autonomous examples* (targeted fixes):
+- "Fix database.dart query errors"
+- "Fix extensions.dart errors"
+- "Fix pantry_screen.dart errors"
+
+Opus 4.6's autonomous general-purpose usage is typically for *parallel cleanup tasks*
+(e.g., fixing compile errors across multiple files), not delegating core implementation.
+
+*** Implementation Delegation Summary
+
+| Task Scope | Opus 4.5 | Opus 4.6 |
+|------------|------|-------|
+| Create module/file | 15 | 3 |
+| Fix targeted issue | 13 | 9 |
+| Other | 57 | 17 |
+
+*Key Finding*: Opus 4.6 maintains tight control over implementation work. It uses
+subagents heavily for research (Explore: 72%) and planning, but implements
+features itself. Opus 4.5 more readily delegates substantial implementation chunks.
+
+** Multi-Subagent Tasks
+
+Examples of tasks where multiple subagents were launched:
+
+*** Opus 4.5 (30 tasks with 2+ subagents)
+- 22 subagents: "Iteration workflow" (explicit multi-agent instruction)
+- 16 subagents: "Iteration workflow" (explicit multi-agent instruction)
+- 6 subagents: "use subagents to investigate the purpose and structure of each..."
+
+*** Opus 4.6 (39 tasks with 2+ subagents)
+- 10 subagents: "drag and drop should move items between locations..."
+- 7 subagents: "Generate a changelog for version 2.1.27..."
+- 6 subagents: "do another deep investigation, comparing and reviewing..."
+
+* EnterPlanMode Usage
+
+** Overall Statistics
+
+| Metric | Opus 4.5 | Opus 4.6 |
+|--------|------|-------|
+| Tasks using EnterPlanMode | 6 (1.1%) | 34 (11.5%) |
+
+** Autonomous vs User-Requested
+
+| Metric | Opus 4.5 | Opus 4.6 |
+|--------|------|-------|
+| User explicitly requested planning | 2 (33%) | 3 (9%) |
+| Autonomously entered plan mode | 4 (67%) | 31 (91%) |
+
+*Key Finding*: Opus 4.6 enters planning mode autonomously 91% of the time---it proactively
+decides "this task needs planning" much more often than Opus 4.5.
+
+** What Triggers Autonomous Planning?
+
+*** Opus 4.5 Examples
+- "the project root path identification isn't very accurate..."
+- "for the drag and drop reordering of categories/locations..."
+- "The TUI we have now is a bit heavy..."
+
+*** Opus 4.6 Examples
+- "ok, I want to simplify the code so that it is easier to write similar proxies..."
+- "ok; let's start by removing all of the UCPExecutor stuff..."
+- "Add the additional conformance fixtures..."
+- "first, we need to fix the comment confusion..."
+
+* Parallel Tool Calls
+
+** Neither Model Uses Multi-Tool Messages
+
+| Metric | Opus 4.5 | Opus 4.6 |
+|--------|------|-------|
+| Total assistant messages with tools | 4,952 | 4,095 |
+| Messages with >1 tool call | 0 (0%) | 0 (0%) |
+| Max tools per message | 1 | 1 |
+
+Despite system prompts encouraging parallel tool calls ("If you intend to call multiple
+tools and there are no dependencies between them, make all independent calls in the
+same message"), *neither model ever does this* in the analyzed data.
+
+** Directive Compliance: "Parallel" Instructions
+
+When users explicitly request parallel execution, the models differ dramatically:
+
+| Metric | Opus 4.5 | Opus 4.6 |
+|--------|------|-------|
+| Tasks with "parallel" directive | 6 | 2 |
+| Total agents launched | 50 | 7 |
+| Background (true parallel) | 0 (0%) | 6 (86%) |
+
+*** Per-Task Breakdown
+
+| Task | Opus 4.5 Agents | Opus 4.5 BG | Opus 4.6 Agents | Opus 4.6 BG |
+|------|-------------|---------|--------------|----------|
+| 1 | 22 | 0 (0%) | 6 | 6 (100%) |
+| 2 | 16 | 0 (0%) | 1 | 0 (N/A) |
+| 3 | 2 | 0 (0%) | - | - |
+| 4 | 5 | 0 (0%) | - | - |
+| 5 | 4 | 0 (0%) | - | - |
+| 6 | 1 | 0 (0%) | - | - |
+| *Avg* | *8.3* | *0%* | *3.5* | *100%* (multi-agent) |
+
+*Critical Finding*: Opus 4.5 consistently launches agents sequentially (0% background)
+across ALL 6 tasks, even when launching up to 22 agents. Opus 4.6's one multi-agent
+task used 100% background execution.
+
+** General "Use Agents" Directive (Non-Parallel)
+
+When users request agents without explicitly saying "parallel":
+
+| Metric | Opus 4.5 | Opus 4.6 |
+|--------|------|-------|
+| Tasks | 13 | 1 |
+| Total agents | 49 | 2 |
+| Background | 9 (18%) | 0 (0%) |
+
+*Irony*: Opus 4.5 uses background 18% of the time for general "use agents" requests,
+but 0% for explicit "parallel" requests. It's more likely to parallelize when
+NOT asked to!
+
+** Summary: User-Directed Agent Usage
+
+| Directive Type | Opus 4.5 Tasks | Opus 4.5 BG% | Opus 4.6 Tasks | Opus 4.6 BG% |
+|----------------|------------|----------|-------------|-----------|
+| "parallel" | 6 | 0% | 2 | 86% |
+| "use agents" | 13 | 18% | 1 | 0% |
+| *Total* | *19* | *9%* | *3* | *67%* |
+
+*Key Findings*:
+1. Opus 4.5 receives 6x more explicit agent directives (19 vs 3)
+2. Opus 4.5 never follows "parallel" literally (0% background)
+3. Opus 4.6 almost always follows "parallel" literally (86% background)
+4. The user may have learned to prompt Opus 4.5 for agents more explicitly
+
+** What "Parallelization" Actually Means
+
+Both models mention "parallel" approximately equally (~45 times each), but this refers
+to *sequential subagent dispatch*, not simultaneous tool calls.
+
+*** Opus 4.5 Examples
+- "I'll launch parallel agents to implement the core generic components"
+- "launching research agents for UCP and A2A in parallel"
+- "Project Daily Summary (parallel, cached) - Runs concurrently via asyncio.gather()"
+
+*** Opus 4.6 Examples
+- "I'll work on all three implementations in parallel using agents"
+- "Let me dispatch subagents in parallel to handle the different files"
+- "All 6 subagents are running in parallel"
+- "Let me read all three files in parallel" (but doesn't actually do 3 Read calls at once)
+
+* Background Task Execution
+
+| Metric | Opus 4.5 | Opus 4.6 |
+|--------|------|-------|
+| Foreground Task calls | 138 (82%) | 159 (85%) |
+| Background Task calls | 31 (18%) | 27 (15%) |
+
+Both models primarily use foreground (blocking) subagents. Background execution is
+relatively rare for both.
+
+* Behavioral Model Summary
+
+** Opus 4.5 Characteristics
+
+1. *Conservative subagent use* (9.8% of tasks)
+2. *Relies more on explicit user requests* (44% of subagent usage)
+3. *Prefers general-purpose agents* (50% of Task calls)
+4. *Rarely uses EnterPlanMode* (1.1% of tasks)
+5. *When planning, often user-prompted* (33%)
+
+** Opus 4.6 Characteristics
+
+1. *Aggressive subagent use* (29.1% of tasks, 3x Opus 4.5)
+2. *Highly autonomous* (90% of subagent usage is unprompted)
+3. *Prefers lightweight Explore agents* (72% of Task calls)
+4. *Frequently uses EnterPlanMode* (11.5% of tasks, 10x Opus 4.5)
+5. *Almost always plans autonomously* (91%)
+
+** The "Invisible Subagent" Phenomenon
+
+The user observed that Opus 4.6 "never uses subagents unless asked." The data reveals
+a nuanced picture:
+
+- Opus 4.6 uses *more subagents overall* (186 vs 169), mostly autonomously (90%)
+- But Opus 4.6's subagents are *read-only* (Explore 72%, Plan 9%)
+- Opus 4.6 *rarely delegates implementation* (29 general-purpose calls vs Opus 4.5's 85)
+- When Opus 4.6 does delegate implementation, it's for *targeted fixes*, not whole modules
+
+The user's intuition is correct for *implementation subagents*---Opus 4.6 keeps that
+work in-house. The high subagent count comes from lightweight research agents.
+
+** Why This Matters for Task Quality
+
+Opus 4.6's strategy of:
+1. Heavy exploration (Explore agents)
+2. Frequent planning (EnterPlanMode)
+3. Self-implemented features (not delegated)
+
+...correlates with higher satisfaction on complex tasks (+11pp vs Opus 4.5).
+
+Possible mechanisms:
+- Better understanding before implementing (more exploration)
+- Tighter control over implementation details
+- Fewer "telephone game" errors from delegation
+- Planning catches issues before implementation begins
+
+* Performance by Task Complexity
+
+Comparing raw metrics without controlling for complexity is misleading.
+Here we bin tasks by the automated complexity classification.
+
+** Task Distribution
+
+| Complexity | Opus 4.5 | Opus 4.5 % | Opus 4.6 | Opus 4.6 % |
+|------------|----------|------------|----------|------------|
+| trivial | 282 | 51.3% | 119 | 40.2% |
+| simple | 79 | 14.4% | 53 | 17.9% |
+| moderate | 127 | 23.1% | 67 | 22.6% |
+| complex | 53 | 9.6% | 46 | 15.5% |
+
+*Key Finding*: Opus 4.5 has 51% trivial tasks vs Opus 4.6's 40%, while Opus 4.6 has 15.5%
+complex tasks vs Opus 4.5's 9.6%. Opus 4.6 is handling proportionally harder work.
+
+** Duration Comparison (Median, by Complexity)
+
+| Complexity | Opus 4.5 | Opus 4.6 | Difference |
+|------------|----------|----------|------------|
+| trivial | 13s | 13s | 0s |
+| simple | 38s | 47s | +9s |
+| moderate | 114s | 135s | +21s |
+| complex | 228s | 337s | +109s |
+
+Within each complexity bin, Opus 4.6 takes slightly longer, with the gap widening
+for complex tasks. This correlates with Opus 4.6 using more tools and touching
+more files (see below).
+
+** Resource Usage (Median, by Complexity)
+
+| Complexity | Tool Calls (O45/O46) | Files Touched (O45/O46) | Lines Changed (O45/O46) |
+|------------|------------------|---------------------|---------------------|
+| trivial | 0 / 0 | 0 / 0 | 0 / 0 |
+| simple | 5 / 6 | 1 / 1 | 0 / 5 |
+| moderate | 13 / 12 | 2 / 3 | 128 / 135 |
+| complex | 32 / 39 | 4 / 7 | 586 / 515 |
+
+For complex tasks, Opus 4.6 uses more tools (+7), touches more files (+3), but
+changes fewer lines (-71). This suggests more exploration/reading relative
+to writing---consistent with Opus 4.6's heavier use of Explore subagents.
+
+** Quality Metrics by Complexity
+
+| Complexity | Satisfied (O45/O46) | Alignment (O45/O46) | One-shot (O45/O46) |
+|------------|-----------------|-----------------|----------------|
+| trivial | 22.7% / 15.3% | 2.46 / 2.08 | 39.4% / 33.1% |
+| simple | 48.1% / 49.1% | 3.56 / 3.42 | 46.8% / 47.2% |
+| moderate | 49.6% / 58.2% | 3.59 / 3.85 | 45.7% / 55.2% |
+| complex | 56.6% / 67.4% | 3.72 / 3.74 | 41.5% / 52.2% |
+
+*Key Finding*: Opus 4.6 performs progressively better as task complexity increases:
+- Trivial: Opus 4.5 +7pp satisfaction
+- Simple: Tie
+- Moderate: Opus 4.6 +9pp satisfaction
+- Complex: Opus 4.6 +11pp satisfaction
+
+This correlates with Opus 4.6's heavier use of planning and Explore subagents,
+which may provide more value on complex tasks while adding overhead on trivial ones.
+
+** Interpretation
+
+Opus 4.6's aggressive planning and subagent strategy appears optimized for complex work:
+1. For trivial tasks, the overhead of planning/delegation hurts performance
+2. For complex tasks, the upfront investment in understanding pays off
+3. The "one-shot" rate increases with complexity for Opus 4.6 (33%->52%) but not Opus 4.5
+
+Opus 4.5's more conservative approach works well for simpler tasks but doesn't scale
+as effectively to complex work.
+
+* Methodology
+
+** Data Sources
+- 550 Opus 4.5 tasks from sessions-opus-4-5.json
+- 296 Opus 4.6 tasks from sessions-opus-4-6.json
+- Raw JSONL session files for detailed tool call analysis
+
+** Analysis Approach
+1. Extracted tool call details from tasks-deep-*.json
+2. Analyzed raw session JSONL to count tools per assistant message
+3. Pattern-matched user prompts for explicit agent/planning requests
+4. Text-searched agent responses for "parallel" intent mentions
+
+** Limitations
+- Sample from single user's session history
+- Task boundaries determined by user messages, not semantic task completion
+- "Autonomous" detection relies on keyword matching in user prompts

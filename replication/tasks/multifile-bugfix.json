@@ -1,0 +1,26 @@
+{
+  "name": "multifile-bugfix",
+  "description": "Bug requiring coordinated changes across 3+ files. Tests coordination and efficiency across module boundaries.",
+  "original_model": "none",
+  "original_metrics": {},
+  "setup": {
+    "type": "greenfield",
+    "context_sources": []
+  },
+  "prompt_file": "../prompts/multifile-bugfix.txt",
+  "verification": {
+    "commands": [
+      "python -m pytest tests/ -v 2>&1",
+      "python -c \"from src.api import create_app; app = create_app(); print('app created')\"",
+      "python -c \"from src.models import User; u = User('test', 'test@example.com'); print(u.validate())\"",
+      "python -c \"from src.auth import verify_token; print('auth import ok')\""
+    ],
+    "success_patterns": [
+      "passed",
+      "app created"
+    ]
+  },
+  "test_both_models": true,
+  "expected_behavioral_difference": "Tests coordination across files - Opus 4.6 uses more tools but may be more thorough in cross-file changes",
+  "measures": ["tool_count", "files_touched", "lines_changed", "test_pass_rate", "duration"]
+}

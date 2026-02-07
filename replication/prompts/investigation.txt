@@ -1,0 +1,15 @@
+I need you to investigate the model comparison analysis pipeline in this repository and produce a detailed report. Do NOT modify any files - this is a read-only investigation.
+
+Specifically, I need you to:
+
+1. **Trace the data flow**: Starting from raw session JSONL files, trace exactly how data moves through the pipeline. For each script, identify its inputs, outputs, and key transformations.
+
+2. **Identify the analysis dimensions**: What quantitative metrics, qualitative assessments, and behavioral patterns does the pipeline extract? How are they defined?
+
+3. **Evaluate methodology strengths and weaknesses**: Are there any potential biases in how tasks are classified? Are the satisfaction heuristics robust? What assumptions does the pipeline make?
+
+4. **Find the key findings**: What does the existing analysis reveal about model differences? Focus on the specific claims made in the reports.
+
+5. **Assess reproducibility**: Could someone reproduce this analysis from scratch? What's missing or underdocumented?
+
+Write your findings to /tmp/investigation-report.org as an org-mode document with proper headings and structure. Be thorough - I want to understand if this analysis pipeline is sound enough to publish.

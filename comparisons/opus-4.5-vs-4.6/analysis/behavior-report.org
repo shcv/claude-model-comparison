@@ -1,0 +1,107 @@
+#+TITLE: Behavioral Analysis: Opus 4.5 vs Opus 4.6
+#+DATE: 2026-02-07
+#+OPTIONS: toc:2 num:t
+
+* Executive Summary
+
+| Metric | Opus 4.5 | Opus 4.6 |
+|--------|----------|----------|
+| Tasks with subagents | 11.9% | 29.8% |
+| Tasks with planning | 1.9% | 10.5% |
+| Autonomous subagent % | 38.7% | 79.2% |
+| General-purpose calls | 189 | 46 |
+| Parallel tool messages | 0 | 0 |
+
+* Subagent Types
+
+| Type | Opus 4.5 | Opus 4.5 % | Opus 4.6 | Opus 4.6 % |
+|------|----------|------------|----------|------------|
+| Bash | 28 | 5.9% | 9 | 3.8% |
+| Explore | 184 | 38.7% | 165 | 68.8% |
+| Plan | 25 | 5.3% | 18 | 7.5% |
+| claude-code-guide | 5 | 1.1% | 2 | 0.8% |
+| code-auditor | 3 | 0.6% | 0 | 0.0% |
+| context-collector | 4 | 0.8% | 0 | 0.0% |
+| general-purpose | 189 | 39.7% | 46 | 19.2% |
+| implementation-engineer | 12 | 2.5% | 0 | 0.0% |
+| investigator | 24 | 5.0% | 0 | 0.0% |
+| refactoring-specialist | 2 | 0.4% | 0 | 0.0% |
+
+* General-Purpose Scope
+
+| Scope | Opus 4.5 | Opus 4.6 |
+|-------|----------|----------|
+| Create module/file | 29 | 4 |
+| Fix targeted issue | 30 | 10 |
+| Other | 130 | 32 |
+
+* Subagent Success Rates
+
+** With Subagents
+
+| Metric | Opus 4.5 | Opus 4.6 |
+|--------|----------|----------|
+| Tasks analyzed | 107 | 0 |
+| Satisfied | 0 | 0 |
+| Neutral | 107 | 0 |
+| Dissatisfied | 0 | 0 |
+| Avg alignment score | 3.36 | 0.00 |
+| % satisfied | 0.0% | N/A |
+
+** Without Subagents
+
+| Metric | Opus 4.5 | Opus 4.6 |
+|--------|----------|----------|
+| Tasks analyzed | 1500 | 0 |
+| Satisfied | 0 | 0 |
+| Neutral | 1500 | 0 |
+| Dissatisfied | 0 | 0 |
+| Avg alignment score | 2.78 | 0.00 |
+| % satisfied | 0.0% | N/A |
+
+** Subagent Prompt Length
+
+| Metric | Opus 4.5 | Opus 4.6 |
+|--------|----------|----------|
+| Avg prompt length (chars) | 967 | 1170 |
+| Prompts recorded | 476 | 240 |
+
+* Tool Sequence Patterns
+
+** Top 10 Tool 2-grams
+
+| Rank | Opus 4.5 | Count | Opus 4.6 | Count |
+|------|----------|-------|----------|-------|
+| 1 | Bash->Bash | 2959 | Bash->Bash | 719 |
+| 2 | Edit->Edit | 1425 | Read->Read | 581 |
+| 3 | Read->Edit | 951 | Edit->Edit | 425 |
+| 4 | Read->Read | 891 | Read->Edit | 188 |
+| 5 | Edit->Bash | 571 | TaskUpdate->TaskUpdate | 158 |
+| 6 | Write->Write | 472 | TaskCreate->TaskCreate | 148 |
+| 7 | Edit->Read | 409 | Write->Write | 100 |
+| 8 | Bash->Read | 405 | Edit->Bash | 93 |
+| 9 | TaskList->TaskList | 281 | Edit->Read | 84 |
+| 10 | Grep->Read | 256 | Grep->Read | 75 |
+
+** Top 5 Tool 3-grams
+
+| Rank | Opus 4.5 | Count | Opus 4.6 | Count |
+|------|----------|-------|----------|-------|
+| 1 | Bash->Bash->Bash | 2049 | Bash->Bash->Bash | 521 |
+| 2 | Edit->Edit->Edit | 784 | Read->Read->Read | 407 |
+| 3 | Read->Read->Read | 410 | Edit->Edit->Edit | 276 |
+| 4 | Write->Write->Write | 367 | TaskCreate->TaskCreate->TaskCreate | 113 |
+| 5 | Read->Edit->Edit | 355 | Read->Edit->Edit | 81 |
+
+** Key Pattern Frequencies
+
+| Pattern | Opus 4.5 | Opus 4.6 |
+|---------|----------|----------|
+| Read->Edit | 951 | 188 |
+| Read->Grep | 152 | 58 |
+| Grep->Read | 256 | 75 |
+| Glob->Read | 144 | 18 |
+| Read->Grep->Edit | 21 | 11 |
+| Read->Grep->Read | 77 | 18 |
+| Glob->Read->Edit | 19 | 0 |
+| EnterPlanMode->Read->Edit | 0 | 0 |

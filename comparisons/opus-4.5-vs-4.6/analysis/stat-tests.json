@@ -1,0 +1,3561 @@
+{
+  "metadata": {
+    "models": [
+      "opus-4-5",
+      "opus-4-6"
+    ],
+    "total_tests": 105,
+    "bonferroni_threshold": 0.00047619,
+    "sample_sizes": {
+      "opus-4-5": 2034,
+      "opus-4-6": 360
+    }
+  },
+  "overall": {
+    "label": "overall",
+    "chi_square": [
+      {
+        "test": "chi-square",
+        "field": "task_completion",
+        "chi2": 35.2454,
+        "p_value": 0.132758,
+        "dof": 27,
+        "cramers_v": 0.1213,
+        "effect_size_label": "negligible",
+        "significant_p05": false,
+        "low_expected_warning": true,
+        "categories": [
+          "N/A - no actionable task was presented; the input resembled credential data rather than a request",
+          "complete",
+          "failed",
+          "incomplete",
+          "interrupted",
+          "interrupted - first task (what's next) received no response; second task (note-taking guidance) is a new request not yet addressed",
+          "not_applicable",
+          "not_attempted",
+          "not_started",
+          "partial",
+          "partial - agent answered the initial question but did not execute on the follow-up requirement to organize scripts into deploy/<host>.scm",
+          "partial - agent attempted troubleshooting but didn't resolve the core issue of phase 1 reporting completion while downloads failed",
+          "partial - agent investigated the question but didn't implement webhook support or create a working demo with async updates. The research phase was complete, but no code changes resulted.",
+          "partial - agent provided analysis and options rather than implementing selected approach, but this appeared to be the appropriate scope for the initial request",
+          "partial - agent ran scenario 2 as requested, then the follow-up implied incomplete execution of remaining scenarios, suggesting the second request may not have completed all scenarios as intended.",
+          "partial - completed the initial 'that worked' task, but user's follow-up indicates additional cleanup work was needed",
+          "partial - debugging was completed successfully, but the help command request is a new task that follows",
+          "partial - initial message was acknowledged but not acted upon; new task (config analysis) would require investigation to assess completion",
+          "partial - research phase completed thoroughly, but follow-up implementation request ('add it') suggests user expected actionable output or implementation guidance from research phase",
+          "partial - the agent addressed the immediate error but the user continues to experience authentication failures, indicating the root cause wasn't fully resolved",
+          "partial - the agent completed the label creation task but the new requirements in the next message are unaddressed in this task record",
+          "partial - the agent performed debugging work but did not identify or resolve the button icon missing problem that became apparent to the user",
+          "partial - the commit was attempted but no changes were made; the new request was not yet addressed",
+          "partial - the prior task appears complete, but the new request for PAM explanation is unanswered",
+          "partial - the user asked for verification but received no substantive analysis or tool-based confirmation",
+          "unclear",
+          "unknown",
+          "unknown - likely incomplete or unverified"
+        ],
+        "counts": {
+          "opus-4-5": {
+            "N/A - no actionable task was presented; the input resembled credential data rather than a request": 1,
+            "complete": 570,
+            "failed": 271,
+            "incomplete": 19,
+            "interrupted": 493,
+            "interrupted - first task (what's next) received no response; second task (note-taking guidance) is a new request not yet addressed": 1,
+            "not_applicable": 2,
+            "not_attempted": 1,
+            "not_started": 2,
+            "partial": 653,
+            "partial - agent answered the initial question but did not execute on the follow-up requirement to organize scripts into deploy/<host>.scm": 1,
+            "partial - agent attempted troubleshooting but didn't resolve the core issue of phase 1 reporting completion while downloads failed": 0,
+            "partial - agent investigated the question but didn't implement webhook support or create a working demo with async updates. The research phase was complete, but no code changes resulted.": 1,
+            "partial - agent provided analysis and options rather than implementing selected approach, but this appeared to be the appropriate scope for the initial request": 1,
+            "partial - agent ran scenario 2 as requested, then the follow-up implied incomplete execution of remaining scenarios, suggesting the second request may not have completed all scenarios as intended.": 0,
+            "partial - completed the initial 'that worked' task, but user's follow-up indicates additional cleanup work was needed": 1,
+            "partial - debugging was completed successfully, but the help command request is a new task that follows": 0,
+            "partial - initial message was acknowledged but not acted upon; new task (config analysis) would require investigation to assess completion": 1,
+            "partial - research phase completed thoroughly, but follow-up implementation request ('add it') suggests user expected actionable output or implementation guidance from research phase": 1,
+            "partial - the agent addressed the immediate error but the user continues to experience authentication failures, indicating the root cause wasn't fully resolved": 1,
+            "partial - the agent completed the label creation task but the new requirements in the next message are unaddressed in this task record": 1,
+            "partial - the agent performed debugging work but did not identify or resolve the button icon missing problem that became apparent to the user": 1,
+            "partial - the commit was attempted but no changes were made; the new request was not yet addressed": 1,
+            "partial - the prior task appears complete, but the new request for PAM explanation is unanswered": 1,
+            "partial - the user asked for verification but received no substantive analysis or tool-based confirmation": 1,
+            "unclear": 7,
+            "unknown": 1,
+            "unknown - likely incomplete or unverified": 1
+          },
+          "opus-4-6": {
+            "N/A - no actionable task was presented; the input resembled credential data rather than a request": 0,
+            "complete": 123,
+            "failed": 27,
+            "incomplete": 3,
+            "interrupted": 92,
+            "interrupted - first task (what's next) received no response; second task (note-taking guidance) is a new request not yet addressed": 0,
+            "not_applicable": 0,
+            "not_attempted": 0,
+            "not_started": 0,
+            "partial": 110,
+            "partial - agent answered the initial question but did not execute on the follow-up requirement to organize scripts into deploy/<host>.scm": 0,
+            "partial - agent attempted troubleshooting but didn't resolve the core issue of phase 1 reporting completion while downloads failed": 1,
+            "partial - agent investigated the question but didn't implement webhook support or create a working demo with async updates. The research phase was complete, but no code changes resulted.": 0,
+            "partial - agent provided analysis and options rather than implementing selected approach, but this appeared to be the appropriate scope for the initial request": 0,
+            "partial - agent ran scenario 2 as requested, then the follow-up implied incomplete execution of remaining scenarios, suggesting the second request may not have completed all scenarios as intended.": 1,
+            "partial - completed the initial 'that worked' task, but user's follow-up indicates additional cleanup work was needed": 0,
+            "partial - debugging was completed successfully, but the help command request is a new task that follows": 1,
+            "partial - initial message was acknowledged but not acted upon; new task (config analysis) would require investigation to assess completion": 0,
+            "partial - research phase completed thoroughly, but follow-up implementation request ('add it') suggests user expected actionable output or implementation guidance from research phase": 0,
+            "partial - the agent addressed the immediate error but the user continues to experience authentication failures, indicating the root cause wasn't fully resolved": 0,
+            "partial - the agent completed the label creation task but the new requirements in the next message are unaddressed in this task record": 0,
+            "partial - the agent performed debugging work but did not identify or resolve the button icon missing problem that became apparent to the user": 0,
+            "partial - the commit was attempted but no changes were made; the new request was not yet addressed": 0,
+            "partial - the prior task appears complete, but the new request for PAM explanation is unanswered": 0,
+            "partial - the user asked for verification but received no substantive analysis or tool-based confirmation": 0,
+            "unclear": 1,
+            "unknown": 1,
+            "unknown - likely incomplete or unverified": 0
+          }
+        },
+        "n": {
+          "opus-4-5": 2034,
+          "opus-4-6": 360
+        },
+        "bonferroni_significant": false
+      },
+      {
+        "test": "chi-square",
+        "field": "scope_management",
+        "chi2": 18.896,
+        "p_value": 0.218486,
+        "dof": 15,
+        "cramers_v": 0.0888,
+        "effect_size_label": "negligible",
+        "significant_p05": false,
+        "low_expected_warning": true,
+        "categories": [
+          "appropriate",
+          "appropriate - agent stayed focused on confirming the key installation status without tangential exploration",
+          "expanded",
+          "focused",
+          "focused - agent made only the requested changes without expanding scope",
+          "focused - agent stayed narrowly on the user's explicit requests without adding unnecessary work",
+          "focused - agent stayed narrowly on the verification topic without expanding, though by not expanding it failed to actually verify",
+          "focused - agent stayed on the immediate troubleshooting task without adding unnecessary complexity",
+          "focused - agent stayed tightly on answering the specific question about how webhook async updates work, without over-extending into implementation.",
+          "focused - agent stuck to explicit requests without adding unnecessary analysis or explanation.",
+          "focused - the agent stayed narrowly focused on the email configuration without expanding into unrelated areas",
+          "focused - the agent stayed on the initial request without expanding scope",
+          "focused - the agent stayed on the task of investigating the build without adding unrelated work, though the investigation was ultimately ineffective",
+          "focused - the prior work stayed on track; the new request is clearly scoped as explanation/education",
+          "over_engineered",
+          "unfocused"
+        ],
+        "counts": {
+          "opus-4-5": {
+            "appropriate": 348,
+            "appropriate - agent stayed focused on confirming the key installation status without tangential exploration": 1,
+            "expanded": 26,
+            "focused": 1644,
+            "focused - agent made only the requested changes without expanding scope": 1,
+            "focused - agent stayed narrowly on the user's explicit requests without adding unnecessary work": 1,
+            "focused - agent stayed narrowly on the verification topic without expanding, though by not expanding it failed to actually verify": 1,
+            "focused - agent stayed on the immediate troubleshooting task without adding unnecessary complexity": 0,
+            "focused - agent stayed tightly on answering the specific question about how webhook async updates work, without over-extending into implementation.": 1,
+            "focused - agent stuck to explicit requests without adding unnecessary analysis or explanation.": 0,
+            "focused - the agent stayed narrowly focused on the email configuration without expanding into unrelated areas": 1,
+            "focused - the agent stayed on the initial request without expanding scope": 1,
+            "focused - the agent stayed on the task of investigating the build without adding unrelated work, though the investigation was ultimately ineffective": 1,
+            "focused - the prior work stayed on track; the new request is clearly scoped as explanation/education": 1,
+            "over_engineered": 6,
+            "unfocused": 1
+          },
+          "opus-4-6": {
+            "appropriate": 78,
+            "appropriate - agent stayed focused on confirming the key installation status without tangential exploration": 0,
+            "expanded": 6,
+            "focused": 274,
+            "focused - agent made only the requested changes without expanding scope": 0,
+            "focused - agent stayed narrowly on the user's explicit requests without adding unnecessary work": 0,
+            "focused - agent stayed narrowly on the verification topic without expanding, though by not expanding it failed to actually verify": 0,
+            "focused - agent stayed on the immediate troubleshooting task without adding unnecessary complexity": 1,
+            "focused - agent stayed tightly on answering the specific question about how webhook async updates work, without over-extending into implementation.": 0,
+            "focused - agent stuck to explicit requests without adding unnecessary analysis or explanation.": 1,
+            "focused - the agent stayed narrowly focused on the email configuration without expanding into unrelated areas": 0,
+            "focused - the agent stayed on the initial request without expanding scope": 0,
+            "focused - the agent stayed on the task of investigating the build without adding unrelated work, though the investigation was ultimately ineffective": 0,
+            "focused - the prior work stayed on track; the new request is clearly scoped as explanation/education": 0,
+            "over_engineered": 0,
+            "unfocused": 0
+          }
+        },
+        "n": {
+          "opus-4-5": 2034,
+          "opus-4-6": 360
+        },
+        "bonferroni_significant": false
+      },
+      {
+        "test": "chi-square",
+        "field": "iteration_required",
+        "chi2": 24.4637,
+        "p_value": 0.017579,
+        "dof": 12,
+        "cramers_v": 0.1011,
+        "effect_size_label": "negligible",
+        "significant_p05": true,
+        "low_expected_warning": true,
+        "categories": [
+          "minor",
+          "minor - one follow-up question from user about a related but distinct concern (cleanup behavior), suggesting the investigation provided sufficient foundation for the next iteration.",
+          "minor - single follow-up question to clarify intent, then new directive provided",
+          "minor - the user's follow-up shows they're satisfied enough to move forward with the next phase",
+          "minor - user needed to make a follow-up request to run remaining scenarios, suggesting the agent didn't anticipate batch execution preference.",
+          "minor - user provided one targeted refinement instruction after initial work",
+          "one_shot",
+          "significant",
+          "significant - the user had to prompt the agent multiple times to move from discussion to concrete action",
+          "significant - the user had to return with a more specific problem statement after the initial debugging attempt",
+          "significant - the user's follow-up indicates the problem persists and further iteration would be needed to fully resolve the authentication issue",
+          "significant - user had to ask a follow-up question, suggesting the initial response was insufficient or inconclusive",
+          "significant - user's follow-up indicates the first attempt missed the mark and multiple rounds will be needed"
+        ],
+        "counts": {
+          "opus-4-5": {
+            "minor": 277,
+            "minor - one follow-up question from user about a related but distinct concern (cleanup behavior), suggesting the investigation provided sufficient foundation for the next iteration.": 1,
+            "minor - single follow-up question to clarify intent, then new directive provided": 1,
+            "minor - the user's follow-up shows they're satisfied enough to move forward with the next phase": 1,
+            "minor - user needed to make a follow-up request to run remaining scenarios, suggesting the agent didn't anticipate batch execution preference.": 0,
+            "minor - user provided one targeted refinement instruction after initial work": 1,
+            "one_shot": 726,
+            "significant": 1023,
+            "significant - the user had to prompt the agent multiple times to move from discussion to concrete action": 1,
+            "significant - the user had to return with a more specific problem statement after the initial debugging attempt": 1,
+            "significant - the user's follow-up indicates the problem persists and further iteration would be needed to fully resolve the authentication issue": 1,
+            "significant - user had to ask a follow-up question, suggesting the initial response was insufficient or inconclusive": 1,
+            "significant - user's follow-up indicates the first attempt missed the mark and multiple rounds will be needed": 0
+          },
+          "opus-4-6": {
+            "minor": 55,
+            "minor - one follow-up question from user about a related but distinct concern (cleanup behavior), suggesting the investigation provided sufficient foundation for the next iteration.": 0,
+            "minor - single follow-up question to clarify intent, then new directive provided": 0,
+            "minor - the user's follow-up shows they're satisfied enough to move forward with the next phase": 0,
+            "minor - user needed to make a follow-up request to run remaining scenarios, suggesting the agent didn't anticipate batch execution preference.": 1,
+            "minor - user provided one targeted refinement instruction after initial work": 0,
+            "one_shot": 157,
+            "significant": 146,
+            "significant - the user had to prompt the agent multiple times to move from discussion to concrete action": 0,
+            "significant - the user had to return with a more specific problem statement after the initial debugging attempt": 0,
+            "significant - the user's follow-up indicates the problem persists and further iteration would be needed to fully resolve the authentication issue": 0,
+            "significant - user had to ask a follow-up question, suggesting the initial response was insufficient or inconclusive": 0,
+            "significant - user's follow-up indicates the first attempt missed the mark and multiple rounds will be needed": 1
+          }
+        },
+        "n": {
+          "opus-4-5": 2034,
+          "opus-4-6": 360
+        },
+        "bonferroni_significant": false
+      },
+      {
+        "test": "chi-square",
+        "field": "error_recovery",
+        "chi2": 32.0902,
+        "p_value": 0.057331,
+        "dof": 21,
+        "cramers_v": 0.1158,
+        "effect_size_label": "negligible",
+        "significant_p05": false,
+        "low_expected_warning": true,
+        "categories": [
+          "failed",
+          "failed - agent didn't anticipate or acknowledge the styling side effect of the change",
+          "failed - agent reported the error but did not offer alternatives or clarification",
+          "none_attempted",
+          "none_needed",
+          "none_needed - no apparent errors encountered during execution.",
+          "none_needed - no commits were available, which is not an error but a pre-condition issue",
+          "none_needed - no errors appear in the execution record",
+          "none_needed - no errors encountered during straightforward code search and reading.",
+          "none_needed - no errors encountered in a simple clarification exchange",
+          "none_needed - no errors encountered in a straightforward verification task",
+          "none_needed - no errors encountered, but also no work attempted",
+          "none_needed - no errors occurred, but the agent's troubleshooting approach did not successfully diagnose the issue",
+          "recovered",
+          "recovered - agent encountered test failures, investigated root cause (submitter_id field missing), and fixed it without user intervention",
+          "recovered - agent identified the configuration issue and fixed it successfully",
+          "recovered - agent identified the shebang issue and fixed it after initial attempts",
+          "struggled",
+          "struggled - agent ran commands but didn't effectively use results to narrow down the root cause or ask clarifying questions about pipeline architecture",
+          "struggled - the agent made an edit but didn't verify or diagnose whether it would actually resolve the underlying issue",
+          "struggled - while the agent made a change addressing the initial error message, the subsequent authentication failure indicates the underlying issue wasn't properly resolved",
+          "unknown"
+        ],
+        "counts": {
+          "opus-4-5": {
+            "failed": 100,
+            "failed - agent didn't anticipate or acknowledge the styling side effect of the change": 1,
+            "failed - agent reported the error but did not offer alternatives or clarification": 0,
+            "none_attempted": 1,
+            "none_needed": 1714,
+            "none_needed - no apparent errors encountered during execution.": 0,
+            "none_needed - no commits were available, which is not an error but a pre-condition issue": 1,
+            "none_needed - no errors appear in the execution record": 1,
+            "none_needed - no errors encountered during straightforward code search and reading.": 1,
+            "none_needed - no errors encountered in a simple clarification exchange": 1,
+            "none_needed - no errors encountered in a straightforward verification task": 1,
+            "none_needed - no errors encountered, but also no work attempted": 1,
+            "none_needed - no errors occurred, but the agent's troubleshooting approach did not successfully diagnose the issue": 1,
+            "recovered": 90,
+            "recovered - agent encountered test failures, investigated root cause (submitter_id field missing), and fixed it without user intervention": 1,
+            "recovered - agent identified the configuration issue and fixed it successfully": 1,
+            "recovered - agent identified the shebang issue and fixed it after initial attempts": 0,
+            "struggled": 116,
+            "struggled - agent ran commands but didn't effectively use results to narrow down the root cause or ask clarifying questions about pipeline architecture": 0,
+            "struggled - the agent made an edit but didn't verify or diagnose whether it would actually resolve the underlying issue": 1,
+            "struggled - while the agent made a change addressing the initial error message, the subsequent authentication failure indicates the underlying issue wasn't properly resolved": 1,
+            "unknown": 1
+          },
+          "opus-4-6": {
+            "failed": 10,
+            "failed - agent didn't anticipate or acknowledge the styling side effect of the change": 0,
+            "failed - agent reported the error but did not offer alternatives or clarification": 1,
+            "none_attempted": 1,
+            "none_needed": 315,
+            "none_needed - no apparent errors encountered during execution.": 1,
+            "none_needed - no commits were available, which is not an error but a pre-condition issue": 0,
+            "none_needed - no errors appear in the execution record": 0,
+            "none_needed - no errors encountered during straightforward code search and reading.": 0,
+            "none_needed - no errors encountered in a simple clarification exchange": 0,
+            "none_needed - no errors encountered in a straightforward verification task": 0,
+            "none_needed - no errors encountered, but also no work attempted": 0,
+            "none_needed - no errors occurred, but the agent's troubleshooting approach did not successfully diagnose the issue": 0,
+            "recovered": 16,
+            "recovered - agent encountered test failures, investigated root cause (submitter_id field missing), and fixed it without user intervention": 0,
+            "recovered - agent identified the configuration issue and fixed it successfully": 0,
+            "recovered - agent identified the shebang issue and fixed it after initial attempts": 1,
+            "struggled": 14,
+            "struggled - agent ran commands but didn't effectively use results to narrow down the root cause or ask clarifying questions about pipeline architecture": 1,
+            "struggled - the agent made an edit but didn't verify or diagnose whether it would actually resolve the underlying issue": 0,
+            "struggled - while the agent made a change addressing the initial error message, the subsequent authentication failure indicates the underlying issue wasn't properly resolved": 0,
+            "unknown": 0
+          }
+        },
+        "n": {
+          "opus-4-5": 2034,
+          "opus-4-6": 360
+        },
+        "bonferroni_significant": false
+      },
+      {
+        "test": "chi-square",
+        "field": "communication_quality",
+        "chi2": 38.0416,
+        "p_value": 0.097615,
+        "dof": 28,
+        "cramers_v": 0.1261,
+        "effect_size_label": "negligible",
+        "significant_p05": false,
+        "low_expected_warning": true,
+        "categories": [
+          "N/A",
+          "adequate",
+          "adequate - agent acknowledged the workflow but context is limited to understand how thoroughly the new task request was addressed",
+          "adequate - agent appears to have answered the initial question adequately enough that user could provide next steps",
+          "adequate - agent executed commands but provided minimal explanation of what scenarios were running or their status/results.",
+          "adequate - agent executed the requested git operation but the new request was not started",
+          "adequate - agent executed verification steps but the interaction was minimal",
+          "adequate - agent explained findings clearly but could have been more forward-looking about implementation implications or next steps.",
+          "adequate - agent explained search steps and commands but didn't articulate hypotheses about the phase 1 completion contradiction",
+          "adequate - agent made the edit without explanation, relying on the user to guide next steps",
+          "adequate - agent presented multiple options with considerations, though the follow-up suggests the presentation could have been more directly actionable",
+          "adequate - the 'done' message confirms completion without elaboration; the follow-up is specific and well-defined",
+          "adequate - the agent likely explained what it was testing and checking, but the results were not clarifying for the user",
+          "adequate - the agent showed its work through tool calls but didn't explain the authentication mechanism changes or potential next steps for diagnosis",
+          "clear",
+          "inadequate",
+          "minimal",
+          "n/a - no agent output",
+          "none",
+          "none_provided",
+          "not_applicable",
+          "unclear",
+          "unclear - agent provided no response to initial 'what's next?' query, leaving first interaction unresolved",
+          "unclear - no detail available about what was actually communicated in the 58-second response",
+          "unclear - no explanation of verification findings provided; unclear what analysis led to any conclusions",
+          "unclear - no substantive communication occurred",
+          "unclear - no tools were invoked, so it's unclear what the agent actually said or whether it explained the concepts adequately",
+          "unclear - the agent did not respond with any explanation, which is appropriate for avoiding credential handling but leaves the user without feedback on why no action was taken",
+          "unclear - the transcript shows 11 Bash calls but no human-readable explanation or summary of what labels were created or why"
+        ],
+        "counts": {
+          "opus-4-5": {
+            "N/A": 1,
+            "adequate": 1136,
+            "adequate - agent acknowledged the workflow but context is limited to understand how thoroughly the new task request was addressed": 1,
+            "adequate - agent appears to have answered the initial question adequately enough that user could provide next steps": 1,
+            "adequate - agent executed commands but provided minimal explanation of what scenarios were running or their status/results.": 0,
+            "adequate - agent executed the requested git operation but the new request was not started": 1,
+            "adequate - agent executed verification steps but the interaction was minimal": 1,
+            "adequate - agent explained findings clearly but could have been more forward-looking about implementation implications or next steps.": 1,
+            "adequate - agent explained search steps and commands but didn't articulate hypotheses about the phase 1 completion contradiction": 0,
+            "adequate - agent made the edit without explanation, relying on the user to guide next steps": 1,
+            "adequate - agent presented multiple options with considerations, though the follow-up suggests the presentation could have been more directly actionable": 1,
+            "adequate - the 'done' message confirms completion without elaboration; the follow-up is specific and well-defined": 1,
+            "adequate - the agent likely explained what it was testing and checking, but the results were not clarifying for the user": 1,
+            "adequate - the agent showed its work through tool calls but didn't explain the authentication mechanism changes or potential next steps for diagnosis": 1,
+            "clear": 287,
+            "inadequate": 3,
+            "minimal": 1,
+            "n/a - no agent output": 1,
+            "none": 1,
+            "none_provided": 0,
+            "not_applicable": 3,
+            "unclear": 585,
+            "unclear - agent provided no response to initial 'what's next?' query, leaving first interaction unresolved": 1,
+            "unclear - no detail available about what was actually communicated in the 58-second response": 1,
+            "unclear - no explanation of verification findings provided; unclear what analysis led to any conclusions": 1,
+            "unclear - no substantive communication occurred": 0,
+            "unclear - no tools were invoked, so it's unclear what the agent actually said or whether it explained the concepts adequately": 1,
+            "unclear - the agent did not respond with any explanation, which is appropriate for avoiding credential handling but leaves the user without feedback on why no action was taken": 1,
+            "unclear - the transcript shows 11 Bash calls but no human-readable explanation or summary of what labels were created or why": 1
+          },
+          "opus-4-6": {
+            "N/A": 0,
+            "adequate": 217,
+            "adequate - agent acknowledged the workflow but context is limited to understand how thoroughly the new task request was addressed": 0,
+            "adequate - agent appears to have answered the initial question adequately enough that user could provide next steps": 0,
+            "adequate - agent executed commands but provided minimal explanation of what scenarios were running or their status/results.": 1,
+            "adequate - agent executed the requested git operation but the new request was not started": 0,
+            "adequate - agent executed verification steps but the interaction was minimal": 0,
+            "adequate - agent explained findings clearly but could have been more forward-looking about implementation implications or next steps.": 0,
+            "adequate - agent explained search steps and commands but didn't articulate hypotheses about the phase 1 completion contradiction": 1,
+            "adequate - agent made the edit without explanation, relying on the user to guide next steps": 0,
+            "adequate - agent presented multiple options with considerations, though the follow-up suggests the presentation could have been more directly actionable": 0,
+            "adequate - the 'done' message confirms completion without elaboration; the follow-up is specific and well-defined": 0,
+            "adequate - the agent likely explained what it was testing and checking, but the results were not clarifying for the user": 0,
+            "adequate - the agent showed its work through tool calls but didn't explain the authentication mechanism changes or potential next steps for diagnosis": 0,
+            "clear": 64,
+            "inadequate": 0,
+            "minimal": 0,
+            "n/a - no agent output": 0,
+            "none": 0,
+            "none_provided": 1,
+            "not_applicable": 0,
+            "unclear": 75,
+            "unclear - agent provided no response to initial 'what's next?' query, leaving first interaction unresolved": 0,
+            "unclear - no detail available about what was actually communicated in the 58-second response": 0,
+            "unclear - no explanation of verification findings provided; unclear what analysis led to any conclusions": 0,
+            "unclear - no substantive communication occurred": 1,
+            "unclear - no tools were invoked, so it's unclear what the agent actually said or whether it explained the concepts adequately": 0,
+            "unclear - the agent did not respond with any explanation, which is appropriate for avoiding credential handling but leaves the user without feedback on why no action was taken": 0,
+            "unclear - the transcript shows 11 Bash calls but no human-readable explanation or summary of what labels were created or why": 0
+          }
+        },
+        "n": {
+          "opus-4-5": 2034,
+          "opus-4-6": 360
+        },
+        "bonferroni_significant": false
+      },
+      {
+        "test": "chi-square",
+        "field": "autonomy_level",
+        "chi2": 22.5728,
+        "p_value": 0.00723,
+        "dof": 9,
+        "cramers_v": 0.0971,
+        "effect_size_label": "negligible",
+        "significant_p05": true,
+        "low_expected_warning": true,
+        "categories": [
+          "high",
+          "low",
+          "medium",
+          "medium - agent executed commands as requested but didn't proactively suggest or batch multiple scenarios together despite the follow-up pattern suggesting that would have been preferred.",
+          "medium - agent executed the edit correctly but required user guidance to identify unnecessary code",
+          "medium - agent ran searches and commands but didn't pursue deeper investigation into pipeline state or logs after initial attempts",
+          "medium - agent took initiative to verify the stated fact rather than just acknowledging it",
+          "medium - the agent executed multiple tool calls autonomously but didn't independently discover or fix the underlying issue",
+          "medium - the agent read existing configuration, made edits, but didn't proactively test or validate the changes before the user reported new errors",
+          "none"
+        ],
+        "counts": {
+          "opus-4-5": {
+            "high": 841,
+            "low": 840,
+            "medium": 348,
+            "medium - agent executed commands as requested but didn't proactively suggest or batch multiple scenarios together despite the follow-up pattern suggesting that would have been preferred.": 0,
+            "medium - agent executed the edit correctly but required user guidance to identify unnecessary code": 1,
+            "medium - agent ran searches and commands but didn't pursue deeper investigation into pipeline state or logs after initial attempts": 0,
+            "medium - agent took initiative to verify the stated fact rather than just acknowledging it": 1,
+            "medium - the agent executed multiple tool calls autonomously but didn't independently discover or fix the underlying issue": 1,
+            "medium - the agent read existing configuration, made edits, but didn't proactively test or validate the changes before the user reported new errors": 1,
+            "none": 1
+          },
+          "opus-4-6": {
+            "high": 180,
+            "low": 120,
+            "medium": 58,
+            "medium - agent executed commands as requested but didn't proactively suggest or batch multiple scenarios together despite the follow-up pattern suggesting that would have been preferred.": 1,
+            "medium - agent executed the edit correctly but required user guidance to identify unnecessary code": 0,
+            "medium - agent ran searches and commands but didn't pursue deeper investigation into pipeline state or logs after initial attempts": 1,
+            "medium - agent took initiative to verify the stated fact rather than just acknowledging it": 0,
+            "medium - the agent executed multiple tool calls autonomously but didn't independently discover or fix the underlying issue": 0,
+            "medium - the agent read existing configuration, made edits, but didn't proactively test or validate the changes before the user reported new errors": 0,
+            "none": 0
+          }
+        },
+        "n": {
+          "opus-4-5": 2034,
+          "opus-4-6": 360
+        },
+        "bonferroni_significant": false
+      }
+    ],
+    "mann_whitney": [
+      {
+        "test": "mann-whitney-u",
+        "field": "alignment_score",
+        "u_statistic": 323706.5,
+        "p_value": 0.000328,
+        "cohens_d": -0.2029,
+        "effect_size_label": "small",
+        "significant_p05": true,
+        "n": {
+          "opus-4-5": 2034,
+          "opus-4-6": 360
+        },
+        "median": {
+          "opus-4-5": 3.0,
+          "opus-4-6": 3.0
+        },
+        "mean": {
+          "opus-4-5": 2.865,
+          "opus-4-6": 3.133
+        },
+        "std": {
+          "opus-4-5": 1.323,
+          "opus-4-6": 1.309
+        },
+        "bonferroni_significant": true
+      },
+      {
+        "test": "mann-whitney-u",
+        "field": "duration_seconds",
+        "u_statistic": 336597.0,
+        "p_value": 0.014513,
+        "cohens_d": -0.0193,
+        "effect_size_label": "negligible",
+        "significant_p05": true,
+        "n": {
+          "opus-4-5": 2034,
+          "opus-4-6": 360
+        },
+        "median": {
+          "opus-4-5": 29.373,
+          "opus-4-6": 47.566
+        },
+        "mean": {
+          "opus-4-5": 349.519,
+          "opus-4-6": 438.148
+        },
+        "std": {
+          "opus-4-5": 4742.132,
+          "opus-4-6": 3664.179
+        },
+        "bonferroni_significant": false
+      },
+      {
+        "test": "mann-whitney-u",
+        "field": "tool_calls",
+        "u_statistic": 309766.5,
+        "p_value": 2e-06,
+        "cohens_d": -0.288,
+        "effect_size_label": "small",
+        "significant_p05": true,
+        "n": {
+          "opus-4-5": 2034,
+          "opus-4-6": 360
+        },
+        "median": {
+          "opus-4-5": 2.0,
+          "opus-4-6": 4.0
+        },
+        "mean": {
+          "opus-4-5": 7.224,
+          "opus-4-6": 11.622
+        },
+        "std": {
+          "opus-4-5": 14.379,
+          "opus-4-6": 19.58
+        },
+        "bonferroni_significant": true
+      },
+      {
+        "test": "mann-whitney-u",
+        "field": "files_touched",
+        "u_statistic": 345472.5,
+        "p_value": 0.062655,
+        "cohens_d": -0.231,
+        "effect_size_label": "small",
+        "significant_p05": false,
+        "n": {
+          "opus-4-5": 2034,
+          "opus-4-6": 360
+        },
+        "median": {
+          "opus-4-5": 0.0,
+          "opus-4-6": 0.0
+        },
+        "mean": {
+          "opus-4-5": 1.57,
+          "opus-4-6": 2.458
+        },
+        "std": {
+          "opus-4-5": 3.263,
+          "opus-4-6": 6.187
+        },
+        "bonferroni_significant": false
+      },
+      {
+        "test": "mann-whitney-u",
+        "field": "lines_added",
+        "u_statistic": 351611.0,
+        "p_value": 0.176194,
+        "cohens_d": -0.042,
+        "effect_size_label": "negligible",
+        "significant_p05": false,
+        "n": {
+          "opus-4-5": 2034,
+          "opus-4-6": 360
+        },
+        "median": {
+          "opus-4-5": 0.0,
+          "opus-4-6": 0.0
+        },
+        "mean": {
+          "opus-4-5": 97.814,
+          "opus-4-6": 115.061
+        },
+        "std": {
+          "opus-4-5": 426.503,
+          "opus-4-6": 308.149
+        },
+        "bonferroni_significant": false
+      },
+      {
+        "test": "mann-whitney-u",
+        "field": "lines_removed",
+        "u_statistic": 377937.0,
+        "p_value": 0.246688,
+        "cohens_d": -0.1158,
+        "effect_size_label": "negligible",
+        "significant_p05": false,
+        "n": {
+          "opus-4-5": 2034,
+          "opus-4-6": 360
+        },
+        "median": {
+          "opus-4-5": 0.0,
+          "opus-4-6": 0.0
+        },
+        "mean": {
+          "opus-4-5": 22.557,
+          "opus-4-6": 31.133
+        },
+        "std": {
+          "opus-4-5": 66.687,
+          "opus-4-6": 106.548
+        },
+        "bonferroni_significant": false
+      },
+      {
+        "test": "mann-whitney-u",
+        "field": "lines_per_minute",
+        "u_statistic": 362046.0,
+        "p_value": 0.704208,
+        "cohens_d": 0.0243,
+        "effect_size_label": "negligible",
+        "significant_p05": false,
+        "n": {
+          "opus-4-5": 2034,
+          "opus-4-6": 360
+        },
+        "median": {
+          "opus-4-5": 0.0,
+          "opus-4-6": 0.0
+        },
+        "mean": {
+          "opus-4-5": 38.393,
+          "opus-4-6": 36.624
+        },
+        "std": {
+          "opus-4-5": 73.882,
+          "opus-4-6": 66.139
+        },
+        "bonferroni_significant": false
+      },
+      {
+        "test": "mann-whitney-u",
+        "field": "tools_per_file",
+        "u_statistic": 310363.0,
+        "p_value": 3e-06,
+        "cohens_d": -0.1792,
+        "effect_size_label": "negligible",
+        "significant_p05": true,
+        "n": {
+          "opus-4-5": 2034,
+          "opus-4-6": 360
+        },
+        "median": {
+          "opus-4-5": 2.0,
+          "opus-4-6": 2.9
+        },
+        "mean": {
+          "opus-4-5": 3.049,
+          "opus-4-6": 3.835
+        },
+        "std": {
+          "opus-4-5": 4.423,
+          "opus-4-6": 4.145
+        },
+        "bonferroni_significant": true
+      }
+    ],
+    "proportions": [
+      {
+        "test": "two-proportion-z",
+        "field": "satisfaction_rate",
+        "z_statistic": 0,
+        "p_value": 1.0,
+        "cohens_h": 0.0,
+        "effect_size_label": "negligible",
+        "significant_p05": false,
+        "opus-4-5": {
+          "proportion": 0.0,
+          "ci_lower": 0.0,
+          "ci_upper": 0.0019,
+          "count": 0,
+          "n": 2034
+        },
+        "opus-4-6": {
+          "proportion": 0.0,
+          "ci_lower": 0.0,
+          "ci_upper": 0.0106,
+          "count": 0,
+          "n": 360
+        },
+        "bonferroni_significant": false
+      },
+      {
+        "test": "two-proportion-z",
+        "field": "dissatisfaction_rate",
+        "z_statistic": 0,
+        "p_value": 1.0,
+        "cohens_h": 0.0,
+        "effect_size_label": "negligible",
+        "significant_p05": false,
+        "opus-4-5": {
+          "proportion": 0.0,
+          "ci_lower": 0.0,
+          "ci_upper": 0.0019,
+          "count": 0,
+          "n": 2034
+        },
+        "opus-4-6": {
+          "proportion": 0.0,
+          "ci_lower": 0.0,
+          "ci_upper": 0.0106,
+          "count": 0,
+          "n": 360
+        },
+        "bonferroni_significant": false
+      },
+      {
+        "test": "two-proportion-z",
+        "field": "complete_rate",
+        "z_statistic": -2.3689,
+        "p_value": 0.017839,
+        "cohens_h": -0.1329,
+        "effect_size_label": "negligible",
+        "significant_p05": true,
+        "opus-4-5": {
+          "proportion": 0.2802,
+          "ci_lower": 0.2611,
+          "ci_upper": 0.3002,
+          "count": 570,
+          "n": 2034
+        },
+        "opus-4-6": {
+          "proportion": 0.3417,
+          "ci_lower": 0.2946,
+          "ci_upper": 0.3921,
+          "count": 123,
+          "n": 360
+        },
+        "bonferroni_significant": false
+      },
+      {
+        "test": "two-proportion-z",
+        "field": "failed_rate",
+        "z_statistic": 3.0851,
+        "p_value": 0.002035,
+        "cohens_h": 0.1925,
+        "effect_size_label": "negligible",
+        "significant_p05": true,
+        "opus-4-5": {
+          "proportion": 0.1332,
+          "ci_lower": 0.1192,
+          "ci_upper": 0.1487,
+          "count": 271,
+          "n": 2034
+        },
+        "opus-4-6": {
+          "proportion": 0.075,
+          "ci_lower": 0.0521,
+          "ci_upper": 0.1069,
+          "count": 27,
+          "n": 360
+        },
+        "bonferroni_significant": false
+      },
+      {
+        "test": "two-proportion-z",
+        "field": "scope_expanded_rate",
+        "z_statistic": -0.5915,
+        "p_value": 0.55419,
+        "cohens_h": -0.0323,
+        "effect_size_label": "negligible",
+        "significant_p05": false,
+        "opus-4-5": {
+          "proportion": 0.0128,
+          "ci_lower": 0.0087,
+          "ci_upper": 0.0187,
+          "count": 26,
+          "n": 2034
+        },
+        "opus-4-6": {
+          "proportion": 0.0167,
+          "ci_lower": 0.0077,
+          "ci_upper": 0.0359,
+          "count": 6,
+          "n": 360
+        },
+        "bonferroni_significant": false
+      },
+      {
+        "test": "two-proportion-z",
+        "field": "one_shot_rate",
+        "z_statistic": -2.87,
+        "p_value": 0.004104,
+        "cohens_h": -0.1621,
+        "effect_size_label": "negligible",
+        "significant_p05": true,
+        "opus-4-5": {
+          "proportion": 0.3569,
+          "ci_lower": 0.3364,
+          "ci_upper": 0.378,
+          "count": 726,
+          "n": 2034
+        },
+        "opus-4-6": {
+          "proportion": 0.4361,
+          "ci_lower": 0.3858,
+          "ci_upper": 0.4877,
+          "count": 157,
+          "n": 360
+        },
+        "bonferroni_significant": false
+      },
+      {
+        "test": "two-proportion-z",
+        "field": "good_execution_rate",
+        "z_statistic": 0,
+        "p_value": 1.0,
+        "cohens_h": 0.0,
+        "effect_size_label": "negligible",
+        "significant_p05": false,
+        "opus-4-5": {
+          "proportion": 0.0,
+          "ci_lower": 0.0,
+          "ci_upper": 0.0019,
+          "count": 0,
+          "n": 2034
+        },
+        "opus-4-6": {
+          "proportion": 0.0,
+          "ci_lower": 0.0,
+          "ci_upper": 0.0106,
+          "count": 0,
+          "n": 360
+        },
+        "bonferroni_significant": false
+      }
+    ]
+  },
+  "by_complexity": [
+    {
+      "label": "complexity: trivial",
+      "chi_square": [
+        {
+          "test": "chi-square",
+          "field": "task_completion",
+          "chi2": 15.3525,
+          "p_value": 0.570109,
+          "dof": 17,
+          "cramers_v": 0.1124,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "N/A - no actionable task was presented; the input resembled credential data rather than a request",
+            "complete",
+            "failed",
+            "incomplete",
+            "interrupted",
+            "interrupted - first task (what's next) received no response; second task (note-taking guidance) is a new request not yet addressed",
+            "not_applicable",
+            "not_attempted",
+            "not_started",
+            "partial",
+            "partial - agent answered the initial question but did not execute on the follow-up requirement to organize scripts into deploy/<host>.scm",
+            "partial - agent ran scenario 2 as requested, then the follow-up implied incomplete execution of remaining scenarios, suggesting the second request may not have completed all scenarios as intended.",
+            "partial - completed the initial 'that worked' task, but user's follow-up indicates additional cleanup work was needed",
+            "partial - the prior task appears complete, but the new request for PAM explanation is unanswered",
+            "partial - the user asked for verification but received no substantive analysis or tool-based confirmation",
+            "unclear",
+            "unknown",
+            "unknown - likely incomplete or unverified"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "N/A - no actionable task was presented; the input resembled credential data rather than a request": 1,
+              "complete": 162,
+              "failed": 247,
+              "incomplete": 18,
+              "interrupted": 425,
+              "interrupted - first task (what's next) received no response; second task (note-taking guidance) is a new request not yet addressed": 1,
+              "not_applicable": 2,
+              "not_attempted": 1,
+              "not_started": 2,
+              "partial": 194,
+              "partial - agent answered the initial question but did not execute on the follow-up requirement to organize scripts into deploy/<host>.scm": 1,
+              "partial - agent ran scenario 2 as requested, then the follow-up implied incomplete execution of remaining scenarios, suggesting the second request may not have completed all scenarios as intended.": 0,
+              "partial - completed the initial 'that worked' task, but user's follow-up indicates additional cleanup work was needed": 1,
+              "partial - the prior task appears complete, but the new request for PAM explanation is unanswered": 1,
+              "partial - the user asked for verification but received no substantive analysis or tool-based confirmation": 1,
+              "unclear": 5,
+              "unknown": 1,
+              "unknown - likely incomplete or unverified": 1
+            },
+            "opus-4-6": {
+              "N/A - no actionable task was presented; the input resembled credential data rather than a request": 0,
+              "complete": 21,
+              "failed": 24,
+              "incomplete": 3,
+              "interrupted": 75,
+              "interrupted - first task (what's next) received no response; second task (note-taking guidance) is a new request not yet addressed": 0,
+              "not_applicable": 0,
+              "not_attempted": 0,
+              "not_started": 0,
+              "partial": 27,
+              "partial - agent answered the initial question but did not execute on the follow-up requirement to organize scripts into deploy/<host>.scm": 0,
+              "partial - agent ran scenario 2 as requested, then the follow-up implied incomplete execution of remaining scenarios, suggesting the second request may not have completed all scenarios as intended.": 1,
+              "partial - completed the initial 'that worked' task, but user's follow-up indicates additional cleanup work was needed": 0,
+              "partial - the prior task appears complete, but the new request for PAM explanation is unanswered": 0,
+              "partial - the user asked for verification but received no substantive analysis or tool-based confirmation": 0,
+              "unclear": 1,
+              "unknown": 0,
+              "unknown - likely incomplete or unverified": 0
+            }
+          },
+          "n": {
+            "opus-4-5": 1064,
+            "opus-4-6": 152
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "chi-square",
+          "field": "scope_management",
+          "chi2": 15.6502,
+          "p_value": 0.110093,
+          "dof": 10,
+          "cramers_v": 0.1134,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "appropriate",
+            "appropriate - agent stayed focused on confirming the key installation status without tangential exploration",
+            "expanded",
+            "focused",
+            "focused - agent made only the requested changes without expanding scope",
+            "focused - agent stayed narrowly on the user's explicit requests without adding unnecessary work",
+            "focused - agent stayed narrowly on the verification topic without expanding, though by not expanding it failed to actually verify",
+            "focused - agent stuck to explicit requests without adding unnecessary analysis or explanation.",
+            "focused - the prior work stayed on track; the new request is clearly scoped as explanation/education",
+            "over_engineered",
+            "unfocused"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "appropriate": 37,
+              "appropriate - agent stayed focused on confirming the key installation status without tangential exploration": 1,
+              "expanded": 0,
+              "focused": 1019,
+              "focused - agent made only the requested changes without expanding scope": 1,
+              "focused - agent stayed narrowly on the user's explicit requests without adding unnecessary work": 1,
+              "focused - agent stayed narrowly on the verification topic without expanding, though by not expanding it failed to actually verify": 1,
+              "focused - agent stuck to explicit requests without adding unnecessary analysis or explanation.": 0,
+              "focused - the prior work stayed on track; the new request is clearly scoped as explanation/education": 1,
+              "over_engineered": 2,
+              "unfocused": 1
+            },
+            "opus-4-6": {
+              "appropriate": 7,
+              "appropriate - agent stayed focused on confirming the key installation status without tangential exploration": 0,
+              "expanded": 1,
+              "focused": 143,
+              "focused - agent made only the requested changes without expanding scope": 0,
+              "focused - agent stayed narrowly on the user's explicit requests without adding unnecessary work": 0,
+              "focused - agent stayed narrowly on the verification topic without expanding, though by not expanding it failed to actually verify": 0,
+              "focused - agent stuck to explicit requests without adding unnecessary analysis or explanation.": 1,
+              "focused - the prior work stayed on track; the new request is clearly scoped as explanation/education": 0,
+              "over_engineered": 0,
+              "unfocused": 0
+            }
+          },
+          "n": {
+            "opus-4-5": 1064,
+            "opus-4-6": 152
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "chi-square",
+          "field": "iteration_required",
+          "chi2": 8.2262,
+          "p_value": 0.31307,
+          "dof": 7,
+          "cramers_v": 0.0822,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "minor",
+            "minor - single follow-up question to clarify intent, then new directive provided",
+            "minor - user needed to make a follow-up request to run remaining scenarios, suggesting the agent didn't anticipate batch execution preference.",
+            "minor - user provided one targeted refinement instruction after initial work",
+            "one_shot",
+            "significant",
+            "significant - the user had to prompt the agent multiple times to move from discussion to concrete action",
+            "significant - user had to ask a follow-up question, suggesting the initial response was insufficient or inconclusive"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "minor": 78,
+              "minor - single follow-up question to clarify intent, then new directive provided": 1,
+              "minor - user needed to make a follow-up request to run remaining scenarios, suggesting the agent didn't anticipate batch execution preference.": 0,
+              "minor - user provided one targeted refinement instruction after initial work": 1,
+              "one_shot": 338,
+              "significant": 644,
+              "significant - the user had to prompt the agent multiple times to move from discussion to concrete action": 1,
+              "significant - user had to ask a follow-up question, suggesting the initial response was insufficient or inconclusive": 1
+            },
+            "opus-4-6": {
+              "minor": 10,
+              "minor - single follow-up question to clarify intent, then new directive provided": 0,
+              "minor - user needed to make a follow-up request to run remaining scenarios, suggesting the agent didn't anticipate batch execution preference.": 1,
+              "minor - user provided one targeted refinement instruction after initial work": 0,
+              "one_shot": 53,
+              "significant": 88,
+              "significant - the user had to prompt the agent multiple times to move from discussion to concrete action": 0,
+              "significant - user had to ask a follow-up question, suggesting the initial response was insufficient or inconclusive": 0
+            }
+          },
+          "n": {
+            "opus-4-5": 1064,
+            "opus-4-6": 152
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "chi-square",
+          "field": "error_recovery",
+          "chi2": 19.7399,
+          "p_value": 0.049037,
+          "dof": 11,
+          "cramers_v": 0.1274,
+          "effect_size_label": "negligible",
+          "significant_p05": true,
+          "low_expected_warning": true,
+          "categories": [
+            "failed",
+            "failed - agent didn't anticipate or acknowledge the styling side effect of the change",
+            "failed - agent reported the error but did not offer alternatives or clarification",
+            "none_attempted",
+            "none_needed",
+            "none_needed - no apparent errors encountered during execution.",
+            "none_needed - no errors encountered in a simple clarification exchange",
+            "none_needed - no errors encountered in a straightforward verification task",
+            "none_needed - no errors encountered, but also no work attempted",
+            "recovered",
+            "struggled",
+            "unknown"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "failed": 91,
+              "failed - agent didn't anticipate or acknowledge the styling side effect of the change": 1,
+              "failed - agent reported the error but did not offer alternatives or clarification": 0,
+              "none_attempted": 1,
+              "none_needed": 924,
+              "none_needed - no apparent errors encountered during execution.": 0,
+              "none_needed - no errors encountered in a simple clarification exchange": 1,
+              "none_needed - no errors encountered in a straightforward verification task": 1,
+              "none_needed - no errors encountered, but also no work attempted": 1,
+              "recovered": 7,
+              "struggled": 36,
+              "unknown": 1
+            },
+            "opus-4-6": {
+              "failed": 9,
+              "failed - agent didn't anticipate or acknowledge the styling side effect of the change": 0,
+              "failed - agent reported the error but did not offer alternatives or clarification": 1,
+              "none_attempted": 1,
+              "none_needed": 136,
+              "none_needed - no apparent errors encountered during execution.": 1,
+              "none_needed - no errors encountered in a simple clarification exchange": 0,
+              "none_needed - no errors encountered in a straightforward verification task": 0,
+              "none_needed - no errors encountered, but also no work attempted": 0,
+              "recovered": 0,
+              "struggled": 4,
+              "unknown": 0
+            }
+          },
+          "n": {
+            "opus-4-5": 1064,
+            "opus-4-6": 152
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "chi-square",
+          "field": "communication_quality",
+          "chi2": 29.9093,
+          "p_value": 0.071337,
+          "dof": 20,
+          "cramers_v": 0.1568,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "N/A",
+            "adequate",
+            "adequate - agent appears to have answered the initial question adequately enough that user could provide next steps",
+            "adequate - agent executed commands but provided minimal explanation of what scenarios were running or their status/results.",
+            "adequate - agent executed verification steps but the interaction was minimal",
+            "adequate - agent made the edit without explanation, relying on the user to guide next steps",
+            "adequate - the 'done' message confirms completion without elaboration; the follow-up is specific and well-defined",
+            "clear",
+            "inadequate",
+            "minimal",
+            "n/a - no agent output",
+            "none",
+            "none_provided",
+            "not_applicable",
+            "unclear",
+            "unclear - agent provided no response to initial 'what's next?' query, leaving first interaction unresolved",
+            "unclear - no detail available about what was actually communicated in the 58-second response",
+            "unclear - no explanation of verification findings provided; unclear what analysis led to any conclusions",
+            "unclear - no substantive communication occurred",
+            "unclear - no tools were invoked, so it's unclear what the agent actually said or whether it explained the concepts adequately",
+            "unclear - the agent did not respond with any explanation, which is appropriate for avoiding credential handling but leaves the user without feedback on why no action was taken"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "N/A": 1,
+              "adequate": 398,
+              "adequate - agent appears to have answered the initial question adequately enough that user could provide next steps": 1,
+              "adequate - agent executed commands but provided minimal explanation of what scenarios were running or their status/results.": 0,
+              "adequate - agent executed verification steps but the interaction was minimal": 1,
+              "adequate - agent made the edit without explanation, relying on the user to guide next steps": 1,
+              "adequate - the 'done' message confirms completion without elaboration; the follow-up is specific and well-defined": 1,
+              "clear": 96,
+              "inadequate": 3,
+              "minimal": 1,
+              "n/a - no agent output": 1,
+              "none": 1,
+              "none_provided": 0,
+              "not_applicable": 3,
+              "unclear": 551,
+              "unclear - agent provided no response to initial 'what's next?' query, leaving first interaction unresolved": 1,
+              "unclear - no detail available about what was actually communicated in the 58-second response": 1,
+              "unclear - no explanation of verification findings provided; unclear what analysis led to any conclusions": 1,
+              "unclear - no substantive communication occurred": 0,
+              "unclear - no tools were invoked, so it's unclear what the agent actually said or whether it explained the concepts adequately": 1,
+              "unclear - the agent did not respond with any explanation, which is appropriate for avoiding credential handling but leaves the user without feedback on why no action was taken": 1
+            },
+            "opus-4-6": {
+              "N/A": 0,
+              "adequate": 72,
+              "adequate - agent appears to have answered the initial question adequately enough that user could provide next steps": 0,
+              "adequate - agent executed commands but provided minimal explanation of what scenarios were running or their status/results.": 1,
+              "adequate - agent executed verification steps but the interaction was minimal": 0,
+              "adequate - agent made the edit without explanation, relying on the user to guide next steps": 0,
+              "adequate - the 'done' message confirms completion without elaboration; the follow-up is specific and well-defined": 0,
+              "clear": 9,
+              "inadequate": 0,
+              "minimal": 0,
+              "n/a - no agent output": 0,
+              "none": 0,
+              "none_provided": 1,
+              "not_applicable": 0,
+              "unclear": 68,
+              "unclear - agent provided no response to initial 'what's next?' query, leaving first interaction unresolved": 0,
+              "unclear - no detail available about what was actually communicated in the 58-second response": 0,
+              "unclear - no explanation of verification findings provided; unclear what analysis led to any conclusions": 0,
+              "unclear - no substantive communication occurred": 1,
+              "unclear - no tools were invoked, so it's unclear what the agent actually said or whether it explained the concepts adequately": 0,
+              "unclear - the agent did not respond with any explanation, which is appropriate for avoiding credential handling but leaves the user without feedback on why no action was taken": 0
+            }
+          },
+          "n": {
+            "opus-4-5": 1064,
+            "opus-4-6": 152
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "chi-square",
+          "field": "autonomy_level",
+          "chi2": 11.4733,
+          "p_value": 0.074804,
+          "dof": 6,
+          "cramers_v": 0.0971,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "high",
+            "low",
+            "medium",
+            "medium - agent executed commands as requested but didn't proactively suggest or batch multiple scenarios together despite the follow-up pattern suggesting that would have been preferred.",
+            "medium - agent executed the edit correctly but required user guidance to identify unnecessary code",
+            "medium - agent took initiative to verify the stated fact rather than just acknowledging it",
+            "none"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "high": 146,
+              "low": 813,
+              "medium": 102,
+              "medium - agent executed commands as requested but didn't proactively suggest or batch multiple scenarios together despite the follow-up pattern suggesting that would have been preferred.": 0,
+              "medium - agent executed the edit correctly but required user guidance to identify unnecessary code": 1,
+              "medium - agent took initiative to verify the stated fact rather than just acknowledging it": 1,
+              "none": 1
+            },
+            "opus-4-6": {
+              "high": 28,
+              "low": 114,
+              "medium": 9,
+              "medium - agent executed commands as requested but didn't proactively suggest or batch multiple scenarios together despite the follow-up pattern suggesting that would have been preferred.": 1,
+              "medium - agent executed the edit correctly but required user guidance to identify unnecessary code": 0,
+              "medium - agent took initiative to verify the stated fact rather than just acknowledging it": 0,
+              "none": 0
+            }
+          },
+          "n": {
+            "opus-4-5": 1064,
+            "opus-4-6": 152
+          },
+          "bonferroni_significant": false
+        }
+      ],
+      "mann_whitney": [
+        {
+          "test": "mann-whitney-u",
+          "field": "alignment_score",
+          "u_statistic": 76092.5,
+          "p_value": 0.219449,
+          "cohens_d": -0.0721,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "n": {
+            "opus-4-5": 1064,
+            "opus-4-6": 152
+          },
+          "median": {
+            "opus-4-5": 2.0,
+            "opus-4-6": 2.0
+          },
+          "mean": {
+            "opus-4-5": 2.284,
+            "opus-4-6": 2.375
+          },
+          "std": {
+            "opus-4-5": 1.27,
+            "opus-4-6": 1.228
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "duration_seconds",
+          "u_statistic": 97921.0,
+          "p_value": 2.2e-05,
+          "cohens_d": 0.0343,
+          "effect_size_label": "negligible",
+          "significant_p05": true,
+          "n": {
+            "opus-4-5": 1064,
+            "opus-4-6": 152
+          },
+          "median": {
+            "opus-4-5": 10.797,
+            "opus-4-6": 5.336
+          },
+          "mean": {
+            "opus-4-5": 100.902,
+            "opus-4-6": 23.532
+          },
+          "std": {
+            "opus-4-5": 2412.621,
+            "opus-4-6": 62.674
+          },
+          "bonferroni_significant": true
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "tool_calls",
+          "u_statistic": 77430.5,
+          "p_value": 0.318787,
+          "cohens_d": -0.0625,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "n": {
+            "opus-4-5": 1064,
+            "opus-4-6": 152
+          },
+          "median": {
+            "opus-4-5": 0.0,
+            "opus-4-6": 0.0
+          },
+          "mean": {
+            "opus-4-5": 0.599,
+            "opus-4-6": 0.658
+          },
+          "std": {
+            "opus-4-5": 0.946,
+            "opus-4-6": 0.95
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "files_touched",
+          "u_statistic": 81928.0,
+          "p_value": 0.61886,
+          "cohens_d": 0.0431,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "n": {
+            "opus-4-5": 1064,
+            "opus-4-6": 152
+          },
+          "median": {
+            "opus-4-5": 0.0,
+            "opus-4-6": 0.0
+          },
+          "mean": {
+            "opus-4-5": 0.105,
+            "opus-4-6": 0.092
+          },
+          "std": {
+            "opus-4-5": 0.307,
+            "opus-4-6": 0.29
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "lines_added",
+          "u_statistic": 82888.0,
+          "p_value": 0.253071,
+          "cohens_d": 0.0548,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "n": {
+            "opus-4-5": 1064,
+            "opus-4-6": 152
+          },
+          "median": {
+            "opus-4-5": 0.0,
+            "opus-4-6": 0.0
+          },
+          "mean": {
+            "opus-4-5": 0.39,
+            "opus-4-6": 0.296
+          },
+          "std": {
+            "opus-4-5": 1.724,
+            "opus-4-6": 1.639
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "lines_removed",
+          "u_statistic": 83306.0,
+          "p_value": 0.160654,
+          "cohens_d": 0.105,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "n": {
+            "opus-4-5": 1064,
+            "opus-4-6": 152
+          },
+          "median": {
+            "opus-4-5": 0.0,
+            "opus-4-6": 0.0
+          },
+          "mean": {
+            "opus-4-5": 0.304,
+            "opus-4-6": 0.164
+          },
+          "std": {
+            "opus-4-5": 1.362,
+            "opus-4-6": 1.026
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "lines_per_minute",
+          "u_statistic": 82913.5,
+          "p_value": 0.249777,
+          "cohens_d": 0.0497,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "n": {
+            "opus-4-5": 1064,
+            "opus-4-6": 152
+          },
+          "median": {
+            "opus-4-5": 0.0,
+            "opus-4-6": 0.0
+          },
+          "mean": {
+            "opus-4-5": 2.412,
+            "opus-4-6": 1.896
+          },
+          "std": {
+            "opus-4-5": 10.486,
+            "opus-4-6": 9.495
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "tools_per_file",
+          "u_statistic": 77430.5,
+          "p_value": 0.318787,
+          "cohens_d": -0.0625,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "n": {
+            "opus-4-5": 1064,
+            "opus-4-6": 152
+          },
+          "median": {
+            "opus-4-5": 0.0,
+            "opus-4-6": 0.0
+          },
+          "mean": {
+            "opus-4-5": 0.599,
+            "opus-4-6": 0.658
+          },
+          "std": {
+            "opus-4-5": 0.946,
+            "opus-4-6": 0.95
+          },
+          "bonferroni_significant": false
+        }
+      ],
+      "proportions": [
+        {
+          "test": "two-proportion-z",
+          "field": "satisfaction_rate",
+          "z_statistic": 0,
+          "p_value": 1.0,
+          "cohens_h": 0.0,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0036,
+            "count": 0,
+            "n": 1064
+          },
+          "opus-4-6": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0247,
+            "count": 0,
+            "n": 152
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "dissatisfaction_rate",
+          "z_statistic": 0,
+          "p_value": 1.0,
+          "cohens_h": 0.0,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0036,
+            "count": 0,
+            "n": 1064
+          },
+          "opus-4-6": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0247,
+            "count": 0,
+            "n": 152
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "complete_rate",
+          "z_statistic": 0.4547,
+          "p_value": 0.649319,
+          "cohens_h": 0.04,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.1523,
+            "ci_lower": 0.1319,
+            "ci_upper": 0.1751,
+            "count": 162,
+            "n": 1064
+          },
+          "opus-4-6": {
+            "proportion": 0.1382,
+            "ci_lower": 0.0922,
+            "ci_upper": 0.202,
+            "count": 21,
+            "n": 152
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "failed_rate",
+          "z_statistic": 2.0575,
+          "p_value": 0.039636,
+          "cohens_h": 0.1882,
+          "effect_size_label": "negligible",
+          "significant_p05": true,
+          "opus-4-5": {
+            "proportion": 0.2321,
+            "ci_lower": 0.2078,
+            "ci_upper": 0.2584,
+            "count": 247,
+            "n": 1064
+          },
+          "opus-4-6": {
+            "proportion": 0.1579,
+            "ci_lower": 0.1085,
+            "ci_upper": 0.2242,
+            "count": 24,
+            "n": 152
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "scope_expanded_rate",
+          "z_statistic": -2.6468,
+          "p_value": 0.008125,
+          "cohens_h": -0.1624,
+          "effect_size_label": "negligible",
+          "significant_p05": true,
+          "opus-4-5": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0036,
+            "count": 0,
+            "n": 1064
+          },
+          "opus-4-6": {
+            "proportion": 0.0066,
+            "ci_lower": 0.0012,
+            "ci_upper": 0.0363,
+            "count": 1,
+            "n": 152
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "one_shot_rate",
+          "z_statistic": -0.7658,
+          "p_value": 0.443794,
+          "cohens_h": -0.0658,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.3177,
+            "ci_lower": 0.2904,
+            "ci_upper": 0.3463,
+            "count": 338,
+            "n": 1064
+          },
+          "opus-4-6": {
+            "proportion": 0.3487,
+            "ci_lower": 0.2775,
+            "ci_upper": 0.4273,
+            "count": 53,
+            "n": 152
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "good_execution_rate",
+          "z_statistic": 0,
+          "p_value": 1.0,
+          "cohens_h": 0.0,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0036,
+            "count": 0,
+            "n": 1064
+          },
+          "opus-4-6": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0247,
+            "count": 0,
+            "n": 152
+          },
+          "bonferroni_significant": false
+        }
+      ]
+    },
+    {
+      "label": "complexity: simple",
+      "chi_square": [
+        {
+          "test": "chi-square",
+          "field": "task_completion",
+          "chi2": 12.8669,
+          "p_value": 0.378792,
+          "dof": 12,
+          "cramers_v": 0.168,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "complete",
+            "failed",
+            "incomplete",
+            "interrupted",
+            "partial",
+            "partial - agent attempted troubleshooting but didn't resolve the core issue of phase 1 reporting completion while downloads failed",
+            "partial - agent investigated the question but didn't implement webhook support or create a working demo with async updates. The research phase was complete, but no code changes resulted.",
+            "partial - agent provided analysis and options rather than implementing selected approach, but this appeared to be the appropriate scope for the initial request",
+            "partial - initial message was acknowledged but not acted upon; new task (config analysis) would require investigation to assess completion",
+            "partial - the agent addressed the immediate error but the user continues to experience authentication failures, indicating the root cause wasn't fully resolved",
+            "partial - the commit was attempted but no changes were made; the new request was not yet addressed",
+            "unclear",
+            "unknown"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "complete": 153,
+              "failed": 10,
+              "incomplete": 1,
+              "interrupted": 34,
+              "partial": 179,
+              "partial - agent attempted troubleshooting but didn't resolve the core issue of phase 1 reporting completion while downloads failed": 0,
+              "partial - agent investigated the question but didn't implement webhook support or create a working demo with async updates. The research phase was complete, but no code changes resulted.": 1,
+              "partial - agent provided analysis and options rather than implementing selected approach, but this appeared to be the appropriate scope for the initial request": 1,
+              "partial - initial message was acknowledged but not acted upon; new task (config analysis) would require investigation to assess completion": 1,
+              "partial - the agent addressed the immediate error but the user continues to experience authentication failures, indicating the root cause wasn't fully resolved": 1,
+              "partial - the commit was attempted but no changes were made; the new request was not yet addressed": 1,
+              "unclear": 1,
+              "unknown": 0
+            },
+            "opus-4-6": {
+              "complete": 31,
+              "failed": 3,
+              "incomplete": 0,
+              "interrupted": 7,
+              "partial": 30,
+              "partial - agent attempted troubleshooting but didn't resolve the core issue of phase 1 reporting completion while downloads failed": 1,
+              "partial - agent investigated the question but didn't implement webhook support or create a working demo with async updates. The research phase was complete, but no code changes resulted.": 0,
+              "partial - agent provided analysis and options rather than implementing selected approach, but this appeared to be the appropriate scope for the initial request": 0,
+              "partial - initial message was acknowledged but not acted upon; new task (config analysis) would require investigation to assess completion": 0,
+              "partial - the agent addressed the immediate error but the user continues to experience authentication failures, indicating the root cause wasn't fully resolved": 0,
+              "partial - the commit was attempted but no changes were made; the new request was not yet addressed": 0,
+              "unclear": 0,
+              "unknown": 1
+            }
+          },
+          "n": {
+            "opus-4-5": 383,
+            "opus-4-6": 73
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "chi-square",
+          "field": "scope_management",
+          "chi2": 10.0094,
+          "p_value": 0.07497,
+          "dof": 5,
+          "cramers_v": 0.1482,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "appropriate",
+            "expanded",
+            "focused",
+            "focused - agent stayed on the immediate troubleshooting task without adding unnecessary complexity",
+            "focused - agent stayed tightly on answering the specific question about how webhook async updates work, without over-extending into implementation.",
+            "focused - the agent stayed narrowly focused on the email configuration without expanding into unrelated areas"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "appropriate": 37,
+              "expanded": 4,
+              "focused": 340,
+              "focused - agent stayed on the immediate troubleshooting task without adding unnecessary complexity": 0,
+              "focused - agent stayed tightly on answering the specific question about how webhook async updates work, without over-extending into implementation.": 1,
+              "focused - the agent stayed narrowly focused on the email configuration without expanding into unrelated areas": 1
+            },
+            "opus-4-6": {
+              "appropriate": 13,
+              "expanded": 1,
+              "focused": 58,
+              "focused - agent stayed on the immediate troubleshooting task without adding unnecessary complexity": 1,
+              "focused - agent stayed tightly on answering the specific question about how webhook async updates work, without over-extending into implementation.": 0,
+              "focused - the agent stayed narrowly focused on the email configuration without expanding into unrelated areas": 0
+            }
+          },
+          "n": {
+            "opus-4-5": 383,
+            "opus-4-6": 73
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "chi-square",
+          "field": "iteration_required",
+          "chi2": 7.2619,
+          "p_value": 0.201878,
+          "dof": 5,
+          "cramers_v": 0.1262,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "minor",
+            "minor - one follow-up question from user about a related but distinct concern (cleanup behavior), suggesting the investigation provided sufficient foundation for the next iteration.",
+            "one_shot",
+            "significant",
+            "significant - the user's follow-up indicates the problem persists and further iteration would be needed to fully resolve the authentication issue",
+            "significant - user's follow-up indicates the first attempt missed the mark and multiple rounds will be needed"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "minor": 63,
+              "minor - one follow-up question from user about a related but distinct concern (cleanup behavior), suggesting the investigation provided sufficient foundation for the next iteration.": 1,
+              "one_shot": 166,
+              "significant": 152,
+              "significant - the user's follow-up indicates the problem persists and further iteration would be needed to fully resolve the authentication issue": 1,
+              "significant - user's follow-up indicates the first attempt missed the mark and multiple rounds will be needed": 0
+            },
+            "opus-4-6": {
+              "minor": 14,
+              "minor - one follow-up question from user about a related but distinct concern (cleanup behavior), suggesting the investigation provided sufficient foundation for the next iteration.": 0,
+              "one_shot": 35,
+              "significant": 23,
+              "significant - the user's follow-up indicates the problem persists and further iteration would be needed to fully resolve the authentication issue": 0,
+              "significant - user's follow-up indicates the first attempt missed the mark and multiple rounds will be needed": 1
+            }
+          },
+          "n": {
+            "opus-4-5": 383,
+            "opus-4-6": 73
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "chi-square",
+          "field": "error_recovery",
+          "chi2": 8.7312,
+          "p_value": 0.462447,
+          "dof": 9,
+          "cramers_v": 0.1384,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "failed",
+            "none_needed",
+            "none_needed - no commits were available, which is not an error but a pre-condition issue",
+            "none_needed - no errors encountered during straightforward code search and reading.",
+            "recovered",
+            "recovered - agent identified the configuration issue and fixed it successfully",
+            "struggled",
+            "struggled - agent ran commands but didn't effectively use results to narrow down the root cause or ask clarifying questions about pipeline architecture",
+            "struggled - the agent made an edit but didn't verify or diagnose whether it would actually resolve the underlying issue",
+            "struggled - while the agent made a change addressing the initial error message, the subsequent authentication failure indicates the underlying issue wasn't properly resolved"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "failed": 2,
+              "none_needed": 318,
+              "none_needed - no commits were available, which is not an error but a pre-condition issue": 1,
+              "none_needed - no errors encountered during straightforward code search and reading.": 1,
+              "recovered": 25,
+              "recovered - agent identified the configuration issue and fixed it successfully": 1,
+              "struggled": 33,
+              "struggled - agent ran commands but didn't effectively use results to narrow down the root cause or ask clarifying questions about pipeline architecture": 0,
+              "struggled - the agent made an edit but didn't verify or diagnose whether it would actually resolve the underlying issue": 1,
+              "struggled - while the agent made a change addressing the initial error message, the subsequent authentication failure indicates the underlying issue wasn't properly resolved": 1
+            },
+            "opus-4-6": {
+              "failed": 1,
+              "none_needed": 61,
+              "none_needed - no commits were available, which is not an error but a pre-condition issue": 0,
+              "none_needed - no errors encountered during straightforward code search and reading.": 0,
+              "recovered": 2,
+              "recovered - agent identified the configuration issue and fixed it successfully": 0,
+              "struggled": 8,
+              "struggled - agent ran commands but didn't effectively use results to narrow down the root cause or ask clarifying questions about pipeline architecture": 1,
+              "struggled - the agent made an edit but didn't verify or diagnose whether it would actually resolve the underlying issue": 0,
+              "struggled - while the agent made a change addressing the initial error message, the subsequent authentication failure indicates the underlying issue wasn't properly resolved": 0
+            }
+          },
+          "n": {
+            "opus-4-5": 383,
+            "opus-4-6": 73
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "chi-square",
+          "field": "communication_quality",
+          "chi2": 6.282,
+          "p_value": 0.615681,
+          "dof": 8,
+          "cramers_v": 0.1174,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "adequate",
+            "adequate - agent acknowledged the workflow but context is limited to understand how thoroughly the new task request was addressed",
+            "adequate - agent executed the requested git operation but the new request was not started",
+            "adequate - agent explained findings clearly but could have been more forward-looking about implementation implications or next steps.",
+            "adequate - agent explained search steps and commands but didn't articulate hypotheses about the phase 1 completion contradiction",
+            "adequate - agent presented multiple options with considerations, though the follow-up suggests the presentation could have been more directly actionable",
+            "adequate - the agent showed its work through tool calls but didn't explain the authentication mechanism changes or potential next steps for diagnosis",
+            "clear",
+            "unclear"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "adequate": 319,
+              "adequate - agent acknowledged the workflow but context is limited to understand how thoroughly the new task request was addressed": 1,
+              "adequate - agent executed the requested git operation but the new request was not started": 1,
+              "adequate - agent explained findings clearly but could have been more forward-looking about implementation implications or next steps.": 1,
+              "adequate - agent explained search steps and commands but didn't articulate hypotheses about the phase 1 completion contradiction": 0,
+              "adequate - agent presented multiple options with considerations, though the follow-up suggests the presentation could have been more directly actionable": 1,
+              "adequate - the agent showed its work through tool calls but didn't explain the authentication mechanism changes or potential next steps for diagnosis": 1,
+              "clear": 36,
+              "unclear": 23
+            },
+            "opus-4-6": {
+              "adequate": 60,
+              "adequate - agent acknowledged the workflow but context is limited to understand how thoroughly the new task request was addressed": 0,
+              "adequate - agent executed the requested git operation but the new request was not started": 0,
+              "adequate - agent explained findings clearly but could have been more forward-looking about implementation implications or next steps.": 0,
+              "adequate - agent explained search steps and commands but didn't articulate hypotheses about the phase 1 completion contradiction": 1,
+              "adequate - agent presented multiple options with considerations, though the follow-up suggests the presentation could have been more directly actionable": 0,
+              "adequate - the agent showed its work through tool calls but didn't explain the authentication mechanism changes or potential next steps for diagnosis": 0,
+              "clear": 7,
+              "unclear": 5
+            }
+          },
+          "n": {
+            "opus-4-5": 383,
+            "opus-4-6": 73
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "chi-square",
+          "field": "autonomy_level",
+          "chi2": 5.8408,
+          "p_value": 0.211358,
+          "dof": 4,
+          "cramers_v": 0.1132,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "high",
+            "low",
+            "medium",
+            "medium - agent ran searches and commands but didn't pursue deeper investigation into pipeline state or logs after initial attempts",
+            "medium - the agent read existing configuration, made edits, but didn't proactively test or validate the changes before the user reported new errors"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "high": 220,
+              "low": 25,
+              "medium": 137,
+              "medium - agent ran searches and commands but didn't pursue deeper investigation into pipeline state or logs after initial attempts": 0,
+              "medium - the agent read existing configuration, made edits, but didn't proactively test or validate the changes before the user reported new errors": 1
+            },
+            "opus-4-6": {
+              "high": 42,
+              "low": 6,
+              "medium": 24,
+              "medium - agent ran searches and commands but didn't pursue deeper investigation into pipeline state or logs after initial attempts": 1,
+              "medium - the agent read existing configuration, made edits, but didn't proactively test or validate the changes before the user reported new errors": 0
+            }
+          },
+          "n": {
+            "opus-4-5": 383,
+            "opus-4-6": 73
+          },
+          "bonferroni_significant": false
+        }
+      ],
+      "mann_whitney": [
+        {
+          "test": "mann-whitney-u",
+          "field": "alignment_score",
+          "u_statistic": 14549.0,
+          "p_value": 0.568961,
+          "cohens_d": 0.081,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "n": {
+            "opus-4-5": 383,
+            "opus-4-6": 73
+          },
+          "median": {
+            "opus-4-5": 3.0,
+            "opus-4-6": 3.0
+          },
+          "mean": {
+            "opus-4-5": 3.423,
+            "opus-4-6": 3.329
+          },
+          "std": {
+            "opus-4-5": 1.159,
+            "opus-4-6": 1.179
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "duration_seconds",
+          "u_statistic": 14314.0,
+          "p_value": 0.746179,
+          "cohens_d": -0.1847,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "n": {
+            "opus-4-5": 383,
+            "opus-4-6": 73
+          },
+          "median": {
+            "opus-4-5": 48.142,
+            "opus-4-6": 46.262
+          },
+          "mean": {
+            "opus-4-5": 71.351,
+            "opus-4-6": 92.939
+          },
+          "std": {
+            "opus-4-5": 108.459,
+            "opus-4-6": 154.024
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "tool_calls",
+          "u_statistic": 11867.5,
+          "p_value": 0.038528,
+          "cohens_d": -0.239,
+          "effect_size_label": "small",
+          "significant_p05": true,
+          "n": {
+            "opus-4-5": 383,
+            "opus-4-6": 73
+          },
+          "median": {
+            "opus-4-5": 5.0,
+            "opus-4-6": 6.0
+          },
+          "mean": {
+            "opus-4-5": 5.217,
+            "opus-4-6": 5.753
+          },
+          "std": {
+            "opus-4-5": 2.26,
+            "opus-4-6": 2.165
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "files_touched",
+          "u_statistic": 18234.0,
+          "p_value": 1.2e-05,
+          "cohens_d": 0.5354,
+          "effect_size_label": "medium",
+          "significant_p05": true,
+          "n": {
+            "opus-4-5": 383,
+            "opus-4-6": 73
+          },
+          "median": {
+            "opus-4-5": 1.0,
+            "opus-4-6": 0.0
+          },
+          "mean": {
+            "opus-4-5": 1.081,
+            "opus-4-6": 0.616
+          },
+          "std": {
+            "opus-4-5": 0.884,
+            "opus-4-6": 0.775
+          },
+          "bonferroni_significant": true
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "lines_added",
+          "u_statistic": 16044.5,
+          "p_value": 0.036532,
+          "cohens_d": -0.0027,
+          "effect_size_label": "negligible",
+          "significant_p05": true,
+          "n": {
+            "opus-4-5": 383,
+            "opus-4-6": 73
+          },
+          "median": {
+            "opus-4-5": 6.0,
+            "opus-4-6": 0.0
+          },
+          "mean": {
+            "opus-4-5": 14.916,
+            "opus-4-6": 14.973
+          },
+          "std": {
+            "opus-4-5": 19.405,
+            "opus-4-6": 27.41
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "lines_removed",
+          "u_statistic": 17674.5,
+          "p_value": 0.000127,
+          "cohens_d": 0.3477,
+          "effect_size_label": "small",
+          "significant_p05": true,
+          "n": {
+            "opus-4-5": 383,
+            "opus-4-6": 73
+          },
+          "median": {
+            "opus-4-5": 2.0,
+            "opus-4-6": 0.0
+          },
+          "mean": {
+            "opus-4-5": 9.06,
+            "opus-4-6": 4.658
+          },
+          "std": {
+            "opus-4-5": 12.905,
+            "opus-4-6": 11.296
+          },
+          "bonferroni_significant": true
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "lines_per_minute",
+          "u_statistic": 16295.5,
+          "p_value": 0.019023,
+          "cohens_d": 0.0229,
+          "effect_size_label": "negligible",
+          "significant_p05": true,
+          "n": {
+            "opus-4-5": 383,
+            "opus-4-6": 73
+          },
+          "median": {
+            "opus-4-5": 11.67,
+            "opus-4-6": 0.0
+          },
+          "mean": {
+            "opus-4-5": 33.81,
+            "opus-4-6": 32.63
+          },
+          "std": {
+            "opus-4-5": 46.936,
+            "opus-4-6": 70.779
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "tools_per_file",
+          "u_statistic": 10224.0,
+          "p_value": 0.000244,
+          "cohens_d": -0.4292,
+          "effect_size_label": "small",
+          "significant_p05": true,
+          "n": {
+            "opus-4-5": 383,
+            "opus-4-6": 73
+          },
+          "median": {
+            "opus-4-5": 4.0,
+            "opus-4-6": 5.0
+          },
+          "mean": {
+            "opus-4-5": 4.331,
+            "opus-4-6": 5.304
+          },
+          "std": {
+            "opus-4-5": 2.297,
+            "opus-4-6": 2.1
+          },
+          "bonferroni_significant": true
+        }
+      ],
+      "proportions": [
+        {
+          "test": "two-proportion-z",
+          "field": "satisfaction_rate",
+          "z_statistic": 0,
+          "p_value": 1.0,
+          "cohens_h": 0.0,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0099,
+            "count": 0,
+            "n": 383
+          },
+          "opus-4-6": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.05,
+            "count": 0,
+            "n": 73
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "dissatisfaction_rate",
+          "z_statistic": 0,
+          "p_value": 1.0,
+          "cohens_h": 0.0,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0099,
+            "count": 0,
+            "n": 383
+          },
+          "opus-4-6": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.05,
+            "count": 0,
+            "n": 73
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "complete_rate",
+          "z_statistic": -0.4019,
+          "p_value": 0.687769,
+          "cohens_h": -0.0512,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.3995,
+            "ci_lower": 0.3517,
+            "ci_upper": 0.4493,
+            "count": 153,
+            "n": 383
+          },
+          "opus-4-6": {
+            "proportion": 0.4247,
+            "ci_lower": 0.3178,
+            "ci_upper": 0.539,
+            "count": 31,
+            "n": 73
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "failed_rate",
+          "z_statistic": -0.7051,
+          "p_value": 0.480737,
+          "cohens_h": -0.0837,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.0261,
+            "ci_lower": 0.0142,
+            "ci_upper": 0.0474,
+            "count": 10,
+            "n": 383
+          },
+          "opus-4-6": {
+            "proportion": 0.0411,
+            "ci_lower": 0.0141,
+            "ci_upper": 0.114,
+            "count": 3,
+            "n": 73
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "scope_expanded_rate",
+          "z_statistic": -0.2447,
+          "p_value": 0.806664,
+          "cohens_h": -0.0299,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.0104,
+            "ci_lower": 0.0041,
+            "ci_upper": 0.0265,
+            "count": 4,
+            "n": 383
+          },
+          "opus-4-6": {
+            "proportion": 0.0137,
+            "ci_lower": 0.0024,
+            "ci_upper": 0.0736,
+            "count": 1,
+            "n": 73
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "one_shot_rate",
+          "z_statistic": -0.726,
+          "p_value": 0.467843,
+          "cohens_h": -0.0924,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.4334,
+            "ci_lower": 0.3847,
+            "ci_upper": 0.4835,
+            "count": 166,
+            "n": 383
+          },
+          "opus-4-6": {
+            "proportion": 0.4795,
+            "ci_lower": 0.3688,
+            "ci_upper": 0.5922,
+            "count": 35,
+            "n": 73
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "good_execution_rate",
+          "z_statistic": 0,
+          "p_value": 1.0,
+          "cohens_h": 0.0,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0099,
+            "count": 0,
+            "n": 383
+          },
+          "opus-4-6": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.05,
+            "count": 0,
+            "n": 73
+          },
+          "bonferroni_significant": false
+        }
+      ]
+    },
+    {
+      "label": "complexity: moderate",
+      "chi_square": [
+        {
+          "test": "chi-square",
+          "field": "task_completion",
+          "chi2": 14.9441,
+          "p_value": 0.060242,
+          "dof": 8,
+          "cramers_v": 0.1764,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "complete",
+            "failed",
+            "interrupted",
+            "partial",
+            "partial - debugging was completed successfully, but the help command request is a new task that follows",
+            "partial - research phase completed thoroughly, but follow-up implementation request ('add it') suggests user expected actionable output or implementation guidance from research phase",
+            "partial - the agent completed the label creation task but the new requirements in the next message are unaddressed in this task record",
+            "partial - the agent performed debugging work but did not identify or resolve the button icon missing problem that became apparent to the user",
+            "unclear"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "complete": 153,
+              "failed": 11,
+              "interrupted": 29,
+              "partial": 201,
+              "partial - debugging was completed successfully, but the help command request is a new task that follows": 0,
+              "partial - research phase completed thoroughly, but follow-up implementation request ('add it') suggests user expected actionable output or implementation guidance from research phase": 1,
+              "partial - the agent completed the label creation task but the new requirements in the next message are unaddressed in this task record": 1,
+              "partial - the agent performed debugging work but did not identify or resolve the button icon missing problem that became apparent to the user": 1,
+              "unclear": 1
+            },
+            "opus-4-6": {
+              "complete": 41,
+              "failed": 0,
+              "interrupted": 10,
+              "partial": 30,
+              "partial - debugging was completed successfully, but the help command request is a new task that follows": 1,
+              "partial - research phase completed thoroughly, but follow-up implementation request ('add it') suggests user expected actionable output or implementation guidance from research phase": 0,
+              "partial - the agent completed the label creation task but the new requirements in the next message are unaddressed in this task record": 0,
+              "partial - the agent performed debugging work but did not identify or resolve the button icon missing problem that became apparent to the user": 0,
+              "unclear": 0
+            }
+          },
+          "n": {
+            "opus-4-5": 398,
+            "opus-4-6": 82
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "chi-square",
+          "field": "scope_management",
+          "chi2": 2.7259,
+          "p_value": 0.74215,
+          "dof": 5,
+          "cramers_v": 0.0754,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "appropriate",
+            "expanded",
+            "focused",
+            "focused - the agent stayed on the initial request without expanding scope",
+            "focused - the agent stayed on the task of investigating the build without adding unrelated work, though the investigation was ultimately ineffective",
+            "over_engineered"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "appropriate": 142,
+              "expanded": 12,
+              "focused": 241,
+              "focused - the agent stayed on the initial request without expanding scope": 1,
+              "focused - the agent stayed on the task of investigating the build without adding unrelated work, though the investigation was ultimately ineffective": 1,
+              "over_engineered": 1
+            },
+            "opus-4-6": {
+              "appropriate": 23,
+              "expanded": 2,
+              "focused": 57,
+              "focused - the agent stayed on the initial request without expanding scope": 0,
+              "focused - the agent stayed on the task of investigating the build without adding unrelated work, though the investigation was ultimately ineffective": 0,
+              "over_engineered": 0
+            }
+          },
+          "n": {
+            "opus-4-5": 398,
+            "opus-4-6": 82
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "chi-square",
+          "field": "iteration_required",
+          "chi2": 5.3524,
+          "p_value": 0.253011,
+          "dof": 4,
+          "cramers_v": 0.1056,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "minor",
+            "minor - the user's follow-up shows they're satisfied enough to move forward with the next phase",
+            "one_shot",
+            "significant",
+            "significant - the user had to return with a more specific problem statement after the initial debugging attempt"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "minor": 90,
+              "minor - the user's follow-up shows they're satisfied enough to move forward with the next phase": 1,
+              "one_shot": 144,
+              "significant": 162,
+              "significant - the user had to return with a more specific problem statement after the initial debugging attempt": 1
+            },
+            "opus-4-6": {
+              "minor": 21,
+              "minor - the user's follow-up shows they're satisfied enough to move forward with the next phase": 0,
+              "one_shot": 38,
+              "significant": 23,
+              "significant - the user had to return with a more specific problem statement after the initial debugging attempt": 0
+            }
+          },
+          "n": {
+            "opus-4-5": 398,
+            "opus-4-6": 82
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "chi-square",
+          "field": "error_recovery",
+          "chi2": 11.3595,
+          "p_value": 0.123686,
+          "dof": 7,
+          "cramers_v": 0.1538,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "failed",
+            "none_needed",
+            "none_needed - no errors appear in the execution record",
+            "none_needed - no errors occurred, but the agent's troubleshooting approach did not successfully diagnose the issue",
+            "recovered",
+            "recovered - agent encountered test failures, investigated root cause (submitter_id field missing), and fixed it without user intervention",
+            "recovered - agent identified the shebang issue and fixed it after initial attempts",
+            "struggled"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "failed": 5,
+              "none_needed": 318,
+              "none_needed - no errors appear in the execution record": 1,
+              "none_needed - no errors occurred, but the agent's troubleshooting approach did not successfully diagnose the issue": 1,
+              "recovered": 33,
+              "recovered - agent encountered test failures, investigated root cause (submitter_id field missing), and fixed it without user intervention": 1,
+              "recovered - agent identified the shebang issue and fixed it after initial attempts": 0,
+              "struggled": 39
+            },
+            "opus-4-6": {
+              "failed": 0,
+              "none_needed": 71,
+              "none_needed - no errors appear in the execution record": 0,
+              "none_needed - no errors occurred, but the agent's troubleshooting approach did not successfully diagnose the issue": 0,
+              "recovered": 8,
+              "recovered - agent encountered test failures, investigated root cause (submitter_id field missing), and fixed it without user intervention": 0,
+              "recovered - agent identified the shebang issue and fixed it after initial attempts": 1,
+              "struggled": 2
+            }
+          },
+          "n": {
+            "opus-4-5": 398,
+            "opus-4-6": 82
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "chi-square",
+          "field": "communication_quality",
+          "chi2": 3.8841,
+          "p_value": 0.421919,
+          "dof": 4,
+          "cramers_v": 0.09,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "adequate",
+            "adequate - the agent likely explained what it was testing and checking, but the results were not clarifying for the user",
+            "clear",
+            "unclear",
+            "unclear - the transcript shows 11 Bash calls but no human-readable explanation or summary of what labels were created or why"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "adequate": 310,
+              "adequate - the agent likely explained what it was testing and checking, but the results were not clarifying for the user": 1,
+              "clear": 75,
+              "unclear": 11,
+              "unclear - the transcript shows 11 Bash calls but no human-readable explanation or summary of what labels were created or why": 1
+            },
+            "opus-4-6": {
+              "adequate": 57,
+              "adequate - the agent likely explained what it was testing and checking, but the results were not clarifying for the user": 0,
+              "clear": 23,
+              "unclear": 2,
+              "unclear - the transcript shows 11 Bash calls but no human-readable explanation or summary of what labels were created or why": 0
+            }
+          },
+          "n": {
+            "opus-4-5": 398,
+            "opus-4-6": 82
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "chi-square",
+          "field": "autonomy_level",
+          "chi2": 1.2079,
+          "p_value": 0.751113,
+          "dof": 3,
+          "cramers_v": 0.0502,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "high",
+            "low",
+            "medium",
+            "medium - the agent executed multiple tool calls autonomously but didn't independently discover or fix the underlying issue"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "high": 300,
+              "low": 2,
+              "medium": 95,
+              "medium - the agent executed multiple tool calls autonomously but didn't independently discover or fix the underlying issue": 1
+            },
+            "opus-4-6": {
+              "high": 59,
+              "low": 0,
+              "medium": 23,
+              "medium - the agent executed multiple tool calls autonomously but didn't independently discover or fix the underlying issue": 0
+            }
+          },
+          "n": {
+            "opus-4-5": 398,
+            "opus-4-6": 82
+          },
+          "bonferroni_significant": false
+        }
+      ],
+      "mann_whitney": [
+        {
+          "test": "mann-whitney-u",
+          "field": "alignment_score",
+          "u_statistic": 13917.0,
+          "p_value": 0.029236,
+          "cohens_d": -0.2557,
+          "effect_size_label": "small",
+          "significant_p05": true,
+          "n": {
+            "opus-4-5": 398,
+            "opus-4-6": 82
+          },
+          "median": {
+            "opus-4-5": 3.0,
+            "opus-4-6": 4.0
+          },
+          "mean": {
+            "opus-4-5": 3.462,
+            "opus-4-6": 3.72
+          },
+          "std": {
+            "opus-4-5": 1.002,
+            "opus-4-6": 1.022
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "duration_seconds",
+          "u_statistic": 15348.0,
+          "p_value": 0.396632,
+          "cohens_d": 0.0148,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "n": {
+            "opus-4-5": 398,
+            "opus-4-6": 82
+          },
+          "median": {
+            "opus-4-5": 110.788,
+            "opus-4-6": 118.375
+          },
+          "mean": {
+            "opus-4-5": 726.834,
+            "opus-4-6": 619.457
+          },
+          "std": {
+            "opus-4-5": 7846.636,
+            "opus-4-6": 3167.08
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "tool_calls",
+          "u_statistic": 14904.5,
+          "p_value": 0.216131,
+          "cohens_d": -0.1201,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "n": {
+            "opus-4-5": 398,
+            "opus-4-6": 82
+          },
+          "median": {
+            "opus-4-5": 12.0,
+            "opus-4-6": 13.0
+          },
+          "mean": {
+            "opus-4-5": 12.497,
+            "opus-4-6": 13.293
+          },
+          "std": {
+            "opus-4-5": 6.724,
+            "opus-4-6": 6.083
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "files_touched",
+          "u_statistic": 15794.0,
+          "p_value": 0.641736,
+          "cohens_d": -0.0165,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "n": {
+            "opus-4-5": 398,
+            "opus-4-6": 82
+          },
+          "median": {
+            "opus-4-5": 2.0,
+            "opus-4-6": 3.0
+          },
+          "mean": {
+            "opus-4-5": 2.842,
+            "opus-4-6": 2.878
+          },
+          "std": {
+            "opus-4-5": 2.218,
+            "opus-4-6": 2.11
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "lines_added",
+          "u_statistic": 18750.5,
+          "p_value": 0.032982,
+          "cohens_d": 0.2617,
+          "effect_size_label": "small",
+          "significant_p05": true,
+          "n": {
+            "opus-4-5": 398,
+            "opus-4-6": 82
+          },
+          "median": {
+            "opus-4-5": 85.0,
+            "opus-4-6": 63.0
+          },
+          "mean": {
+            "opus-4-5": 112.47,
+            "opus-4-6": 85.427
+          },
+          "std": {
+            "opus-4-5": 106.005,
+            "opus-4-6": 89.177
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "lines_removed",
+          "u_statistic": 19677.5,
+          "p_value": 0.002693,
+          "cohens_d": 0.1854,
+          "effect_size_label": "negligible",
+          "significant_p05": true,
+          "n": {
+            "opus-4-5": 398,
+            "opus-4-6": 82
+          },
+          "median": {
+            "opus-4-5": 22.0,
+            "opus-4-6": 0.0
+          },
+          "mean": {
+            "opus-4-5": 40.261,
+            "opus-4-6": 30.902
+          },
+          "std": {
+            "opus-4-5": 48.674,
+            "opus-4-6": 58.52
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "lines_per_minute",
+          "u_statistic": 19563.0,
+          "p_value": 0.004446,
+          "cohens_d": 0.3401,
+          "effect_size_label": "small",
+          "significant_p05": true,
+          "n": {
+            "opus-4-5": 398,
+            "opus-4-6": 82
+          },
+          "median": {
+            "opus-4-5": 67.426,
+            "opus-4-6": 34.165
+          },
+          "mean": {
+            "opus-4-5": 87.115,
+            "opus-4-6": 58.664
+          },
+          "std": {
+            "opus-4-5": 86.197,
+            "opus-4-6": 69.832
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "tools_per_file",
+          "u_statistic": 15429.0,
+          "p_value": 0.437022,
+          "cohens_d": 0.0122,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "n": {
+            "opus-4-5": 398,
+            "opus-4-6": 82
+          },
+          "median": {
+            "opus-4-5": 4.792,
+            "opus-4-6": 4.875
+          },
+          "mean": {
+            "opus-4-5": 6.423,
+            "opus-4-6": 6.357
+          },
+          "std": {
+            "opus-4-5": 5.601,
+            "opus-4-6": 4.539
+          },
+          "bonferroni_significant": false
+        }
+      ],
+      "proportions": [
+        {
+          "test": "two-proportion-z",
+          "field": "satisfaction_rate",
+          "z_statistic": 0,
+          "p_value": 1.0,
+          "cohens_h": 0.0,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0096,
+            "count": 0,
+            "n": 398
+          },
+          "opus-4-6": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0448,
+            "count": 0,
+            "n": 82
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "dissatisfaction_rate",
+          "z_statistic": 0,
+          "p_value": 1.0,
+          "cohens_h": 0.0,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0096,
+            "count": 0,
+            "n": 398
+          },
+          "opus-4-6": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0448,
+            "count": 0,
+            "n": 82
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "complete_rate",
+          "z_statistic": -1.942,
+          "p_value": 0.052131,
+          "cohens_h": -0.2333,
+          "effect_size_label": "small",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.3844,
+            "ci_lower": 0.338,
+            "ci_upper": 0.4331,
+            "count": 153,
+            "n": 398
+          },
+          "opus-4-6": {
+            "proportion": 0.5,
+            "ci_lower": 0.3942,
+            "ci_upper": 0.6058,
+            "count": 41,
+            "n": 82
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "failed_rate",
+          "z_statistic": 1.523,
+          "p_value": 0.127762,
+          "cohens_h": 0.334,
+          "effect_size_label": "small",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.0276,
+            "ci_lower": 0.0155,
+            "ci_upper": 0.0488,
+            "count": 11,
+            "n": 398
+          },
+          "opus-4-6": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0448,
+            "count": 0,
+            "n": 82
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "scope_expanded_rate",
+          "z_statistic": 0.2823,
+          "p_value": 0.777732,
+          "cohens_h": 0.0354,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.0302,
+            "ci_lower": 0.0173,
+            "ci_upper": 0.052,
+            "count": 12,
+            "n": 398
+          },
+          "opus-4-6": {
+            "proportion": 0.0244,
+            "ci_lower": 0.0067,
+            "ci_upper": 0.0846,
+            "count": 2,
+            "n": 82
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "one_shot_rate",
+          "z_statistic": -1.7268,
+          "p_value": 0.084203,
+          "cohens_h": -0.2068,
+          "effect_size_label": "small",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.3618,
+            "ci_lower": 0.3161,
+            "ci_upper": 0.4101,
+            "count": 144,
+            "n": 398
+          },
+          "opus-4-6": {
+            "proportion": 0.4634,
+            "ci_lower": 0.3595,
+            "ci_upper": 0.5706,
+            "count": 38,
+            "n": 82
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "good_execution_rate",
+          "z_statistic": 0,
+          "p_value": 1.0,
+          "cohens_h": 0.0,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0096,
+            "count": 0,
+            "n": 398
+          },
+          "opus-4-6": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0448,
+            "count": 0,
+            "n": 82
+          },
+          "bonferroni_significant": false
+        }
+      ]
+    },
+    {
+      "label": "complexity: complex",
+      "chi_square": [
+        {
+          "test": "chi-square",
+          "field": "task_completion",
+          "chi2": 2.0923,
+          "p_value": 0.553479,
+          "dof": 3,
+          "cramers_v": 0.0998,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "complete",
+            "failed",
+            "interrupted",
+            "partial"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "complete": 92,
+              "failed": 3,
+              "interrupted": 4,
+              "partial": 68
+            },
+            "opus-4-6": {
+              "complete": 23,
+              "failed": 0,
+              "interrupted": 0,
+              "partial": 20
+            }
+          },
+          "n": {
+            "opus-4-5": 167,
+            "opus-4-6": 43
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "chi-square",
+          "field": "scope_management",
+          "chi2": 2.5677,
+          "p_value": 0.463188,
+          "dof": 3,
+          "cramers_v": 0.1106,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "appropriate",
+            "expanded",
+            "focused",
+            "over_engineered"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "appropriate": 116,
+              "expanded": 7,
+              "focused": 41,
+              "over_engineered": 3
+            },
+            "opus-4-6": {
+              "appropriate": 26,
+              "expanded": 2,
+              "focused": 15,
+              "over_engineered": 0
+            }
+          },
+          "n": {
+            "opus-4-5": 167,
+            "opus-4-6": 43
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "chi-square",
+          "field": "iteration_required",
+          "chi2": 3.9478,
+          "p_value": 0.138916,
+          "dof": 2,
+          "cramers_v": 0.1371,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": false,
+          "categories": [
+            "minor",
+            "one_shot",
+            "significant"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "minor": 41,
+              "one_shot": 69,
+              "significant": 57
+            },
+            "opus-4-6": {
+              "minor": 8,
+              "one_shot": 25,
+              "significant": 10
+            }
+          },
+          "n": {
+            "opus-4-5": 167,
+            "opus-4-6": 43
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "chi-square",
+          "field": "error_recovery",
+          "chi2": 2.9689,
+          "p_value": 0.39644,
+          "dof": 3,
+          "cramers_v": 0.1189,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "failed",
+            "none_needed",
+            "recovered",
+            "struggled"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "failed": 2,
+              "none_needed": 134,
+              "recovered": 23,
+              "struggled": 8
+            },
+            "opus-4-6": {
+              "failed": 0,
+              "none_needed": 38,
+              "recovered": 5,
+              "struggled": 0
+            }
+          },
+          "n": {
+            "opus-4-5": 167,
+            "opus-4-6": 43
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "chi-square",
+          "field": "communication_quality",
+          "chi2": 0.0011,
+          "p_value": 0.973531,
+          "dof": 1,
+          "cramers_v": 0.0023,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": false,
+          "categories": [
+            "adequate",
+            "clear"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "adequate": 100,
+              "clear": 67
+            },
+            "opus-4-6": {
+              "adequate": 25,
+              "clear": 18
+            }
+          },
+          "n": {
+            "opus-4-5": 167,
+            "opus-4-6": 43
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "chi-square",
+          "field": "autonomy_level",
+          "chi2": 0.2503,
+          "p_value": 0.616853,
+          "dof": 1,
+          "cramers_v": 0.0345,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "low_expected_warning": true,
+          "categories": [
+            "high",
+            "medium"
+          ],
+          "counts": {
+            "opus-4-5": {
+              "high": 153,
+              "medium": 14
+            },
+            "opus-4-6": {
+              "high": 41,
+              "medium": 2
+            }
+          },
+          "n": {
+            "opus-4-5": 167,
+            "opus-4-6": 43
+          },
+          "bonferroni_significant": false
+        }
+      ],
+      "mann_whitney": [
+        {
+          "test": "mann-whitney-u",
+          "field": "alignment_score",
+          "u_statistic": 2861.0,
+          "p_value": 0.030506,
+          "cohens_d": -0.3897,
+          "effect_size_label": "small",
+          "significant_p05": true,
+          "n": {
+            "opus-4-5": 167,
+            "opus-4-6": 43
+          },
+          "median": {
+            "opus-4-5": 4.0,
+            "opus-4-6": 4.0
+          },
+          "mean": {
+            "opus-4-5": 3.737,
+            "opus-4-6": 4.093
+          },
+          "std": {
+            "opus-4-5": 0.946,
+            "opus-4-6": 0.781
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "duration_seconds",
+          "u_statistic": 3465.0,
+          "p_value": 0.725005,
+          "cohens_d": 0.1319,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "n": {
+            "opus-4-5": 167,
+            "opus-4-6": 43
+          },
+          "median": {
+            "opus-4-5": 296.445,
+            "opus-4-6": 323.691
+          },
+          "mean": {
+            "opus-4-5": 1592.758,
+            "opus-4-6": 485.186
+          },
+          "std": {
+            "opus-4-5": 9395.077,
+            "opus-4-6": 473.133
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "tool_calls",
+          "u_statistic": 2540.0,
+          "p_value": 0.003118,
+          "cohens_d": -0.5682,
+          "effect_size_label": "medium",
+          "significant_p05": true,
+          "n": {
+            "opus-4-5": 167,
+            "opus-4-6": 43
+          },
+          "median": {
+            "opus-4-5": 32.0,
+            "opus-4-6": 38.0
+          },
+          "mean": {
+            "opus-4-5": 31.623,
+            "opus-4-6": 40.093
+          },
+          "std": {
+            "opus-4-5": 14.277,
+            "opus-4-6": 17.171
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "files_touched",
+          "u_statistic": 3238.0,
+          "p_value": 0.32016,
+          "cohens_d": -0.2465,
+          "effect_size_label": "small",
+          "significant_p05": false,
+          "n": {
+            "opus-4-5": 167,
+            "opus-4-6": 43
+          },
+          "median": {
+            "opus-4-5": 6.0,
+            "opus-4-6": 7.0
+          },
+          "mean": {
+            "opus-4-5": 6.599,
+            "opus-4-6": 7.698
+          },
+          "std": {
+            "opus-4-5": 4.206,
+            "opus-4-6": 5.339
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "lines_added",
+          "u_statistic": 3972.5,
+          "p_value": 0.282963,
+          "cohens_d": 0.2069,
+          "effect_size_label": "small",
+          "significant_p05": false,
+          "n": {
+            "opus-4-5": 167,
+            "opus-4-6": 43
+          },
+          "median": {
+            "opus-4-5": 466.0,
+            "opus-4-6": 355.0
+          },
+          "mean": {
+            "opus-4-5": 558.982,
+            "opus-4-6": 473.977
+          },
+          "std": {
+            "opus-4-5": 423.767,
+            "opus-4-6": 355.084
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "lines_removed",
+          "u_statistic": 3898.5,
+          "p_value": 0.384782,
+          "cohens_d": 0.1291,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "n": {
+            "opus-4-5": 167,
+            "opus-4-6": 43
+          },
+          "median": {
+            "opus-4-5": 95.0,
+            "opus-4-6": 91.0
+          },
+          "mean": {
+            "opus-4-5": 129.934,
+            "opus-4-6": 112.395
+          },
+          "std": {
+            "opus-4-5": 138.724,
+            "opus-4-6": 123.809
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "lines_per_minute",
+          "u_statistic": 4219.0,
+          "p_value": 0.077158,
+          "cohens_d": 0.3483,
+          "effect_size_label": "small",
+          "significant_p05": false,
+          "n": {
+            "opus-4-5": 167,
+            "opus-4-6": 43
+          },
+          "median": {
+            "opus-4-5": 134.73,
+            "opus-4-6": 93.862
+          },
+          "mean": {
+            "opus-4-5": 137.466,
+            "opus-4-6": 104.112
+          },
+          "std": {
+            "opus-4-5": 100.656,
+            "opus-4-6": 73.228
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "mann-whitney-u",
+          "field": "tools_per_file",
+          "u_statistic": 3070.5,
+          "p_value": 0.143722,
+          "cohens_d": -0.0152,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "n": {
+            "opus-4-5": 167,
+            "opus-4-6": 43
+          },
+          "median": {
+            "opus-4-5": 4.778,
+            "opus-4-6": 5.846
+          },
+          "mean": {
+            "opus-4-5": 7.385,
+            "opus-4-6": 7.491
+          },
+          "std": {
+            "opus-4-5": 7.356,
+            "opus-4-6": 5.038
+          },
+          "bonferroni_significant": false
+        }
+      ],
+      "proportions": [
+        {
+          "test": "two-proportion-z",
+          "field": "satisfaction_rate",
+          "z_statistic": 0,
+          "p_value": 1.0,
+          "cohens_h": 0.0,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0225,
+            "count": 0,
+            "n": 167
+          },
+          "opus-4-6": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.082,
+            "count": 0,
+            "n": 43
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "dissatisfaction_rate",
+          "z_statistic": 0,
+          "p_value": 1.0,
+          "cohens_h": 0.0,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0225,
+            "count": 0,
+            "n": 167
+          },
+          "opus-4-6": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.082,
+            "count": 0,
+            "n": 43
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "complete_rate",
+          "z_statistic": 0.1882,
+          "p_value": 0.850759,
+          "cohens_h": 0.0321,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.5509,
+            "ci_lower": 0.4752,
+            "ci_upper": 0.6244,
+            "count": 92,
+            "n": 167
+          },
+          "opus-4-6": {
+            "proportion": 0.5349,
+            "ci_lower": 0.3892,
+            "ci_upper": 0.6749,
+            "count": 23,
+            "n": 43
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "failed_rate",
+          "z_statistic": 0.8852,
+          "p_value": 0.376027,
+          "cohens_h": 0.2689,
+          "effect_size_label": "small",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.018,
+            "ci_lower": 0.0061,
+            "ci_upper": 0.0515,
+            "count": 3,
+            "n": 167
+          },
+          "opus-4-6": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.082,
+            "count": 0,
+            "n": 43
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "scope_expanded_rate",
+          "z_statistic": -0.1327,
+          "p_value": 0.894445,
+          "cohens_h": -0.0224,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.0419,
+            "ci_lower": 0.0204,
+            "ci_upper": 0.084,
+            "count": 7,
+            "n": 167
+          },
+          "opus-4-6": {
+            "proportion": 0.0465,
+            "ci_lower": 0.0128,
+            "ci_upper": 0.1546,
+            "count": 2,
+            "n": 43
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "one_shot_rate",
+          "z_statistic": -1.9783,
+          "p_value": 0.047895,
+          "cohens_h": -0.3381,
+          "effect_size_label": "small",
+          "significant_p05": true,
+          "opus-4-5": {
+            "proportion": 0.4132,
+            "ci_lower": 0.3413,
+            "ci_upper": 0.489,
+            "count": 69,
+            "n": 167
+          },
+          "opus-4-6": {
+            "proportion": 0.5814,
+            "ci_lower": 0.4333,
+            "ci_upper": 0.7162,
+            "count": 25,
+            "n": 43
+          },
+          "bonferroni_significant": false
+        },
+        {
+          "test": "two-proportion-z",
+          "field": "good_execution_rate",
+          "z_statistic": 0,
+          "p_value": 1.0,
+          "cohens_h": 0.0,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
+          "opus-4-5": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0225,
+            "count": 0,
+            "n": 167
+          },
+          "opus-4-6": {
+            "proportion": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.082,
+            "count": 0,
+            "n": 43
+          },
+          "bonferroni_significant": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+#+TITLE: LLM-Powered Task Analysis: Opus 4.5 vs Opus 4.6
+#+DATE: 2026-02-07
+#+OPTIONS: toc:2 num:t
+
+* Executive Summary
+
+Analysis of 2034 Opus 4.5 tasks and 360 Opus 4.6 tasks using LLM-powered
+qualitative assessment of the full task arc: user request → agent work → user response.
+
+** Key Findings
+
+| Metric | Opus 4.5 | Opus 4.6 | Winner |
+|--------|----------|----------|--------|
+| Alignment Score (1-5) | 2.87 | 3.13 | Opus 4.6 |
+| User Satisfied % | 34.4% | 43.3% | Opus 4.6 |
+| Task Complete % | 28.0% | 34.2% | Opus 4.6 |
+| High Autonomy % | 41.3% | 50.0% | Opus 4.6 |
+
+* Detailed Comparison
+
+** User Sentiment
+
+| Sentiment | Opus 4.5 | Opus 4.5 % | Opus 4.6 | Opus 4.6 % |
+|-----------|----------|------------|----------|------------|
+| satisfied | 700 | 34.4% | 156 | 43.3% |
+| collaborative | 47 | 2.3% | 6 | 1.7% |
+| neutral | 532 | 26.2% | 94 | 26.1% |
+| dissatisfied | 397 | 19.5% | 53 | 14.7% |
+| other | 358 | 17.6% | 51 | 14.2% |
+
+** Task Completion
+
+| Task Completion | Opus 4.5 | Opus 4.5 % | Opus 4.6 | Opus 4.6 % |
+|--------|----------|------------|----------|------------|
+| complete | 570 | 28.0% | 123 | 34.2% |
+| partial | 653 | 32.1% | 110 | 30.6% |
+| interrupted | 493 | 24.2% | 92 | 25.6% |
+| failed | 271 | 13.3% | 27 | 7.5% |
+
+** Alignment Score Distribution
+
+| Score | Opus 4.5 | Opus 4.5 % | Opus 4.6 | Opus 4.6 % | Interpretation |
+|-------|----------|------------|----------|------------|----------------|
+| 5 | 320 | 15.7% | 71 | 19.7% | Perfect alignment |
+| 4 | 355 | 17.5% | 78 | 21.7% | Minor misalignment |
+| 3 | 435 | 21.4% | 83 | 23.1% | Partial alignment |
+| 2 | 579 | 28.5% | 84 | 23.3% | Significant gap |
+| 1 | 345 | 17.0% | 44 | 12.2% | Missed intent |
+
+** Autonomy Level
+
+| Autonomy Level | Opus 4.5 | Opus 4.5 % | Opus 4.6 | Opus 4.6 % |
+|--------|----------|------------|----------|------------|
+| high | 841 | 41.3% | 180 | 50.0% |
+| medium | 348 | 17.1% | 58 | 16.1% |
+| low | 840 | 41.3% | 120 | 33.3% |
+
+** Scope Management
+
+| Scope Management | Opus 4.5 | Opus 4.5 % | Opus 4.6 | Opus 4.6 % |
+|--------|----------|------------|----------|------------|
+| focused | 1644 | 80.8% | 274 | 76.1% |
+| appropriate | 348 | 17.1% | 78 | 21.7% |
+| expanded | 26 | 1.3% | 6 | 1.7% |
+| over_engineered | 6 | 0.3% | 0 | 0.0% |
+
+** Iteration Required
+
+| Iteration Required | Opus 4.5 | Opus 4.5 % | Opus 4.6 | Opus 4.6 % |
+|--------|----------|------------|----------|------------|
+| one_shot | 726 | 35.7% | 157 | 43.6% |
+| minor | 277 | 13.6% | 55 | 15.3% |
+| significant | 1023 | 50.3% | 146 | 40.6% |
+
+** Error Recovery
+
+| Error Recovery | Opus 4.5 | Opus 4.5 % | Opus 4.6 | Opus 4.6 % |
+|--------|----------|------------|----------|------------|
+| none_needed | 1714 | 84.3% | 315 | 87.5% |
+| recovered | 90 | 4.4% | 16 | 4.4% |
+| struggled | 116 | 5.7% | 14 | 3.9% |
+| failed | 100 | 4.9% | 10 | 2.8% |
+
+** Efficiency Metrics
+
+| Metric | Opus 4.5 | Opus 4.6 |
+|--------|----------|----------|
+| Avg Lines/Minute | 95.7 | 87.9 |
+| Avg Tools/File | 4.6 | 5.2 |
+| Avg Duration (s) | 350 | 438 |
+| Avg Tool Calls | 7.2 | 11.6 |
+
+* Notable Examples
+
+** High Alignment Examples (Score 5)
+
+*** Opus 4.5
+- *1a8c9737-caef-40d3-8fba-c7cce4*: The agent successfully completed all requested work: creating a README.org with the specification and committing+pushing the changes. The user's 'sounds good' prior message indicated approval, and the...
+- *d449a325-6e53-444f-8c24-37aedc*: Agent correctly interpreted the architectural concern (UUID-based key ensures write safety regardless of priority) and removed the unnecessary parameter with a single targeted edit. The quick verifica...
+
+*** Opus 4.6
+- *b3b518f7-55b0-484e-a20e-8b0f52*: Agent successfully completed a major refactoring task to extract discovery steps into a separate UCP discovery protocol, working autonomously through systematic codebase exploration and targeted file ...
+- *2615846d-043d-492f-9e49-f6e396*: The agent autonomously analyzed the project architecture and generated publication-ready TikZ diagrams matching the user's stated request. No iteration or corrections were needed, and the session ende...
+
+** Low Alignment Examples (Score 1-2)
+
+*** Opus 4.5
+- *72bc801d-bec3-4faa-b2a5-a45e98*: The agent independently created an elaborate two-architecture implementation with Peach dependencies and complex directory structures, but the user's follow-up reveals they wanted a simpler organizati...
+- *366dfd7b-6dcd-429e-a80e-6abce9*: The agent appropriately delegated to an Explore subagent for codebase investigation, but the initial response appears to have missed the depth needed. The user's immediate request for a detailed walkt...
+
+*** Opus 4.6
+- *b38e9bee-a87b-4c5b-84ce-5fb3b6*: A request was initiated but immediately interrupted by the user before any work commenced. The subsequent 'continue' message lacked sufficient context for the agent to proceed meaningfully. Without un...
+- *b38e9bee-a87b-4c5b-84ce-5fb3b6*: The agent appropriately delegated a code investigation task to a subagent rather than attempting it directly, but the execution was interrupted before completion. The lack of direct explanation from t...
+
+* Methodology
+
+** Analysis Approach
+
+Each task was analyzed using Claude (haiku) with a structured prompt that considers:
+1. The user's initial request
+2. The agent's work (tools used, files touched, duration)
+3. The user's next message (the ground truth for satisfaction)
+
+** Dimensions Analyzed
+
+| Dimension | Values | Description |
+|-----------|--------|-------------|
+| Alignment Score | 1-5 | How well agent matched user intent |
+| User Sentiment | satisfied/collaborative/neutral/dissatisfied | Inferred from next message |
+| Task Completion | complete/partial/interrupted/failed | Did agent finish the work? |
+| Autonomy Level | high/medium/low | Independence of agent work |
+| Scope Management | focused/appropriate/expanded/over_engineered | Did agent stay on track? |
+| Iteration Required | one_shot/minor/significant | Back-and-forth needed |
+| Error Recovery | none_needed/recovered/struggled/failed | Handling of errors |

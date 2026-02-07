@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Opus 4.5 vs Opus 4.6: A Comparative Behavioral Analysis</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+        <style>
+        :root {
+            --dark: #141413;
+            --light: #faf9f5;
+            --mid-gray: #b0aea5;
+            --light-gray: #e8e6dc;
+            --orange: #d97757;
+            --blue: #6a9bcc;
+            --green: #788c5d;
+            --orange-light: #d9775720;
+            --blue-light: #6a9bcc20;
+            --green-light: #788c5d20;
+            --red-soft: #c4705a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Lora', Georgia, serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .page {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 3rem 2rem 4rem;
+        }
+
+        /* -- Header -- */
+        header {
+            border-bottom: 2px solid var(--dark);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+        header .eyebrow {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--orange);
+            margin-bottom: 0.3rem;
+        }
+        header h1 {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--dark);
+        }
+        header .subtitle {
+            font-family: 'Lora', Georgia, serif;
+            font-style: italic;
+            color: var(--mid-gray);
+            margin-top: 0.4rem;
+            font-size: 1.05rem;
+        }
+        header .meta {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.72rem;
+            color: var(--mid-gray);
+            margin-top: 0.8rem;
+            letter-spacing: 0.03em;
+        }
+
+        /* -- Sections -- */
+        section { margin-bottom: 2.5rem; }
+
+        h2 {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 1px solid var(--light-gray);
+            padding-bottom: 0.35rem;
+            margin-bottom: 1rem;
+        }
+
+        h3 {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 1.4rem 0 0.6rem;
+        }
+
+        p { margin-bottom: 0.8rem; max-width: 680px; }
+
+        /* -- Stat Cards -- */
+        .stat-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+        .stat-card {
+            background: white;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            padding: 0.9rem 1rem;
+        }
+        .stat-card .label {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--mid-gray);
+            margin-bottom: 0.15rem;
+        }
+        .stat-card .value {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .stat-card .detail {
+            font-size: 0.78rem;
+            color: var(--mid-gray);
+        }
+        .v-orange { color: var(--orange); }
+        .v-blue   { color: var(--blue); }
+        .v-green  { color: var(--green); }
+        .v-dark   { color: var(--dark); }
+
+        /* -- Tables -- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.2rem;
+            font-size: 0.85rem;
+        }
+        thead th {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.68rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--mid-gray);
+            text-align: left;
+            padding: 0.45rem 0.6rem;
+            border-bottom: 1.5px solid var(--dark);
+            white-space: nowrap;
+        }
+        thead th.right { text-align: right; }
+        tbody td {
+            padding: 0.4rem 0.6rem;
+            border-bottom: 1px solid var(--light-gray);
+            vertical-align: middle;
+        }
+        tbody tr:last-child td { border-bottom: 1.5px solid var(--dark); }
+        td.right { text-align: right; font-variant-numeric: tabular-nums; }
+        td.label-cell {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        td.mono {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-variant-numeric: tabular-nums;
+            font-size: 0.82rem;
+        }
+
+        /* -- Inline Bars -- */
+        .bar-cell {
+            padding: 0.3rem 0.6rem;
+            min-width: 180px;
+        }
+        .bar-pair {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            height: 16px;
+        }
+        .bar-tag {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.6rem;
+            font-weight: 600;
+            width: 14px;
+            flex-shrink: 0;
+            text-align: right;
+            color: var(--mid-gray);
+        }
+        .bar-track {
+            flex: 1;
+            height: 10px;
+            background: var(--light-gray);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.4s ease;
+        }
+        .bar-fill.a { background: var(--orange); }
+        .bar-fill.b { background: var(--blue); }
+        .bar-fill.green { background: var(--green); }
+        .bar-fill.red { background: var(--red-soft); }
+        .bar-val {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.68rem;
+            font-weight: 500;
+            min-width: 34px;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* single bar variant */
+        .bar-single {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            height: 16px;
+        }
+
+        /* -- Callout -- */
+        .callout {
+            background: white;
+            border-left: 3px solid var(--orange);
+            padding: 0.8rem 1rem;
+            margin: 1rem 0 1.2rem;
+            font-size: 0.88rem;
+        }
+        .callout strong {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.78rem;
+        }
+        .callout.blue { border-left-color: var(--blue); }
+        .callout.green { border-left-color: var(--green); }
+
+        /* -- Legend -- */
+        .legend {
+            display: flex;
+            gap: 1.2rem;
+            margin-bottom: 0.8rem;
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: var(--mid-gray);
+        }
+        .legend span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .legend .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            display: inline-block;
+        }
+        .dot-a { background: var(--orange); }
+        .dot-b { background: var(--blue); }
+
+        /* -- Pipeline -- */
+        .pipeline {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin: 1rem 0 1.5rem;
+            flex-wrap: wrap;
+        }
+        .pipe-step {
+            background: white;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            padding: 0.5rem 0.8rem;
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            text-align: center;
+            min-width: 100px;
+        }
+        .pipe-step small {
+            display: block;
+            font-size: 0.6rem;
+            color: var(--mid-gray);
+            font-weight: 400;
+        }
+        .pipe-arrow {
+            font-size: 0.9rem;
+            color: var(--mid-gray);
+            padding: 0 0.3rem;
+        }
+
+        /* -- Side-by-side profile cards -- */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .profile-card {
+            background: white;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            padding: 0.9rem 1rem;
+        }
+        .profile-card p {
+            font-size: 0.82rem;
+            margin: 0.4rem 0 0;
+        }
+
+        /* -- Footer -- */
+        footer {
+            border-top: 1px solid var(--light-gray);
+            padding-top: 1rem;
+            margin-top: 2rem;
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.7rem;
+            color: var(--mid-gray);
+        }
+
+        /* responsive */
+        @media (max-width: 640px) {
+            .page { padding: 1.5rem 1rem; }
+            header h1 { font-size: 1.5rem; }
+            .stat-row { grid-template-columns: 1fr 1fr; }
+            .bar-cell { min-width: 120px; }
+            .profile-grid { grid-template-columns: 1fr; }
+        }
+
+        /* -- Table of Contents -- */
+        .toc {
+            background: white;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            padding: 1.2rem 1.5rem;
+            margin: 1.5rem 0 2.5rem;
+        }
+        .toc-title {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--mid-gray);
+            margin-bottom: 0.8rem;
+        }
+        .toc ol {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            counter-reset: toc 1;
+        }
+        .toc li {
+            counter-increment: toc;
+            padding: 0.35rem 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        .toc li:last-child { border-bottom: none; }
+        .toc li::before {
+            content: counter(toc) ". ";
+            font-family: 'Poppins', Arial, sans-serif;
+            font-weight: 600;
+            font-size: 0.78rem;
+            color: var(--mid-gray);
+        }
+        .toc a {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--dark);
+            text-decoration: none;
+        }
+        .toc a:hover { color: var(--blue); }
+        .toc .finding {
+            font-family: 'Lora', Georgia, serif;
+            font-size: 0.78rem;
+            font-style: italic;
+            color: var(--mid-gray);
+            display: block;
+            padding-left: 1.6rem;
+            margin-top: 0.15rem;
+        }
+
+        /* -- Inline stat note -- */
+        .stat-note {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.72rem;
+            color: var(--mid-gray);
+            margin: 0.6rem 0 1rem;
+            padding: 0.5rem 0.8rem;
+            border-left: 2px solid var(--light-gray);
+            max-width: 680px;
+        }
+        .stat-note strong {
+            color: var(--dark);
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="page">
+
+            <!-- ===== HEADER ===== -->
+            <header>
+                <div class="eyebrow">Claude Code EAP Report</div>
+                <h1>The Explorer and the Executor: How Two Opus Models Solve Differently</h1>
+                <div class="subtitle">A single-user comparative study across 2,395 tasks examining behavioral divergence between Opus 4.5 and Opus 4.6</div>
+                <div class="meta">Samuel &middot; February 2026 &middot; Claude Code Early Access Program</div>
+            </header>
+
+            <!-- ===== 1. EXECUTIVE SUMMARY ===== -->
+            <section>
+                <h2>1. Executive Summary</h2>
+
+                <div class="stat-row">
+                    <div class="stat-card">
+                        <div class="label">Per-Task Cost Gap</div>
+                        <div class="value v-green">&minus;9 to &minus;45%</div>
+                        <div class="detail">4.6 cheaper at every complexity level</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Output Token Ratio</div>
+                        <div class="value v-blue">2.7&times;</div>
+                        <div class="detail">4.6: 2,481 avg vs 4.5: 919 avg</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Strongest Signal</div>
+                        <div class="value v-dark">Tool usage</div>
+                        <div class="detail">+55% tools/task (p&lt;0.000003)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">True Dissatisfaction</div>
+                        <div class="value v-green">&lt;1%</div>
+                        <div class="detail">Both models, after audit correction</div>
+                    </div>
+                </div>
+
+                <div class="callout">
+                    <strong>Key takeaway:</strong> Opus 4.6 produces 2.7&times; more output tokens, uses 55% more tool calls, deploys 3&times; more subagents, and plans 10&times; more often&mdash;yet costs 9&ndash;45% <em>less</em> per task through better prompt caching and fewer API round-trips. Both models achieve below 1% true dissatisfaction. Of 105 statistical tests, only three survive Bonferroni correction&mdash;all about <em>how</em> each model works (tool usage, alignment score), not <em>whether</em> they succeed. The models are strategically different, not meaningfully different in quality.
+                </div>
+
+                <p>Opus 4.5 acts first and adjusts as needed; Opus 4.6 investigates first and implements in concentrated bursts. This report examines where these two strategies diverge across 2,395 tasks (2,035 vs 360). Sections are ordered by effect strength: robust findings (cost efficiency, tool usage) first, weaker signals (sentiment, parallelism) later.</p>
+            </section>
+
+            
+            <nav class="toc">
+                <div class="toc-title">Contents &amp; Key Findings</div>
+                <ol>
+                    <li><a href="#cost">Token Economy &amp; Cost</a><span class="finding">4.6 is 9&ndash;45% cheaper despite 2.7&times; more output tokens</span></li>
+                    <li><a href="#complexity">Complexity-Controlled Comparison</a><span class="finding">Tool usage gap is the strongest statistical signal (p&lt;0.000003)</span></li>
+                    <li><a href="#behavior">Behavioral Patterns</a><span class="finding">4.6 deploys 3&times; more subagents, 72% read-only Explore agents</span></li>
+                    <li><a href="#sessions">Session Dynamics</a><span class="finding">4.6 benefits from session context; both degrade in long sessions</span></li>
+                    <li><a href="#quality">Quality &amp; Satisfaction</a><span class="finding">Both under 1% true dissatisfaction; sentiment gap not significant</span></li>
+                    <li><a href="#parallel">Parallelization</a><span class="finding">4.5 spawns more agents; only 4.6 runs them in the background</span></li>
+                    <li><a href="#refactoring">Refactoring: A False Signal</a><span class="finding">0% dissatisfaction for both; git confirms code retention</span></li>
+                    <li><a href="#planning">Planning: Correlation vs Causation</a><span class="finding">10&times; more planning, only +0.04 alignment benefit</span></li>
+                    <li><a href="#profiles">Model Profiles</a><span class="finding">Routing recommendations for each model</span></li>
+                    <li><a href="#methodology">Methodology</a><span class="finding">Pipeline, development process, and limitations</span></li>
+                </ol>
+            </nav>
+
+<!-- ===== 2. TOKEN ECONOMY &amp; COST ===== -->
+            <section id="cost">
+                <h2>2. Token Economy &amp; Cost</h2>
+
+                <p>Extracting API usage data from session logs reveals how each model allocates its computational budget. The two models achieve similar per-task costs through radically different token strategies.</p>
+
+                <div class="stat-row">
+                    <div class="stat-card">
+                        <div class="label">Per-Task Cost</div>
+                        <div class="value v-green">~$2.40</div>
+                        <div class="detail">$2.30 (4.5) vs $2.49 (4.6)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Output Token Ratio</div>
+                        <div class="value v-blue">2.7&times;</div>
+                        <div class="detail">4.6 produces 2,481 vs 919 avg tokens</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Thinking Depth Gap</div>
+                        <div class="value v-blue">+41%</div>
+                        <div class="detail">3,476 vs 2,459 chars when thinking</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Total Cost Analyzed</div>
+                        <div class="value v-dark">$5,472</div>
+                        <div class="detail">$4,575 (4.5) + $897 (4.6)</div>
+                    </div>
+                </div>
+
+                <h3>Thinking Calibration</h3>
+
+                <p>Opus 4.5 thinks more <em>often</em> (78% of tasks) but shallowly. Opus 4.6 thinks less often (59%) but more deeply when it does. The pattern reverses at the complexity extremes:</p>
+
+                <div class="legend">
+                    <span><span class="dot dot-a"></span> Opus 4.5</span>
+                    <span><span class="dot dot-b"></span> Opus 4.6</span>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr><th>Complexity</th><th>Distribution</th><th class="right">4.5</th><th class="right">4.6</th><th class="right">&Delta;</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="label-cell">Trivial &mdash; thinking %</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:66%"></div></div><span class="bar-val">66%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:29%"></div></div><span class="bar-val">29%</span></div>
+                            </div></td>
+                            <td class="right mono">66%</td>
+                            <td class="right mono">29%</td>
+                            <td class="right mono v-orange">&minus;37pp</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Simple &mdash; thinking %</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:94%"></div></div><span class="bar-val">94%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:57%"></div></div><span class="bar-val">57%</span></div>
+                            </div></td>
+                            <td class="right mono">94%</td>
+                            <td class="right mono">57%</td>
+                            <td class="right mono v-orange">&minus;37pp</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Moderate &mdash; thinking %</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:92%"></div></div><span class="bar-val">92%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:90%"></div></div><span class="bar-val">90%</span></div>
+                            </div></td>
+                            <td class="right mono">92%</td>
+                            <td class="right mono">90%</td>
+                            <td class="right mono">&minus;2pp</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Complex &mdash; thinking %</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:90%"></div></div><span class="bar-val">90%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:98%"></div></div><span class="bar-val">98%</span></div>
+                            </div></td>
+                            <td class="right mono">90%</td>
+                            <td class="right mono">98%</td>
+                            <td class="right mono v-blue">+8pp</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Major &mdash; thinking %</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:82%"></div></div><span class="bar-val">82%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">100%</span></div>
+                            </div></td>
+                            <td class="right mono">82%</td>
+                            <td class="right mono">100%</td>
+                            <td class="right mono v-blue">+18pp</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="callout blue">
+                    <strong>Thinking calibration:</strong> Opus 4.6 shows better calibration of when thinking is needed. It skips thinking for 71% of trivial tasks (vs 34% for Opus 4.5), but engages thinking for 100% of major tasks (vs 82%). Opus 4.5 over-thinks easy problems and occasionally under-thinks hard ones.
+                </div>
+
+                <h3>Output Verbosity by Task Type</h3>
+
+                <table>
+                    <thead>
+                        <tr><th>Task Type</th><th class="right">4.5 avg output</th><th class="right">4.6 avg output</th><th class="right">4.6/4.5</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="label-cell">Refactor</td><td class="right mono">1,166</td><td class="right mono">7,339</td><td class="right mono v-blue">6.3&times;</td></tr>
+                        <tr><td class="label-cell">Greenfield</td><td class="right mono">1,730</td><td class="right mono">6,278</td><td class="right mono v-blue">3.6&times;</td></tr>
+                        <tr><td class="label-cell">Bug fix</td><td class="right mono">874</td><td class="right mono">2,897</td><td class="right mono v-blue">3.3&times;</td></tr>
+                        <tr><td class="label-cell">Investigation</td><td class="right mono">928</td><td class="right mono">2,463</td><td class="right mono v-blue">2.7&times;</td></tr>
+                        <tr><td class="label-cell">Feature</td><td class="right mono">1,431</td><td class="right mono">3,219</td><td class="right mono v-blue">2.2&times;</td></tr>
+                        <tr><td class="label-cell">Sysadmin</td><td class="right mono">659</td><td class="right mono">962</td><td class="right mono">1.5&times;</td></tr>
+                        <tr><td class="label-cell">Port</td><td class="right mono">2,525</td><td class="right mono">3,599</td><td class="right mono">1.4&times;</td></tr>
+                        <tr><td class="label-cell">Continuation</td><td class="right mono">785</td><td class="right mono">752</td><td class="right mono">1.0&times;</td></tr>
+                    </tbody>
+                </table>
+
+                <p>The 6.3&times; multiplier for refactoring is the most extreme: Opus 4.6 spends significantly more tokens exploring the codebase before making changes. For continuation tasks (follow-ups within a session), both models produce identical output volume&mdash;suggesting the verbosity gap comes from <em>initial exploration</em>, not ongoing work.</p>
+
+                <h3>Cost by Complexity</h3>
+
+                <table>
+                    <thead>
+                        <tr><th>Complexity</th><th class="right">4.5 avg cost</th><th class="right">4.6 avg cost</th><th class="right">&Delta;</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="label-cell">Trivial</td><td class="right mono">$0.73</td><td class="right mono">$0.40</td><td class="right mono v-green">&minus;45%</td></tr>
+                        <tr><td class="label-cell">Simple</td><td class="right mono">$2.18</td><td class="right mono">$1.81</td><td class="right mono v-green">&minus;17%</td></tr>
+                        <tr><td class="label-cell">Moderate</td><td class="right mono">$3.54</td><td class="right mono">$3.16</td><td class="right mono v-green">&minus;11%</td></tr>
+                        <tr><td class="label-cell">Complex</td><td class="right mono">$7.72</td><td class="right mono">$7.00</td><td class="right mono v-green">&minus;9%</td></tr>
+                        <tr><td class="label-cell">Major</td><td class="right mono">$16.79</td><td class="right mono">$14.46</td><td class="right mono v-green">&minus;14%</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="callout green">
+                    <strong>Counter-intuitive cost finding:</strong> Despite producing 2&ndash;6&times; more output tokens, Opus 4.6 is 9&ndash;45% <em>cheaper</em> per task at every complexity level. The savings come from more efficient prompt caching and fewer API round-trips. Opus 4.6 averages 21.5 tool calls per task (more work per request) vs 13.9 for Opus 4.5 (more requests with less work each).
+                </div>
+            </section>
+
+            <!-- ===== 3. COMPLEXITY-CONTROLLED COMPARISON ===== -->
+            <section id="complexity">
+                <h2>3. Complexity-Controlled Comparison</h2>
+
+                <div class="legend">
+                    <span><span class="dot dot-a"></span> Opus 4.5</span>
+                    <span><span class="dot dot-b"></span> Opus 4.6</span>
+                </div>
+
+                <h3>Task Distribution by Complexity</h3>
+                <table>
+                    <thead>
+                        <tr><th>Complexity</th><th>Distribution</th><th class="right">4.5 n</th><th class="right">4.6 n</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="label-cell">Trivial</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:100%"></div></div><span class="bar-val">52.3%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:80.7%"></div></div><span class="bar-val">42.2%</span></div>
+                            </div></td>
+                            <td class="right mono">1,064</td>
+                            <td class="right mono">152</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Simple</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:92.6%"></div></div><span class="bar-val">18.8%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">20.3%</span></div>
+                            </div></td>
+                            <td class="right mono">383</td>
+                            <td class="right mono">73</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Moderate</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:86.0%"></div></div><span class="bar-val">19.6%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">22.8%</span></div>
+                            </div></td>
+                            <td class="right mono">399</td>
+                            <td class="right mono">82</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Complex</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:68.9%"></div></div><span class="bar-val">8.2%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">11.9%</span></div>
+                            </div></td>
+                            <td class="right mono">167</td>
+                            <td class="right mono">43</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Major</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:38.9%"></div></div><span class="bar-val">1.1%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">2.8%</span></div>
+                            </div></td>
+                            <td class="right mono">22</td>
+                            <td class="right mono">10</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>Opus 4.6 sessions skew toward higher complexity: fewer trivial tasks (42% vs 52%) and proportionally more complex and major tasks. This makes raw aggregate comparisons misleading&mdash;Opus 4.6 is tackling harder work on average.</p>
+
+                <h3>Resource Usage</h3>
+                <table>
+                    <thead>
+                        <tr><th>Metric</th><th>Distribution</th><th class="right">4.5</th><th class="right">4.6</th><th class="right">&Delta;</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="label-cell">Avg tools per task</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:64.7%"></div></div><span class="bar-val">13.9</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">21.5</span></div>
+                            </div></td>
+                            <td class="right mono">13.9</td>
+                            <td class="right mono">21.5</td>
+                            <td class="right mono" style="color:var(--blue)">B +55%</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Avg files per task</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:68.0%"></div></div><span class="bar-val">3.4</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">5.0</span></div>
+                            </div></td>
+                            <td class="right mono">3.4</td>
+                            <td class="right mono">5.0</td>
+                            <td class="right mono" style="color:var(--blue)">B +47%</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Avg lines added</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:89.5%"></div></div><span class="bar-val">210.6</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">235.4</span></div>
+                            </div></td>
+                            <td class="right mono">210.6</td>
+                            <td class="right mono">235.4</td>
+                            <td class="right mono" style="color:var(--mid-gray)">&asymp; Tie</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <div class="stat-note">
+                    <strong>Statistical significance:</strong> Tool calls per task (p=0.000002, d=&minus;0.29) and tools per file (p=0.000003, d=&minus;0.18) are the strongest signals in this study&mdash;both survive Bonferroni correction. Lines-added difference is not significant.
+                </div>
+
+                <div class="callout blue">
+                    <strong>The exploration&ndash;satisfaction tradeoff:</strong> Opus 4.6 uses 55% more tool calls and touches 47% more files per task, yet produces only 12% more lines of code. The extra activity is research, not output. This research correlates with higher alignment (+0.26) and completion (+6.2pp), but the marginal value of each additional tool call diminishes&mdash;55% more effort yields a small-effect improvement.
+                </div>
+            </section>
+
+            <!-- ===== 4. BEHAVIORAL PATTERNS ===== -->
+            <section id="behavior">
+                <h2>4. Behavioral Patterns</h2>
+
+                <div class="legend">
+                    <span><span class="dot dot-a"></span> Opus 4.5</span>
+                    <span><span class="dot dot-b"></span> Opus 4.6</span>
+                </div>
+
+                <h3>Subagent &amp; Planning Adoption</h3>
+                <table>
+                    <thead>
+                        <tr><th>Metric</th><th>Distribution</th><th class="right">4.5</th><th class="right">4.6</th><th class="right">&Delta;</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="label-cell">Tasks using subagents</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:41.2%"></div></div><span class="bar-val">16.3%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">39.6%</span></div>
+                            </div></td>
+                            <td class="right mono">57</td>
+                            <td class="right mono">86</td>
+                            <td class="right mono" style="color:var(--blue)">B +23.3pp</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Autonomous subagent calls</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:32.5%"></div></div><span class="bar-val">27.8%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">85.5%</span></div>
+                            </div></td>
+                            <td class="right mono">47</td>
+                            <td class="right mono">159</td>
+                            <td class="right mono" style="color:var(--blue)">B +57.7pp</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Tasks using planning mode</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:10.8%"></div></div><span class="bar-val">1.7%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">15.7%</span></div>
+                            </div></td>
+                            <td class="right mono">6</td>
+                            <td class="right mono">34</td>
+                            <td class="right mono" style="color:var(--blue)">B +14.0pp</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Subagent Type Distribution</h3>
+                <div class="legend">
+                    <span><span class="dot dot-a"></span> Opus 4.5</span>
+                    <span><span class="dot dot-b"></span> Opus 4.6</span>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr><th>Type</th><th>Distribution</th><th class="right">4.5</th><th class="right">4.6</th><th class="right">&Delta;</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="label-cell">Explore</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:44.6%"></div></div><span class="bar-val">31.9%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">71.5%</span></div>
+                            </div></td>
+                            <td class="right mono">54</td>
+                            <td class="right mono">133</td>
+                            <td class="right mono" style="color:var(--blue)">B +39.6pp</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">General-purpose</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:100%"></div></div><span class="bar-val">50.3%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:31.0%"></div></div><span class="bar-val">15.6%</span></div>
+                            </div></td>
+                            <td class="right mono">85</td>
+                            <td class="right mono">29</td>
+                            <td class="right mono" style="color:var(--orange)">A +34.7pp</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Bash</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:100%"></div></div><span class="bar-val">16.0%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:23.8%"></div></div><span class="bar-val">3.8%</span></div>
+                            </div></td>
+                            <td class="right mono">27</td>
+                            <td class="right mono">7</td>
+                            <td class="right mono" style="color:var(--orange)">A +12.2pp</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Plan</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:20.9%"></div></div><span class="bar-val">1.8%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">8.6%</span></div>
+                            </div></td>
+                            <td class="right mono">3</td>
+                            <td class="right mono">16</td>
+                            <td class="right mono" style="color:var(--blue)">B +6.8pp</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="callout blue">
+                    <strong>The invisible subagent:</strong> Opus 4.6 deploys <em>more</em> total subagents (186 vs 169) yet they feel invisible to the user. The reason: 72% are lightweight, read-only Explore agents that quietly gather context before implementation begins. Opus 4.5 inverts this ratio&mdash;50% of its subagents are general-purpose implementation workers that visibly modify files. The models produce comparable output, but Opus 4.6 front-loads research while Opus 4.5 front-loads action.
+                </div>
+
+                <div class="stat-note">
+                    <strong>Statistical significance:</strong> Autonomy level (p=0.007, V=0.10) and one-shot rate (p=0.004, h=&minus;0.16) significant at p&lt;0.05 but not after Bonferroni correction. The behavioral differences are large but reflect model design rather than statistical surprise.
+                </div>
+            </section>
+
+            <!-- ===== 5. SESSION DYNAMICS ===== -->
+            <section id="sessions">
+                <h2>5. Session Dynamics</h2>
+
+                <div class="legend">
+                    <span><span class="dot dot-a"></span> Opus 4.5</span>
+                    <span><span class="dot dot-b"></span> Opus 4.6</span>
+                </div>
+
+                <h3>Warm-up Effects</h3>
+                <table>
+                    <thead>
+                        <tr><th>Phase</th><th class="right">Alignment (4.5 / 4.6)</th><th class="right">Completion (4.5 / 4.6)</th><th class="right">Tools/File (4.5 / 4.6)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="label-cell">Early (first 3 tasks)</td>
+                            <td class="right mono">2.85 / 2.95</td>
+                            <td class="right mono">24.2% / 25.0%</td>
+                            <td class="right mono">4.95 / 5.68</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Later (task 4+)</td>
+                            <td class="right mono">2.85 / 3.06</td>
+                            <td class="right mono">28.0% / 33.5%</td>
+                            <td class="right mono">4.50 / 5.11</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>Opus 4.5 shows no warm-up effect: alignment stays flat at 2.85 between early and later tasks. Opus 4.6 improves from 2.95 to 3.06 in alignment and from 25.0% to 33.5% in completion rate, suggesting it benefits more from accumulated session context.</p>
+
+                <h3>Effort Distribution</h3>
+                <table>
+                    <thead>
+                        <tr><th>Metric</th><th>Distribution</th><th class="right">4.5</th><th class="right">4.6</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="label-cell">Research ratio</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:80.6%"></div></div><span class="bar-val">28.3%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">35.1%</span></div>
+                            </div></td>
+                            <td class="right mono">0.283</td>
+                            <td class="right mono">0.351</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Implementation ratio</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:100%"></div></div><span class="bar-val">27.0%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:64.8%"></div></div><span class="bar-val">17.5%</span></div>
+                            </div></td>
+                            <td class="right mono">0.270</td>
+                            <td class="right mono">0.175</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Front-load positive %</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:91.6%"></div></div><span class="bar-val">54.3%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">59.3%</span></div>
+                            </div></td>
+                            <td class="right mono">868 tasks</td>
+                            <td class="right mono">194 tasks</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="callout blue">
+                    <strong>Research-first vs balanced:</strong> Opus 4.6 allocates 35% of tool calls to research (Read, Grep, Glob, Explore agents) vs 28% for Opus 4.5, with a correspondingly lower implementation ratio (17.5% vs 27.0%). Opus 4.6 also front-loads research more aggressively&mdash;59.3% of tasks show positive front-loading vs 54.3%. It investigates first, then implements in concentrated bursts.
+                </div>
+
+                <h3>Session Length Effects</h3>
+                <table>
+                    <thead>
+                        <tr><th>Session Length</th><th class="right">Alignment (4.5 / 4.6)</th><th class="right">Completion (4.5 / 4.6)</th><th class="right">Sessions (4.5 / 4.6)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="label-cell">Short (1&ndash;3 tasks)</td><td class="right mono">2.93 / 3.53</td><td class="right mono">33.3% / 41.7%</td><td class="right mono">135 / 26</td></tr>
+                        <tr><td class="label-cell">Medium (4&ndash;8 tasks)</td><td class="right mono">2.93 / 3.16</td><td class="right mono">30.3% / 37.4%</td><td class="right mono">45 / 27</td></tr>
+                        <tr><td class="label-cell">Long (9+ tasks)</td><td class="right mono">2.85 / 2.96</td><td class="right mono">27.0% / 28.6%</td><td class="right mono">58 / 11</td></tr>
+                    </tbody>
+                </table>
+
+
+                <div class="stat-note">
+                    <strong>Statistical significance:</strong> Duration (p=0.015, d=&minus;0.02) and iteration rate (p=0.018, V=0.10) significant at p&lt;0.05 but not after Bonferroni correction. Session-length effects are observational and confounded with task selection.
+                </div>
+
+                <p>Both models degrade in longer sessions, but Opus 4.6 degrades more steeply: from 3.53 to 2.96 in alignment (&minus;0.57) vs 2.93 to 2.85 (&minus;0.08) for Opus 4.5. However, Opus 4.6 scores higher than Opus 4.5 in every session-length bucket&mdash;even in long sessions (2.96 vs 2.85). The steeper decline reflects 4.6&rsquo;s higher baseline, not a crossover where 4.5 becomes preferable.</p>
+            </section>
+
+            <!-- ===== 6. QUALITY &amp; SATISFACTION ===== -->
+            <section id="quality">
+                <h2>6. Quality &amp; Satisfaction</h2>
+
+                <div class="legend">
+                    <span><span class="dot dot-a"></span> Opus 4.5</span>
+                    <span><span class="dot dot-b"></span> Opus 4.6</span>
+                </div>
+
+                <h3>Sentiment Distribution</h3>
+                <table>
+                    <thead>
+                        <tr><th>Sentiment</th><th>Distribution</th><th class="right">4.5</th><th class="right">4.6</th><th class="right">&Delta;</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="label-cell">Satisfied</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:79.4%"></div></div><span class="bar-val">34.4%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">43.3%</span></div>
+                            </div></td>
+                            <td class="right mono">700</td>
+                            <td class="right mono">156</td>
+                            <td class="right mono" style="color:var(--blue)">B +8.9pp</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Neutral</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:93.9%"></div></div><span class="bar-val">29.5%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">31.4%</span></div>
+                            </div></td>
+                            <td class="right mono">600</td>
+                            <td class="right mono">113</td>
+                            <td class="right mono" style="color:var(--mid-gray)">&asymp; Tie</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Dissatisfied (raw)</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:100%"></div></div><span class="bar-val">0.4%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:69.4%"></div></div><span class="bar-val">0.3%</span></div>
+                            </div></td>
+                            <td class="right mono">8</td>
+                            <td class="right mono">1</td>
+                            <td class="right mono" style="color:var(--mid-gray)">&asymp; Tie</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Completion Distribution</h3>
+                <table>
+                    <thead>
+                        <tr><th>Outcome</th><th>Distribution</th><th class="right">4.5</th><th class="right">4.6</th><th class="right">&Delta;</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="label-cell">Complete</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:81.9%"></div></div><span class="bar-val">28.0%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">34.2%</span></div>
+                            </div></td>
+                            <td class="right mono">570</td>
+                            <td class="right mono">123</td>
+                            <td class="right mono" style="color:var(--blue)">B +6.2pp</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Partial</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:100%"></div></div><span class="bar-val">32.1%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:95.3%"></div></div><span class="bar-val">30.6%</span></div>
+                            </div></td>
+                            <td class="right mono">653</td>
+                            <td class="right mono">110</td>
+                            <td class="right mono" style="color:var(--mid-gray)">&asymp; Tie</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Interrupted</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:94.5%"></div></div><span class="bar-val">24.2%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">25.6%</span></div>
+                            </div></td>
+                            <td class="right mono">493</td>
+                            <td class="right mono">92</td>
+                            <td class="right mono" style="color:var(--mid-gray)">&asymp; Tie</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Failed</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:100%"></div></div><span class="bar-val">13.3%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:56.4%"></div></div><span class="bar-val">7.5%</span></div>
+                            </div></td>
+                            <td class="right mono">271</td>
+                            <td class="right mono">27</td>
+                            <td class="right mono" style="color:var(--blue)">B &minus;5.8pp</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>Opus 4.6 completes a higher fraction of tasks outright (+6.2pp) and fails less often (&minus;5.8pp). The failure rate difference is statistically significant (p=0.002) though the effect size is negligible (Cohen's h=0.19). Both models interrupt at similar rates, suggesting the difference comes from converting partial completions into full completions rather than avoiding interruptions.</p>
+
+
+                <div class="stat-note">
+                    <strong>Statistical significance</strong> &mdash; Bonferroni-corrected (105 tests, p&lt;0.00048): Alignment gap is significant (p=0.000328, d=&minus;0.20). Failure rate (p=0.002) and completion rate (p=0.018) significant at p&lt;0.05 but not after correction. Satisfaction and dissatisfaction differences are <em>not</em> statistically significant. The strongest signals in this study are behavioral (how models work) rather than qualitative (whether they succeed).
+                </div>
+
+                <h3>Dissatisfaction Audit</h3>
+
+                <div class="callout green">
+                    <strong>False positive correction:</strong> Automated dissatisfaction detection flagged 7.1% of Opus 4.5 tasks and 8.7% of Opus 4.6 tasks. LLM-agent review of all 59 flagged cases revealed 73% and 93% false positive rates respectively. Corrected true dissatisfaction: Opus 4.5 = 1.0%, Opus 4.6 = 0.6%. The higher false positive rate for Opus 4.6 traces directly to its subagent delegation pattern&mdash;keywords like "fix" appearing in task coordination rather than user complaints.
+                </div>
+            </section>
+
+            <!-- ===== 7. PARALLELIZATION &amp; DIRECTIVE COMPLIANCE ===== -->
+            <section id="parallel">
+                <h2>7. Parallelization &amp; Directive Compliance</h2>
+
+                <div class="legend">
+                    <span><span class="dot dot-a"></span> Opus 4.5</span>
+                    <span><span class="dot dot-b"></span> Opus 4.6</span>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr><th>Metric</th><th>Distribution</th><th class="right">4.5</th><th class="right">4.6</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="label-cell">&ldquo;Run in parallel&rdquo; tasks</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:100%"></div></div><span class="bar-val">6</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:33.3%"></div></div><span class="bar-val">2</span></div>
+                            </div></td>
+                            <td class="right mono">6</td>
+                            <td class="right mono">2</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Agents spawned per directive</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:100%"></div></div><span class="bar-val">8.3</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:42.2%"></div></div><span class="bar-val">3.5</span></div>
+                            </div></td>
+                            <td class="right mono">50 total</td>
+                            <td class="right mono">7 total</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Background tasks from directive</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:0%"></div></div><span class="bar-val">0</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">6</span></div>
+                            </div></td>
+                            <td class="right mono">0</td>
+                            <td class="right mono">6</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="callout">
+                    <strong>The parallelism paradox:</strong> Opus 4.5 responds to &ldquo;run in parallel&rdquo; by spawning more agents (8.3 per task vs 3.5) but runs them all in the foreground&mdash;zero background tasks. Opus 4.6, given the same directive, spawns fewer agents but actually backgrounds 6 of 7, achieving true concurrent execution. The model that <em>appears</em> more parallel (more agents) is less parallel in practice.
+                </div>
+
+                <p>The &ldquo;use agents&rdquo; directive shows a similar pattern. Opus 4.5 spawns agents reliably (49 across 13 tasks, avg 3.8) but backgrounds only 9. Opus 4.6 barely engages with the directive at all&mdash;just 1 task, 2 agents, no backgrounding&mdash;likely because it already uses subagents autonomously and treats the directive as redundant.</p>
+            </section>
+
+            <!-- ===== 8. REFACTORING: A FALSE SIGNAL ===== -->
+            <section id="refactoring">
+                <h2>8. Refactoring: A False Signal</h2>
+
+                <p>Automated sentiment detection flagged refactoring as a weak spot for Opus 4.6, with apparent dissatisfaction of 9.1% vs 5.9% for Opus 4.5. LLM-agent audit of each flagged case reveals this signal is entirely false positives.</p>
+
+                <table>
+                    <thead>
+                        <tr><th>Metric</th><th class="right">Opus 4.5</th><th class="right">Opus 4.6</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="label-cell">Refactoring tasks</td><td class="right mono">71</td><td class="right mono">23</td></tr>
+                        <tr><td class="label-cell">Flagged dissatisfaction</td><td class="right mono">2</td><td class="right mono">2</td></tr>
+                        <tr><td class="label-cell">True dissatisfaction (audited)</td><td class="right mono">0</td><td class="right mono">0</td></tr>
+                        <tr><td class="label-cell">Corrected rate</td><td class="right mono">0%</td><td class="right mono">0%</td></tr>
+                    </tbody>
+                </table>
+
+                <p>All four flagged cases were false positives&mdash;the word &ldquo;fix&rdquo; appeared in task requests (e.g., &ldquo;refactor and fix the import paths&rdquo;), not user complaints. With only 23&ndash;71 tasks per model, a single misclassification shifts the apparent rate by 1.4&ndash;4.3pp.</p>
+
+                <h3>Git Retention as Ground Truth</h3>
+
+                <p>Cross-referencing refactoring session timestamps with git commit history provides a harder signal than sentiment detection. An LLM agent matched each refactoring session&rsquo;s time window against commit timestamps in the three main repos:</p>
+
+                <table>
+                    <thead>
+                        <tr><th>Repository</th><th class="right">4.5 sessions</th><th class="right">4.5 commit rate</th><th class="right">4.6 sessions</th><th class="right">4.6 commit rate</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="label-cell">Strabo</td><td class="right mono">6</td><td class="right mono">50%</td><td class="right mono">4</td><td class="right mono">0%*</td></tr>
+                        <tr><td class="label-cell">Peach</td><td class="right mono">10</td><td class="right mono">80%</td><td class="right mono">0</td><td class="right mono">n/a</td></tr>
+                        <tr><td class="label-cell">Grocery List</td><td class="right mono">13</td><td class="right mono">69%</td><td class="right mono">5</td><td class="right mono">100%</td></tr>
+                    </tbody>
+                </table>
+
+                <p><small>*Strabo Opus 4.6: ~1,923 lines of changes exist uncommitted in the working tree&mdash;work-in-progress, not necessarily abandoned.</small></p>
+
+                <p>No refactoring commits were reverted in any repository. The abandoned Opus 4.5 work sits on unmerged branches (<code>refactor-attempt</code> in Strabo, <code>feature/async-routing</code> in Peach). Grocery List is the only head-to-head comparison: Opus 4.6 achieved 100% session-to-commit retention (5/5) vs 69% for Opus 4.5 (9/13)&mdash;though with a significant temporal bias (4.5 had 2+ months, 4.6 had 4 days).</p>
+
+                <p>Key retained refactoring commits from both models include:</p>
+                <ul style="margin:0.5rem 0 0.5rem 1.5rem; font-size:0.9em;">
+                    <li><strong>Opus 4.5:</strong> unified tree view architecture (a763d2e), drag handle refactoring across 2 iterations (255f096, a0a9eb6), item stacks model (c0ecb3c)</li>
+                    <li><strong>Opus 4.6:</strong> consolidation of ~27 duplicate dialogs into 3 shared helpers (3d7e469), stack context menu behavior (641f01a), CI/build script reorganization (8ab9260)</li>
+                </ul>
+
+                <div class="callout green">
+                    <strong>Bottom line:</strong> Both models show 0% true refactoring dissatisfaction, and git retention confirms that both produce code that survives in production. Refactoring success varies by <em>project difficulty</em> (Strabo vs Grocery List), not by model. The Opus 4.6 &ldquo;analysis paralysis&rdquo; behavior (6.3&times; more output tokens for refactoring) adds exploration overhead but does not degrade outcomes.
+                </div>
+            </section>
+
+            <!-- ===== 9. PLANNING: CORRELATION VS CAUSATION ===== -->
+            <section id="planning">
+                <h2>9. Planning: Correlation vs Causation</h2>
+
+                <div class="legend">
+                    <span><span class="dot dot-a"></span> Opus 4.5</span>
+                    <span><span class="dot dot-b"></span> Opus 4.6</span>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr><th>Metric</th><th>Distribution</th><th class="right">4.5</th><th class="right">4.6</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="label-cell">Planning adoption rate</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:10.8%"></div></div><span class="bar-val">1.7%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">15.7%</span></div>
+                            </div></td>
+                            <td class="right mono">6 tasks</td>
+                            <td class="right mono">34 tasks</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Autonomous planning</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:56.7%"></div></div><span class="bar-val">50.0%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">88.2%</span></div>
+                            </div></td>
+                            <td class="right mono">3 of 6</td>
+                            <td class="right mono">30 of 34</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>Opus 4.6 uses planning mode 9.2&times; more frequently, and 88% of that planning is self-initiated rather than user-requested. Yet the alignment benefit is minimal: planned tasks score only +0.04 above unplanned tasks.</p>
+
+                <div class="callout">
+                    <strong>Common cause, not direct effect:</strong> Planning doesn&rsquo;t <em>cause</em> better outcomes&mdash;it <em>co-occurs</em> with the model&rsquo;s general thoroughness. The same disposition that leads Opus 4.6 to plan also leads it to explore more, use more subagents, and investigate before acting. Planning is a symptom of caution, not the mechanism of quality. Forcing planning onto a model that doesn&rsquo;t naturally adopt it is unlikely to help.
+                </div>
+            </section>
+
+            <!-- ===== 10. MODEL PROFILES ===== -->
+            <section id="profiles">
+                <h2>10. Model Profiles</h2>
+
+                <div class="profile-grid">
+                    <div class="profile-card" style="border-left:3px solid var(--orange);">
+                        <div class="label" style="color:var(--orange); font-family:'Poppins',sans-serif; font-size:0.65rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em;">Opus 4.5 &mdash; The Executor</div>
+                        <p><strong>Strategy:</strong> Act first, adjust as needed. Jumps to implementation with minimal upfront research.</p>
+                        <p><strong>Subagents:</strong> 50% general-purpose (implementation workers), 32% Explore. Primarily user-directed (72%).</p>
+                        <p><strong>Planning:</strong> Rarely uses planning mode (1.7%). Distributes research evenly through the task.</p>
+                        <p><strong>Strength:</strong> Efficient on trivial and simple tasks. Lower tool overhead. Stable performance across session lengths.</p>
+                        <p><strong>Risk:</strong> Higher failure rate on complex tasks. May miss edge cases that upfront research would catch.</p>
+                    </div>
+                    <div class="profile-card" style="border-left:3px solid var(--blue);">
+                        <div class="label" style="color:var(--blue); font-family:'Poppins',sans-serif; font-size:0.65rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em;">Opus 4.6 &mdash; The Explorer</div>
+                        <p><strong>Strategy:</strong> Research first, implement in focused bursts. Front-loads investigation before touching files.</p>
+                        <p><strong>Subagents:</strong> 72% Explore (read-only research), 16% general-purpose. Overwhelmingly autonomous (85.5%).</p>
+                        <p><strong>Planning:</strong> Frequently self-initiates planning (15.7% of tasks, 88% autonomous).</p>
+                        <p><strong>Strength:</strong> Higher completion rate (+6.2pp), lower failure rate (&minus;5.8pp). Best in short, focused sessions.</p>
+                        <p><strong>Risk:</strong> Higher tool overhead (55% more calls). Performance degrades in long sessions (&minus;0.57 alignment over 9+ tasks).</p>
+                    </div>
+                </div>
+
+                <h3>Routing Recommendations</h3>
+                <table>
+                    <thead>
+                        <tr><th>Task Type</th><th>Recommended</th><th>Rationale</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="label-cell">Trivial / simple tasks</td><td class="mono">Either (slight edge: 4.5)</td><td>Opus 4.5 is more efficient; 4.6&rsquo;s research overhead adds cost without proportional benefit</td></tr>
+                        <tr><td class="label-cell">Complex / major tasks</td><td class="mono" style="color:var(--blue)">Opus 4.6</td><td>Higher alignment, front-loaded research catches requirements that 4.5 may miss</td></tr>
+                        <tr><td class="label-cell">Refactoring</td><td class="mono">Either</td><td>0% true dissatisfaction for both; no measurable quality difference</td></tr>
+                        <tr><td class="label-cell">Investigation / research</td><td class="mono" style="color:var(--blue)">Opus 4.6</td><td>Natural fit with research-first strategy; autonomous Explore agents excel here</td></tr>
+                        <tr><td class="label-cell">Long sessions (9+ tasks)</td><td class="mono">Either</td><td>4.6 degrades faster but still scores higher (2.96 vs 2.85); consider session-break discipline</td></tr>
+                        <tr><td class="label-cell">Parallel execution</td><td class="mono" style="color:var(--blue)">Opus 4.6</td><td>Actually backgrounds tasks; 4.5 spawns more agents but runs them sequentially</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- ===== 11. METHODOLOGY ===== -->
+            <section id="methodology">
+                <h2>11. Methodology</h2>
+
+                <div class="pipeline">
+                    <div class="pipe-step">Session Logs<small>421 sessions</small></div>
+                    <span class="pipe-arrow">&rarr;</span>
+                    <div class="pipe-step">Task Extraction<small>2,395 tasks</small></div>
+                    <span class="pipe-arrow">&rarr;</span>
+                    <div class="pipe-step">LLM Annotation<small>complexity, sentiment</small></div>
+                    <span class="pipe-arrow">&rarr;</span>
+                    <div class="pipe-step">Behavioral Analysis<small>subagents, planning</small></div>
+                    <span class="pipe-arrow">&rarr;</span>
+                    <div class="pipe-step">Dissatisfaction Audit<small>59 cases reviewed</small></div>
+                    <span class="pipe-arrow">&rarr;</span>
+                    <div class="pipe-step">Statistical Tests<small>105 comparisons</small></div>
+                </div>
+
+                <p>Each Claude Code session was segmented into tasks based on user-message boundaries and topic shifts. An LLM annotator classified each task for complexity, type, sentiment, completion status, and alignment score (1&ndash;5 scale). Behavioral metrics&mdash;subagent usage, planning, parallelization&mdash;were extracted from tool-call logs.</p>
+
+                <p>Dissatisfaction signals were audited by LLM agents (with human review of outputs) for 59 flagged cases (30 Opus 4.5, 29 Opus 4.6), revealing false positive rates of 73% and 93%. Corrected rates are used throughout this report.</p>
+
+
+                <p><strong>Statistical testing:</strong> 105 tests were conducted: chi-square (categorical), Mann-Whitney U (continuous), proportion tests (rates). Bonferroni-corrected threshold: p&lt;0.00048. Only three findings survive correction: tool calls per task, tools per file, and alignment score. Significance notes appear inline in each section.</p>
+
+                <h3>Development Process</h3>
+
+                <p>This analysis was developed iteratively. Several approaches were tried and abandoned when they proved unreliable:</p>
+
+                <p><strong>Automated dissatisfaction detection (abandoned as primary signal):</strong> Initial LLM-based sentiment classification flagged 7&ndash;9% dissatisfaction for both models. LLM-agent audit of all 59 flagged cases revealed 73&ndash;93% false positive rates&mdash;the classifiers were fooled by task-coordination language (e.g., &ldquo;fix&rdquo; in subagent prompts). Corrected rates (&lt;1%) are used throughout this report. The lesson: automated sentiment signals from agentic workflows need adversarial validation before drawing conclusions.</p>
+
+                <p><strong>LLM quality judgement (dropped):</strong> An LLM judge was asked to compare code quality between models. The results were unreliable&mdash;the judge lacked sufficient context to evaluate whether code met domain requirements, and produced confident but ungrounded assessments. This section was removed entirely rather than presented with caveats.</p>
+
+                <p><strong>Refactoring routing recommendation (reversed):</strong> Early signals suggested Opus 4.5 was better for refactoring. Investigation traced this to four false-positive dissatisfaction flags and small sample sizes (23&ndash;71 tasks). Git repository cross-referencing confirmed that refactoring retention depended on project difficulty, not model choice.</p>
+
+                <h3>Limitations</h3>
+                <p><strong>Single user:</strong> All data comes from one developer&rsquo;s workflow. Results may not generalize to other users, codebases, or task distributions.</p>
+                <p><strong>Observational, not experimental:</strong> Tasks were not randomly assigned to models. Opus 4.6 was used later chronologically and on different (often harder) tasks, confounding model effects with task effects.</p>
+                <p><strong>Complexity confound:</strong> Opus 4.6&rsquo;s higher proportion of complex tasks (11.9% vs 8.2%) inflates its resource usage metrics and may suppress its satisfaction scores relative to what it would achieve on equivalent tasks.</p>
+                <p><strong>Sample asymmetry:</strong> The 5.6:1 ratio (2,035 vs 360 tasks) means Opus 4.5 estimates have narrower confidence intervals. Effect sizes for Opus 4.6 are less precise.</p>
+                <p><strong>LLM-in-the-loop analysis:</strong> All task classification, sentiment analysis, and dissatisfaction auditing was performed by LLM agents (Claude Haiku and Sonnet), with human review of outputs and skepticism-driven re-auditing. No classification was done by hand.</p>
+            </section>
+
+            <footer>
+                Claude Code Early Access Program &middot; Single-user behavioral analysis &middot; February 2026
+            </footer>
+
+        </div>
+    </body>
+</html>

@@ -1,0 +1,167 @@
+Implement the following plan:
+
+# Cascading Interrupts Stress Test
+
+## Goal
+
+Create `experiments/cascading_interrupts.py` that tests multi-agent interrupt chaining using the real `AsyncOrchestrator`. Six scenarios exercising inbox routing, checkpoint rollback, concurrent interrupts, rapid-fire handling, and the stale-message loop problem.
+
+## File
+
+Single new file: `experiments/cascading_interrupts.py`
+
+## Key References
+
+- `src/interruptions/orchestrator.py` - `AsyncOrchestrator`, `_stream_agent_response()`, `send_interruption()`, `interrupt_agent()`, `send_message()`, `submit_tool_result()`, `handle_send_message_tool()`
+- `src/interruptions/agent.py` - `AgentSession` (inbox, checkpoints, partial_content, state, set_state)
+- `src/interruptions/messages.py` - `AgentMessage`, `MessageBus.send()`, `format_messages_xml()`, `SEND_MESSAGE_TOOL`
+- `src/interruptions/types.py` - `AgentConfig`, `AgentState`, `InterruptMode`, `ContentBlock`, `ToolUseContent`, `TextContent`
+- `experiments/interrupt_modes.py` - Logger pattern, dual log+json output, `--echo` flag
+- `src/interruptions/__main__.py:192-235` - `_check_idle_inboxes()` / `_wake_agent()` pattern for background inbox delivery
+
+## CLI Interface
+
+```
+python -m experiments.cascading_interrupts [--echo] [--scenario N] [--mode COMMIT] [--model claude-haiku-4-20250514]
+```
+
+- `--echo` - print to stdout while logging to file
+- `--scenario` - run one scenario (1-6 or name), default: all
+- `--mode` - interrupt mode: DISCARD/COMMIT/EMBED (default: COMMIT)
+- `--model` - model for agents (default: claude-haiku-4-20250514)
+
+## Code Structure
+
+```
+Logger class          (context manager, same pattern as interrupt_modes.py)
+
+Data classes:
+  StateSnapshot       timestamp, label, agent_states, inbox_sizes, checkpoint_counts, history_lengths
+  ScenarioResult      name, passed, duration, snapshots, errors, notes, verifications
+
+ScenarioRunner class:
+  __init__(log, model, interrupt_mode)
+    - Creates AsyncOrchestrator
+    - Tracks: transitions list, message_events list, errors list
+  register_agents(configs)
+    - Registers each with orchestrator
+    - Monkey-patches set_state to record transitions
+  snapshot_state(label) -> StateSnapshot
+    - Captures + logs all agent states, inbox sizes, checkpoints, history lengths
+  drive_stream(agent_name, async_iter) -> list[events]
+    - Consumes async iterator from send_message/send_interruption/submit_tool_result
+    - On awaiting_tool_results: extracts ToolUseContent, executes send_message via
+      handle_send_message_tool(), submits result via submit_tool_result(), recurses
+    - Returns collected event list
+  wait_for_state(agent_name, state, timeout) -> bool
+  wait_all_idle(timeout) -> bool
+  run_inbox_waker(stop_event)
+    - Background task: polls every 200ms, wakes idle agents with inbox messages
+    - Same pattern as __main__.py _check_idle_inboxes/_wake_agent
+    - Uses drive_stream() to process woken agents' responses
+  shutdown()
+
+6 scenario functions  (each returns ScenarioResult)
+Verification helpers  (verify_all_idle, verify_valid_transitions, verify_message_delivered)
+main()                (CLI parsing, scenario dispatch, JSON+log output, summary)
+```
+
+## Scenarios
+
+### 1. Simple Cascade (alpha, beta, gamma)
+
+Alpha is given a research task and starts streaming. Beta interrupts alpha via `send_interruption()`. Alpha's system prompt instructs it to always forward a status update to gamma via `send_message` after receiving an interruption. The inbox waker detects gamma's pending message and wakes gamma to process it.
+
+**Verify:** Alpha was interrupted (STREAMING -> INTERRUPTED transition recorded). Alpha resumed and responded. Gamma received a forwarded message (message_event from alpha to gamma). All agents IDLE at end.
+
+### 2. In-flight send_message Interrupted (alpha, beta, gamma)
+
+Alpha's prompt instructs it to immediately send_message to beta. We manually consume alpha's stream event-by-event until `awaiting_tool_results` (alpha is now TOOL_EXECUTING, tool_use committed to history, checkpoint created after it). Before submitting the tool result, we call `interrupt_agent("alpha")`.
+
+This tests a real edge case: `rollback_to_checkpoint()` pops the checkpoint but `messages[:checkpoint.index]` keeps the tool_use message since the checkpoint index is set to `len(messages)` after the append. The subsequent resume attempt appends a user message after a tool_use without a tool_result, which should cause an API format error.
+
+**Verify:** Catch the error. Log as a finding documenting the rollback gap. Record alpha's history structure before and after the interrupt attempt.
+
+### 3. Mutual Interruption (alpha, beta)
+
+Both agents start streaming concurrently. Near-simultaneously fire both interrupts via `asyncio.gather(return_exceptions=True)`:
+- `send_interruption("alpha", "beta", "Urgent from A")`
+- `send_interruption("beta", "alpha", "Urgent from B")`
+
+One or both may fail if an agent is already interrupted by the time the second fires.
+
+**Verify:** No deadlock. Both reach IDLE. Document which interrupt(s) succeeded and the race outcome.
+
+### 4. Chain Interrupt A -> B -> C (alpha, beta, gamma)
+
+Gamma starts streaming a long task. Beta starts streaming. Alpha interrupts beta with information to forward. Beta's prompt says: "When interrupted, always forward the key information to gamma via send_message." Beta's tool call places the message in gamma's inbox. Gamma's `_stream_agent_response` detects the inbox message at the next event check and handles it per interrupt_mode (restarting the stream with the injected message).
+
+**Verify:** Full chain resolves. Message_events show alpha->beta and beta->gamma. Gamma's response acknowledges the forwarded info. All agents IDLE.
+
+### 5. Rapid-fire Messages (alpha, beta)
+
+Alpha starts streaming. 5 messages injected directly into alpha's inbox via `inbox.put_nowait()` with 50ms gaps. The `_drain_inbox()` call inside `_stream_agent_response` will collect all queued messages at once and format them as a single `<incoming_messages>` XML block.
+
+**Verify:** All 5 messages appear in alpha's history (either batched in one XML block or across recursive restarts). Alpha reaches IDLE. Count messages in final history to confirm none lost. Document batching behavior.
+
+### 6. Stale Message Loop (alpha, beta, gamma)
+
+This tests the "parallel messaging" failure mode where asynchronous reply timing creates an endless back-and-forth loop.
+
+**Setup:** Alpha is a coordinator. Beta and gamma are workers. Alpha sends the same question to both beta and gamma simultaneously (via send_message to each). Both start processing.
+
+**Phase 1 - Provoke the loop (no intervention):**
+- Gamma replies first (its reply lands in alpha's inbox)
+- Alpha processes gamma's reply and moves to round 2 (sends a new question to both)
+- Beta's round-1 reply arrives late
+- Alpha responds to beta's stale reply. Beta responds to that. They loop.
+- Let this run for up to N rounds (cap at 5 to control cost), tracking message counts per agent pair and whether the conversation content drifts from the original task.
+
+**Phase 2 - Interrupt to break the loop:**
+- Re-run the same setup, but this time the experiment monitors for the stale-loop condition: when alpha sends a reply to beta that references round-1 content while gamma is already on round 2
+- When detected, inject a high-priority interruption to beta: "Disregard previous messages. The conversation has moved on. Here is the current context: [round 2 summary]"
+- Alternatively: interrupt alpha when it's about to reply to beta's stale message, redirecting it
+
+**Measurements:**
+- Round-trip count per agent pair before loop detected
+- Whether agents' messages become increasingly incoherent (substring matching for key terms from each round)
+- Whether the interruption successfully breaks the loop
+- Total messages exchanged with vs. without intervention
+- Cost comparison (tokens) between the two phases
+
+**Verify:** Phase 1 demonstrates the loop forming (beta/alpha message count grows while gamma is idle or waiting). Phase 2 shows that a well-timed interruption breaks it and restores coherent multi-agent coordination.
+
+## Key Design Decisions
+
+1. **Real API calls** - testing actual orchestrator + model behavior. Default to haiku for cost.
+
+2. **`drive_stream()` helper** - consumes async iterator, handles tool execution inline. When `awaiting_tool_results` seen, extracts `ToolUseContent` blocks, executes `send_message` calls via `handle_send_message_tool()`, submits results via `submit_tool_result()`, and continues consuming. More observable than `run_agent_loop()`.
+
+3. **State transition recording** - monkey-patch `AgentSession.set_state` on registered agents to capture every transition with timestamp.
+
+4. **Background inbox waker** - replicates `__main__.py:_check_idle_inboxes` pattern. Polls every 200ms, wakes idle agents that have inbox messages by draining inbox, formatting as XML, and driving a stream.
+
+5. **Scenario 2 surfaces a known gap** - checkpoint rollback during TOOL_EXECUTING doesn't remove committed tool_use. Experiment documents this.
+
+6. **Scenario 6 runs in two phases** - first provokes the stale-loop naturally, then re-runs with interruption intervention. This directly tests whether the interruption mechanism solves a real coordination problem.
+
+## Output
+
+- `experiments/logs/cascading_interrupts_YYYYMMDD_HHMMSS.log` - human-readable narrative
+- `experiments/logs/cascading_interrupts_YYYYMMDD_HHMMSS.json` - structured results
+
+## Verification
+
+```sh
+# Test one scenario first
+python -m experiments.cascading_interrupts --echo --scenario 1
+
+# Full suite
+python -m experiments.cascading_interrupts --echo
+
+# With specific mode
+python -m experiments.cascading_interrupts --echo --mode DISCARD
+```
+
+
+If you need specific details from before exiting plan mode (like exact code snippets, error messages, or content you generated), read the full transcript at: /home/shcv/.claude/projects/-home-shcv-projects-interruptions/50891bb0-c179-417b-9a14-bd114819c0b9.jsonl

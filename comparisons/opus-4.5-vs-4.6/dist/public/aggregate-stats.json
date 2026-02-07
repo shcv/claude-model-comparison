@@ -1,0 +1,131 @@
+{
+  "opus-4-5": {
+    "display_name": "Opus 4.5",
+    "session_count": 330,
+    "total_duration_minutes": 154641.17000000013,
+    "task_count": 2035,
+    "outcome_distribution": {
+      "new_task": 972,
+      "session_end": 238,
+      "system_continuation": 201,
+      "continuation": 357,
+      "unclear": 151,
+      "dissatisfaction": 64,
+      "satisfaction": 52
+    },
+    "complexity_distribution": {
+      "simple": 383,
+      "complex": 167,
+      "moderate": 399,
+      "trivial": 1064,
+      "major": 22
+    },
+    "type_distribution": {
+      "investigation": 414,
+      "continuation": 227,
+      "unknown": 649,
+      "greenfield": 129,
+      "refactor": 71,
+      "feature": 175,
+      "port": 33,
+      "sysadmin": 164,
+      "simple": 36,
+      "bugfix": 130,
+      "docs": 7
+    },
+    "avg_tools_per_task": 13.9,
+    "avg_files_per_task": 3.4,
+    "avg_lines_added": 210.6,
+    "avg_alignment_score": 2.87,
+    "sentiment_distribution": {
+      "other": 726,
+      "satisfied": 700,
+      "neutral": 600,
+      "dissatisfied": 8
+    },
+    "completion_distribution": {
+      "partial": 653,
+      "complete": 570,
+      "interrupted": 493,
+      "failed": 271,
+      "incomplete": 19,
+      "unknown - likely incomplete or unverified": 1,
+      "partial - agent provided analysis and options rather than implementing selected approach, but this appeared to be the appropriate scope for the initial request": 1,
+      "not_attempted": 1,
+      "unclear": 7,
+      "unknown": 1,
+      "partial - research phase completed thoroughly, but follow-up implementation request ('add it') suggests user expected actionable output or implementation guidance from research phase": 1,
+      "partial - agent investigated the question but didn't implement webhook support or create a working demo with async updates. the research phase was complete, but no code changes resulted.": 1,
+      "partial - the user asked for verification but received no substantive analysis or tool-based confirmation": 1,
+      "partial - agent answered the initial question but did not execute on the follow-up requirement to organize scripts into deploy/<host>.scm": 1,
+      "not_applicable": 2,
+      "n/a - no actionable task was presented; the input resembled credential data rather than a request": 1,
+      "partial - the prior task appears complete, but the new request for pam explanation is unanswered": 1,
+      "partial - completed the initial 'that worked' task, but user's follow-up indicates additional cleanup work was needed": 1,
+      "partial - the agent addressed the immediate error but the user continues to experience authentication failures, indicating the root cause wasn't fully resolved": 1,
+      "partial - initial message was acknowledged but not acted upon; new task (config analysis) would require investigation to assess completion": 1,
+      "partial - the agent completed the label creation task but the new requirements in the next message are unaddressed in this task record": 1,
+      "not_started": 2,
+      "partial - the agent performed debugging work but did not identify or resolve the button icon missing problem that became apparent to the user": 1,
+      "partial - the commit was attempted but no changes were made; the new request was not yet addressed": 1,
+      "interrupted - first task (what's next) received no response; second task (note-taking guidance) is a new request not yet addressed": 1
+    }
+  },
+  "opus-4-6": {
+    "display_name": "Opus 4.6",
+    "session_count": 91,
+    "total_duration_minutes": 15016.070000000002,
+    "task_count": 360,
+    "outcome_distribution": {
+      "new_task": 147,
+      "continuation": 49,
+      "session_end": 64,
+      "system_continuation": 55,
+      "unclear": 35,
+      "dissatisfaction": 8,
+      "satisfaction": 2
+    },
+    "complexity_distribution": {
+      "trivial": 152,
+      "major": 10,
+      "complex": 43,
+      "moderate": 82,
+      "simple": 73
+    },
+    "type_distribution": {
+      "investigation": 60,
+      "unknown": 84,
+      "refactor": 23,
+      "continuation": 70,
+      "port": 13,
+      "simple": 8,
+      "greenfield": 21,
+      "sysadmin": 34,
+      "bugfix": 16,
+      "feature": 29,
+      "docs": 2
+    },
+    "avg_tools_per_task": 21.5,
+    "avg_files_per_task": 5.0,
+    "avg_lines_added": 235.4,
+    "avg_alignment_score": 3.13,
+    "sentiment_distribution": {
+      "other": 90,
+      "neutral": 113,
+      "satisfied": 156,
+      "dissatisfied": 1
+    },
+    "completion_distribution": {
+      "partial": 110,
+      "complete": 123,
+      "interrupted": 92,
+      "failed": 27,
+      "incomplete": 3,
+      "partial - agent attempted troubleshooting but didn't resolve the core issue of phase 1 reporting completion while downloads failed": 1,
+      "unknown": 1,
+      "unclear": 1,
+      "partial - agent ran scenario 2 as requested, then the follow-up implied incomplete execution of remaining scenarios, suggesting the second request may not have completed all scenarios as intended.": 1,
+      "partial - debugging was completed successfully, but the help command request is a new task that follows": 1
+    }
+  }
+}

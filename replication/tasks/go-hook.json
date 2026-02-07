@@ -1,0 +1,28 @@
+{
+  "name": "claude-coder-go-hook",
+  "description": "Replace bash hook with Go binary, add TCP listener",
+  "original_model": "opus-4-6",
+  "original_metrics": {
+    "tools": 59,
+    "files_touched": 12,
+    "lines_added": 701,
+    "lines_removed": 41,
+    "duration_seconds": 227.447
+  },
+  "setup": {
+    "type": "worktree",
+    "repo": "~/projects/claude-coder",
+    "commit": "7ec42e6"
+  },
+  "prompt_file": "../prompts/go-hook.txt",
+  "verification": {
+    "commands": [
+      "make game 2>&1",
+      "test -f claude-coder-hook && echo 'binary exists'",
+      "test -f claude-coder && echo 'main binary exists'"
+    ],
+    "success_patterns": [
+      "binary exists"
+    ]
+  }
+}

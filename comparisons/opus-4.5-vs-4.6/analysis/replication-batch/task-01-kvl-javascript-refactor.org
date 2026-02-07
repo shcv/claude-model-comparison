@@ -1,0 +1,176 @@
+* Task: KVL JavaScript Library - Major Refactor
+
+** Metadata
+- Task ID: 6ec36123-fb43-4691-ab00-383e238641a1-task-2
+- Project: kvl (Key-Value Language)
+- Classification: Major refactor (rename directory + full library implementation)
+- Model: Opus 4.6
+
+** Opus 4.6 Metrics
+| Metric | Value |
+|--------|-------|
+| Total Tools | 96 |
+| Files Touched | 28 |
+| Lines Added | ~1400+ |
+| Lines Removed | ~20+ |
+| Duration | Not captured in excerpt |
+
+** User Prompt (Full)
+
+#+begin_quote
+Implement the following plan:
+
+# Plan: Rename js/ to javascript/ and implement complete KVL library
+
+## Step 1: Rename directory
+- `mv js/ javascript/`
+- Update references in `CLAUDE.md`
+
+## Step 2: Initialize Node.js project
+- `npm init` in `javascript/` with name `kvl`, version `0.1.0`
+- Add `vitest` as dev dependency for testing
+- Configure `package.json` with ESM (`"type": "module"`) and dual CJS/ESM exports
+- Keep it pure JS (no TypeScript build step) with JSDoc type annotations for IDE support
+
+## Step 3: Implement core modules
+
+### `javascript/src/errors.js`
+- `KvlError` extends `Error`
+- `KvlParseError` extends `KvlError` (with line/column)
+- `KvlSerializeError` extends `KvlError`
+
+### `javascript/src/config.js`
+- `KvlConfig` class with: `separator`, `version`, `spaceBefore`, `spaceAfter`, `listMarkers`
+- `autoConfigForSeparator(separator, overrides)` - smart spacing defaults
+- `parseHeader(text)` - parse `#= kvl 1.0 -` header format
+- `generateHeader(config)` - serialize config to header
+- `extractContent(text)` - strip header line
+
+### `javascript/src/transform.js`
+- `merge(model1, model2)` - associative categorical merge (recursive dict merge, conflicting scalars create categorical structure)
+- `compact(data, config)` - categorical to user-friendly (singleton lifting, empty-value flattening to arrays)
+- `expand(data)` - user-friendly to categorical (arrays to `{key: {}}` maps)
+
+### `javascript/src/parser.js`
+- `parse(text, config?)` - low-level API returning raw categorical model
+- `loads(text, config?)` - high-level API returning compacted user-friendly format
+- `load(filePath, config?)` - read file then `loads()`
+- `keyvals(text, config?)` - list of single-key objects
+- Internal: `_parseKvs()`, `_findUnescapedSeparator()`, `_isListMarker()`, `_processValue()`, `_buildModel()`, `_unescapeModel()`
+- Behavior:
+  - No special comment handling - `/= comment` parses normally as key `/`, value `comment` (application layer ignores `/` keys)
+  - Indentation-based nesting
+  - Repeated keys merged categorically
+  - Escape sequences: only `\<separator>` is special, other backslashes literal
+  - Multiline values via indented continuation lines
+  - List marker support (configured via header)
+  - Security limits: max 10MB input, max 100 recursion depth
+
+### `javascript/src/serializer.js`
+- `dumps(data, config?, options?)` - serialize to KVL string
+- `dump(data, filePath, config?, options?)` - serialize to file
+- `KvlSerializer` class with:
+  - Dict/string/list value serialization
+  - Proper indentation (2 spaces default)
+  - Escape separator in output
+  - List marker output when configured
+  - Expand lists to categorical when no list markers
+
+### `javascript/src/index.js`
+- Re-export all public API: `parse`, `loads`, `load`, `keyvals`, `dumps`, `dump`, `merge`, `compact`, `expand`, `KvlConfig`, `autoConfigForSeparator`, `parseHeader`, `generateHeader`, error classes
+
+## Step 4: CLI tool
+- `javascript/src/cli.js` - minimal CLI for conformance testing
+- Subcommands: `parse <file>` (outputs JSON), `convert <file>` (alias)
+- Used by conformance test runner
+
+## Step 5: Tests
+- `javascript/tests/parser.test.js` - comprehensive parser tests matching Python test patterns
+- `javascript/tests/serializer.test.js` - serialization tests
+- `javascript/tests/transform.test.js` - merge/compact/expand tests
+- `javascript/tests/config.test.js` - header parsing, config generation
+- `javascript/tests/roundtrip.test.js` - parse -> serialize -> parse consistency
+
+## Step 6: Wire into conformance harness
+- Add JavaScript runner to `conformance/run.py`
+
+## Verification
+1. `cd javascript && npm test` - all unit tests pass
+2. `cd conformance && python run.py --impl javascript --core` - core fixtures pass
+3. `cd conformance && python run.py --impl javascript` - full fixtures pass
+
+## Files to modify
+- `CLAUDE.md` - update js/ references to javascript/
+- `conformance/run.py` - add JavaScript implementation runner
+
+## Files to create
+- `javascript/package.json`
+- `javascript/src/index.js`
+- `javascript/src/errors.js`
+- `javascript/src/config.js`
+- `javascript/src/parser.js`
+- `javascript/src/serializer.js`
+- `javascript/src/transform.js`
+- `javascript/src/cli.js`
+- `javascript/tests/parser.test.js`
+- `javascript/tests/serializer.test.js`
+- `javascript/tests/transform.test.js`
+- `javascript/tests/config.test.js`
+- `javascript/tests/roundtrip.test.js`
+- `javascript/vitest.config.js`
+
+
+If you need specific details from before exiting plan mode (like exact code snippets, error messages, or content you generated), read the full transcript at: /home/shcv/.claude/projects/-home-shcv-projects-kvl/113ef9c7-784e-45cf-bc3b-54add8e8d3fd.jsonl
+#+end_quote
+
+** Tool Sequence (Summarized)
+Task -> Read -> Bash -> Read -> Bash -> TaskCreate -> TaskUpdate -> Bash -> Edit -> TaskUpdate
+
+** Files Read (21)
+- /home/shcv/projects/kvl/CLAUDE.md
+- /home/shcv/projects/kvl/python/kvl/parser.py
+- /home/shcv/projects/kvl/python/kvl/serializer.py
+- /home/shcv/projects/kvl/python/kvl/config.py
+- /home/shcv/projects/kvl/python/kvl/transform.py
+- /home/shcv/projects/kvl/python/kvl/errors.py
+- /home/shcv/projects/kvl/python/kvl/utils.py
+- /home/shcv/projects/kvl/python/kvl/__init__.py
+- /home/shcv/projects/kvl/conformance/run.py
+- /home/shcv/projects/kvl/python/tests/test_parser.py
+- /home/shcv/projects/kvl/python/tests/test_serializer.py
+- (plus fixture files)
+
+** Files Written (14)
+- /home/shcv/projects/kvl/javascript/package.json (23 lines)
+- /home/shcv/projects/kvl/javascript/vitest.config.js (8 lines)
+- /home/shcv/projects/kvl/javascript/src/errors.js (42 lines)
+- /home/shcv/projects/kvl/javascript/src/config.js (168 lines)
+- /home/shcv/projects/kvl/javascript/src/transform.js (167 lines)
+- /home/shcv/projects/kvl/javascript/src/parser.js (383 lines)
+- /home/shcv/projects/kvl/javascript/src/serializer.js (248 lines)
+- /home/shcv/projects/kvl/javascript/src/index.js (6 lines)
+- /home/shcv/projects/kvl/javascript/src/cli.js (36 lines)
+- /home/shcv/projects/kvl/javascript/tests/parser.test.js (423 lines)
+- /home/shcv/projects/kvl/javascript/tests/serializer.test.js (156 lines)
+- /home/shcv/projects/kvl/javascript/tests/transform.test.js (112 lines)
+- /home/shcv/projects/kvl/javascript/tests/config.test.js (132 lines)
+- /home/shcv/projects/kvl/javascript/tests/roundtrip.test.js (93 lines)
+
+** Files Edited (4)
+- /home/shcv/projects/kvl/CLAUDE.md (3 edits)
+- /home/shcv/projects/kvl/javascript/src/parser.js (2 edits - bug fixes)
+- /home/shcv/projects/kvl/conformance/run.py (3 edits - add JS runner)
+
+** Outcome
+- Outcome Category: new_task (user moved on to next request)
+- Verification: Conformance tests run and pass
+
+** Context Notes
+This task is a port of an existing Python KVL library to JavaScript. The model:
+1. Read the entire Python implementation to understand the spec
+2. Renamed the directory
+3. Created all JavaScript modules from scratch
+4. Ran tests and fixed bugs
+5. Integrated with conformance test harness
+
+Key challenge: Implementing a complete parser/serializer library with proper escape handling, indentation-based nesting, and categorical merge semantics.

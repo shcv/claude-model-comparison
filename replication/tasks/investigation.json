@@ -1,0 +1,25 @@
+{
+  "name": "codebase-investigation",
+  "description": "Pure exploration task with no code changes. Tests depth of investigation and accuracy of findings. Opus 4.5 showed slight advantage on investigation tasks.",
+  "original_model": "none",
+  "original_metrics": {},
+  "setup": {
+    "type": "worktree",
+    "repo": "~/projects/claude-investigations",
+    "commit": "HEAD"
+  },
+  "prompt_file": "../prompts/investigation.txt",
+  "verification": {
+    "commands": [
+      "test -f /tmp/investigation-report.org && echo 'report exists'",
+      "wc -l /tmp/investigation-report.org | awk '{print $1}' | xargs -I{} test {} -gt 50 && echo 'report substantial'"
+    ],
+    "success_patterns": [
+      "report exists",
+      "report substantial"
+    ]
+  },
+  "test_both_models": true,
+  "expected_behavioral_difference": "Opus 4.5 showed slight advantage on investigation tasks; measuring depth of exploration, number of files examined, accuracy of conclusions",
+  "measures": ["tool_count", "files_read", "grep_searches", "duration", "report_length"]
+}

@@ -1,0 +1,287 @@
+#+TITLE: Model Comparison Analysis Process
+#+DATE: 2026-02-05
+#+OPTIONS: toc:2 num:t
+
+* Overview
+
+This document describes a repeatable process for extracting and analyzing
+behavioral differences between Claude models (e.g., Opus 4.5 vs Opus 4.6) from
+session data.
+
+* Data Pipeline
+
+#+begin_src
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│  Raw Sessions   │────▶│  Extract Tasks  │────▶│  Classify Tasks │
+│  (.jsonl files) │     │  (deep data)    │     │  (complexity)   │
+└─────────────────┘     └─────────────────┘     └─────────────────┘
+                                                        │
+                        ┌─────────────────┐             │
+                        │  LLM Analysis   │◀────────────┘
+                        │  (qualitative)  │
+                        └─────────────────┘
+                                │
+                        ┌───────┴───────┐
+                        ▼               ▼
+               ┌─────────────┐  ┌─────────────┐
+               │ Quantitative │  │ Behavioral  │
+               │   Report     │  │   Report    │
+               └─────────────┘  └─────────────┘
+#+end_src
+
+* Step 1: Collect Sessions
+
+** Script: collect_sessions.py
+
+#+begin_src bash
+python collect_sessions.py --model opus-4-5 --output data/sessions-opus-4-5.json
+python collect_sessions.py --model opus-4-6 --output data/sessions-opus-4-6.json
+#+end_src
+
+** Input
+- ~/.claude/projects/*/\*.jsonl (session files)
+- Model identifier (opus-4-5, opus-4-6, sonnet, etc.)
+
+** Output
+- sessions-{model}.json: List of session metadata
+  - session_id, file_path, model, timestamps
+  - message counts, tool usage summary
+
+* Step 2: Extract Deep Task Data
+
+** Script: extract_tasks.py
+
+#+begin_src bash
+python extract_tasks.py --data-dir data
+#+end_src
+
+** Output
+- tasks-deep-{model}.json: Per-task data including:
+  - User prompt (initial request)
+  - Tool calls with parameters
+  - Files read/written/edited
+  - Lines added/removed
+  - Duration
+  - Next user message (ground truth for satisfaction)
+
+* Step 3: Classify Task Complexity
+
+** Script: classify_tasks.py
+
+#+begin_src bash
+python classify_tasks.py --data-dir data
+#+end_src
+
+** Output
+- tasks-classified-{model}.json: Tasks with complexity classification
+  - trivial, simple, moderate, complex
+  - Classification signals (tool count, file count, etc.)
+
+* Step 4: LLM Qualitative Analysis
+
+** Script: analyze_tasks_llm.py
+
+#+begin_src bash
+# Full analysis (uses caching)
+python analyze_tasks_llm.py --workers 8 --report
+
+# Report only (from cached data)
+python analyze_tasks_llm.py --report-only
+#+end_src
+
+** Output
+- analysis/llm-analysis-{model}.json: Per-task LLM judgments
+  - alignment_score (1-5)
+  - user_sentiment
+  - task_completion
+  - autonomy_level
+  - scope_management
+  - iteration_required
+  - error_recovery
+
+- analysis/llm-comparison-report.org: Comparison tables
+
+* Step 5: Behavioral Analysis
+
+This step analyzes planning, subagent, and parallelization patterns.
+Currently done via ad-hoc Python scripts; could be formalized.
+
+** Metrics to Extract
+
+*** Subagent Usage
+#+begin_src python
+# From raw sessions, count Task tool usage
+for msg in session:
+    if msg.type == 'assistant':
+        for block in msg.content:
+            if block.type == 'tool_use' and block.name == 'Task':
+                subagent_type = block.input.get('subagent_type')
+                run_in_background = block.input.get('run_in_background', False)
+                # Categorize and count
+#+end_src
+
+*** Planning Usage
+#+begin_src python
+# Count EnterPlanMode tool calls
+for tool_call in task.tool_calls:
+    if tool_call.name == 'EnterPlanMode':
+        # Track whether user requested or autonomous
+#+end_src
+
+*** Parallel Tool Calls
+#+begin_src python
+# Check if assistant messages have multiple tool_use blocks
+for msg in session:
+    if msg.type == 'assistant':
+        tool_uses = [b for b in msg.content if b.type == 'tool_use']
+        if len(tool_uses) > 1:
+            # This is parallel tool execution
+#+end_src
+
+*** Autonomous vs User-Requested
+#+begin_src python
+# Check user prompt for explicit agent keywords
+agent_keywords = ['subagent', 'agent', 'parallel', 'delegate',
+                  'spawn', 'dispatch', 'concurrent']
+
+is_user_requested = any(kw in user_prompt.lower() for kw in agent_keywords)
+#+end_src
+
+*** Directive Compliance (User-Directed Only)
+
+When user explicitly requests behavior, measure how well the model complies:
+
+#+begin_src python
+# "Parallel" directive compliance
+def has_parallel_directive(prompt):
+    return 'parallel' in prompt.lower() or 'concurrently' in prompt.lower()
+
+# Track when "parallel" requested:
+# - How many agents launched?
+# - How many with run_in_background=true? (actual parallel)
+# - Compliance = background_count / total_agents
+#+end_src
+
+Key finding: Opus 4.5 interprets "parallel" as "multiple agents" (sequential).
+Opus 4.6 interprets "parallel" as "run_in_background=true" (concurrent).
+
+*** General-Purpose Scope
+#+begin_src python
+# Categorize general-purpose Task calls by scope
+create_patterns = r'\b(create|implement|build|write)\b.*\b(module|file|class)\b'
+fix_patterns = r'\b(fix|repair|resolve|patch)\b'
+
+# Classify each Task prompt
+#+end_src
+
+* Metrics Summary
+
+** Quantitative (Factual)
+| Metric | Source | Description |
+|--------|--------|-------------|
+| Tool call count | tasks-deep | Number of tool invocations |
+| Files touched | tasks-deep | Unique files read/written/edited |
+| Lines changed | tasks-deep | Lines added + removed |
+| Duration | tasks-deep | End time - start time |
+| Complexity | tasks-classified | trivial/simple/moderate/complex |
+
+** LLM Judgments (Subjective)
+| Metric | Source | Values |
+|--------|--------|--------|
+| Alignment score | llm-analysis | 1-5 |
+| User sentiment | llm-analysis | satisfied/neutral/dissatisfied |
+| Task completion | llm-analysis | complete/partial/interrupted/failed |
+| Autonomy level | llm-analysis | high/medium/low |
+| Scope management | llm-analysis | focused/appropriate/expanded |
+| Iteration required | llm-analysis | one_shot/minor/significant |
+
+** Behavioral (Tool Pattern Analysis)
+| Metric | Source | Description |
+|--------|--------|-------------|
+| Subagent usage % | raw sessions | % tasks using Task tool |
+| EnterPlanMode % | raw sessions | % tasks using planning |
+| Subagent types | raw sessions | Distribution of subagent_type |
+| Autonomous % | raw sessions | % of subagent use without user request |
+| Parallel calls | raw sessions | Multiple tools per assistant message |
+| Implementation delegation | raw sessions | general-purpose scope analysis |
+
+* User-Directed vs Autonomous Analysis
+
+** Two Distinct Analysis Modes
+
+When analyzing model behavior, distinguish between:
+
+*** User-Directed Behavior
+User explicitly requests a behavior (e.g., "use subagents", "in parallel").
+
+Questions to ask:
+- Did the model comply with the directive?
+- How closely did it follow instructions?
+- Did it use the right approach (e.g., background for parallel)?
+
+Metrics:
+- Directive detection rate
+- Compliance rate (did requested thing happen?)
+- Literal vs interpreted compliance
+
+*** Autonomous Behavior
+Model chooses behavior without explicit user request.
+
+Questions to ask:
+- Was the choice appropriate for the task?
+- Did it improve outcomes?
+- What triggered the autonomous decision?
+
+Metrics:
+- Trigger patterns (what prompts lead to autonomous behavior?)
+- Outcome correlation (does autonomous X improve satisfaction?)
+- Appropriateness (was it warranted for complexity level?)
+
+** Why This Distinction Matters
+
+Example finding: "Parallel" directive compliance
+- Opus 4.5: 50 agents launched when "parallel" requested, 0% background (literal non-compliance)
+- Opus 4.6: 7 agents launched when "parallel" requested, 86% background (literal compliance)
+
+Without distinguishing user-directed from autonomous, this finding would be hidden
+in aggregate "background execution" statistics.
+
+* Analysis Recommendations
+
+** Always Control for Complexity
+
+Raw metric comparisons (duration, tools, etc.) are misleading without
+controlling for task complexity. Always bin by complexity class.
+
+** Normalize LLM Judgments
+
+The LLM may produce varied phrasings for sentiment (e.g., "satisfied",
+"positive", "neutral_to_positive"). Normalize to standard categories.
+
+** Consider User Behavior
+
+User-directed vs autonomous behavior matters. Heavy subagent usage may
+be model preference OR user preference for that model.
+
+** Sample Size Awareness
+
+Different models may have different sample sizes. Report percentages
+and absolute counts. Be cautious with small bins.
+
+* Future Improvements
+
+** Formalize Behavioral Analysis
+Create analyze_behavior.py with standardized metrics extraction.
+
+** Add Statistical Tests
+For comparing distributions (chi-square, t-tests, etc.)
+
+** Track Over Time
+Add version/date tracking to see how behavior changes across releases.
+
+** Cross-User Analysis
+Current data is single-user. Multi-user analysis would strengthen findings.
+
+** Task Success Ground Truth
+The "next user message" is a proxy for satisfaction. Direct success
+measurement (tests passing, deployment, etc.) would be more reliable.

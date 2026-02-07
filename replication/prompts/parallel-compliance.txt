@@ -1,0 +1,11 @@
+I need you to research three topics IN PARALLEL using subagents. This is important - please run all three investigations concurrently, not sequentially.
+
+Topic A: Research the history and key design decisions of the SQLite database engine. Focus on its single-file architecture, the decision to not use client-server model, and its testing methodology (100% branch coverage). Write your findings to analysis-a.md.
+
+Topic B: Research the design philosophy of the Go programming language. Focus on why it excluded generics initially, the decision to include goroutines as a core primitive, and the module system evolution. Write your findings to analysis-b.md.
+
+Topic C: Research the architectural decisions behind Redis. Focus on its single-threaded event loop design, the decision to keep data in memory, and how it handles persistence (RDB vs AOF). Write your findings to analysis-c.md.
+
+After all three analyses are complete, write a unified report.org that synthesizes the common themes across all three: what design trade-offs did each project make, and what can we learn about successful software architecture from comparing them?
+
+Remember: run the three research tasks IN PARALLEL, not one after another.

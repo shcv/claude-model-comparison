@@ -1,0 +1,60 @@
+{
+  "run_id": "claude-coder-go-hook_20260205_110349",
+  "timestamp": "2026-02-05T11:07:57.370502",
+  "task": "claude-coder-go-hook",
+  "description": "Replace bash hook with Go binary, add TCP listener",
+  "model": "claude-opus-4-5-20251101",
+  "original_model": "opus-4-6",
+  "original_metrics": {
+    "tools": 59,
+    "files_touched": 12,
+    "lines_added": 701,
+    "lines_removed": 41,
+    "duration_seconds": 227.447
+  },
+  "replication_metrics": {
+    "duration_seconds": 247.48132348060608,
+    "exit_code": 0,
+    "total_tools": 35,
+    "tool_breakdown": {
+      "Read": 8,
+      "Glob": 2,
+      "TodoWrite": 9,
+      "Write": 5,
+      "Edit": 6,
+      "Bash": 5
+    },
+    "message_count": 89,
+    "session_file": "/home/shcv/.claude/projects/-tmp-replication-claude-coder-go-hook-oti5y24i/5b50c8c6-6281-492a-8aad-91f9b7f2646c.jsonl"
+  },
+  "verification": {
+    "tests": [
+      {
+        "command": "make game 2>&1",
+        "stdout": "make: Nothing to be done for 'game'.\n",
+        "stderr": "",
+        "exit_code": 0
+      },
+      {
+        "command": "test -f claude-coder-hook",
+        "stdout": "",
+        "stderr": "",
+        "exit_code": 0
+      },
+      {
+        "command": "test -f claude-coder",
+        "stdout": "",
+        "stderr": "",
+        "exit_code": 0
+      }
+    ],
+    "patterns": {
+      "claude-coder-hook": false
+    },
+    "tests_passed": true,
+    "patterns_matched": false,
+    "overall_success": false
+  },
+  "work_dir": "/tmp/replication_claude-coder-go-hook_oti5y24i",
+  "session_file": "/home/shcv/.claude/projects/-tmp-replication-claude-coder-go-hook-oti5y24i/5b50c8c6-6281-492a-8aad-91f9b7f2646c.jsonl"
+}

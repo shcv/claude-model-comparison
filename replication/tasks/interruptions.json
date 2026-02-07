@@ -1,0 +1,40 @@
+{
+  "name": "interruptions-stress-test",
+  "description": "Create cascading interrupts stress test for multi-agent orchestration",
+  "original_model": "opus-4-6",
+  "original_metrics": {
+    "tools": 21,
+    "files_touched": 7,
+    "lines_added": 1618,
+    "lines_removed": 0,
+    "duration_seconds": 784.571
+  },
+  "setup": {
+    "type": "greenfield",
+    "context_sources": [
+      {
+        "src": "~/projects/interruptions/src",
+        "dst": "src"
+      },
+      {
+        "src": "~/projects/interruptions/experiments",
+        "dst": "experiments"
+      },
+      {
+        "src": "~/projects/interruptions/pyproject.toml",
+        "dst": "pyproject.toml"
+      }
+    ]
+  },
+  "prompt_file": "../prompts/interruptions.txt",
+  "verification": {
+    "commands": [
+      "test -f experiments/cascading_interrupts.py",
+      "python -m py_compile experiments/cascading_interrupts.py",
+      "python -c \"from experiments.cascading_interrupts import SCENARIOS; print(f'{len(SCENARIOS)} scenarios')\""
+    ],
+    "success_patterns": [
+      "6 scenarios"
+    ]
+  }
+}

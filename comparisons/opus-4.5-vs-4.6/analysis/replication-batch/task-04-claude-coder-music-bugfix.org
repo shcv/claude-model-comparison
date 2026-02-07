@@ -1,0 +1,234 @@
+* Task: Fix Music Playback - Bugfix/Complex
+
+** Metadata
+- Task ID: 5bc09504-d3ad-4863-be77-b0d46a6cb6aa-task-2
+- Project: claude-coder (Terminal game for Claude Code)
+- Classification: Bugfix/complex (fix broken feature + add new UI)
+- Model: Opus 4.6
+
+** Opus 4.6 Metrics
+| Metric | Value |
+|--------|-------|
+| Total Tools | 48 |
+| Files Touched | 7 |
+| Lines Added | 663 |
+| Lines Removed | 129 |
+| Duration | 232.013 seconds (~3.9 minutes) |
+| Start Time | 2026-02-04T08:40:56.122Z |
+| End Time | 2026-02-04T08:44:48.135Z |
+
+** User Prompt (Full)
+
+#+begin_quote
+Implement the following plan:
+
+# Plan: Fix Music Playback + Audio Settings Page
+
+## Problem
+
+Music doesn't turn on despite being enabled in onboarding. Config view shows
+"off" and toggling has no effect.
+
+## Root Causes
+
+1. **Missing `--no-terminal`**: mpv fights bubbletea for terminal control
+   when running inside alt-screen mode. mpv needs `--no-terminal` to run
+   headlessly.
+
+2. **Stdout/stderr inheritance**: Setting `cmd.Stdout = nil` in Go means
+   "inherit parent's fd", not /dev/null. mpv output goes to bubbletea's
+   terminal, causing conflicts. Must redirect to `os.DevNull`.
+
+3. **Silent failures**: `Play()` returns without setting `playing = true`
+   when mpv fails to start, but there's no error feedback to the user.
+   Config view toggle just silently does nothing.
+
+## 1. Fix AudioPlayer playback — `internal/effects/audio.go`
+
+### Fix mpv command
+
+Add `--no-terminal`, redirect stdout/stderr to devnull:
+```go
+devnull, _ := os.Open(os.DevNull)
+defer devnull.Close()
+ap.cmd = exec.Command(path, "--no-video", "--no-terminal",
+    "--loop-playlist", "--quiet",
+    fmt.Sprintf("--volume=%d", ap.volume),
+    ap.musicDir)
+ap.cmd.Stdout = devnull
+ap.cmd.Stderr = devnull
+```
+
+Same treatment for ffplay fallback.
+
+### Add volume + device fields
+
+```go
+type AudioPlayer struct {
+    // existing fields...
+    volume  int    // 0-100, default 80
+    device  string // mpv audio device name, "" = default
+    err     string // last error for UI feedback
+}
+```
+
+### Add methods
+
+- `SetVolume(v int)` — stores volume, restarts playback if playing
+- `SetDevice(d string)` — stores device, restarts playback if playing
+- `Volume() int` — getter
+- `Device() string` — getter
+- `Error() string` — last error message for UI display
+- `ListDevices() []string` — runs `mpv --no-terminal --audio-device=help`
+  and parses output. Cached after first call.
+
+### Pass volume + device to mpv
+
+```go
+args := []string{"--no-video", "--no-terminal", "--loop-playlist", "--quiet",
+    fmt.Sprintf("--volume=%d", ap.volume)}
+if ap.device != "" {
+    args = append(args, "--audio-device="+ap.device)
+}
+args = append(args, ap.musicDir)
+```
+
+## 2. Config — `internal/config/config.go`
+
+Add fields + flags:
+```go
+Volume      int    // 0-100
+AudioDevice string // mpv device name
+```
+```go
+flag.IntVar(&c.Volume, "volume", 80, "Music volume (0-100)")
+flag.StringVar(&c.AudioDevice, "audio-device", "", "Audio output device")
+```
+
+## 3. Wire volume/device into AudioPlayer — `internal/game/model.go`
+
+In `New()`, after creating audio player:
+```go
+m.audio.SetVolume(cfg.Volume)
+if cfg.AudioDevice != "" {
+    m.audio.SetDevice(cfg.AudioDevice)
+}
+```
+
+## 4. Audio settings sub-page — `internal/game/configview.go`
+
+Replace the flat "Music" config option with "Audio ▸" that opens a sub-page
+(similar to how configView itself overlays the game).
+
+### Model fields (model.go)
+
+```go
+audioView       bool
+audioCursor     int
+audioDevices    []string  // cached device list
+audioDeviceIdx  int       // index into audioDevices
+```
+
+### Audio sub-page options
+
+When cursor is on "Audio ▸" and user presses enter/confirm, set
+`m.audioView = true`. The audio view has these options:
+
+1. **Music** — on/off toggle (same as current)
+2. **Volume** — 0-100, left/right adjusts by 5
+3. **Device** — cycles through devices from `ListDevices()`
+
+### Key handling
+
+In `updateConfigView`, if `m.audioView` is true, delegate to
+`updateAudioView` instead. Cancel/esc returns to config view.
+
+### Rendering
+
+`viewAudioView()` renders a centered box similar to config view, with the
+audio-specific options. Title: "Audio Settings".
+
+## 5. Update config view — `internal/game/configview.go`
+
+Change the existing "Music" option to "Audio ▸" with a confirm handler that
+opens the audio sub-page. Remove the left/right toggle behavior (since
+that's now inside the sub-page). The value display shows a summary like
+"on 80%" or "off".
+
+The "Sound" option (sound effects on/off) stays in the main config view
+since it's a simple toggle unrelated to music playback.
+
+## Files to Modify
+
+- `internal/effects/audio.go` — fix playback, add volume/device/error
+- `internal/config/config.go` — add Volume, AudioDevice fields + flags
+- `internal/game/model.go` — wire volume/device, add audioView fields
+- `internal/game/configview.go` — audio sub-page, change Music to Audio ▸
+- `internal/game/update.go` — delegate audioView key handling
+
+## Files to Create
+
+None.
+
+## Verification
+
+1. Music plays when enabled in onboarding (mpv runs with --no-terminal)
+2. Config view shows "Audio ▸" with on/off + volume summary
+3. Entering Audio sub-page shows Music toggle, Volume slider, Device picker
+4. Volume changes take effect immediately (mpv restarts)
+5. Device changes take effect immediately (mpv restarts)
+6. When no music files exist, Audio sub-page shows appropriate message
+7. `clod-coder -volume 50 -audio-device "..."` works from CLI
+
+
+If you need specific details from before exiting plan mode (like exact code snippets, error messages, or content you generated), read the full transcript at: /home/shcv/.claude/projects/-home-shcv-projects-claude-coder/124fe771-6f76-4e84-a289-0ce5e3ab3945.jsonl
+#+end_quote
+
+** Tool Sequence (Summarized)
+Read -> TaskCreate -> TaskUpdate -> Write -> TaskUpdate -> Edit -> TaskUpdate -> Edit -> TaskUpdate -> Edit
+
+** Files Read (10)
+- /home/shcv/projects/claude-coder/internal/effects/audio.go
+- /home/shcv/projects/claude-coder/internal/config/config.go
+- /home/shcv/projects/claude-coder/internal/game/model.go
+- /home/shcv/projects/claude-coder/internal/game/configview.go (read 4 times)
+- /home/shcv/projects/claude-coder/internal/game/update.go
+- /home/shcv/projects/claude-coder/internal/game/view.go
+- /home/shcv/projects/claude-coder/internal/game/onboarding.go
+
+** Files Written (1)
+- /home/shcv/projects/claude-coder/internal/effects/audio.go (365 lines - complete rewrite)
+
+** Files Edited (6)
+- /home/shcv/projects/claude-coder/internal/config/config.go (2 edits)
+- /home/shcv/projects/claude-coder/internal/game/model.go (2 edits)
+- /home/shcv/projects/claude-coder/internal/game/configview.go (7 edits)
+- /home/shcv/projects/claude-coder/internal/game/update.go (1 edit)
+- /home/shcv/projects/claude-coder/internal/game/view.go (1 edit)
+
+** Bash Commands (3)
+#+begin_src
+make game 2>&1
+make game 2>&1
+go build ./cmd/clod-coder-hook/ 2>&1
+#+end_src
+
+** Outcome
+- Outcome Category: new_task
+- Next User Message: "it doesn't seem to remember my choices when I start it again, and telling it to change themes just kills it without starting up again (maybe a path issue?)"
+- Evidence: Bug was fixed but user found new issues
+
+** Context Notes
+This task fixes a bug where music playback was silently failing. The model:
+1. Read all relevant files to understand the architecture
+2. Identified root causes (terminal control, stdout inheritance, silent failures)
+3. Rewrote the audio player with proper subprocess handling
+4. Added config fields and CLI flags
+5. Created a new audio settings sub-page in the UI
+6. Verified compilation
+
+Key challenges:
+- Understanding Go subprocess terminal handling
+- Integrating volume/device controls into existing UI
+- Creating nested config view (audio sub-page)
+- Multiple interconnected file edits

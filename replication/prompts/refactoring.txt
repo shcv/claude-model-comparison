@@ -1,0 +1,43 @@
+I have a monolithic Python script that handles config parsing, data processing, and output formatting all in one file. I need you to refactor it into separate modules while keeping all tests passing.
+
+First, create the initial monolithic code and tests, then refactor:
+
+## Step 1: Create the monolithic module
+
+Create `src/app.py` with these components mixed together:
+- A `parse_config(text)` function that parses a simple key=value config format (supporting comments with #, sections with [section], and multiline values with \)
+- A `process_data(config, data)` function that applies transformations based on config (uppercase, filter, sort, deduplicate based on config flags)
+- A `format_output(results, fmt)` function that formats output in different styles (table, csv, json, markdown)
+- A `main()` function that ties them together
+
+Make sure each component is ~40-60 lines with realistic complexity.
+
+## Step 2: Create comprehensive tests
+
+Create `tests/test_app.py` with pytest tests covering:
+- Config parsing edge cases (empty lines, comments, sections, multiline)
+- Data processing with different config combinations
+- Output formatting for each format type
+- Integration test using all components together
+- At least 15 test functions
+
+Also create `src/__init__.py` and `tests/__init__.py`.
+
+## Step 3: Verify tests pass
+
+Run the tests and make sure they all pass.
+
+## Step 4: Refactor into modules
+
+Extract the monolithic `src/app.py` into:
+- `src/parser.py` - config parsing logic
+- `src/processor.py` - data processing logic
+- `src/formatter.py` - output formatting logic
+- `src/app.py` - slim main() that imports from the modules
+
+## Step 5: Update imports and verify
+
+Update all imports in tests and app.py to use the new module structure.
+Run tests again to verify everything still passes.
+
+The key success criteria: all tests must pass after refactoring, and the code must be properly modularized.

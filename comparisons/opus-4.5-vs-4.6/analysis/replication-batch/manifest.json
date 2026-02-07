@@ -1,0 +1,158 @@
+{
+  "description": "5 Opus 4.6 tasks selected for replication with Opus 4.5",
+  "created": "2026-02-04",
+  "purpose": "Compare Opus 4.5 performance against Opus 4.6 on identical prompts",
+  "tasks": [
+    {
+      "id": 1,
+      "task_id": "6ec36123-fb43-4691-ab00-383e238641a1-task-2",
+      "export_file": "task-01-kvl-javascript-refactor.org",
+      "short_name": "kvl-javascript-refactor",
+      "classification": "major_refactor",
+      "project": "kvl",
+      "description": "Rename js/ to javascript/, implement complete KVL library with parser, serializer, transforms, CLI, and tests",
+      "opus46_metrics": {
+        "total_tools": 96,
+        "files_touched": 28,
+        "lines_added": 1400,
+        "lines_removed": 20,
+        "duration_seconds": null,
+        "files_written": 14,
+        "files_edited": 4
+      },
+      "key_challenges": [
+        "Port Python implementation to JavaScript",
+        "Implement categorical merge semantics",
+        "Create comprehensive test suite",
+        "Wire into conformance harness"
+      ]
+    },
+    {
+      "id": 2,
+      "task_id": "674b0c5e-cd72-42f1-922d-44530740a82c-task-2",
+      "export_file": "task-02-kvl-go-reimplement.org",
+      "short_name": "kvl-go-reimplement",
+      "classification": "greenfield_major",
+      "project": "kvl",
+      "description": "Delete existing Go implementation, reimplement from spec using novel ordered node tree approach",
+      "opus46_metrics": {
+        "total_tools": 61,
+        "files_touched": 28,
+        "lines_added": 1419,
+        "lines_removed": 67,
+        "duration_seconds": 357.751,
+        "files_written": 9,
+        "files_edited": 2
+      },
+      "key_challenges": [
+        "Design new internal representation (ordered node tree)",
+        "Implement from spec only, not from other implementations",
+        "Pass all conformance tests",
+        "Handle edge cases in parsing/serialization"
+      ]
+    },
+    {
+      "id": 3,
+      "task_id": "f3365352-6d5a-4095-9a31-b29f1cf3893c-task-2",
+      "export_file": "task-03-claude-coder-go-hook.org",
+      "short_name": "claude-coder-go-hook",
+      "classification": "port_complex",
+      "project": "claude-coder",
+      "description": "Replace bash hook script with Go binary, add TCP listener alongside Unix socket",
+      "opus46_metrics": {
+        "total_tools": 59,
+        "files_touched": 12,
+        "lines_added": 701,
+        "lines_removed": 41,
+        "duration_seconds": 227.447,
+        "files_written": 6,
+        "files_edited": 5
+      },
+      "key_challenges": [
+        "Understand existing bash hook protocol",
+        "Implement dual Unix socket + TCP listeners",
+        "Update detection/installation code",
+        "Maintain backwards compatibility"
+      ]
+    },
+    {
+      "id": 4,
+      "task_id": "5bc09504-d3ad-4863-be77-b0d46a6cb6aa-task-2",
+      "export_file": "task-04-claude-coder-music-bugfix.org",
+      "short_name": "claude-coder-music-bugfix",
+      "classification": "bugfix_complex",
+      "project": "claude-coder",
+      "description": "Fix silent music playback failure, add volume/device controls and audio settings UI",
+      "opus46_metrics": {
+        "total_tools": 48,
+        "files_touched": 7,
+        "lines_added": 663,
+        "lines_removed": 129,
+        "duration_seconds": 232.013,
+        "files_written": 1,
+        "files_edited": 6
+      },
+      "key_challenges": [
+        "Diagnose subprocess terminal handling issues",
+        "Add config fields and CLI flags",
+        "Create nested audio settings UI",
+        "Coordinate multiple interconnected file edits"
+      ]
+    },
+    {
+      "id": 5,
+      "task_id": "27e85e1e-c11d-4b0f-b631-e293802ae138-task-2",
+      "export_file": "task-05-interruptions-stress-test.org",
+      "short_name": "interruptions-stress-test",
+      "classification": "greenfield_complex",
+      "project": "interruptions",
+      "description": "Create 1600+ line stress test for multi-agent interrupt orchestration with 6 scenarios",
+      "opus46_metrics": {
+        "total_tools": 21,
+        "files_touched": 7,
+        "lines_added": 1618,
+        "lines_removed": 0,
+        "duration_seconds": 784.571,
+        "files_written": 1,
+        "files_edited": 0
+      },
+      "key_challenges": [
+        "Understand async multi-agent orchestration API",
+        "Implement 6 complex test scenarios",
+        "Design observable test infrastructure",
+        "Maintain coherence across 1600+ line file"
+      ]
+    }
+  ],
+  "summary_metrics": {
+    "total_tasks": 5,
+    "total_tools_used": 285,
+    "total_files_touched": 82,
+    "total_lines_added": 5801,
+    "total_lines_removed": 257,
+    "total_duration_seconds": 1601.782,
+    "average_duration_seconds": 400.445,
+    "classifications": {
+      "major_refactor": 1,
+      "greenfield_major": 1,
+      "port_complex": 1,
+      "bugfix_complex": 1,
+      "greenfield_complex": 1
+    },
+    "projects": {
+      "kvl": 2,
+      "claude-coder": 2,
+      "interruptions": 1
+    }
+  },
+  "replication_notes": {
+    "setup": "Each task's .org file contains the full user_prompt_full that should be used verbatim",
+    "context": "Tasks assume existing project context - Opus will need to explore the codebase",
+    "verification": "Compare tool counts, lines changed, duration, and outcome (success/failure)",
+    "expected_differences": [
+      "Opus may take different approaches to the same problem",
+      "Tool sequences may vary while achieving same outcome",
+      "Duration depends on API latency and model thinking time"
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "run_id": "claude-coder-go-hook_20260205_104514",
+  "timestamp": "2026-02-05T11:02:16.425861",
+  "task": "claude-coder-go-hook",
+  "description": "Replace bash hook with Go binary, add TCP listener",
+  "model": "claude-opus-4-5-20251101",
+  "original_model": "opus-4-6",
+  "original_metrics": {
+    "tools": 59,
+    "files_touched": 12,
+    "lines_added": 701,
+    "lines_removed": 41,
+    "duration_seconds": 227.447
+  },
+  "replication_metrics": {
+    "duration_seconds": 1021.421709060669,
+    "exit_code": 0,
+    "error": "No session file found"
+  },
+  "verification": {
+    "tests": [
+      {
+        "command": "make game 2>&1",
+        "stdout": "make: *** No rule to make target 'game'.  Stop.\n",
+        "stderr": "",
+        "exit_code": 2
+      },
+      {
+        "command": "test -f claude-coder-hook",
+        "stdout": "",
+        "stderr": "",
+        "exit_code": 1
+      },
+      {
+        "command": "test -f claude-coder",
+        "stdout": "",
+        "stderr": "",
+        "exit_code": 1
+      }
+    ],
+    "patterns": {
+      "claude-coder-hook": false
+    },
+    "tests_passed": false,
+    "patterns_matched": false,
+    "overall_success": false
+  },
+  "work_dir": "/tmp/replication_claude-coder-go-hook_enedktku",
+  "session_file": null
+}

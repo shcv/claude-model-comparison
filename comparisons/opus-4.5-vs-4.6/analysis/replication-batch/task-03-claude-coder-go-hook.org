@@ -1,0 +1,180 @@
+* Task: Go Hook Binary + TCP Support - Port/Complex
+
+** Metadata
+- Task ID: f3365352-6d5a-4095-9a31-b29f1cf3893c-task-2
+- Project: claude-coder (Terminal game for Claude Code)
+- Classification: Port/complex (bash script to Go binary + add TCP)
+- Model: Opus 4.6
+
+** Opus 4.6 Metrics
+| Metric | Value |
+|--------|-------|
+| Total Tools | 59 |
+| Files Touched | 12 |
+| Lines Added | 701 |
+| Lines Removed | 41 |
+| Duration | 227.447 seconds (~3.8 minutes) |
+| Start Time | 2026-02-04T07:32:00.868Z |
+| End Time | 2026-02-04T07:35:48.315Z |
+
+** User Prompt (Full)
+
+#+begin_quote
+Implement the following plan:
+
+# Plan: Go hook binary + TCP support
+
+Replace the bash hook script (socat + jq deps) with a compiled Go binary.
+Add TCP listener (port 31337) alongside Unix socket.
+
+## New binary: `cmd/claude-coder-hook/main.go`
+
+Small Go program that:
+1. Reads JSON from stdin (Claude Code hook input)
+2. Parses `tool_name` and `tool_input` using `encoding/json`
+3. Builds task JSON (same format as current bash hook)
+4. Connects to game server (try Unix socket, then TCP)
+5. Sends JSON line, reads until connection closed (blocks)
+6. Exits 0
+
+Address discovery order:
+1. `CLAUDE_CODER_ADDR` env var (supports `host:port` or socket path)
+2. Unix socket at `$XDG_RUNTIME_DIR/claude-coder.sock`
+3. `127.0.0.1:31337`
+
+No external deps — just stdlib `net`, `encoding/json`, `os`.
+
+## `internal/server/server.go` changes
+
+Listen on **both** Unix socket and TCP simultaneously:
+- Unix socket: same path as now (for local zero-config)
+- TCP: `127.0.0.1:31337` default, `-addr` flag to override
+- Both feed into the same `handleConn` / queue
+- `Start()` launches two accept loops
+
+Add `Addr` field to Server struct, expose actual TCP listener address.
+
+## `internal/config/config.go` changes
+
+- Add `Addr string` field
+- Add `-addr` flag (default `127.0.0.1:31337`)
+- Keep `-socket` flag for Unix socket path
+
+## `internal/config/detect.go` changes
+
+- Remove `socat` and `jq` checks (no longer needed)
+- Add check for hook binary instead of hook script
+- Check for `claude-coder-hook` next to main binary, then in PATH
+
+## `internal/config/install.go` changes
+
+- `FindHookScript()` → `FindHookBinary()`: look for `claude-coder-hook`
+- Update command in settings to point to Go binary instead of bash script
+
+## `hooks/claude-coder-hook.sh`
+
+Keep for backwards compat but no longer the primary hook.
+The installer will prefer the Go binary.
+
+## `Makefile` changes
+
+```make
+claude-coder-hook: cmd/claude-coder-hook/main.go
+	go build -o $@ ./cmd/claude-coder-hook/
+
+game: claude-coder claude-coder-hook
+
+install: game
+	install -m 755 claude-coder $(PREFIX)/bin/
+	install -m 755 claude-coder-hook $(PREFIX)/bin/
+```
+
+## `cmd/claude-coder/main.go` changes
+
+Pass `cfg.Addr` to server. Server now starts both listeners.
+
+## Files to create
+- `cmd/claude-coder-hook/main.go`
+
+## Files to modify
+- `internal/server/server.go` — add TCP listener
+- `internal/config/config.go` — add Addr flag
+- `internal/config/detect.go` — remove socat/jq checks, add hook binary check
+- `internal/config/install.go` — find/install Go binary
+- `cmd/claude-coder/main.go` — pass addr to server
+- `Makefile` — build hook binary
+
+## Verification
+
+1. `make game` builds both `claude-coder` and `claude-coder-hook`
+2. Start game, run hook manually: `echo '{"tool_name":"Bash","tool_input":{"command":"echo hi"}}' | ./claude-coder-hook` — blocks until task completed in game
+3. `CLAUDE_CODER_ADDR=127.0.0.1:31337` works for remote forwarding
+4. Unix socket still works as fallback
+5. No socat/jq required
+
+
+If you need specific details from before exiting plan mode (like exact code snippets, error messages, or content you generated), read the full transcript at: /home/shcv/.claude/projects/-home-shcv-projects-claude-coder/c4f4f555-a30d-48a9-8645-b39cfe556908.jsonl
+#+end_quote
+
+** Tool Sequence (Summarized)
+Read -> TaskCreate -> TaskUpdate -> Bash -> Write -> TaskUpdate -> Write -> TaskUpdate -> Edit -> TaskUpdate
+
+** Files Read (11)
+- /home/shcv/projects/claude-coder/internal/server/server.go
+- /home/shcv/projects/claude-coder/internal/config/config.go
+- /home/shcv/projects/claude-coder/internal/config/detect.go
+- /home/shcv/projects/claude-coder/internal/config/install.go
+- /home/shcv/projects/claude-coder/cmd/claude-coder/main.go
+- /home/shcv/projects/claude-coder/Makefile
+- /home/shcv/projects/claude-coder/hooks/claude-coder-hook.sh
+- /home/shcv/projects/claude-coder/internal/game/onboarding.go
+- /home/shcv/projects/claude-coder/internal/game/model.go
+- /home/shcv/projects/claude-coder/guix.scm
+- /home/shcv/projects/claude-coder/hooks/install.sh
+
+** Files Written (6)
+- /home/shcv/projects/claude-coder/cmd/claude-coder-hook/main.go (133 lines)
+- /home/shcv/projects/claude-coder/internal/server/server.go (113 lines - rewritten)
+- /home/shcv/projects/claude-coder/internal/config/detect.go (115 lines - rewritten)
+- /home/shcv/projects/claude-coder/internal/config/install.go (219 lines - rewritten)
+- /home/shcv/projects/claude-coder/Makefile (44 lines - rewritten)
+- /home/shcv/projects/claude-coder/guix.scm (36 lines - rewritten)
+
+** Files Edited (5)
+- /home/shcv/projects/claude-coder/internal/config/config.go (2 edits)
+- /home/shcv/projects/claude-coder/internal/config/detect.go (1 edit)
+- /home/shcv/projects/claude-coder/cmd/claude-coder/main.go (2 edits)
+- /home/shcv/projects/claude-coder/internal/game/onboarding.go (2 edits)
+
+** Bash Commands (12)
+#+begin_src
+mkdir -p /home/shcv/projects/claude-coder/cmd/claude-coder-hook
+rm /home/shcv/projects/claude-coder/hooks/claude-coder-hook.sh && rmdir /home/shcv/projects/claude-c...
+make game 2>&1
+ls -la /home/shcv/projects/claude-coder/claude-coder /home/shcv/projects/claude-coder/claude-coder-h...
+echo '{}' | /home/shcv/projects/claude-coder/claude-coder-hook; echo "exit code: $?"
+echo '{"tool_name":"Bash","tool_input":{"command":"echo hi"}}' | /home/shcv/projects/claude-coder/cl...
+# (multiple test variations)
+rm /home/shcv/projects/claude-coder/hooks/install.sh && rmdir /home/shcv/projects/claude-coder/hooks
+make -B game 2>&1
+#+end_src
+
+** Outcome
+- Outcome Category: new_task
+- Next User Message: "is it normal for go flags to have a single hyphen?"
+- Evidence: Task completed successfully, user asking unrelated follow-up
+
+** Context Notes
+This task replaces a bash hook script with a compiled Go binary. The model:
+1. Read existing bash implementation to understand protocol
+2. Created new Go binary with same functionality
+3. Modified server to accept both Unix socket and TCP
+4. Updated config, detection, and installation code
+5. Cleaned up old bash scripts
+6. Updated Makefile and Guix package definition
+
+Key challenges:
+- Understanding the existing hook protocol
+- Implementing dual Unix socket + TCP listeners
+- Updating detection code to find binary vs script
+- Ensuring backwards compatibility

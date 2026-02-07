@@ -1,0 +1,157 @@
+#+TITLE: Replication Worktrees - Ready for Testing
+#+DATE: 2026-02-04
+
+* Summary
+
+Three worktrees are ready for model comparison replication:
+
+| Worktree | Original Model | Task Type | Lines | Tools | Ready |
+|----------|----------------|-----------|-------|-------|-------|
+| cc-summarize-repl | Opus 4.5 | investigation/refactor | +323 | 28 | ✓ |
+| interruptions-repl | Opus 4.6 | greenfield/complex | +1618 | 21 | ✓ |
+| claude-coder-go-hook-repl | Opus 4.6 | port/complex | +701 | 59 | ✓ |
+
+* Worktree 1: cc-summarize (Opus 4.5 -> Opus 4.6)
+
+** Location
+=/tmp/cc-summarize-repl=
+
+** Starting State
+- Commit: =84ca308= ("fix: isolate --summary sessions from user's Claude history")
+- Detached HEAD at this commit
+
+** Original Metrics (Opus 4.5)
+| Metric | Value |
+|--------|-------|
+| Tools | 28 |
+| Files | 2 |
+| Lines Added | 323 |
+| Lines Removed | 183 |
+| Duration | 246s |
+
+** Prompt to Use
+#+begin_quote
+the summary feature doesn't work; rewrite it to use the code implemented for --summarize. Redesign the system, with several different kinds of summaries. The point is that these summaries cover all of the work in the selected/filtered sessions, not just the messages between user messages
+#+end_quote
+
+** Run Replication
+#+begin_src sh
+cd /tmp/cc-summarize-repl
+claude --model claude-opus-4-6
+# Paste the prompt above
+#+end_src
+
+* Worktree 2: interruptions (Opus 4.6 -> Opus 4.5)
+
+** Location
+=/tmp/interruptions-repl=
+
+** Starting State
+- Empty git repository (greenfield)
+- No existing code
+
+** Original Metrics (Opus 4.6)
+| Metric | Value |
+|--------|-------|
+| Tools | 21 |
+| Files | 7 |
+| Lines Added | 1618 |
+| Lines Removed | 0 |
+| Duration | 785s |
+
+** Prompt to Use
+See full prompt in =task-05-interruptions-stress-test.org=
+
+The prompt is very long (~190 lines) - it's a detailed implementation plan for a cascading interrupts stress test.
+
+** Important Context
+This task requires the =interruptions= library to exist. The prompt references:
+- =src/interruptions/orchestrator.py=
+- =src/interruptions/agent.py=
+- =src/interruptions/messages.py=
+- =experiments/interrupt_modes.py=
+
+For a fair comparison, you need to either:
+1. Copy the =interruptions= library into the worktree first
+2. Or use a worktree of the actual =interruptions= repo at the right commit
+
+** Run Replication
+#+begin_src sh
+# Option A: Copy library first
+cp -r ~/projects/interruptions/src /tmp/interruptions-repl/
+cp -r ~/projects/interruptions/experiments /tmp/interruptions-repl/
+cd /tmp/interruptions-repl
+claude --model claude-opus-4-5-20251101
+# Paste the full prompt from task-05-interruptions-stress-test.org
+#+end_src
+
+* Worktree 3: claude-coder-go-hook (Opus 4.6 -> Opus 4.5)
+
+** Location
+=/tmp/claude-coder-go-hook-repl=
+
+** Starting State
+- Commit: =7ec42e6= ("Initial commit: claude-coder hacking minigame for Claude Code")
+- This is BEFORE the Go hook was added
+- Contains bash hook script in =hooks/=
+
+** Original Metrics (Opus 4.6)
+| Metric | Value |
+|--------|-------|
+| Tools | 59 |
+| Files | 12 |
+| Lines Added | 701 |
+| Lines Removed | 41 |
+| Duration | 227s |
+
+** Prompt to Use
+See full prompt in =task-03-claude-coder-go-hook.org=
+
+The prompt is a detailed plan (~100 lines) for:
+- Replacing bash hook with Go binary
+- Adding TCP listener alongside Unix socket
+- Updating detection/installation code
+
+** Run Replication
+#+begin_src sh
+cd /tmp/claude-coder-go-hook-repl
+claude --model claude-opus-4-5-20251101
+# Paste the full prompt from task-03-claude-coder-go-hook.org
+#+end_src
+
+* KVL Tasks (No Git History)
+
+The KVL repository doesn't have git history at the top level. However, starting states exist:
+
+** kvl-javascript-refactor
+- Start from: =~/projects/kvl-old/kvl-js/design.md= (design doc only)
+- Target: Implement full JavaScript parser/serializer
+
+** kvl-go-reimplement
+- Start from: =~/projects/kvl-old/kvl-go/= (complex implementation)
+- Target: Simplify to =~/projects/kvl/go/= version
+
+These would require manual setup to replicate.
+
+* Metrics Collection
+
+After running each replication, record:
+
+1. *Tool count* - How many tool calls total?
+2. *Files touched* - Which files were read/written/edited?
+3. *Lines changed* - git diff --stat
+4. *Duration* - Wall clock time from prompt to completion
+5. *Outcome* - Did it work? Any errors?
+6. *Approach differences* - Did the model take a different path?
+
+* Efficiency Comparison Formula
+
+#+begin_src
+Tools per 100 lines = (tool_count / lines_changed) * 100
+#+end_src
+
+| Task | Original T/100L | Replication T/100L | Winner |
+|------|-----------------|-------------------|--------|
+| cc-summarize | 8.7 | ? | ? |
+| interruptions | 1.3 | ? | ? |
+| go-hook | 8.4 | ? | ? |

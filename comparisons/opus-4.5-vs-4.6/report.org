@@ -1,0 +1,481 @@
+#+TITLE: Opus 4.5 vs Opus 4.6: A Behavioral Comparison from Real-World Usage
+#+DATE: 2026-02-05
+#+OPTIONS: toc:3 num:t
+
+* Introduction
+
+This report compares two Claude models---Opus 4.5 (~claude-opus-4-5-20251101~) and
+Opus 4.6 (~claude-opus-4-6~)---using observational data from a single power user's
+Claude Code sessions over a 7-day period.
+
+The analysis draws on 550 Opus 4.5 tasks (89 sessions) and 296 Opus 4.6 tasks
+(61 sessions) covering a range of software engineering work: investigation,
+feature development, refactoring, sysadmin, greenfield projects, and more.
+
+** What This Study Is (and Isn't)
+
+This is an /observational study/, not a controlled experiment. The models were used
+in the author's normal workflow, meaning task selection was not random. Opus 4.6
+was preferentially used for larger implementation work; Opus 4.5 saw more quick
+investigations. Where possible, we control for complexity.
+
+A small /replication study/ with identical prompts is planned but not yet complete.
+
+** Data Pipeline
+
+#+begin_example
+Raw Sessions (.jsonl)
+  -> collect_sessions.py    -> sessions-{model}.json
+  -> extract_tasks.py       -> tasks-deep-{model}.json
+  -> classify_tasks.py      -> tasks-classified-{model}.json
+  -> analyze_tasks_llm.py   -> llm-analysis-{model}.json
+  -> analyze_behavior.py    -> behavior-metrics.json
+  -> normalize_llm_fields.py -> (updates llm-analysis in-place)
+#+end_example
+
+See =analysis-process.org= for detailed methodology.
+
+* Executive Summary
+
+After correcting for false positives in dissatisfaction detection (73--93%
+of flagged "dissatisfaction" signals were system-generated, not user complaints),
+Opus 4.6 outperforms Opus 4.5 on most metrics:
+
+| Metric | Opus 4.5 | Opus 4.6 | Advantage |
+|--------|----------|----------|-----------|
+| Corrected dissatisfaction rate | 3.7% | 1.3% | Opus 4.6 |
+| Tools per 100 lines of code | 39.3 | 23.2 | Opus 4.6 (41% fewer) |
+| Avg files touched per task | 3.4 | 5.3 | Opus 4.6 (broader scope) |
+| User satisfied (LLM judgment) | 40.2% | 46.4% | Opus 4.6 |
+| Tasks with autonomous subagents | 16.3% | 39.6% | Opus 4.6 |
+| Tasks with autonomous planning | 1.7% | 15.7% | Opus 4.6 (10x) |
+| One-shot completion rate | 42.0% | 45.1% | Opus 4.6 |
+| Satisfaction on complex tasks | 56.6% | 67.4% | Opus 4.6 (+11pp) |
+
+Opus 4.5 retains advantages on trivial tasks (+7pp satisfaction), refactoring
+(5.9% vs 9.1% dissatisfaction), and quick investigations.
+
+* Quantitative Findings
+
+** Task Distribution
+
+The models saw different workloads. Opus 4.6 handled proportionally harder tasks.
+
+| Complexity | Opus 4.5 | % | Opus 4.6 | % |
+|------------|----------|------|----------|------|
+| trivial | 282 | 51.3 | 119 | 40.2 |
+| simple | 79 | 14.4 | 53 | 17.9 |
+| moderate | 127 | 23.1 | 67 | 22.6 |
+| complex | 53 | 9.6 | 46 | 15.5 |
+
+** Efficiency
+
+Raw tool counts favor Opus 4.5 (8.9 avg vs 13.9), but per-unit-of-work metrics
+tell a different story.
+
+| Metric | Opus 4.5 | Opus 4.6 |
+|--------|----------|----------|
+| Avg tools/task | 16.9 | 23.4 |
+| Avg files/task | 3.4 | 5.3 |
+| Avg lines/task | 322 | 378 |
+| *Tools per file* | *6.63* | *6.14* |
+| *Tools per 100 lines* | *39.32* | *23.23* |
+
+Opus 4.6 does more work per task but is more efficient per unit of output.
+The gap widens dramatically at higher complexity: at "major" tasks,
+Opus 4.6 achieves 9.0 tools/100 lines vs Opus 4.5's 157.5.
+
+** Efficiency by Complexity
+
+| Complexity | O45 Tools/100L | O45 Dissatisfaction | O46 Tools/100L | O46 Dissatisfaction |
+|------------|----------------|---------------------|----------------|---------------------|
+| trivial | 35.2 | 3.9% | 26.4 | 2.7% |
+| simple | 34.9 | 5.1% | 28.0 | 4.3% |
+| moderate | 41.7 | 1.6% | 32.5 | 0.0% |
+| complex | 19.1 | 4.2% | 11.7 | 0.0% |
+| major | 157.5 | 0.0% | 9.0 | 0.0% |
+
+Opus 4.6 is more efficient at /every/ complexity level, with the advantage
+growing as complexity increases.
+
+** Performance by Task Type
+
+| Type | O45 Tasks | O45 Dissatisfaction | O46 Tasks | O46 Dissatisfaction |
+|---------------|-----------|---------------------|-----------|---------------------|
+| bugfix | 25 | 12.0% | 11 | 0.0% |
+| feature | 47 | 2.1% | 21 | 0.0% |
+| greenfield | 36 | 2.8% | 19 | 0.0% |
+| investigation | 119 | 0.8% | 48 | 2.1% |
+| port | 11 | 9.1% | 8 | 0.0% |
+| refactor | 34 | 5.9% | 22 | 9.1% |
+| sysadmin | 34 | 5.9% | 25 | 4.0% |
+
+Opus 4.6 has 0% dissatisfaction on bugfix, feature, greenfield, and port tasks.
+Refactoring is the only category where Opus 4.6 underperforms (9.1% vs 5.9%).
+
+** Duration by Complexity (Median)
+
+| Complexity | Opus 4.5 | Opus 4.6 | Difference |
+|------------|----------|----------|------------|
+| trivial | 13s | 13s | 0s |
+| simple | 38s | 47s | +9s |
+| moderate | 114s | 135s | +21s |
+| complex | 228s | 337s | +109s |
+
+Opus 4.6 takes longer on complex tasks, but achieves higher satisfaction---the
+extra time appears to be invested in exploration and planning.
+
+* LLM Qualitative Analysis
+
+Each task was analyzed by an LLM (Haiku) evaluating the full task arc: user request,
+agent work, and user's next message (ground truth for satisfaction).
+
+** Summary
+
+| Metric | Opus 4.5 | Opus 4.6 |
+|--------|----------|----------|
+| Alignment score (1--5) | 3.02 | 3.06 |
+| User satisfied | 40.2% | 46.4% |
+| Task complete | 34.9% | 32.9% |
+| High autonomy | 45.1% | 51.5% |
+| One-shot | 42.0% | 45.1% |
+| Error recovered | 3.5% | 6.1% |
+| Error struggled | 4.4% | 2.0% |
+
+** Normalized Field Distributions
+
+After regex-based normalization of free-text LLM judgments:
+
+*** Execution Quality
+
+| Rating | Opus 4.5 | % | Opus 4.6 | % |
+|-----------|----------|------|----------|------|
+| excellent | 3 | 0.5 | 3 | 1.0 |
+| good | 158 | 28.7 | 73 | 24.7 |
+| adequate | 342 | 62.2 | 192 | 65.1 |
+| poor | 21 | 3.8 | 11 | 3.7 |
+| failed | 26 | 4.7 | 16 | 5.4 |
+
+*** Work Category
+
+| Category | Opus 4.5 | % | Opus 4.6 | % |
+|----------------|----------|------|----------|------|
+| investigation | 211 | 38.4 | 99 | 33.6 |
+| directed_impl | 186 | 33.8 | 106 | 35.9 |
+| correction | 53 | 9.6 | 34 | 11.5 |
+| creative_impl | 51 | 9.3 | 28 | 9.5 |
+| verification | 49 | 8.9 | 28 | 9.5 |
+
+*** User Sentiment (Normalized)
+
+| Sentiment | Opus 4.5 | % | Opus 4.6 | % |
+|--------------|----------|------|----------|------|
+| satisfied | 139 | 25.3 | 89 | 30.2 |
+| neutral | 317 | 57.6 | 179 | 60.7 |
+| dissatisfied | 74 | 13.5 | 23 | 7.8 |
+| ambiguous | 20 | 3.6 | 4 | 1.4 |
+
+** Quality by Complexity
+
+Opus 4.6's advantage grows with task complexity:
+
+| Complexity | O45 Satisfied | O45 Alignment | O45 One-shot | O46 Satisfied | O46 Alignment | O46 One-shot |
+|------------|---------------|---------------|--------------|---------------|---------------|--------------|
+| trivial | 22.7% | 2.46 | 39.4% | 15.3% | 2.08 | 33.1% |
+| simple | 48.1% | 3.56 | 46.8% | 49.1% | 3.42 | 47.2% |
+| moderate | 49.6% | 3.59 | 45.7% | 58.2% | 3.85 | 55.2% |
+| complex | 56.6% | 3.72 | 41.5% | 67.4% | 3.74 | 52.2% |
+
+For trivial tasks, Opus 4.5 leads by 7pp in satisfaction. For complex tasks,
+Opus 4.6 leads by 11pp. The crossover occurs around "simple" complexity.
+
+* Behavioral Analysis
+
+The models differ fundamentally in how they approach work, not just in outcomes.
+
+** Subagent Usage
+
+| Metric | Opus 4.5 | Opus 4.6 |
+|--------|----------|----------|
+| Tasks using subagents | 9.8% | 29.1% |
+| Total subagent calls | 169 | 186 |
+| Autonomous subagent use | 56% | 90% |
+| Explore agents | 32% | 72% |
+| General-purpose agents | 50% | 16% |
+| Plan agents | 2% | 9% |
+
+Opus 4.6 uses subagents 3x more frequently and 90% autonomously, but strongly
+prefers lightweight Explore agents (72%) over the heavier general-purpose type
+(16%). Opus 4.5 inverts this pattern: 50% general-purpose, 32% Explore.
+
+** The "Invisible Subagent" Phenomenon
+
+A key user observation was that Opus 4.6 "never uses subagents unless asked."
+The data reveals a more nuanced picture:
+
+- Opus 4.6 uses /more/ subagents overall (186 vs 169)
+- But 72% are Explore (read-only) and 9% are Plan
+- Only 16% are general-purpose (capable of implementation)
+- Opus 4.6 rarely delegates /implementation/ to subagents
+
+The subagents feel "invisible" because they're lightweight research agents,
+not large implementation workers. The user notices the 22-agent iteration
+workflows that Opus 4.5 launches but not the quiet Explore calls Opus 4.6 makes.
+
+** Planning Mode
+
+| Metric | Opus 4.5 | Opus 4.6 |
+|--------|----------|----------|
+| Tasks using EnterPlanMode | 1.1% | 11.5% |
+| Autonomous planning | 67% | 91% |
+
+Opus 4.6 uses planning mode 10x more frequently and almost always autonomously.
+This correlates with better outcomes on complex tasks---the upfront investment
+in understanding the problem pays off.
+
+However, task-level analysis qualifies the causal claim that planning leads to
+better outcomes. Opus 4.6 tasks that use planning mode show only a marginal
+improvement in alignment scores (+0.04) compared to those that do not. This
+suggests the relationship between planning and quality is not straightforward:
+planning may primarily benefit truly complex tasks where upfront design prevents
+costly rework, rather than providing a uniform advantage across all task types.
+The observed correlation between planning frequency and Opus 4.6's strong
+complex-task performance may reflect a common cause (the model's thoroughness)
+rather than a direct planning-to-outcome effect.
+
+** Parallel Execution
+
+Despite system prompts encouraging parallel tool calls, /neither model/ ever
+sends multiple tool calls in a single message (0% for both). Both mention
+"parallel" frequently (~45 times each), but this refers to sequential subagent
+dispatch.
+
+When explicitly asked for parallel execution:
+
+| Metric | Opus 4.5 | Opus 4.6 |
+|--------|----------|----------|
+| Tasks with "parallel" directive | 6 | 2 |
+| Agents launched | 50 | 7 |
+| Background (true parallel) | 0% | 86% |
+
+Opus 4.5 never uses =run_in_background=true= for "parallel" directives (0/50
+agents), while Opus 4.6 uses it for 6/7 agents (86%). Opus 4.5 interprets
+"parallel" as "multiple agents" (launched sequentially); Opus 4.6 interprets
+it as "concurrent execution."
+
+** Implementation Strategy
+
+| Scope | Opus 4.5 GP calls | Opus 4.6 GP calls |
+|------------------|--------------------|--------------------|
+| Create module | 15 | 3 |
+| Fix targeted | 13 | 9 |
+| Other | 57 | 17 |
+
+Opus 4.6 maintains tight control over implementation work. It delegates
+research (Explore) and planning extensively, but implements features itself.
+Opus 4.5 more readily delegates substantial implementation to general-purpose
+subagents.
+
+* Dissatisfaction Analysis
+
+** False Positive Correction
+
+Initial outcome detection flagged 7.1% (Opus 4.5) and 8.7% (Opus 4.6)
+dissatisfaction rates. Manual audit revealed massive false positive rates:
+
+| Model | Original Rate | Corrected Rate | False Positive Rate |
+|----------|---------------|----------------|---------------------|
+| Opus 4.5 | 7.1% | 3.7% | 73% |
+| Opus 4.6 | 8.7% | 1.3% | 93% |
+
+** Sources of False Positives
+
+1. Session continuation messages containing summary text with "fix"
+2. Task notifications from subagents reporting completion
+3. Plan templates ("Implement the following plan: Fix...")
+4. Rhetorical questions ("will this fix it?")
+
+The higher false positive rate for Opus 4.6 (93% vs 73%) likely stems from
+its heavier use of subagent delegation, which generates more task-notification
+messages containing words like "fix."
+
+** Matched Pairs
+
+From 10 matched task pairs (similar type, scale, complexity):
+
+- Opus 4.5 wins: 4
+- Opus 4.6 wins: 5
+- Ties: 1
+- Average efficiency difference: -0.49 tools/100L (Opus 4.6 more efficient)
+
+When outcomes differ, the model achieving user satisfaction wins regardless of
+raw efficiency.
+
+** Refactoring and Analysis Paralysis
+
+Refactoring is the only task type where Opus 4.6 has higher dissatisfaction than
+Opus 4.5 (9.1% vs 5.9%). This is notable because Opus 4.6 outperforms on nearly
+every other category, often achieving 0% dissatisfaction.
+
+The pattern behind this gap is what might be called "analysis paralysis." Opus
+4.6's core strength---thorough investigation before action---becomes a liability
+on refactoring tasks. Refactoring typically has a clear target state: the user
+knows /what/ they want changed and expects direct execution. Opus 4.6's tendency
+to explore the codebase extensively, assess implications, and plan before acting
+adds overhead that the user perceives as hesitation or wasted effort.
+
+In contrast, Opus 4.5's "conservative executor" profile suits refactoring well:
+it acts quickly on well-defined transformations without extended preamble. The
+same directness that costs Opus 4.5 on complex greenfield tasks serves it well
+when the path forward is already clear.
+
+This represents a case where a model's strength creates a specific, predictable
+weakness. Users who anticipate this pattern can route refactoring tasks to Opus
+4.5, or explicitly instruct Opus 4.6 to skip exploration and proceed directly.
+
+* Model Profiles
+
+** Opus 4.5
+
+*Strengths:*
+- More focused on trivial/simple tasks (+7pp satisfaction on trivial)
+- Lower dissatisfaction on refactoring (5.9% vs 9.1%)
+- More investigation tasks completed (119 vs 48)
+- Faster median time on simple tasks
+
+*Weaknesses:*
+- Higher dissatisfaction rate overall (3.7% vs 1.3%)
+- Less efficient per unit of work (39.3 vs 23.2 tools/100L)
+- Extreme inefficiency on major tasks (157.5 tools/100L)
+- Never follows "parallel" directives literally (0% background)
+- Rarely plans autonomously (1.1%)
+
+*Best for:*
+- Quick investigations and research
+- Trivial/simple tasks
+- Refactoring
+- When speed matters more than thoroughness
+
+** Opus 4.6
+
+*Strengths:*
+- Lower dissatisfaction (1.3% vs 3.7%)
+- More efficient per line of code (41% fewer tools)
+- Excellent on complex/major tasks (0% dissatisfaction)
+- Follows parallel directives accurately (86% background)
+- Plans autonomously (11.5% of tasks, 91% autonomous)
+- Strong error recovery (6.1% recovered vs 3.5%)
+
+*Weaknesses:*
+- Higher dissatisfaction on refactoring (9.1% vs 5.9%)
+- Lower satisfaction on trivial tasks (-7pp)
+- Takes longer on complex tasks (+109s median)
+- Slight investigation disadvantage (2.1% vs 0.8% dissatisfaction)
+
+*Best for:*
+- Large implementation tasks
+- Greenfield development
+- Complex multi-file changes
+- Port/migration work
+- Tasks requiring thorough planning
+
+* Behavioral Model
+
+The models embody different strategies:
+
+** Opus 4.5: Conservative Executor
+
+- Acts quickly with minimal overhead
+- Delegates implementation readily to subagents
+- Rarely plans unless explicitly asked
+- Uses subagents when directed, not autonomously
+- Efficient on small tasks, struggles at scale
+
+** Opus 4.6: Autonomous Planner
+
+- Invests in understanding before acting
+- Explores extensively with lightweight agents
+- Plans autonomously for non-trivial tasks
+- Implements features itself rather than delegating
+- Overhead hurts on trivial tasks, pays off on complex ones
+
+The crossover point is around "simple" complexity: below that, Opus 4.5's
+directness wins; above it, Opus 4.6's thorough approach dominates.
+
+* Caveats and Limitations
+
+1. *Single user*: All data from one author's workflow. Different users may
+   trigger different model behaviors.
+
+2. *Observational, not experimental*: Task selection was not random. The user
+   chose which model to use, likely based on perceived task suitability.
+
+3. *Proxy metrics*: "Satisfaction" is inferred from the user's next message,
+   not from explicit ratings. "Dissatisfaction" is heuristic-detected.
+
+4. *LLM-as-judge*: Qualitative assessments come from Haiku, which may have
+   systematic biases (e.g., favoring verbosity or certain patterns).
+
+5. *Complexity classification*: Automated, heuristic-based. Some tasks may be
+   misclassified.
+
+6. *Sample size*: Especially thin for matched-pairs analysis (n=10) and major
+   complexity (n=8--10). Small bins should be interpreted cautiously.
+
+7. *Temporal confounds*: Opus 4.6 was used later in the period. User
+   experience with Claude Code improved over time.
+
+8. *No ground truth*: Success is never verified against objective criteria
+   (e.g., tests passing, deployment success).
+
+* Future Work
+
+1. *Replication study*: Run identical prompts through both models. Configs for
+   6 tasks are prepared in =replication/tasks/=.
+
+2. *Refactor investigation*: Deep-dive into why Opus 4.6 struggles with
+   refactoring (9.1% dissatisfaction).
+
+3. *Multi-user analysis*: Collect data from additional users to test whether
+   behavioral patterns generalize.
+
+4. *Statistical tests*: Add chi-square and t-tests for distribution comparisons.
+
+5. *Temporal tracking*: Version-stamped analysis to detect behavioral changes
+   across model releases.
+
+* Methodology Reference
+
+** Scripts
+
+| Script | Purpose |
+|--------|---------|
+| collect_sessions.py | Extract session metadata from JSONL files |
+| extract_tasks.py | Deep task data extraction with tool calls |
+| classify_tasks.py | Heuristic + LLM complexity classification |
+| analyze_tasks_llm.py | LLM-powered qualitative analysis (Haiku) |
+| analyze_behavior.py | Subagent/planning/parallelization metrics |
+| normalize_llm_fields.py | Standardize free-text LLM judgments |
+| analyze.py | Orchestrator for scoring and comparison reports |
+| sanitize.py | Data anonymization for publication |
+| browse_tasks.py | Interactive task browser and search |
+
+** Data Files
+
+| File | Description |
+|------|-------------|
+| sessions-{model}.json | Session metadata (timestamps, message counts) |
+| tasks-{model}.json | Basic task list |
+| tasks-deep-{model}.json | Full task data with tool calls, file metrics |
+| tasks-classified-{model}.json | Tasks with complexity classification |
+| llm-analysis-{model}.json | LLM qualitative judgments per task |
+| scores-latest.json | Sampled task scoring (15 per model) |
+| dissatisfaction-audit.json | Manual audit of dissatisfaction false positives |
+| behavior-metrics.json | Subagent/planning/parallelization metrics |
+
+** Publication Tiers
+
+| Tier | Directory | Contents |
+|------|-----------|----------|
+| anthropic | dist/anthropic/ | Full data, personal paths anonymized |
+| public | dist/public/ | Aggregate statistics only, no raw task data |
