@@ -1,0 +1,59 @@
+name: Deploy report to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'comparisons/*/dist/public/report.html'
+      - '.github/workflows/pages.yml'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Collect reports
+        run: |
+          mkdir _site
+          # Copy each comparison's public report
+          for report in comparisons/*/dist/public/report.html; do
+            comparison=$(echo "$report" | cut -d/ -f2)
+            mkdir -p "_site/${comparison}"
+            cp "$report" "_site/${comparison}/index.html"
+          done
+          # Create root index linking to all comparisons
+          cat > _site/index.html << 'INDEXEOF'
+          <!DOCTYPE html>
+          <html>
+          <head><meta charset="utf-8"><title>Claude Model Comparisons</title></head>
+          <body>
+          <h1>Claude Model Comparisons</h1>
+          <ul>
+          INDEXEOF
+          for dir in _site/*/; do
+            name=$(basename "$dir")
+            echo "<li><a href=\"${name}/\">${name}</a></li>" >> _site/index.html
+          done
+          cat >> _site/index.html << 'INDEXEOF'
+          </ul>
+          </body>
+          </html>
+          INDEXEOF
+
+      - uses: actions/configure-pages@v4
+      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/deploy-pages@v4
+        id: deployment
