@@ -35,7 +35,7 @@ Write these sections (you may add or adjust based on what the data supports):
 - Eyebrow: "Claude Code EAP Report"
 - Title: Something descriptive about the comparison
 - Subtitle: Mention it's a single-user comparative study, include total task count
-- Meta: "Samuel · February 2026 · Claude Code Early Access Program"
+- Meta: "Samuel H. Christie V · February 2026 · Claude Code Early Access Program"
 
 ### 1. Executive Summary
 - 3-4 stat cards with the most striking findings (delta format — see Formatting Requirements)
