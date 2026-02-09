@@ -16,7 +16,22 @@ comparisons/<model-a>-vs-<model-b>/
 
 ## Running a Comparison
 
-Most scripts accept `--data-dir` and `--analysis-dir` arguments pointing to the comparison directory:
+Use the pipeline orchestrator to run all steps:
+
+```sh
+python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data
+```
+
+Or select specific steps:
+
+```sh
+python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --steps extract,classify
+python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --from stats
+```
+
+Steps (in order): `collect`, `extract`, `classify`, `analyze`, `tokens`, `stats`, `edits`.
+
+Individual scripts can also be run directly with `--data-dir` and `--analysis-dir` arguments:
 
 ```sh
 python scripts/collect_sessions.py --data-dir comparisons/opus-4.5-vs-4.6/data
@@ -25,6 +40,7 @@ python scripts/classify_tasks.py --data-dir comparisons/opus-4.5-vs-4.6/data
 python scripts/analyze_behavior.py --data-dir comparisons/opus-4.5-vs-4.6/data
 python scripts/extract_tokens.py --dir comparisons/opus-4.5-vs-4.6
 python scripts/stat_tests.py --data-dir comparisons/opus-4.5-vs-4.6/data --analysis-dir comparisons/opus-4.5-vs-4.6/analysis
+python scripts/analyze_edits.py --data-dir comparisons/opus-4.5-vs-4.6/data --analysis-dir comparisons/opus-4.5-vs-4.6/analysis
 ```
 
 ## Adding a New Comparison

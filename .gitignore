@@ -10,6 +10,12 @@ comparisons/*/sanitize-mapping.json
 # Packaged exports (contain copies of private data)
 comparisons/*/dist/private/
 
+# Legacy private export directory
+comparisons/*/dist/anthropic/
+
+# Playwright MCP artifacts
+.playwright-mcp/
+
 # Python
 __pycache__/
 *.pyc

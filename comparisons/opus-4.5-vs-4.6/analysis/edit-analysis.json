@@ -1,0 +1,208 @@
+{
+  "opus-4-5": {
+    "model": "opus-4-5",
+    "sessions_processed": 236,
+    "total_tasks": 759,
+    "total_edits": 2880,
+    "total_writes": 895,
+    "total_overlaps": 1861,
+    "rewrite_rate": 0.6461805555555555,
+    "tasks_with_overlaps": 472,
+    "by_tier": {
+      "exact": 251,
+      "containment": 359,
+      "line_overlap": 1251
+    },
+    "by_classification": {
+      "self_correction": 131,
+      "error_recovery": 330,
+      "user_directed": 256,
+      "iterative_refinement": 1144
+    },
+    "triage_top_10": [
+      {
+        "task_id": "37f58869-ab28-40fa-b768-426ef9a1ff8a-task-19",
+        "score": 13.0,
+        "self_corrections": 0,
+        "error_recoveries": 0,
+        "user_corrections": 2,
+        "chain_depth": 3
+      },
+      {
+        "task_id": "7947e9cd-f74c-4803-b34f-26c9832f6261-task-49",
+        "score": 12.5,
+        "self_corrections": 0,
+        "error_recoveries": 0,
+        "user_corrections": 4,
+        "chain_depth": 5
+      },
+      {
+        "task_id": "7c00f189-68fe-4955-a85b-b50bb8d0e90a-task-19",
+        "score": 12.0,
+        "self_corrections": 0,
+        "error_recoveries": 0,
+        "user_corrections": 2,
+        "chain_depth": 2
+      },
+      {
+        "task_id": "7947e9cd-f74c-4803-b34f-26c9832f6261-task-61",
+        "score": 11.0,
+        "self_corrections": 0,
+        "error_recoveries": 0,
+        "user_corrections": 3,
+        "chain_depth": 7
+      },
+      {
+        "task_id": "ad860a90-153e-4802-9ca6-0b452729907f-task-46",
+        "score": 10.5,
+        "self_corrections": 0,
+        "error_recoveries": 0,
+        "user_corrections": 4,
+        "chain_depth": 1
+      },
+      {
+        "task_id": "ca1dda64-b290-49d7-a09b-7896d52436a6-task-61",
+        "score": 9.0,
+        "self_corrections": 0,
+        "error_recoveries": 0,
+        "user_corrections": 3,
+        "chain_depth": 3
+      },
+      {
+        "task_id": "ad860a90-153e-4802-9ca6-0b452729907f-task-83",
+        "score": 9.0,
+        "self_corrections": 0,
+        "error_recoveries": 0,
+        "user_corrections": 1,
+        "chain_depth": 4
+      },
+      {
+        "task_id": "7947e9cd-f74c-4803-b34f-26c9832f6261-task-98",
+        "score": 9.0,
+        "self_corrections": 0,
+        "error_recoveries": 0,
+        "user_corrections": 1,
+        "chain_depth": 4
+      },
+      {
+        "task_id": "7c00f189-68fe-4955-a85b-b50bb8d0e90a-task-21",
+        "score": 9.0,
+        "self_corrections": 0,
+        "error_recoveries": 0,
+        "user_corrections": 3,
+        "chain_depth": 3
+      },
+      {
+        "task_id": "37f58869-ab28-40fa-b768-426ef9a1ff8a-task-22",
+        "score": 9.0,
+        "self_corrections": 0,
+        "error_recoveries": 0,
+        "user_corrections": 5,
+        "chain_depth": 2
+      }
+    ]
+  },
+  "opus-4-6": {
+    "model": "opus-4-6",
+    "sessions_processed": 64,
+    "total_tasks": 147,
+    "total_edits": 720,
+    "total_writes": 240,
+    "total_overlaps": 207,
+    "rewrite_rate": 0.2875,
+    "tasks_with_overlaps": 64,
+    "by_tier": {
+      "exact": 20,
+      "containment": 34,
+      "line_overlap": 153
+    },
+    "by_classification": {
+      "self_correction": 44,
+      "error_recovery": 68,
+      "user_directed": 4,
+      "iterative_refinement": 91
+    },
+    "triage_top_10": [
+      {
+        "task_id": "27e85e1e-c11d-4b0f-b631-e293802ae138-task-4",
+        "score": 5.5,
+        "self_corrections": 0,
+        "error_recoveries": 0,
+        "user_corrections": 2,
+        "chain_depth": 1
+      },
+      {
+        "task_id": "27e85e1e-c11d-4b0f-b631-e293802ae138-task-9",
+        "score": 4.666666666666667,
+        "self_corrections": 0,
+        "error_recoveries": 1,
+        "user_corrections": 2,
+        "chain_depth": 2
+      },
+      {
+        "task_id": "c4f4f555-a30d-48a9-8645-b39cfe556908-task-15",
+        "score": 4.0,
+        "self_corrections": 0,
+        "error_recoveries": 0,
+        "user_corrections": 0,
+        "chain_depth": 4
+      },
+      {
+        "task_id": "c4f4f555-a30d-48a9-8645-b39cfe556908-task-13",
+        "score": 3.0,
+        "self_corrections": 1,
+        "error_recoveries": 0,
+        "user_corrections": 0,
+        "chain_depth": 3
+      },
+      {
+        "task_id": "8df2928f-264c-4d31-8bf0-71717dfb2c70-task-3",
+        "score": 2.0,
+        "self_corrections": 0,
+        "error_recoveries": 0,
+        "user_corrections": 0,
+        "chain_depth": 2
+      },
+      {
+        "task_id": "c4f4f555-a30d-48a9-8645-b39cfe556908-task-12",
+        "score": 2.0,
+        "self_corrections": 1,
+        "error_recoveries": 0,
+        "user_corrections": 0,
+        "chain_depth": 1
+      },
+      {
+        "task_id": "627078d6-250f-4c0a-b164-728eb4b2a9e4-task-3",
+        "score": 1.9411764705882353,
+        "self_corrections": 1,
+        "error_recoveries": 12,
+        "user_corrections": 0,
+        "chain_depth": 6
+      },
+      {
+        "task_id": "f302c88c-ce99-4618-9686-cf46576ee90d-task-1",
+        "score": 1.8333333333333333,
+        "self_corrections": 3,
+        "error_recoveries": 0,
+        "user_corrections": 0,
+        "chain_depth": 2
+      },
+      {
+        "task_id": "2e35fd9b-0c5c-4d3e-9f98-92fb44e63223-task-3",
+        "score": 1.5,
+        "self_corrections": 0,
+        "error_recoveries": 1,
+        "user_corrections": 0,
+        "chain_depth": 1
+      },
+      {
+        "task_id": "113ef9c7-784e-45cf-bc3b-54add8e8d3fd-task-2",
+        "score": 1.5,
+        "self_corrections": 0,
+        "error_recoveries": 1,
+        "user_corrections": 0,
+        "chain_depth": 1
+      }
+    ]
+  }
+}

@@ -439,17 +439,17 @@
                         <div class="detail">+55% tools/task (p&lt;0.000003)</div>
                     </div>
                     <div class="stat-card">
-                        <div class="label">True Dissatisfaction</div>
-                        <div class="value v-green">&lt;1%</div>
-                        <div class="detail">Both models, after audit correction</div>
+                        <div class="label">User Corrections</div>
+                        <div class="value v-green">0.6%</div>
+                        <div class="detail">Opus 4.6 vs 8.9% for Opus 4.5</div>
                     </div>
                 </div>
 
                 <div class="callout">
-                    <strong>Key takeaway:</strong> Opus 4.6 produces 2.7&times; more output tokens, uses 55% more tool calls, deploys 3&times; more subagents, and plans 10&times; more often&mdash;yet costs 9&ndash;45% <em>less</em> per task through better prompt caching and fewer API round-trips. Both models achieve below 1% true dissatisfaction. Of 105 statistical tests, only three survive Bonferroni correction&mdash;all about <em>how</em> each model works (tool usage, alignment score), not <em>whether</em> they succeed. The models are strategically different, not meaningfully different in quality.
+                    <strong>Key takeaway:</strong> Opus 4.6 produces 2.7&times; more output tokens, uses 55% more tool calls, deploys 3&times; more subagents, and plans 10&times; more often&mdash;yet costs 9&ndash;45% <em>less</em> per task through better prompt caching and fewer API round-trips. Users correct Opus 4.5 edits 16&times; more often (8.9% vs 0.6%), the strongest accuracy signal in the dataset. Of 105 statistical tests, only three survive Bonferroni correction&mdash;all about <em>how</em> each model works (tool usage, alignment score), not <em>whether</em> they succeed. The models are strategically different, not meaningfully different in quality.
                 </div>
 
-                <p>Opus 4.5 acts first and adjusts as needed; Opus 4.6 investigates first and implements in concentrated bursts. This report examines where these two strategies diverge across 2,395 tasks (2,035 vs 360). Sections are ordered by effect strength: robust findings (cost efficiency, tool usage) first, weaker signals (sentiment, parallelism) later.</p>
+                <p>Opus 4.5 acts first and adjusts as needed; Opus 4.6 investigates first and implements in concentrated bursts. This report examines where these two strategies diverge across 2,395 tasks (2,035 vs 360). Sections are ordered by effect strength: robust findings (cost efficiency, tool usage) first, weaker signals (satisfaction, parallelism) later.</p>
             </section>
 
             
@@ -460,9 +460,9 @@
                     <li><a href="#complexity">Complexity-Controlled Comparison</a><span class="finding">Tool usage gap is the strongest statistical signal (p&lt;0.000003)</span></li>
                     <li><a href="#behavior">Behavioral Patterns</a><span class="finding">4.6 deploys 3&times; more subagents, 72% read-only Explore agents</span></li>
                     <li><a href="#sessions">Session Dynamics</a><span class="finding">4.6 benefits from session context; both degrade in long sessions</span></li>
-                    <li><a href="#quality">Quality &amp; Satisfaction</a><span class="finding">Both under 1% true dissatisfaction; sentiment gap not significant</span></li>
+                    <li><a href="#quality">Quality &amp; Satisfaction</a><span class="finding">Both under 0.4% dissatisfaction; completion and failure rates differ</span></li>
                     <li><a href="#parallel">Parallelization</a><span class="finding">4.5 spawns more agents; only 4.6 runs them in the background</span></li>
-                    <li><a href="#refactoring">Refactoring: A False Signal</a><span class="finding">0% dissatisfaction for both; git confirms code retention</span></li>
+                    <li><a href="#edit-accuracy">Edit Accuracy</a><span class="finding">Users correct 4.5 edits 16&times; more often; self-correction rates comparable</span></li>
                     <li><a href="#planning">Planning: Correlation vs Causation</a><span class="finding">10&times; more planning, only +0.04 alignment benefit</span></li>
                     <li><a href="#profiles">Model Profiles</a><span class="finding">Routing recommendations for each model</span></li>
                     <li><a href="#methodology">Methodology</a><span class="finding">Pipeline, development process, and limitations</span></li>
@@ -962,7 +962,7 @@
                             <td class="right mono" style="color:var(--mid-gray)">&asymp; Tie</td>
                         </tr>
                         <tr>
-                            <td class="label-cell">Dissatisfied (raw)</td>
+                            <td class="label-cell">Dissatisfied</td>
                             <td class="bar-cell"><div class="bar-pair">
                                 <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:100%"></div></div><span class="bar-val">0.4%</span></div>
                                 <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:69.4%"></div></div><span class="bar-val">0.3%</span></div>
@@ -1030,11 +1030,7 @@
                     <strong>Statistical significance</strong> &mdash; Bonferroni-corrected (105 tests, p&lt;0.00048): Alignment gap is significant (p=0.000328, d=&minus;0.20). Failure rate (p=0.002) and completion rate (p=0.018) significant at p&lt;0.05 but not after correction. Satisfaction and dissatisfaction differences are <em>not</em> statistically significant. The strongest signals in this study are behavioral (how models work) rather than qualitative (whether they succeed).
                 </div>
 
-                <h3>Dissatisfaction Audit</h3>
-
-                <div class="callout green">
-                    <strong>False positive correction:</strong> Automated dissatisfaction detection flagged 7.1% of Opus 4.5 tasks and 8.7% of Opus 4.6 tasks. LLM-agent review of all 59 flagged cases revealed 73% and 93% false positive rates respectively. Corrected true dissatisfaction: Opus 4.5 = 1.0%, Opus 4.6 = 0.6%. The higher false positive rate for Opus 4.6 traces directly to its subagent delegation pattern&mdash;keywords like "fix" appearing in task coordination rather than user complaints.
-                </div>
+                <p>LLM-annotated dissatisfaction is extremely low for both models (&lt;0.4%). Satisfaction and dissatisfaction differences between models are not statistically significant. A more direct accuracy signal&mdash;edit timeline analysis measuring how often users correct model output&mdash;is presented in <a href="#edit-accuracy">Section 8</a>.</p>
             </section>
 
             <!-- ===== 7. PARALLELIZATION &amp; DIRECTIVE COMPLIANCE ===== -->
@@ -1088,53 +1084,65 @@
                 <p>The &ldquo;use agents&rdquo; directive shows a similar pattern. Opus 4.5 spawns agents reliably (49 across 13 tasks, avg 3.8) but backgrounds only 9. Opus 4.6 barely engages with the directive at all&mdash;just 1 task, 2 agents, no backgrounding&mdash;likely because it already uses subagents autonomously and treats the directive as redundant.</p>
             </section>
 
-            <!-- ===== 8. REFACTORING: A FALSE SIGNAL ===== -->
-            <section id="refactoring">
-                <h2>8. Refactoring: A False Signal</h2>
+            <!-- ===== 8. EDIT ACCURACY: SELF-CORRECTION ANALYSIS ===== -->
+            <section id="edit-accuracy">
+                <h2>8. Edit Accuracy</h2>
 
-                <p>Automated sentiment detection flagged refactoring as a weak spot for Opus 4.6, with apparent dissatisfaction of 9.1% vs 5.9% for Opus 4.5. LLM-agent audit of each flagged case reveals this signal is entirely false positives.</p>
+                <p>Satisfaction metrics capture user perception but not code accuracy. A more direct signal: <em>how often does the agent rewrite its own code?</em> Edit timeline analysis tracks every Edit and Write tool call per session, detecting when a later edit&rsquo;s <code>old_string</code> overlaps with an earlier edit&rsquo;s <code>new_string</code> on the same file.</p>
 
-                <table>
-                    <thead>
-                        <tr><th>Metric</th><th class="right">Opus 4.5</th><th class="right">Opus 4.6</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td class="label-cell">Refactoring tasks</td><td class="right mono">71</td><td class="right mono">23</td></tr>
-                        <tr><td class="label-cell">Flagged dissatisfaction</td><td class="right mono">2</td><td class="right mono">2</td></tr>
-                        <tr><td class="label-cell">True dissatisfaction (audited)</td><td class="right mono">0</td><td class="right mono">0</td></tr>
-                        <tr><td class="label-cell">Corrected rate</td><td class="right mono">0%</td><td class="right mono">0%</td></tr>
-                    </tbody>
-                </table>
-
-                <p>All four flagged cases were false positives&mdash;the word &ldquo;fix&rdquo; appeared in task requests (e.g., &ldquo;refactor and fix the import paths&rdquo;), not user complaints. With only 23&ndash;71 tasks per model, a single misclassification shifts the apparent rate by 1.4&ndash;4.3pp.</p>
-
-                <h3>Git Retention as Ground Truth</h3>
-
-                <p>Cross-referencing refactoring session timestamps with git commit history provides a harder signal than sentiment detection. An LLM agent matched each refactoring session&rsquo;s time window against commit timestamps in the three main repos:</p>
+                <div class="legend">
+                    <span><span class="dot dot-a"></span> Opus 4.5</span>
+                    <span><span class="dot dot-b"></span> Opus 4.6</span>
+                </div>
 
                 <table>
                     <thead>
-                        <tr><th>Repository</th><th class="right">4.5 sessions</th><th class="right">4.5 commit rate</th><th class="right">4.6 sessions</th><th class="right">4.6 commit rate</th></tr>
+                        <tr><th>Metric</th><th>Distribution</th><th class="right">4.5</th><th class="right">4.6</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td class="label-cell">Strabo</td><td class="right mono">6</td><td class="right mono">50%</td><td class="right mono">4</td><td class="right mono">0%*</td></tr>
-                        <tr><td class="label-cell">Peach</td><td class="right mono">10</td><td class="right mono">80%</td><td class="right mono">0</td><td class="right mono">n/a</td></tr>
-                        <tr><td class="label-cell">Grocery List</td><td class="right mono">13</td><td class="right mono">69%</td><td class="right mono">5</td><td class="right mono">100%</td></tr>
+                        <tr><td class="label-cell">Total edits analyzed</td><td></td><td class="right mono">2,880</td><td class="right mono">720</td></tr>
+                        <tr><td class="label-cell">Self-corrections</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:74%"></div></div><span class="bar-val">4.5%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div><span class="bar-val">6.1%</span></div>
+                            </div></td>
+                            <td class="right mono">131</td><td class="right mono">44</td></tr>
+                        <tr><td class="label-cell">Error recovery</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:100%"></div></div><span class="bar-val">11.5%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:82%"></div></div><span class="bar-val">9.4%</span></div>
+                            </div></td>
+                            <td class="right mono">330</td><td class="right mono">68</td></tr>
+                        <tr><td class="label-cell">User-directed corrections</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:100%"></div></div><span class="bar-val">8.9%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:7%"></div></div><span class="bar-val">0.6%</span></div>
+                            </div></td>
+                            <td class="right mono">256</td><td class="right mono">4</td></tr>
+                        <tr><td class="label-cell">Iterative refinement</td>
+                            <td class="bar-cell"><div class="bar-pair">
+                                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:100%"></div></div><span class="bar-val">39.7%</span></div>
+                                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:32%"></div></div><span class="bar-val">12.6%</span></div>
+                            </div></td>
+                            <td class="right mono">1,144</td><td class="right mono">91</td></tr>
                     </tbody>
                 </table>
 
-                <p><small>*Strabo Opus 4.6: ~1,923 lines of changes exist uncommitted in the working tree&mdash;work-in-progress, not necessarily abandoned.</small></p>
-
-                <p>No refactoring commits were reverted in any repository. The abandoned Opus 4.5 work sits on unmerged branches (<code>refactor-attempt</code> in Strabo, <code>feature/async-routing</code> in Peach). Grocery List is the only head-to-head comparison: Opus 4.6 achieved 100% session-to-commit retention (5/5) vs 69% for Opus 4.5 (9/13)&mdash;though with a significant temporal bias (4.5 had 2+ months, 4.6 had 4 days).</p>
-
-                <p>Key retained refactoring commits from both models include:</p>
+                <h3>Classification</h3>
+                <p>Each detected overlap is classified by context:</p>
                 <ul style="margin:0.5rem 0 0.5rem 1.5rem; font-size:0.9em;">
-                    <li><strong>Opus 4.5:</strong> unified tree view architecture (a763d2e), drag handle refactoring across 2 iterations (255f096, a0a9eb6), item stacks model (c0ecb3c)</li>
-                    <li><strong>Opus 4.6:</strong> consolidation of ~27 duplicate dialogs into 3 shared helpers (3d7e469), stack context menu behavior (641f01a), CI/build script reorganization (8ab9260)</li>
+                    <li><strong>Self-correction:</strong> Agent rewrites its own output within the same task, no intervening error&mdash;catching and fixing its own mistakes unprompted.</li>
+                    <li><strong>Error recovery:</strong> Same task, but a tool error (test failure, syntax error, compilation failure) occurred between the original edit and the rewrite.</li>
+                    <li><strong>User-directed correction:</strong> The rewrite occurs in a later task, and the intervening user message contains dissatisfaction signals (&ldquo;wrong&rdquo;, &ldquo;revert&rdquo;, &ldquo;fix that&rdquo;, etc.).</li>
+                    <li><strong>Iterative refinement:</strong> Sequential edits to the same region without error signals or dissatisfaction&mdash;normal iterative development.</li>
                 </ul>
 
+                <p>Self-correction rates are comparable (4.5% vs 6.1%), meaning both models catch their own mistakes at similar rates. Error recovery is also comparable (~9&ndash;12%). The critical difference is <strong>user-directed corrections: users had to ask Opus 4.5 to fix its work 16&times; more often</strong> (8.9% vs 0.6% of edits). This is the strongest accuracy signal in the dataset&mdash;it measures how often the model produces output that the user explicitly rejects.</p>
+
+                <p>Opus 4.5&rsquo;s higher iterative refinement rate (39.7% vs 12.6%) reflects its different workflow: more sequential passes through the same code regions, producing more opportunities for edits to overlap. Opus 4.6&rsquo;s research-first strategy appears to reduce the need for iterative rework.</p>
+
                 <div class="callout green">
-                    <strong>Bottom line:</strong> Both models show 0% true refactoring dissatisfaction, and git retention confirms that both produce code that survives in production. Refactoring success varies by <em>project difficulty</em> (Strabo vs Grocery List), not by model. The Opus 4.6 &ldquo;analysis paralysis&rdquo; behavior (6.3&times; more output tokens for refactoring) adds exploration overhead but does not degrade outcomes.
+                    <strong>Bottom line:</strong> Both models self-correct at comparable rates (~5%), but users correct Opus 4.5 edits 16&times; more often. Opus 4.6&rsquo;s research-first approach and higher token expenditure translate into fewer corrections needed from the user&mdash;its code is more likely to be right the first time.
                 </div>
             </section>
 
@@ -1211,7 +1219,7 @@
                     <tbody>
                         <tr><td class="label-cell">Trivial / simple tasks</td><td class="mono">Either (slight edge: 4.5)</td><td>Opus 4.5 is more efficient; 4.6&rsquo;s research overhead adds cost without proportional benefit</td></tr>
                         <tr><td class="label-cell">Complex / major tasks</td><td class="mono" style="color:var(--blue)">Opus 4.6</td><td>Higher alignment, front-loaded research catches requirements that 4.5 may miss</td></tr>
-                        <tr><td class="label-cell">Refactoring</td><td class="mono">Either</td><td>0% true dissatisfaction for both; no measurable quality difference</td></tr>
+                        <tr><td class="label-cell">Refactoring</td><td class="mono" style="color:var(--blue)">Opus 4.6</td><td>16&times; fewer user-directed corrections; research-first approach reduces rework</td></tr>
                         <tr><td class="label-cell">Investigation / research</td><td class="mono" style="color:var(--blue)">Opus 4.6</td><td>Natural fit with research-first strategy; autonomous Explore agents excel here</td></tr>
                         <tr><td class="label-cell">Long sessions (9+ tasks)</td><td class="mono">Either</td><td>4.6 degrades faster but still scores higher (2.96 vs 2.85); consider session-break discipline</td></tr>
                         <tr><td class="label-cell">Parallel execution</td><td class="mono" style="color:var(--blue)">Opus 4.6</td><td>Actually backgrounds tasks; 4.5 spawns more agents but runs them sequentially</td></tr>
@@ -1232,14 +1240,14 @@
                     <span class="pipe-arrow">&rarr;</span>
                     <div class="pipe-step">Behavioral Analysis<small>subagents, planning</small></div>
                     <span class="pipe-arrow">&rarr;</span>
-                    <div class="pipe-step">Dissatisfaction Audit<small>59 cases reviewed</small></div>
+                    <div class="pipe-step">Edit Timeline<small>3,600 edits tracked</small></div>
                     <span class="pipe-arrow">&rarr;</span>
                     <div class="pipe-step">Statistical Tests<small>105 comparisons</small></div>
                 </div>
 
                 <p>Each Claude Code session was segmented into tasks based on user-message boundaries and topic shifts. An LLM annotator classified each task for complexity, type, sentiment, completion status, and alignment score (1&ndash;5 scale). Behavioral metrics&mdash;subagent usage, planning, parallelization&mdash;were extracted from tool-call logs.</p>
 
-                <p>Dissatisfaction signals were audited by LLM agents (with human review of outputs) for 59 flagged cases (30 Opus 4.5, 29 Opus 4.6), revealing false positive rates of 73% and 93%. Corrected rates are used throughout this report.</p>
+                <p>Edit timeline analysis tracked 3,600 Edit/Write tool calls across all sessions, building per-file content ownership maps to detect when a later edit&rsquo;s <code>old_string</code> overlaps with an earlier edit&rsquo;s <code>new_string</code>. Overlaps are detected via three tiers (exact match, containment at &ge;30% ratio, and Jaccard line overlap) and classified by context (self-correction, error recovery, user-directed, iterative refinement).</p>
 
 
                 <p><strong>Statistical testing:</strong> 105 tests were conducted: chi-square (categorical), Mann-Whitney U (continuous), proportion tests (rates). Bonferroni-corrected threshold: p&lt;0.00048. Only three findings survive correction: tool calls per task, tools per file, and alignment score. Significance notes appear inline in each section.</p>
@@ -1248,11 +1256,11 @@
 
                 <p>This analysis was developed iteratively. Several approaches were tried and abandoned when they proved unreliable:</p>
 
-                <p><strong>Automated dissatisfaction detection (abandoned as primary signal):</strong> Initial LLM-based sentiment classification flagged 7&ndash;9% dissatisfaction for both models. LLM-agent audit of all 59 flagged cases revealed 73&ndash;93% false positive rates&mdash;the classifiers were fooled by task-coordination language (e.g., &ldquo;fix&rdquo; in subagent prompts). Corrected rates (&lt;1%) are used throughout this report. The lesson: automated sentiment signals from agentic workflows need adversarial validation before drawing conclusions.</p>
+                <p><strong>Automated dissatisfaction detection (abandoned as primary signal):</strong> Initial LLM-based sentiment classification flagged 7&ndash;9% dissatisfaction for both models. LLM-agent audit of all 59 flagged cases revealed 73&ndash;93% false positive rates&mdash;the classifiers were fooled by task-coordination language (e.g., &ldquo;fix&rdquo; in subagent prompts). This approach was replaced by edit timeline analysis, which detects self-corrections mechanistically rather than through sentiment proxies.</p>
 
                 <p><strong>LLM quality judgement (dropped):</strong> An LLM judge was asked to compare code quality between models. The results were unreliable&mdash;the judge lacked sufficient context to evaluate whether code met domain requirements, and produced confident but ungrounded assessments. This section was removed entirely rather than presented with caveats.</p>
 
-                <p><strong>Refactoring routing recommendation (reversed):</strong> Early signals suggested Opus 4.5 was better for refactoring. Investigation traced this to four false-positive dissatisfaction flags and small sample sizes (23&ndash;71 tasks). Git repository cross-referencing confirmed that refactoring retention depended on project difficulty, not model choice.</p>
+                <p><strong>Refactoring routing recommendation (revised):</strong> Early signals suggested Opus 4.5 was better for refactoring, based on four false-positive dissatisfaction flags and small sample sizes. Sentiment detection and git retention both proved unreliable. Edit timeline analysis provided a direct mechanistic signal: tracking every edit across all sessions revealed that users correct Opus 4.5 edits 16&times; more often (8.9% vs 0.6%), reversing the initial recommendation.</p>
 
                 <h3>Limitations</h3>
                 <p><strong>Single user:</strong> All data comes from one developer&rsquo;s workflow. Results may not generalize to other users, codebases, or task distributions.</p>
