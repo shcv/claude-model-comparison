@@ -1,71 +1,71 @@
 {
   "opus-4-5": {
-    "total_tasks": 87,
-    "total_planned": 0,
-    "planning_rate_pct": 0.0,
+    "total_tasks": 1913,
+    "total_planned": 26,
+    "planning_rate_pct": 1.4,
     "by_complexity": {
       "trivial": {
-        "n": 40,
+        "n": 1013,
         "planned": 0,
-        "unplanned": 40,
+        "unplanned": 1013,
         "planning_rate_pct": 0.0,
         "alignment_planned": null,
-        "alignment_unplanned": 2.425,
+        "alignment_unplanned": 2.3129,
         "alignment_delta": null,
         "n_scored_planned": 0,
-        "n_scored_unplanned": 40
+        "n_scored_unplanned": 1013
       },
       "simple": {
-        "n": 13,
-        "planned": 0,
-        "unplanned": 13,
-        "planning_rate_pct": 0.0,
-        "alignment_planned": null,
-        "alignment_unplanned": 3.6923,
-        "alignment_delta": null,
-        "n_scored_planned": 0,
-        "n_scored_unplanned": 13
+        "n": 345,
+        "planned": 3,
+        "unplanned": 342,
+        "planning_rate_pct": 0.9,
+        "alignment_planned": 3.3333,
+        "alignment_unplanned": 3.4503,
+        "alignment_delta": -0.117,
+        "n_scored_planned": 3,
+        "n_scored_unplanned": 342
       },
       "moderate": {
-        "n": 20,
-        "planned": 0,
-        "unplanned": 20,
-        "planning_rate_pct": 0.0,
-        "alignment_planned": null,
-        "alignment_unplanned": 3.35,
-        "alignment_delta": null,
-        "n_scored_planned": 0,
-        "n_scored_unplanned": 20
+        "n": 369,
+        "planned": 13,
+        "unplanned": 356,
+        "planning_rate_pct": 3.5,
+        "alignment_planned": 4.1538,
+        "alignment_unplanned": 3.4535,
+        "alignment_delta": 0.7003,
+        "n_scored_planned": 13,
+        "n_scored_unplanned": 355
       },
       "complex+": {
-        "n": 14,
-        "planned": 0,
-        "unplanned": 14,
-        "planning_rate_pct": 0.0,
-        "alignment_planned": null,
-        "alignment_unplanned": 4.0,
-        "alignment_delta": null,
-        "n_scored_planned": 0,
-        "n_scored_unplanned": 14
+        "n": 186,
+        "planned": 10,
+        "unplanned": 176,
+        "planning_rate_pct": 5.4,
+        "alignment_planned": 3.7,
+        "alignment_unplanned": 3.7614,
+        "alignment_delta": -0.0614,
+        "n_scored_planned": 10,
+        "n_scored_unplanned": 176
       }
     },
-    "overall_alignment_planned": null,
-    "overall_alignment_unplanned": 3.0805,
-    "overall_alignment_delta": null,
+    "overall_alignment_planned": 3.8846,
+    "overall_alignment_unplanned": 2.869,
+    "overall_alignment_delta": 1.0156,
     "coverage": {
-      "tasks_with_alignment": 87,
-      "pct": 100.0
+      "tasks_with_alignment": 1912,
+      "pct": 99.9
     }
   },
   "opus-4-6": {
-    "total_tasks": 126,
+    "total_tasks": 133,
     "total_planned": 5,
-    "planning_rate_pct": 4.0,
+    "planning_rate_pct": 3.8,
     "by_complexity": {
       "trivial": {
-        "n": 59,
+        "n": 60,
         "planned": 0,
-        "unplanned": 59,
+        "unplanned": 60,
         "planning_rate_pct": 0.0,
         "alignment_planned": null,
         "alignment_unplanned": 2.6905,
@@ -85,10 +85,10 @@
         "n_scored_unplanned": 22
       },
       "moderate": {
-        "n": 29,
+        "n": 33,
         "planned": 2,
-        "unplanned": 27,
-        "planning_rate_pct": 6.9,
+        "unplanned": 31,
+        "planning_rate_pct": 6.1,
         "alignment_planned": null,
         "alignment_unplanned": 3.55,
         "alignment_delta": null,
@@ -96,10 +96,10 @@
         "n_scored_unplanned": 20
       },
       "complex+": {
-        "n": 11,
+        "n": 13,
         "planned": 3,
-        "unplanned": 8,
-        "planning_rate_pct": 27.3,
+        "unplanned": 10,
+        "planning_rate_pct": 23.1,
         "alignment_planned": 5.0,
         "alignment_unplanned": 3.0,
         "alignment_delta": 2.0,
@@ -112,7 +112,7 @@
     "overall_alignment_delta": 2.0455,
     "coverage": {
       "tasks_with_alignment": 89,
-      "pct": 70.6
+      "pct": 66.9
     }
   }
 }

@@ -976,44 +976,74 @@
         {
           "test": "chi-square",
           "field": "task_completion",
-          "chi2": 13.0654,
-          "p_value": 0.042009,
-          "dof": 6,
-          "cramers_v": 0.3992,
-          "effect_size_label": "small",
-          "significant_p05": true,
+          "chi2": 11.2374,
+          "p_value": 0.794598,
+          "dof": 16,
+          "cramers_v": 0.1032,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
+            "N/A - no actionable task was presented; the input resembled credential data rather than a request",
             "complete",
             "failed",
             "incomplete",
             "interrupted",
+            "interrupted - first task (what's next) received no response; second task (note-taking guidance) is a new request not yet addressed",
+            "not_applicable",
+            "not_attempted",
+            "not_started",
             "partial",
+            "partial - agent answered the initial question but did not execute on the follow-up requirement to organize scripts into deploy/<host>.scm",
+            "partial - completed the initial 'that worked' task, but user's follow-up indicates additional cleanup work was needed",
+            "partial - the prior task appears complete, but the new request for PAM explanation is unanswered",
             "partial - the user asked for verification but received no substantive analysis or tool-based confirmation",
-            "unknown"
+            "unclear",
+            "unknown",
+            "unknown - likely incomplete or unverified"
           ],
           "counts": {
             "opus-4-5": {
-              "complete": 7,
-              "failed": 13,
-              "incomplete": 0,
-              "interrupted": 14,
-              "partial": 4,
+              "N/A - no actionable task was presented; the input resembled credential data rather than a request": 1,
+              "complete": 158,
+              "failed": 222,
+              "incomplete": 16,
+              "interrupted": 416,
+              "interrupted - first task (what's next) received no response; second task (note-taking guidance) is a new request not yet addressed": 1,
+              "not_applicable": 2,
+              "not_attempted": 1,
+              "not_started": 2,
+              "partial": 183,
+              "partial - agent answered the initial question but did not execute on the follow-up requirement to organize scripts into deploy/<host>.scm": 1,
+              "partial - completed the initial 'that worked' task, but user's follow-up indicates additional cleanup work was needed": 1,
+              "partial - the prior task appears complete, but the new request for PAM explanation is unanswered": 1,
               "partial - the user asked for verification but received no substantive analysis or tool-based confirmation": 1,
-              "unknown": 1
+              "unclear": 5,
+              "unknown": 1,
+              "unknown - likely incomplete or unverified": 1
             },
             "opus-4-6": {
+              "N/A - no actionable task was presented; the input resembled credential data rather than a request": 0,
               "complete": 13,
               "failed": 3,
               "incomplete": 1,
               "interrupted": 16,
+              "interrupted - first task (what's next) received no response; second task (note-taking guidance) is a new request not yet addressed": 0,
+              "not_applicable": 0,
+              "not_attempted": 0,
+              "not_started": 0,
               "partial": 9,
+              "partial - agent answered the initial question but did not execute on the follow-up requirement to organize scripts into deploy/<host>.scm": 0,
+              "partial - completed the initial 'that worked' task, but user's follow-up indicates additional cleanup work was needed": 0,
+              "partial - the prior task appears complete, but the new request for PAM explanation is unanswered": 0,
               "partial - the user asked for verification but received no substantive analysis or tool-based confirmation": 0,
-              "unknown": 0
+              "unclear": 0,
+              "unknown": 0,
+              "unknown - likely incomplete or unverified": 0
             }
           },
           "n": {
-            "opus-4-5": 40,
+            "opus-4-5": 1013,
             "opus-4-6": 42
           },
           "bonferroni_significant": false
@@ -1021,11 +1051,11 @@
         {
           "test": "chi-square",
           "field": "normalized_user_sentiment",
-          "chi2": 6.1942,
-          "p_value": 0.102536,
+          "chi2": 5.3058,
+          "p_value": 0.150725,
           "dof": 3,
-          "cramers_v": 0.2748,
-          "effect_size_label": "small",
+          "cramers_v": 0.0709,
+          "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
@@ -1036,10 +1066,10 @@
           ],
           "counts": {
             "opus-4-5": {
-              "ambiguous": 0,
-              "dissatisfied": 6,
-              "neutral": 29,
-              "satisfied": 5
+              "ambiguous": 46,
+              "dissatisfied": 180,
+              "neutral": 630,
+              "satisfied": 157
             },
             "opus-4-6": {
               "ambiguous": 2,
@@ -1049,7 +1079,7 @@
             }
           },
           "n": {
-            "opus-4-5": 40,
+            "opus-4-5": 1013,
             "opus-4-6": 42
           },
           "bonferroni_significant": false
@@ -1057,32 +1087,50 @@
         {
           "test": "chi-square",
           "field": "scope_management",
-          "chi2": 2.1525,
-          "p_value": 0.340871,
-          "dof": 2,
-          "cramers_v": 0.162,
+          "chi2": 1.9037,
+          "p_value": 0.983824,
+          "dof": 8,
+          "cramers_v": 0.0425,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
             "appropriate",
+            "appropriate - agent stayed focused on confirming the key installation status without tangential exploration",
             "focused",
-            "focused - agent stayed narrowly on the verification topic without expanding, though by not expanding it failed to actually verify"
+            "focused - agent made only the requested changes without expanding scope",
+            "focused - agent stayed narrowly on the user's explicit requests without adding unnecessary work",
+            "focused - agent stayed narrowly on the verification topic without expanding, though by not expanding it failed to actually verify",
+            "focused - the prior work stayed on track; the new request is clearly scoped as explanation/education",
+            "over_engineered",
+            "unfocused"
           ],
           "counts": {
             "opus-4-5": {
-              "appropriate": 1,
-              "focused": 38,
-              "focused - agent stayed narrowly on the verification topic without expanding, though by not expanding it failed to actually verify": 1
+              "appropriate": 36,
+              "appropriate - agent stayed focused on confirming the key installation status without tangential exploration": 1,
+              "focused": 969,
+              "focused - agent made only the requested changes without expanding scope": 1,
+              "focused - agent stayed narrowly on the user's explicit requests without adding unnecessary work": 1,
+              "focused - agent stayed narrowly on the verification topic without expanding, though by not expanding it failed to actually verify": 1,
+              "focused - the prior work stayed on track; the new request is clearly scoped as explanation/education": 1,
+              "over_engineered": 2,
+              "unfocused": 1
             },
             "opus-4-6": {
               "appropriate": 0,
+              "appropriate - agent stayed focused on confirming the key installation status without tangential exploration": 0,
               "focused": 42,
-              "focused - agent stayed narrowly on the verification topic without expanding, though by not expanding it failed to actually verify": 0
+              "focused - agent made only the requested changes without expanding scope": 0,
+              "focused - agent stayed narrowly on the user's explicit requests without adding unnecessary work": 0,
+              "focused - agent stayed narrowly on the verification topic without expanding, though by not expanding it failed to actually verify": 0,
+              "focused - the prior work stayed on track; the new request is clearly scoped as explanation/education": 0,
+              "over_engineered": 0,
+              "unfocused": 0
             }
           },
           "n": {
-            "opus-4-5": 40,
+            "opus-4-5": 1013,
             "opus-4-6": 42
           },
           "bonferroni_significant": false
@@ -1090,35 +1138,44 @@
         {
           "test": "chi-square",
           "field": "iteration_required",
-          "chi2": 1.9934,
-          "p_value": 0.573771,
-          "dof": 3,
-          "cramers_v": 0.1559,
+          "chi2": 8.0655,
+          "p_value": 0.233342,
+          "dof": 6,
+          "cramers_v": 0.0874,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
             "minor",
+            "minor - single follow-up question to clarify intent, then new directive provided",
+            "minor - user provided one targeted refinement instruction after initial work",
             "one_shot",
             "significant",
+            "significant - the user had to prompt the agent multiple times to move from discussion to concrete action",
             "significant - user had to ask a follow-up question, suggesting the initial response was insufficient or inconclusive"
           ],
           "counts": {
             "opus-4-5": {
-              "minor": 3,
-              "one_shot": 17,
-              "significant": 19,
+              "minor": 77,
+              "minor - single follow-up question to clarify intent, then new directive provided": 1,
+              "minor - user provided one targeted refinement instruction after initial work": 1,
+              "one_shot": 332,
+              "significant": 600,
+              "significant - the user had to prompt the agent multiple times to move from discussion to concrete action": 1,
               "significant - user had to ask a follow-up question, suggesting the initial response was insufficient or inconclusive": 1
             },
             "opus-4-6": {
               "minor": 4,
+              "minor - single follow-up question to clarify intent, then new directive provided": 0,
+              "minor - user provided one targeted refinement instruction after initial work": 0,
               "one_shot": 22,
               "significant": 16,
+              "significant - the user had to prompt the agent multiple times to move from discussion to concrete action": 0,
               "significant - user had to ask a follow-up question, suggesting the initial response was insufficient or inconclusive": 0
             }
           },
           "n": {
-            "opus-4-5": 40,
+            "opus-4-5": 1013,
             "opus-4-6": 42
           },
           "bonferroni_significant": false
@@ -1126,35 +1183,53 @@
         {
           "test": "chi-square",
           "field": "error_recovery",
-          "chi2": 3.1636,
-          "p_value": 0.367078,
-          "dof": 3,
-          "cramers_v": 0.1964,
+          "chi2": 2.3403,
+          "p_value": 0.984875,
+          "dof": 9,
+          "cramers_v": 0.0471,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
             "failed",
+            "failed - agent didn't anticipate or acknowledge the styling side effect of the change",
+            "none_attempted",
             "none_needed",
+            "none_needed - no errors encountered in a simple clarification exchange",
+            "none_needed - no errors encountered in a straightforward verification task",
             "none_needed - no errors encountered, but also no work attempted",
-            "struggled"
+            "recovered",
+            "struggled",
+            "unknown"
           ],
           "counts": {
             "opus-4-5": {
-              "failed": 3,
-              "none_needed": 36,
+              "failed": 79,
+              "failed - agent didn't anticipate or acknowledge the styling side effect of the change": 1,
+              "none_attempted": 1,
+              "none_needed": 892,
+              "none_needed - no errors encountered in a simple clarification exchange": 1,
+              "none_needed - no errors encountered in a straightforward verification task": 1,
               "none_needed - no errors encountered, but also no work attempted": 1,
-              "struggled": 0
+              "recovered": 6,
+              "struggled": 30,
+              "unknown": 1
             },
             "opus-4-6": {
               "failed": 1,
+              "failed - agent didn't anticipate or acknowledge the styling side effect of the change": 0,
+              "none_attempted": 0,
               "none_needed": 40,
+              "none_needed - no errors encountered in a simple clarification exchange": 0,
+              "none_needed - no errors encountered in a straightforward verification task": 0,
               "none_needed - no errors encountered, but also no work attempted": 0,
-              "struggled": 1
+              "recovered": 0,
+              "struggled": 1,
+              "unknown": 0
             }
           },
           "n": {
-            "opus-4-5": 40,
+            "opus-4-5": 1013,
             "opus-4-6": 42
           },
           "bonferroni_significant": false
@@ -1162,38 +1237,80 @@
         {
           "test": "chi-square",
           "field": "communication_quality",
-          "chi2": 6.4984,
-          "p_value": 0.164893,
-          "dof": 4,
-          "cramers_v": 0.2815,
-          "effect_size_label": "small",
-          "significant_p05": false,
+          "chi2": 32.9886,
+          "p_value": 0.016743,
+          "dof": 18,
+          "cramers_v": 0.1768,
+          "effect_size_label": "negligible",
+          "significant_p05": true,
           "low_expected_warning": true,
           "categories": [
+            "N/A",
             "adequate",
+            "adequate - agent appears to have answered the initial question adequately enough that user could provide next steps",
+            "adequate - agent executed verification steps but the interaction was minimal",
+            "adequate - agent made the edit without explanation, relying on the user to guide next steps",
+            "adequate - the 'done' message confirms completion without elaboration; the follow-up is specific and well-defined",
             "clear",
+            "inadequate",
+            "minimal",
+            "n/a - no agent output",
+            "none",
             "none_provided",
+            "not_applicable",
             "unclear",
-            "unclear - no explanation of verification findings provided; unclear what analysis led to any conclusions"
+            "unclear - agent provided no response to initial 'what's next?' query, leaving first interaction unresolved",
+            "unclear - no detail available about what was actually communicated in the 58-second response",
+            "unclear - no explanation of verification findings provided; unclear what analysis led to any conclusions",
+            "unclear - no tools were invoked, so it's unclear what the agent actually said or whether it explained the concepts adequately",
+            "unclear - the agent did not respond with any explanation, which is appropriate for avoiding credential handling but leaves the user without feedback on why no action was taken"
           ],
           "counts": {
             "opus-4-5": {
-              "adequate": 15,
-              "clear": 5,
+              "N/A": 1,
+              "adequate": 386,
+              "adequate - agent appears to have answered the initial question adequately enough that user could provide next steps": 1,
+              "adequate - agent executed verification steps but the interaction was minimal": 1,
+              "adequate - agent made the edit without explanation, relying on the user to guide next steps": 1,
+              "adequate - the 'done' message confirms completion without elaboration; the follow-up is specific and well-defined": 1,
+              "clear": 92,
+              "inadequate": 3,
+              "minimal": 1,
+              "n/a - no agent output": 1,
+              "none": 1,
               "none_provided": 0,
-              "unclear": 19,
-              "unclear - no explanation of verification findings provided; unclear what analysis led to any conclusions": 1
+              "not_applicable": 3,
+              "unclear": 516,
+              "unclear - agent provided no response to initial 'what's next?' query, leaving first interaction unresolved": 1,
+              "unclear - no detail available about what was actually communicated in the 58-second response": 1,
+              "unclear - no explanation of verification findings provided; unclear what analysis led to any conclusions": 1,
+              "unclear - no tools were invoked, so it's unclear what the agent actually said or whether it explained the concepts adequately": 1,
+              "unclear - the agent did not respond with any explanation, which is appropriate for avoiding credential handling but leaves the user without feedback on why no action was taken": 1
             },
             "opus-4-6": {
+              "N/A": 0,
               "adequate": 25,
+              "adequate - agent appears to have answered the initial question adequately enough that user could provide next steps": 0,
+              "adequate - agent executed verification steps but the interaction was minimal": 0,
+              "adequate - agent made the edit without explanation, relying on the user to guide next steps": 0,
+              "adequate - the 'done' message confirms completion without elaboration; the follow-up is specific and well-defined": 0,
               "clear": 2,
+              "inadequate": 0,
+              "minimal": 0,
+              "n/a - no agent output": 0,
+              "none": 0,
               "none_provided": 1,
+              "not_applicable": 0,
               "unclear": 14,
-              "unclear - no explanation of verification findings provided; unclear what analysis led to any conclusions": 0
+              "unclear - agent provided no response to initial 'what's next?' query, leaving first interaction unresolved": 0,
+              "unclear - no detail available about what was actually communicated in the 58-second response": 0,
+              "unclear - no explanation of verification findings provided; unclear what analysis led to any conclusions": 0,
+              "unclear - no tools were invoked, so it's unclear what the agent actually said or whether it explained the concepts adequately": 0,
+              "unclear - the agent did not respond with any explanation, which is appropriate for avoiding credential handling but leaves the user without feedback on why no action was taken": 0
             }
           },
           "n": {
-            "opus-4-5": 40,
+            "opus-4-5": 1013,
             "opus-4-6": 42
           },
           "bonferroni_significant": false
@@ -1201,11 +1318,11 @@
         {
           "test": "chi-square",
           "field": "normalized_execution_quality",
-          "chi2": 4.2795,
-          "p_value": 0.369503,
+          "chi2": 9.2587,
+          "p_value": 0.05495,
           "dof": 4,
-          "cramers_v": 0.2284,
-          "effect_size_label": "small",
+          "cramers_v": 0.0937,
+          "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
@@ -1217,11 +1334,11 @@
           ],
           "counts": {
             "opus-4-5": {
-              "adequate": 25,
-              "excellent": 1,
-              "failed": 5,
-              "good": 7,
-              "poor": 2
+              "adequate": 735,
+              "excellent": 4,
+              "failed": 95,
+              "good": 110,
+              "poor": 69
             },
             "opus-4-6": {
               "adequate": 29,
@@ -1232,7 +1349,7 @@
             }
           },
           "n": {
-            "opus-4-5": 40,
+            "opus-4-5": 1013,
             "opus-4-6": 42
           },
           "bonferroni_significant": false
@@ -1240,32 +1357,41 @@
         {
           "test": "chi-square",
           "field": "autonomy_level",
-          "chi2": 0.9096,
-          "p_value": 0.63457,
-          "dof": 2,
-          "cramers_v": 0.1053,
+          "chi2": 5.0596,
+          "p_value": 0.408645,
+          "dof": 5,
+          "cramers_v": 0.0693,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
             "high",
             "low",
-            "medium"
+            "medium",
+            "medium - agent executed the edit correctly but required user guidance to identify unnecessary code",
+            "medium - agent took initiative to verify the stated fact rather than just acknowledging it",
+            "none"
           ],
           "counts": {
             "opus-4-5": {
-              "high": 7,
-              "low": 30,
-              "medium": 3
+              "high": 141,
+              "low": 774,
+              "medium": 95,
+              "medium - agent executed the edit correctly but required user guidance to identify unnecessary code": 1,
+              "medium - agent took initiative to verify the stated fact rather than just acknowledging it": 1,
+              "none": 1
             },
             "opus-4-6": {
               "high": 11,
               "low": 28,
-              "medium": 3
+              "medium": 3,
+              "medium - agent executed the edit correctly but required user guidance to identify unnecessary code": 0,
+              "medium - agent took initiative to verify the stated fact rather than just acknowledging it": 0,
+              "none": 0
             }
           },
           "n": {
-            "opus-4-5": 40,
+            "opus-4-5": 1013,
             "opus-4-6": 42
           },
           "bonferroni_significant": false
@@ -1275,13 +1401,13 @@
         {
           "test": "mann-whitney-u",
           "field": "alignment_score",
-          "u_statistic": 746.5,
-          "p_value": 0.373735,
-          "cohens_d": -0.1796,
-          "effect_size_label": "negligible",
+          "u_statistic": 18381.5,
+          "p_value": 0.120007,
+          "cohens_d": -0.2943,
+          "effect_size_label": "small",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 40,
+            "opus-4-5": 1013,
             "opus-4-6": 42
           },
           "median": {
@@ -1289,11 +1415,11 @@
             "opus-4-6": 2.0
           },
           "mean": {
-            "opus-4-5": 2.425,
+            "opus-4-5": 2.313,
             "opus-4-6": 2.69
           },
           "std": {
-            "opus-4-5": 1.483,
+            "opus-4-5": 1.274,
             "opus-4-6": 1.473
           },
           "bonferroni_significant": false
@@ -1301,25 +1427,25 @@
         {
           "test": "mann-whitney-u",
           "field": "duration_seconds",
-          "u_statistic": 787.5,
-          "p_value": 0.625163,
-          "cohens_d": 0.2127,
-          "effect_size_label": "small",
+          "u_statistic": 23507.5,
+          "p_value": 0.245682,
+          "cohens_d": 0.0361,
+          "effect_size_label": "negligible",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 40,
+            "opus-4-5": 1013,
             "opus-4-6": 42
           },
           "median": {
-            "opus-4-5": 6.319,
+            "opus-4-5": 10.583,
             "opus-4-6": 9.058
           },
           "mean": {
-            "opus-4-5": 71.103,
+            "opus-4-5": 105.046,
             "opus-4-6": 17.52
           },
           "std": {
-            "opus-4-5": 359.144,
+            "opus-4-5": 2472.591,
             "opus-4-6": 33.298
           },
           "bonferroni_significant": false
@@ -1327,13 +1453,13 @@
         {
           "test": "mann-whitney-u",
           "field": "tool_calls",
-          "u_statistic": 678.0,
-          "p_value": 0.095337,
-          "cohens_d": -0.2731,
+          "u_statistic": 17478.5,
+          "p_value": 0.020988,
+          "cohens_d": -0.2543,
           "effect_size_label": "small",
-          "significant_p05": false,
+          "significant_p05": true,
           "n": {
-            "opus-4-5": 40,
+            "opus-4-5": 1013,
             "opus-4-6": 42
           },
           "median": {
@@ -1341,11 +1467,11 @@
             "opus-4-6": 1.0
           },
           "mean": {
-            "opus-4-5": 0.575,
+            "opus-4-5": 0.593,
             "opus-4-6": 0.833
           },
           "std": {
-            "opus-4-5": 0.958,
+            "opus-4-5": 0.944,
             "opus-4-6": 0.935
           },
           "bonferroni_significant": false
@@ -1353,13 +1479,13 @@
         {
           "test": "mann-whitney-u",
           "field": "files_touched",
-          "u_statistic": 864.0,
-          "p_value": 0.652416,
-          "cohens_d": 0.1011,
+          "u_statistic": 21937.5,
+          "p_value": 0.51164,
+          "cohens_d": 0.1034,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 40,
+            "opus-4-5": 1013,
             "opus-4-6": 42
           },
           "median": {
@@ -1367,7 +1493,7 @@
             "opus-4-6": 0.0
           },
           "mean": {
-            "opus-4-5": 0.1,
+            "opus-4-5": 0.103,
             "opus-4-6": 0.071
           },
           "std": {
@@ -1379,13 +1505,13 @@
         {
           "test": "mann-whitney-u",
           "field": "lines_added",
-          "u_statistic": 861.0,
-          "p_value": 0.646562,
-          "cohens_d": -0.0294,
+          "u_statistic": 21709.5,
+          "p_value": 0.601475,
+          "cohens_d": 0.1285,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 40,
+            "opus-4-5": 1013,
             "opus-4-6": 42
           },
           "median": {
@@ -1393,11 +1519,11 @@
             "opus-4-6": 0.0
           },
           "mean": {
-            "opus-4-5": 0.125,
+            "opus-4-5": 0.346,
             "opus-4-6": 0.143
           },
           "std": {
-            "opus-4-5": 0.516,
+            "opus-4-5": 1.61,
             "opus-4-6": 0.683
           },
           "bonferroni_significant": false
@@ -1405,13 +1531,13 @@
         {
           "test": "mann-whitney-u",
           "field": "lines_removed",
-          "u_statistic": 864.0,
-          "p_value": 0.599122,
-          "cohens_d": 0.2129,
-          "effect_size_label": "small",
+          "u_statistic": 21684.5,
+          "p_value": 0.617751,
+          "cohens_d": 0.1621,
+          "effect_size_label": "negligible",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 40,
+            "opus-4-5": 1013,
             "opus-4-6": 42
           },
           "median": {
@@ -1419,11 +1545,11 @@
             "opus-4-6": 0.0
           },
           "mean": {
-            "opus-4-5": 0.25,
+            "opus-4-5": 0.271,
             "opus-4-6": 0.071
           },
           "std": {
-            "opus-4-5": 1.149,
+            "opus-4-5": 1.257,
             "opus-4-6": 0.342
           },
           "bonferroni_significant": false
@@ -1431,13 +1557,13 @@
         {
           "test": "mann-whitney-u",
           "field": "lines_per_minute",
-          "u_statistic": 861.0,
-          "p_value": 0.646573,
-          "cohens_d": -0.0329,
+          "u_statistic": 21708.0,
+          "p_value": 0.605121,
+          "cohens_d": 0.0892,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 40,
+            "opus-4-5": 1013,
             "opus-4-6": 42
           },
           "median": {
@@ -1445,11 +1571,11 @@
             "opus-4-6": 0.0
           },
           "mean": {
-            "opus-4-5": 1.177,
+            "opus-4-5": 2.265,
             "opus-4-6": 1.36
           },
           "std": {
-            "opus-4-5": 4.684,
+            "opus-4-5": 10.26,
             "opus-4-6": 6.283
           },
           "bonferroni_significant": false
@@ -1457,13 +1583,13 @@
         {
           "test": "mann-whitney-u",
           "field": "tools_per_file",
-          "u_statistic": 678.0,
-          "p_value": 0.095337,
-          "cohens_d": -0.2731,
+          "u_statistic": 17478.5,
+          "p_value": 0.020988,
+          "cohens_d": -0.2543,
           "effect_size_label": "small",
-          "significant_p05": false,
+          "significant_p05": true,
           "n": {
-            "opus-4-5": 40,
+            "opus-4-5": 1013,
             "opus-4-6": 42
           },
           "median": {
@@ -1471,11 +1597,11 @@
             "opus-4-6": 1.0
           },
           "mean": {
-            "opus-4-5": 0.575,
+            "opus-4-5": 0.593,
             "opus-4-6": 0.833
           },
           "std": {
-            "opus-4-5": 0.958,
+            "opus-4-5": 0.944,
             "opus-4-6": 0.935
           },
           "bonferroni_significant": false
@@ -1485,17 +1611,17 @@
         {
           "test": "two-proportion-z",
           "field": "satisfaction_rate",
-          "z_statistic": -1.7945,
-          "p_value": 0.072739,
-          "cohens_h": -0.4052,
+          "z_statistic": -2.2634,
+          "p_value": 0.023609,
+          "cohens_h": -0.3186,
           "effect_size_label": "small",
-          "significant_p05": false,
+          "significant_p05": true,
           "opus-4-5": {
-            "proportion": 0.125,
-            "ci_lower": 0.0546,
-            "ci_upper": 0.2611,
-            "count": 5,
-            "n": 40
+            "proportion": 0.155,
+            "ci_lower": 0.134,
+            "ci_upper": 0.1786,
+            "count": 157,
+            "n": 1013
           },
           "opus-4-6": {
             "proportion": 0.2857,
@@ -1509,17 +1635,17 @@
         {
           "test": "two-proportion-z",
           "field": "dissatisfaction_rate",
-          "z_statistic": -0.2065,
-          "p_value": 0.836365,
-          "cohens_h": -0.0457,
+          "z_statistic": 0.1833,
+          "p_value": 0.854554,
+          "cohens_h": 0.0292,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.15,
-            "ci_lower": 0.0706,
-            "ci_upper": 0.2907,
-            "count": 6,
-            "n": 40
+            "proportion": 0.1777,
+            "ci_lower": 0.1554,
+            "ci_upper": 0.2024,
+            "count": 180,
+            "n": 1013
           },
           "opus-4-6": {
             "proportion": 0.1667,
@@ -1533,17 +1659,17 @@
         {
           "test": "two-proportion-z",
           "field": "complete_rate",
-          "z_statistic": -1.4179,
-          "p_value": 0.156216,
-          "cohens_h": -0.3168,
+          "z_statistic": -2.646,
+          "p_value": 0.008146,
+          "cohens_h": -0.368,
           "effect_size_label": "small",
-          "significant_p05": false,
+          "significant_p05": true,
           "opus-4-5": {
-            "proportion": 0.175,
-            "ci_lower": 0.0875,
-            "ci_upper": 0.3195,
-            "count": 7,
-            "n": 40
+            "proportion": 0.156,
+            "ci_lower": 0.1349,
+            "ci_upper": 0.1796,
+            "count": 158,
+            "n": 1013
           },
           "opus-4-6": {
             "proportion": 0.3095,
@@ -1557,17 +1683,17 @@
         {
           "test": "two-proportion-z",
           "field": "failed_rate",
-          "z_statistic": 2.8962,
-          "p_value": 0.003777,
-          "cohens_h": 0.6721,
-          "effect_size_label": "medium",
+          "z_statistic": 2.2902,
+          "p_value": 0.02201,
+          "cohens_h": 0.4333,
+          "effect_size_label": "small",
           "significant_p05": true,
           "opus-4-5": {
-            "proportion": 0.325,
-            "ci_lower": 0.2008,
-            "ci_upper": 0.4798,
-            "count": 13,
-            "n": 40
+            "proportion": 0.2192,
+            "ci_lower": 0.1948,
+            "ci_upper": 0.2457,
+            "count": 222,
+            "n": 1013
           },
           "opus-4-6": {
             "proportion": 0.0714,
@@ -1589,9 +1715,9 @@
           "opus-4-5": {
             "proportion": 0.0,
             "ci_lower": 0.0,
-            "ci_upper": 0.0876,
+            "ci_upper": 0.0038,
             "count": 0,
-            "n": 40
+            "n": 1013
           },
           "opus-4-6": {
             "proportion": 0.0,
@@ -1605,17 +1731,17 @@
         {
           "test": "two-proportion-z",
           "field": "one_shot_rate",
-          "z_statistic": -0.8956,
-          "p_value": 0.370489,
-          "cohens_h": -0.1982,
-          "effect_size_label": "negligible",
-          "significant_p05": false,
+          "z_statistic": -2.637,
+          "p_value": 0.008365,
+          "cohens_h": -0.3994,
+          "effect_size_label": "small",
+          "significant_p05": true,
           "opus-4-5": {
-            "proportion": 0.425,
-            "ci_lower": 0.2851,
-            "ci_upper": 0.5781,
-            "count": 17,
-            "n": 40
+            "proportion": 0.3277,
+            "ci_lower": 0.2995,
+            "ci_upper": 0.3572,
+            "count": 332,
+            "n": 1013
           },
           "opus-4-6": {
             "proportion": 0.5238,
@@ -1629,17 +1755,17 @@
         {
           "test": "two-proportion-z",
           "field": "good_execution_rate",
-          "z_statistic": -0.7045,
-          "p_value": 0.481125,
-          "cohens_h": -0.1563,
-          "effect_size_label": "negligible",
-          "significant_p05": false,
+          "z_statistic": -2.5903,
+          "p_value": 0.009589,
+          "cohens_h": -0.3479,
+          "effect_size_label": "small",
+          "significant_p05": true,
           "opus-4-5": {
-            "proportion": 0.175,
-            "ci_lower": 0.0875,
-            "ci_upper": 0.3195,
-            "count": 7,
-            "n": 40
+            "proportion": 0.1086,
+            "ci_lower": 0.0909,
+            "ci_upper": 0.1292,
+            "count": 110,
+            "n": 1013
           },
           "opus-4-6": {
             "proportion": 0.2381,
@@ -1658,53 +1784,71 @@
         {
           "test": "chi-square",
           "field": "task_completion",
-          "chi2": 3.3858,
-          "p_value": 0.640736,
-          "dof": 5,
-          "cramers_v": 0.311,
+          "chi2": 36.4744,
+          "p_value": 0.000141,
+          "dof": 11,
+          "cramers_v": 0.3153,
           "effect_size_label": "small",
-          "significant_p05": false,
+          "significant_p05": true,
           "low_expected_warning": true,
           "categories": [
             "complete",
             "failed",
+            "incomplete",
             "interrupted",
             "partial",
             "partial - agent attempted troubleshooting but didn't resolve the core issue of phase 1 reporting completion while downloads failed",
+            "partial - agent investigated the question but didn't implement webhook support or create a working demo with async updates. The research phase was complete, but no code changes resulted.",
+            "partial - agent provided analysis and options rather than implementing selected approach, but this appeared to be the appropriate scope for the initial request",
+            "partial - initial message was acknowledged but not acted upon; new task (config analysis) would require investigation to assess completion",
+            "partial - the agent addressed the immediate error but the user continues to experience authentication failures, indicating the root cause wasn't fully resolved",
+            "partial - the commit was attempted but no changes were made; the new request was not yet addressed",
             "unknown"
           ],
           "counts": {
             "opus-4-5": {
-              "complete": 7,
-              "failed": 0,
-              "interrupted": 1,
-              "partial": 5,
+              "complete": 140,
+              "failed": 7,
+              "incomplete": 1,
+              "interrupted": 33,
+              "partial": 159,
               "partial - agent attempted troubleshooting but didn't resolve the core issue of phase 1 reporting completion while downloads failed": 0,
+              "partial - agent investigated the question but didn't implement webhook support or create a working demo with async updates. The research phase was complete, but no code changes resulted.": 1,
+              "partial - agent provided analysis and options rather than implementing selected approach, but this appeared to be the appropriate scope for the initial request": 1,
+              "partial - initial message was acknowledged but not acted upon; new task (config analysis) would require investigation to assess completion": 1,
+              "partial - the agent addressed the immediate error but the user continues to experience authentication failures, indicating the root cause wasn't fully resolved": 1,
+              "partial - the commit was attempted but no changes were made; the new request was not yet addressed": 1,
               "unknown": 0
             },
             "opus-4-6": {
               "complete": 7,
               "failed": 2,
+              "incomplete": 0,
               "interrupted": 2,
               "partial": 9,
               "partial - agent attempted troubleshooting but didn't resolve the core issue of phase 1 reporting completion while downloads failed": 1,
+              "partial - agent investigated the question but didn't implement webhook support or create a working demo with async updates. The research phase was complete, but no code changes resulted.": 0,
+              "partial - agent provided analysis and options rather than implementing selected approach, but this appeared to be the appropriate scope for the initial request": 0,
+              "partial - initial message was acknowledged but not acted upon; new task (config analysis) would require investigation to assess completion": 0,
+              "partial - the agent addressed the immediate error but the user continues to experience authentication failures, indicating the root cause wasn't fully resolved": 0,
+              "partial - the commit was attempted but no changes were made; the new request was not yet addressed": 0,
               "unknown": 1
             }
           },
           "n": {
-            "opus-4-5": 13,
+            "opus-4-5": 345,
             "opus-4-6": 22
           },
-          "bonferroni_significant": false
+          "bonferroni_significant": true
         },
         {
           "test": "chi-square",
           "field": "normalized_user_sentiment",
-          "chi2": 3.5422,
-          "p_value": 0.315336,
+          "chi2": 3.1997,
+          "p_value": 0.361845,
           "dof": 3,
-          "cramers_v": 0.3181,
-          "effect_size_label": "small",
+          "cramers_v": 0.0934,
+          "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
@@ -1715,10 +1859,10 @@
           ],
           "counts": {
             "opus-4-5": {
-              "ambiguous": 0,
-              "dissatisfied": 2,
-              "neutral": 5,
-              "satisfied": 6
+              "ambiguous": 13,
+              "dissatisfied": 63,
+              "neutral": 146,
+              "satisfied": 123
             },
             "opus-4-6": {
               "ambiguous": 1,
@@ -1728,7 +1872,7 @@
             }
           },
           "n": {
-            "opus-4-5": 13,
+            "opus-4-5": 345,
             "opus-4-6": 22
           },
           "bonferroni_significant": false
@@ -1736,35 +1880,41 @@
         {
           "test": "chi-square",
           "field": "scope_management",
-          "chi2": 1.3054,
-          "p_value": 0.72786,
-          "dof": 3,
-          "cramers_v": 0.1931,
-          "effect_size_label": "negligible",
-          "significant_p05": false,
+          "chi2": 17.6705,
+          "p_value": 0.003389,
+          "dof": 5,
+          "cramers_v": 0.2194,
+          "effect_size_label": "small",
+          "significant_p05": true,
           "low_expected_warning": true,
           "categories": [
             "appropriate",
             "expanded",
             "focused",
-            "focused - agent stayed on the immediate troubleshooting task without adding unnecessary complexity"
+            "focused - agent stayed on the immediate troubleshooting task without adding unnecessary complexity",
+            "focused - agent stayed tightly on answering the specific question about how webhook async updates work, without over-extending into implementation.",
+            "focused - the agent stayed narrowly focused on the email configuration without expanding into unrelated areas"
           ],
           "counts": {
             "opus-4-5": {
-              "appropriate": 1,
-              "expanded": 0,
-              "focused": 12,
-              "focused - agent stayed on the immediate troubleshooting task without adding unnecessary complexity": 0
+              "appropriate": 32,
+              "expanded": 4,
+              "focused": 307,
+              "focused - agent stayed on the immediate troubleshooting task without adding unnecessary complexity": 0,
+              "focused - agent stayed tightly on answering the specific question about how webhook async updates work, without over-extending into implementation.": 1,
+              "focused - the agent stayed narrowly focused on the email configuration without expanding into unrelated areas": 1
             },
             "opus-4-6": {
               "appropriate": 2,
               "expanded": 1,
               "focused": 18,
-              "focused - agent stayed on the immediate troubleshooting task without adding unnecessary complexity": 1
+              "focused - agent stayed on the immediate troubleshooting task without adding unnecessary complexity": 1,
+              "focused - agent stayed tightly on answering the specific question about how webhook async updates work, without over-extending into implementation.": 0,
+              "focused - the agent stayed narrowly focused on the email configuration without expanding into unrelated areas": 0
             }
           },
           "n": {
-            "opus-4-5": 13,
+            "opus-4-5": 345,
             "opus-4-6": 22
           },
           "bonferroni_significant": false
@@ -1772,35 +1922,41 @@
         {
           "test": "chi-square",
           "field": "iteration_required",
-          "chi2": 5.7163,
-          "p_value": 0.126258,
-          "dof": 3,
-          "cramers_v": 0.4041,
+          "chi2": 16.0106,
+          "p_value": 0.006814,
+          "dof": 5,
+          "cramers_v": 0.2089,
           "effect_size_label": "small",
-          "significant_p05": false,
+          "significant_p05": true,
           "low_expected_warning": true,
           "categories": [
             "minor",
+            "minor - one follow-up question from user about a related but distinct concern (cleanup behavior), suggesting the investigation provided sufficient foundation for the next iteration.",
             "one_shot",
             "significant",
+            "significant - the user's follow-up indicates the problem persists and further iteration would be needed to fully resolve the authentication issue",
             "significant - user's follow-up indicates the first attempt missed the mark and multiple rounds will be needed"
           ],
           "counts": {
             "opus-4-5": {
-              "minor": 2,
-              "one_shot": 10,
-              "significant": 1,
+              "minor": 59,
+              "minor - one follow-up question from user about a related but distinct concern (cleanup behavior), suggesting the investigation provided sufficient foundation for the next iteration.": 1,
+              "one_shot": 150,
+              "significant": 134,
+              "significant - the user's follow-up indicates the problem persists and further iteration would be needed to fully resolve the authentication issue": 1,
               "significant - user's follow-up indicates the first attempt missed the mark and multiple rounds will be needed": 0
             },
             "opus-4-6": {
               "minor": 3,
+              "minor - one follow-up question from user about a related but distinct concern (cleanup behavior), suggesting the investigation provided sufficient foundation for the next iteration.": 0,
               "one_shot": 9,
               "significant": 9,
+              "significant - the user's follow-up indicates the problem persists and further iteration would be needed to fully resolve the authentication issue": 0,
               "significant - user's follow-up indicates the first attempt missed the mark and multiple rounds will be needed": 1
             }
           },
           "n": {
-            "opus-4-5": 13,
+            "opus-4-5": 345,
             "opus-4-6": 22
           },
           "bonferroni_significant": false
@@ -1808,38 +1964,53 @@
         {
           "test": "chi-square",
           "field": "error_recovery",
-          "chi2": 4.279,
-          "p_value": 0.369563,
-          "dof": 4,
-          "cramers_v": 0.3497,
+          "chi2": 21.4186,
+          "p_value": 0.010916,
+          "dof": 9,
+          "cramers_v": 0.2416,
           "effect_size_label": "small",
-          "significant_p05": false,
+          "significant_p05": true,
           "low_expected_warning": true,
           "categories": [
             "failed",
             "none_needed",
+            "none_needed - no commits were available, which is not an error but a pre-condition issue",
+            "none_needed - no errors encountered during straightforward code search and reading.",
             "recovered",
+            "recovered - agent identified the configuration issue and fixed it successfully",
             "struggled",
-            "struggled - agent ran commands but didn't effectively use results to narrow down the root cause or ask clarifying questions about pipeline architecture"
+            "struggled - agent ran commands but didn't effectively use results to narrow down the root cause or ask clarifying questions about pipeline architecture",
+            "struggled - the agent made an edit but didn't verify or diagnose whether it would actually resolve the underlying issue",
+            "struggled - while the agent made a change addressing the initial error message, the subsequent authentication failure indicates the underlying issue wasn't properly resolved"
           ],
           "counts": {
             "opus-4-5": {
-              "failed": 0,
-              "none_needed": 13,
-              "recovered": 0,
-              "struggled": 0,
-              "struggled - agent ran commands but didn't effectively use results to narrow down the root cause or ask clarifying questions about pipeline architecture": 0
+              "failed": 2,
+              "none_needed": 288,
+              "none_needed - no commits were available, which is not an error but a pre-condition issue": 1,
+              "none_needed - no errors encountered during straightforward code search and reading.": 1,
+              "recovered": 24,
+              "recovered - agent identified the configuration issue and fixed it successfully": 1,
+              "struggled": 26,
+              "struggled - agent ran commands but didn't effectively use results to narrow down the root cause or ask clarifying questions about pipeline architecture": 0,
+              "struggled - the agent made an edit but didn't verify or diagnose whether it would actually resolve the underlying issue": 1,
+              "struggled - while the agent made a change addressing the initial error message, the subsequent authentication failure indicates the underlying issue wasn't properly resolved": 1
             },
             "opus-4-6": {
               "failed": 1,
               "none_needed": 16,
+              "none_needed - no commits were available, which is not an error but a pre-condition issue": 0,
+              "none_needed - no errors encountered during straightforward code search and reading.": 0,
               "recovered": 1,
+              "recovered - agent identified the configuration issue and fixed it successfully": 0,
               "struggled": 3,
-              "struggled - agent ran commands but didn't effectively use results to narrow down the root cause or ask clarifying questions about pipeline architecture": 1
+              "struggled - agent ran commands but didn't effectively use results to narrow down the root cause or ask clarifying questions about pipeline architecture": 1,
+              "struggled - the agent made an edit but didn't verify or diagnose whether it would actually resolve the underlying issue": 0,
+              "struggled - while the agent made a change addressing the initial error message, the subsequent authentication failure indicates the underlying issue wasn't properly resolved": 0
             }
           },
           "n": {
-            "opus-4-5": 13,
+            "opus-4-5": 345,
             "opus-4-6": 22
           },
           "bonferroni_significant": false
@@ -1847,35 +2018,50 @@
         {
           "test": "chi-square",
           "field": "communication_quality",
-          "chi2": 2.3048,
-          "p_value": 0.511606,
-          "dof": 3,
-          "cramers_v": 0.2566,
+          "chi2": 16.7292,
+          "p_value": 0.033056,
+          "dof": 8,
+          "cramers_v": 0.2135,
           "effect_size_label": "small",
-          "significant_p05": false,
+          "significant_p05": true,
           "low_expected_warning": true,
           "categories": [
             "adequate",
+            "adequate - agent acknowledged the workflow but context is limited to understand how thoroughly the new task request was addressed",
+            "adequate - agent executed the requested git operation but the new request was not started",
+            "adequate - agent explained findings clearly but could have been more forward-looking about implementation implications or next steps.",
             "adequate - agent explained search steps and commands but didn't articulate hypotheses about the phase 1 completion contradiction",
+            "adequate - agent presented multiple options with considerations, though the follow-up suggests the presentation could have been more directly actionable",
+            "adequate - the agent showed its work through tool calls but didn't explain the authentication mechanism changes or potential next steps for diagnosis",
             "clear",
             "unclear"
           ],
           "counts": {
             "opus-4-5": {
-              "adequate": 11,
+              "adequate": 285,
+              "adequate - agent acknowledged the workflow but context is limited to understand how thoroughly the new task request was addressed": 1,
+              "adequate - agent executed the requested git operation but the new request was not started": 1,
+              "adequate - agent explained findings clearly but could have been more forward-looking about implementation implications or next steps.": 1,
               "adequate - agent explained search steps and commands but didn't articulate hypotheses about the phase 1 completion contradiction": 0,
-              "clear": 2,
-              "unclear": 0
+              "adequate - agent presented multiple options with considerations, though the follow-up suggests the presentation could have been more directly actionable": 1,
+              "adequate - the agent showed its work through tool calls but didn't explain the authentication mechanism changes or potential next steps for diagnosis": 1,
+              "clear": 34,
+              "unclear": 21
             },
             "opus-4-6": {
               "adequate": 19,
+              "adequate - agent acknowledged the workflow but context is limited to understand how thoroughly the new task request was addressed": 0,
+              "adequate - agent executed the requested git operation but the new request was not started": 0,
+              "adequate - agent explained findings clearly but could have been more forward-looking about implementation implications or next steps.": 0,
               "adequate - agent explained search steps and commands but didn't articulate hypotheses about the phase 1 completion contradiction": 1,
+              "adequate - agent presented multiple options with considerations, though the follow-up suggests the presentation could have been more directly actionable": 0,
+              "adequate - the agent showed its work through tool calls but didn't explain the authentication mechanism changes or potential next steps for diagnosis": 0,
               "clear": 1,
               "unclear": 1
             }
           },
           "n": {
-            "opus-4-5": 13,
+            "opus-4-5": 345,
             "opus-4-6": 22
           },
           "bonferroni_significant": false
@@ -1883,35 +2069,38 @@
         {
           "test": "chi-square",
           "field": "normalized_execution_quality",
-          "chi2": 1.9436,
-          "p_value": 0.584185,
-          "dof": 3,
-          "cramers_v": 0.2357,
-          "effect_size_label": "small",
+          "chi2": 4.3228,
+          "p_value": 0.36408,
+          "dof": 4,
+          "cramers_v": 0.1085,
+          "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
             "adequate",
+            "excellent",
             "failed",
             "good",
             "poor"
           ],
           "counts": {
             "opus-4-5": {
-              "adequate": 7,
-              "failed": 0,
-              "good": 6,
-              "poor": 0
+              "adequate": 142,
+              "excellent": 5,
+              "failed": 8,
+              "good": 176,
+              "poor": 14
             },
             "opus-4-6": {
               "adequate": 10,
+              "excellent": 0,
               "failed": 2,
               "good": 9,
               "poor": 1
             }
           },
           "n": {
-            "opus-4-5": 13,
+            "opus-4-5": 345,
             "opus-4-6": 22
           },
           "bonferroni_significant": false
@@ -1919,35 +2108,38 @@
         {
           "test": "chi-square",
           "field": "autonomy_level",
-          "chi2": 2.9857,
-          "p_value": 0.393835,
-          "dof": 3,
-          "cramers_v": 0.2921,
+          "chi2": 17.4026,
+          "p_value": 0.001614,
+          "dof": 4,
+          "cramers_v": 0.2178,
           "effect_size_label": "small",
-          "significant_p05": false,
+          "significant_p05": true,
           "low_expected_warning": true,
           "categories": [
             "high",
             "low",
             "medium",
-            "medium - agent ran searches and commands but didn't pursue deeper investigation into pipeline state or logs after initial attempts"
+            "medium - agent ran searches and commands but didn't pursue deeper investigation into pipeline state or logs after initial attempts",
+            "medium - the agent read existing configuration, made edits, but didn't proactively test or validate the changes before the user reported new errors"
           ],
           "counts": {
             "opus-4-5": {
-              "high": 9,
-              "low": 1,
-              "medium": 3,
-              "medium - agent ran searches and commands but didn't pursue deeper investigation into pipeline state or logs after initial attempts": 0
+              "high": 197,
+              "low": 23,
+              "medium": 124,
+              "medium - agent ran searches and commands but didn't pursue deeper investigation into pipeline state or logs after initial attempts": 0,
+              "medium - the agent read existing configuration, made edits, but didn't proactively test or validate the changes before the user reported new errors": 1
             },
             "opus-4-6": {
               "high": 9,
               "low": 2,
               "medium": 10,
-              "medium - agent ran searches and commands but didn't pursue deeper investigation into pipeline state or logs after initial attempts": 1
+              "medium - agent ran searches and commands but didn't pursue deeper investigation into pipeline state or logs after initial attempts": 1,
+              "medium - the agent read existing configuration, made edits, but didn't proactively test or validate the changes before the user reported new errors": 0
             }
           },
           "n": {
-            "opus-4-5": 13,
+            "opus-4-5": 345,
             "opus-4-6": 22
           },
           "bonferroni_significant": false
@@ -1957,25 +2149,25 @@
         {
           "test": "mann-whitney-u",
           "field": "alignment_score",
-          "u_statistic": 195.5,
-          "p_value": 0.065701,
-          "cohens_d": 0.6894,
-          "effect_size_label": "medium",
-          "significant_p05": false,
+          "u_statistic": 4759.5,
+          "p_value": 0.038948,
+          "cohens_d": 0.4647,
+          "effect_size_label": "small",
+          "significant_p05": true,
           "n": {
-            "opus-4-5": 13,
+            "opus-4-5": 345,
             "opus-4-6": 22
           },
           "median": {
-            "opus-4-5": 4.0,
+            "opus-4-5": 3.0,
             "opus-4-6": 3.0
           },
           "mean": {
-            "opus-4-5": 3.692,
+            "opus-4-5": 3.449,
             "opus-4-6": 2.909
           },
           "std": {
-            "opus-4-5": 1.182,
+            "opus-4-5": 1.166,
             "opus-4-6": 1.109
           },
           "bonferroni_significant": false
@@ -1983,25 +2175,25 @@
         {
           "test": "mann-whitney-u",
           "field": "duration_seconds",
-          "u_statistic": 144.0,
-          "p_value": 0.986381,
-          "cohens_d": -0.2619,
-          "effect_size_label": "small",
+          "u_statistic": 4138.0,
+          "p_value": 0.477757,
+          "cohens_d": -0.0065,
+          "effect_size_label": "negligible",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 13,
+            "opus-4-5": 345,
             "opus-4-6": 22
           },
           "median": {
-            "opus-4-5": 46.028,
+            "opus-4-5": 47.614,
             "opus-4-6": 45.089
           },
           "mean": {
-            "opus-4-5": 49.741,
+            "opus-4-5": 70.238,
             "opus-4-6": 70.916
           },
           "std": {
-            "opus-4-5": 26.668,
+            "opus-4-5": 104.615,
             "opus-4-6": 99.341
           },
           "bonferroni_significant": false
@@ -2009,25 +2201,25 @@
         {
           "test": "mann-whitney-u",
           "field": "tool_calls",
-          "u_statistic": 147.0,
-          "p_value": 0.903714,
-          "cohens_d": 0.1045,
-          "effect_size_label": "negligible",
+          "u_statistic": 2972.0,
+          "p_value": 0.084585,
+          "cohens_d": -0.2795,
+          "effect_size_label": "small",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 13,
+            "opus-4-5": 345,
             "opus-4-6": 22
           },
           "median": {
-            "opus-4-5": 6.0,
+            "opus-4-5": 5.0,
             "opus-4-6": 6.0
           },
           "mean": {
-            "opus-4-5": 6.077,
+            "opus-4-5": 5.238,
             "opus-4-6": 5.864
           },
           "std": {
-            "opus-4-5": 2.29,
+            "opus-4-5": 2.26,
             "opus-4-6": 1.885
           },
           "bonferroni_significant": false
@@ -2035,13 +2227,13 @@
         {
           "test": "mann-whitney-u",
           "field": "files_touched",
-          "u_statistic": 206.5,
-          "p_value": 0.006751,
-          "cohens_d": 1.1442,
+          "u_statistic": 5977.5,
+          "p_value": 2e-06,
+          "cohens_d": 1.0096,
           "effect_size_label": "large",
           "significant_p05": true,
           "n": {
-            "opus-4-5": 13,
+            "opus-4-5": 345,
             "opus-4-6": 22
           },
           "median": {
@@ -2049,103 +2241,103 @@
             "opus-4-6": 0.0
           },
           "mean": {
-            "opus-4-5": 1.077,
+            "opus-4-5": 1.049,
             "opus-4-6": 0.182
           },
           "std": {
-            "opus-4-5": 1.115,
+            "opus-4-5": 0.876,
             "opus-4-6": 0.501
           },
-          "bonferroni_significant": false
+          "bonferroni_significant": true
         },
         {
           "test": "mann-whitney-u",
           "field": "lines_added",
-          "u_statistic": 178.0,
-          "p_value": 0.072927,
-          "cohens_d": 0.867,
-          "effect_size_label": "large",
-          "significant_p05": false,
+          "u_statistic": 5704.5,
+          "p_value": 3.2e-05,
+          "cohens_d": 0.7166,
+          "effect_size_label": "medium",
+          "significant_p05": true,
           "n": {
-            "opus-4-5": 13,
+            "opus-4-5": 345,
             "opus-4-6": 22
           },
           "median": {
-            "opus-4-5": 0.0,
+            "opus-4-5": 4.0,
             "opus-4-6": 0.0
           },
           "mean": {
-            "opus-4-5": 11.615,
+            "opus-4-5": 14.087,
             "opus-4-6": 1.0
           },
           "std": {
-            "opus-4-5": 19.577,
+            "opus-4-5": 18.785,
             "opus-4-6": 4.071
           },
-          "bonferroni_significant": false
+          "bonferroni_significant": true
         },
         {
           "test": "mann-whitney-u",
           "field": "lines_removed",
-          "u_statistic": 164.5,
-          "p_value": 0.238744,
-          "cohens_d": 0.5178,
+          "u_statistic": 5459.0,
+          "p_value": 0.000222,
+          "cohens_d": 0.6034,
           "effect_size_label": "medium",
-          "significant_p05": false,
+          "significant_p05": true,
           "n": {
-            "opus-4-5": 13,
+            "opus-4-5": 345,
             "opus-4-6": 22
           },
           "median": {
-            "opus-4-5": 0.0,
+            "opus-4-5": 1.0,
             "opus-4-6": 0.0
           },
           "mean": {
-            "opus-4-5": 4.462,
+            "opus-4-5": 8.577,
             "opus-4-6": 1.045
           },
           "std": {
-            "opus-4-5": 9.501,
+            "opus-4-5": 12.817,
             "opus-4-6": 4.1
           },
-          "bonferroni_significant": false
+          "bonferroni_significant": true
         },
         {
           "test": "mann-whitney-u",
           "field": "lines_per_minute",
-          "u_statistic": 174.0,
-          "p_value": 0.112883,
-          "cohens_d": 0.2189,
+          "u_statistic": 5610.0,
+          "p_value": 7.6e-05,
+          "cohens_d": 0.4723,
           "effect_size_label": "small",
-          "significant_p05": false,
+          "significant_p05": true,
           "n": {
-            "opus-4-5": 13,
+            "opus-4-5": 345,
             "opus-4-6": 22
           },
           "median": {
-            "opus-4-5": 0.0,
+            "opus-4-5": 9.058,
             "opus-4-6": 0.0
           },
           "mean": {
-            "opus-4-5": 20.403,
+            "opus-4-5": 32.381,
             "opus-4-6": 10.519
           },
           "std": {
-            "opus-4-5": 38.622,
+            "opus-4-5": 46.153,
             "opus-4-6": 48.475
           },
-          "bonferroni_significant": false
+          "bonferroni_significant": true
         },
         {
           "test": "mann-whitney-u",
           "field": "tools_per_file",
-          "u_statistic": 98.0,
-          "p_value": 0.124789,
-          "cohens_d": -0.5225,
+          "u_statistic": 2385.5,
+          "p_value": 0.003254,
+          "cohens_d": -0.5604,
           "effect_size_label": "medium",
-          "significant_p05": false,
+          "significant_p05": true,
           "n": {
-            "opus-4-5": 13,
+            "opus-4-5": 345,
             "opus-4-6": 22
           },
           "median": {
@@ -2153,11 +2345,11 @@
             "opus-4-6": 6.0
           },
           "mean": {
-            "opus-4-5": 4.603,
+            "opus-4-5": 4.41,
             "opus-4-6": 5.705
           },
           "std": {
-            "opus-4-5": 2.389,
+            "opus-4-5": 2.332,
             "opus-4-6": 1.931
           },
           "bonferroni_significant": false
@@ -2167,17 +2359,17 @@
         {
           "test": "two-proportion-z",
           "field": "satisfaction_rate",
-          "z_statistic": 1.77,
-          "p_value": 0.076729,
-          "cohens_h": 0.6128,
-          "effect_size_label": "medium",
+          "z_statistic": 1.6701,
+          "p_value": 0.094895,
+          "cohens_h": 0.3987,
+          "effect_size_label": "small",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.4615,
-            "ci_lower": 0.2321,
-            "ci_upper": 0.7086,
-            "count": 6,
-            "n": 13
+            "proportion": 0.3565,
+            "ci_lower": 0.3078,
+            "ci_upper": 0.4084,
+            "count": 123,
+            "n": 345
           },
           "opus-4-6": {
             "proportion": 0.1818,
@@ -2191,17 +2383,17 @@
         {
           "test": "two-proportion-z",
           "field": "dissatisfaction_rate",
-          "z_statistic": -0.2122,
-          "p_value": 0.831981,
-          "cohens_h": -0.0749,
+          "z_statistic": 0.0093,
+          "p_value": 0.992575,
+          "cohens_h": 0.002,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.1538,
-            "ci_lower": 0.0433,
-            "ci_upper": 0.4224,
-            "count": 2,
-            "n": 13
+            "proportion": 0.1826,
+            "ci_lower": 0.1454,
+            "ci_upper": 0.2268,
+            "count": 63,
+            "n": 345
           },
           "opus-4-6": {
             "proportion": 0.1818,
@@ -2215,17 +2407,17 @@
         {
           "test": "two-proportion-z",
           "field": "complete_rate",
-          "z_statistic": 1.2853,
-          "p_value": 0.198674,
-          "cohens_h": 0.4492,
-          "effect_size_label": "small",
+          "z_statistic": 0.8131,
+          "p_value": 0.416139,
+          "cohens_h": 0.1826,
+          "effect_size_label": "negligible",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.5385,
-            "ci_lower": 0.2914,
-            "ci_upper": 0.7679,
-            "count": 7,
-            "n": 13
+            "proportion": 0.4058,
+            "ci_lower": 0.3553,
+            "ci_upper": 0.4584,
+            "count": 140,
+            "n": 345
           },
           "opus-4-6": {
             "proportion": 0.3182,
@@ -2239,17 +2431,17 @@
         {
           "test": "two-proportion-z",
           "field": "failed_rate",
-          "z_statistic": -1.1196,
-          "p_value": 0.262896,
-          "cohens_h": -0.6126,
-          "effect_size_label": "medium",
-          "significant_p05": false,
+          "z_statistic": -2.0764,
+          "p_value": 0.037856,
+          "cohens_h": -0.3267,
+          "effect_size_label": "small",
+          "significant_p05": true,
           "opus-4-5": {
-            "proportion": 0.0,
-            "ci_lower": 0.0,
-            "ci_upper": 0.2281,
-            "count": 0,
-            "n": 13
+            "proportion": 0.0203,
+            "ci_lower": 0.0099,
+            "ci_upper": 0.0413,
+            "count": 7,
+            "n": 345
           },
           "opus-4-6": {
             "proportion": 0.0909,
@@ -2263,17 +2455,17 @@
         {
           "test": "two-proportion-z",
           "field": "scope_expanded_rate",
-          "z_statistic": -0.7799,
-          "p_value": 0.435433,
-          "cohens_h": -0.4297,
+          "z_statistic": -1.3283,
+          "p_value": 0.184069,
+          "cohens_h": -0.2139,
           "effect_size_label": "small",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.0,
-            "ci_lower": 0.0,
-            "ci_upper": 0.2281,
-            "count": 0,
-            "n": 13
+            "proportion": 0.0116,
+            "ci_lower": 0.0045,
+            "ci_upper": 0.0294,
+            "count": 4,
+            "n": 345
           },
           "opus-4-6": {
             "proportion": 0.0455,
@@ -2287,17 +2479,17 @@
         {
           "test": "two-proportion-z",
           "field": "one_shot_rate",
-          "z_statistic": 2.0666,
-          "p_value": 0.038774,
-          "cohens_h": 0.7514,
-          "effect_size_label": "medium",
-          "significant_p05": true,
+          "z_statistic": 0.2358,
+          "p_value": 0.813599,
+          "cohens_h": 0.052,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.7692,
-            "ci_lower": 0.4974,
-            "ci_upper": 0.9182,
-            "count": 10,
-            "n": 13
+            "proportion": 0.4348,
+            "ci_lower": 0.3835,
+            "ci_upper": 0.4875,
+            "count": 150,
+            "n": 345
           },
           "opus-4-6": {
             "proportion": 0.4091,
@@ -2311,17 +2503,17 @@
         {
           "test": "two-proportion-z",
           "field": "good_execution_rate",
-          "z_statistic": 0.303,
-          "p_value": 0.761922,
-          "cohens_h": 0.1058,
-          "effect_size_label": "negligible",
+          "z_statistic": 0.9191,
+          "p_value": 0.358018,
+          "cohens_h": 0.2031,
+          "effect_size_label": "small",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.4615,
-            "ci_lower": 0.2321,
-            "ci_upper": 0.7086,
-            "count": 6,
-            "n": 13
+            "proportion": 0.5101,
+            "ci_lower": 0.4576,
+            "ci_upper": 0.5625,
+            "count": 176,
+            "n": 345
           },
           "opus-4-6": {
             "proportion": 0.4091,
@@ -2340,35 +2532,47 @@
         {
           "test": "chi-square",
           "field": "task_completion",
-          "chi2": 3.1193,
-          "p_value": 0.373595,
-          "dof": 3,
-          "cramers_v": 0.2793,
-          "effect_size_label": "small",
+          "chi2": 2.0443,
+          "p_value": 0.957346,
+          "dof": 7,
+          "cramers_v": 0.0726,
+          "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
             "complete",
             "failed",
             "interrupted",
-            "partial"
+            "partial",
+            "partial - research phase completed thoroughly, but follow-up implementation request ('add it') suggests user expected actionable output or implementation guidance from research phase",
+            "partial - the agent completed the label creation task but the new requirements in the next message are unaddressed in this task record",
+            "partial - the agent performed debugging work but did not identify or resolve the button icon missing problem that became apparent to the user",
+            "unclear"
           ],
           "counts": {
             "opus-4-5": {
-              "complete": 7,
-              "failed": 2,
-              "interrupted": 1,
-              "partial": 10
+              "complete": 144,
+              "failed": 11,
+              "interrupted": 29,
+              "partial": 180,
+              "partial - research phase completed thoroughly, but follow-up implementation request ('add it') suggests user expected actionable output or implementation guidance from research phase": 1,
+              "partial - the agent completed the label creation task but the new requirements in the next message are unaddressed in this task record": 1,
+              "partial - the agent performed debugging work but did not identify or resolve the button icon missing problem that became apparent to the user": 1,
+              "unclear": 1
             },
             "opus-4-6": {
               "complete": 8,
               "failed": 0,
               "interrupted": 3,
-              "partial": 9
+              "partial": 9,
+              "partial - research phase completed thoroughly, but follow-up implementation request ('add it') suggests user expected actionable output or implementation guidance from research phase": 0,
+              "partial - the agent completed the label creation task but the new requirements in the next message are unaddressed in this task record": 0,
+              "partial - the agent performed debugging work but did not identify or resolve the button icon missing problem that became apparent to the user": 0,
+              "unclear": 0
             }
           },
           "n": {
-            "opus-4-5": 20,
+            "opus-4-5": 368,
             "opus-4-6": 20
           },
           "bonferroni_significant": false
@@ -2376,11 +2580,11 @@
         {
           "test": "chi-square",
           "field": "normalized_user_sentiment",
-          "chi2": 7.3231,
-          "p_value": 0.062283,
+          "chi2": 3.9741,
+          "p_value": 0.264269,
           "dof": 3,
-          "cramers_v": 0.4279,
-          "effect_size_label": "small",
+          "cramers_v": 0.1012,
+          "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
@@ -2391,10 +2595,10 @@
           ],
           "counts": {
             "opus-4-5": {
-              "ambiguous": 1,
-              "dissatisfied": 6,
-              "neutral": 9,
-              "satisfied": 4
+              "ambiguous": 10,
+              "dissatisfied": 71,
+              "neutral": 139,
+              "satisfied": 148
             },
             "opus-4-6": {
               "ambiguous": 0,
@@ -2404,7 +2608,7 @@
             }
           },
           "n": {
-            "opus-4-5": 20,
+            "opus-4-5": 368,
             "opus-4-6": 20
           },
           "bonferroni_significant": false
@@ -2412,32 +2616,41 @@
         {
           "test": "chi-square",
           "field": "scope_management",
-          "chi2": 2.6333,
-          "p_value": 0.268027,
-          "dof": 2,
-          "cramers_v": 0.2566,
-          "effect_size_label": "small",
+          "chi2": 8.2713,
+          "p_value": 0.141903,
+          "dof": 5,
+          "cramers_v": 0.146,
+          "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
             "appropriate",
             "expanded",
-            "focused"
+            "focused",
+            "focused - the agent stayed on the initial request without expanding scope",
+            "focused - the agent stayed on the task of investigating the build without adding unrelated work, though the investigation was ultimately ineffective",
+            "over_engineered"
           ],
           "counts": {
             "opus-4-5": {
-              "appropriate": 4,
-              "expanded": 2,
-              "focused": 14
+              "appropriate": 131,
+              "expanded": 11,
+              "focused": 223,
+              "focused - the agent stayed on the initial request without expanding scope": 1,
+              "focused - the agent stayed on the task of investigating the build without adding unrelated work, though the investigation was ultimately ineffective": 1,
+              "over_engineered": 1
             },
             "opus-4-6": {
               "appropriate": 1,
               "expanded": 1,
-              "focused": 18
+              "focused": 18,
+              "focused - the agent stayed on the initial request without expanding scope": 0,
+              "focused - the agent stayed on the task of investigating the build without adding unrelated work, though the investigation was ultimately ineffective": 0,
+              "over_engineered": 0
             }
           },
           "n": {
-            "opus-4-5": 20,
+            "opus-4-5": 368,
             "opus-4-6": 20
           },
           "bonferroni_significant": false
@@ -2445,32 +2658,38 @@
         {
           "test": "chi-square",
           "field": "iteration_required",
-          "chi2": 0.5833,
-          "p_value": 0.747018,
-          "dof": 2,
-          "cramers_v": 0.1208,
+          "chi2": 0.6488,
+          "p_value": 0.957492,
+          "dof": 4,
+          "cramers_v": 0.0409,
           "effect_size_label": "negligible",
           "significant_p05": false,
-          "low_expected_warning": false,
+          "low_expected_warning": true,
           "categories": [
             "minor",
+            "minor - the user's follow-up shows they're satisfied enough to move forward with the next phase",
             "one_shot",
-            "significant"
+            "significant",
+            "significant - the user had to return with a more specific problem statement after the initial debugging attempt"
           ],
           "counts": {
             "opus-4-5": {
-              "minor": 6,
-              "one_shot": 5,
-              "significant": 9
+              "minor": 84,
+              "minor - the user's follow-up shows they're satisfied enough to move forward with the next phase": 1,
+              "one_shot": 137,
+              "significant": 145,
+              "significant - the user had to return with a more specific problem statement after the initial debugging attempt": 1
             },
             "opus-4-6": {
               "minor": 6,
+              "minor - the user's follow-up shows they're satisfied enough to move forward with the next phase": 0,
               "one_shot": 7,
-              "significant": 7
+              "significant": 7,
+              "significant - the user had to return with a more specific problem statement after the initial debugging attempt": 0
             }
           },
           "n": {
-            "opus-4-5": 20,
+            "opus-4-5": 368,
             "opus-4-6": 20
           },
           "bonferroni_significant": false
@@ -2478,35 +2697,44 @@
         {
           "test": "chi-square",
           "field": "error_recovery",
-          "chi2": 1.3333,
-          "p_value": 0.721233,
-          "dof": 3,
-          "cramers_v": 0.1826,
+          "chi2": 0.4941,
+          "p_value": 0.99791,
+          "dof": 6,
+          "cramers_v": 0.0357,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
             "failed",
             "none_needed",
+            "none_needed - no errors appear in the execution record",
+            "none_needed - no errors occurred, but the agent's troubleshooting approach did not successfully diagnose the issue",
             "recovered",
+            "recovered - agent encountered test failures, investigated root cause (submitter_id field missing), and fixed it without user intervention",
             "struggled"
           ],
           "counts": {
             "opus-4-5": {
-              "failed": 1,
-              "none_needed": 16,
-              "recovered": 2,
-              "struggled": 1
+              "failed": 5,
+              "none_needed": 295,
+              "none_needed - no errors appear in the execution record": 1,
+              "none_needed - no errors occurred, but the agent's troubleshooting approach did not successfully diagnose the issue": 1,
+              "recovered": 32,
+              "recovered - agent encountered test failures, investigated root cause (submitter_id field missing), and fixed it without user intervention": 1,
+              "struggled": 33
             },
             "opus-4-6": {
               "failed": 0,
               "none_needed": 16,
+              "none_needed - no errors appear in the execution record": 0,
+              "none_needed - no errors occurred, but the agent's troubleshooting approach did not successfully diagnose the issue": 0,
               "recovered": 2,
+              "recovered - agent encountered test failures, investigated root cause (submitter_id field missing), and fixed it without user intervention": 0,
               "struggled": 2
             }
           },
           "n": {
-            "opus-4-5": 20,
+            "opus-4-5": 368,
             "opus-4-6": 20
           },
           "bonferroni_significant": false
@@ -2514,32 +2742,38 @@
         {
           "test": "chi-square",
           "field": "communication_quality",
-          "chi2": 2.1333,
-          "p_value": 0.344154,
-          "dof": 2,
-          "cramers_v": 0.2309,
-          "effect_size_label": "small",
+          "chi2": 0.6744,
+          "p_value": 0.954449,
+          "dof": 4,
+          "cramers_v": 0.0417,
+          "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
             "adequate",
+            "adequate - the agent likely explained what it was testing and checking, but the results were not clarifying for the user",
             "clear",
-            "unclear"
+            "unclear",
+            "unclear - the transcript shows 11 Bash calls but no human-readable explanation or summary of what labels were created or why"
           ],
           "counts": {
             "opus-4-5": {
-              "adequate": 14,
-              "clear": 4,
-              "unclear": 2
+              "adequate": 286,
+              "adequate - the agent likely explained what it was testing and checking, but the results were not clarifying for the user": 1,
+              "clear": 70,
+              "unclear": 10,
+              "unclear - the transcript shows 11 Bash calls but no human-readable explanation or summary of what labels were created or why": 1
             },
             "opus-4-6": {
               "adequate": 16,
+              "adequate - the agent likely explained what it was testing and checking, but the results were not clarifying for the user": 0,
               "clear": 4,
-              "unclear": 0
+              "unclear": 0,
+              "unclear - the transcript shows 11 Bash calls but no human-readable explanation or summary of what labels were created or why": 0
             }
           },
           "n": {
-            "opus-4-5": 20,
+            "opus-4-5": 368,
             "opus-4-6": 20
           },
           "bonferroni_significant": false
@@ -2547,11 +2781,11 @@
         {
           "test": "chi-square",
           "field": "normalized_execution_quality",
-          "chi2": 3.3024,
-          "p_value": 0.50855,
+          "chi2": 7.9834,
+          "p_value": 0.092186,
           "dof": 4,
-          "cramers_v": 0.2873,
-          "effect_size_label": "small",
+          "cramers_v": 0.1434,
+          "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
@@ -2563,11 +2797,11 @@
           ],
           "counts": {
             "opus-4-5": {
-              "adequate": 10,
-              "excellent": 1,
-              "failed": 0,
-              "good": 5,
-              "poor": 4
+              "adequate": 160,
+              "excellent": 7,
+              "failed": 5,
+              "good": 182,
+              "poor": 14
             },
             "opus-4-6": {
               "adequate": 13,
@@ -2578,7 +2812,7 @@
             }
           },
           "n": {
-            "opus-4-5": 20,
+            "opus-4-5": 368,
             "opus-4-6": 20
           },
           "bonferroni_significant": false
@@ -2586,32 +2820,35 @@
         {
           "test": "chi-square",
           "field": "autonomy_level",
-          "chi2": 1.037,
-          "p_value": 0.595402,
-          "dof": 2,
-          "cramers_v": 0.161,
+          "chi2": 0.5997,
+          "p_value": 0.896503,
+          "dof": 3,
+          "cramers_v": 0.0393,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
             "high",
             "low",
-            "medium"
+            "medium",
+            "medium - the agent executed multiple tool calls autonomously but didn't independently discover or fix the underlying issue"
           ],
           "counts": {
             "opus-4-5": {
-              "high": 13,
-              "low": 1,
-              "medium": 6
+              "high": 279,
+              "low": 2,
+              "medium": 86,
+              "medium - the agent executed multiple tool calls autonomously but didn't independently discover or fix the underlying issue": 1
             },
             "opus-4-6": {
               "high": 14,
               "low": 0,
-              "medium": 6
+              "medium": 6,
+              "medium - the agent executed multiple tool calls autonomously but didn't independently discover or fix the underlying issue": 0
             }
           },
           "n": {
-            "opus-4-5": 20,
+            "opus-4-5": 368,
             "opus-4-6": 20
           },
           "bonferroni_significant": false
@@ -2621,13 +2858,13 @@
         {
           "test": "mann-whitney-u",
           "field": "alignment_score",
-          "u_statistic": 182.5,
-          "p_value": 0.634092,
-          "cohens_d": -0.1655,
+          "u_statistic": 3528.0,
+          "p_value": 0.747333,
+          "cohens_d": -0.0711,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 20,
+            "opus-4-5": 368,
             "opus-4-6": 20
           },
           "median": {
@@ -2635,11 +2872,11 @@
             "opus-4-6": 4.0
           },
           "mean": {
-            "opus-4-5": 3.35,
+            "opus-4-5": 3.478,
             "opus-4-6": 3.55
           },
           "std": {
-            "opus-4-5": 1.182,
+            "opus-4-5": 0.996,
             "opus-4-6": 1.234
           },
           "bonferroni_significant": false
@@ -2647,25 +2884,25 @@
         {
           "test": "mann-whitney-u",
           "field": "duration_seconds",
-          "u_statistic": 238.0,
-          "p_value": 0.310402,
-          "cohens_d": 0.186,
+          "u_statistic": 4494.0,
+          "p_value": 0.095821,
+          "cohens_d": 0.0805,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 20,
+            "opus-4-5": 368,
             "opus-4-6": 20
           },
           "median": {
-            "opus-4-5": 107.6,
+            "opus-4-5": 111.213,
             "opus-4-6": 90.938
           },
           "mean": {
-            "opus-4-5": 120.78,
+            "opus-4-5": 747.816,
             "opus-4-6": 107.721
           },
           "std": {
-            "opus-4-5": 67.171,
+            "opus-4-5": 8150.946,
             "opus-4-6": 73.123
           },
           "bonferroni_significant": false
@@ -2673,25 +2910,25 @@
         {
           "test": "mann-whitney-u",
           "field": "tool_calls",
-          "u_statistic": 169.5,
-          "p_value": 0.416004,
-          "cohens_d": -0.1469,
+          "u_statistic": 3052.5,
+          "p_value": 0.198768,
+          "cohens_d": -0.1998,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 20,
+            "opus-4-5": 368,
             "opus-4-6": 20
           },
           "median": {
-            "opus-4-5": 11.5,
+            "opus-4-5": 12.0,
             "opus-4-6": 13.5
           },
           "mean": {
-            "opus-4-5": 13.2,
+            "opus-4-5": 12.75,
             "opus-4-6": 14.1
           },
           "std": {
-            "opus-4-5": 6.693,
+            "opus-4-5": 6.815,
             "opus-4-6": 5.505
           },
           "bonferroni_significant": false
@@ -2699,25 +2936,25 @@
         {
           "test": "mann-whitney-u",
           "field": "files_touched",
-          "u_statistic": 255.0,
-          "p_value": 0.12806,
-          "cohens_d": 0.5177,
+          "u_statistic": 5277.5,
+          "p_value": 0.000874,
+          "cohens_d": 0.6929,
           "effect_size_label": "medium",
-          "significant_p05": false,
+          "significant_p05": true,
           "n": {
-            "opus-4-5": 20,
+            "opus-4-5": 368,
             "opus-4-6": 20
           },
           "median": {
-            "opus-4-5": 1.5,
+            "opus-4-5": 2.0,
             "opus-4-6": 1.0
           },
           "mean": {
-            "opus-4-5": 2.25,
+            "opus-4-5": 2.81,
             "opus-4-6": 1.3
           },
           "std": {
-            "opus-4-5": 2.221,
+            "opus-4-5": 2.214,
             "opus-4-6": 1.342
           },
           "bonferroni_significant": false
@@ -2725,51 +2962,51 @@
         {
           "test": "mann-whitney-u",
           "field": "lines_added",
-          "u_statistic": 255.0,
-          "p_value": 0.122042,
-          "cohens_d": 0.5614,
+          "u_statistic": 5662.5,
+          "p_value": 4.7e-05,
+          "cohens_d": 0.778,
           "effect_size_label": "medium",
-          "significant_p05": false,
+          "significant_p05": true,
           "n": {
-            "opus-4-5": 20,
+            "opus-4-5": 368,
             "opus-4-6": 20
           },
           "median": {
-            "opus-4-5": 19.5,
+            "opus-4-5": 85.0,
             "opus-4-6": 0.0
           },
           "mean": {
-            "opus-4-5": 73.35,
+            "opus-4-5": 113.054,
             "opus-4-6": 31.45
           },
           "std": {
-            "opus-4-5": 88.166,
+            "opus-4-5": 106.751,
             "opus-4-6": 58.02
           },
-          "bonferroni_significant": false
+          "bonferroni_significant": true
         },
         {
           "test": "mann-whitney-u",
           "field": "lines_removed",
-          "u_statistic": 251.5,
-          "p_value": 0.125324,
-          "cohens_d": 0.501,
+          "u_statistic": 5188.5,
+          "p_value": 0.001616,
+          "cohens_d": 0.5934,
           "effect_size_label": "medium",
-          "significant_p05": false,
+          "significant_p05": true,
           "n": {
-            "opus-4-5": 20,
+            "opus-4-5": 368,
             "opus-4-6": 20
           },
           "median": {
-            "opus-4-5": 1.5,
+            "opus-4-5": 20.5,
             "opus-4-6": 0.0
           },
           "mean": {
-            "opus-4-5": 32.9,
+            "opus-4-5": 39.75,
             "opus-4-6": 11.5
           },
           "std": {
-            "opus-4-5": 56.479,
+            "opus-4-5": 48.576,
             "opus-4-6": 21.437
           },
           "bonferroni_significant": false
@@ -2777,51 +3014,51 @@
         {
           "test": "mann-whitney-u",
           "field": "lines_per_minute",
-          "u_statistic": 250.5,
-          "p_value": 0.156041,
-          "cohens_d": 0.5333,
+          "u_statistic": 5419.5,
+          "p_value": 0.000353,
+          "cohens_d": 0.6811,
           "effect_size_label": "medium",
-          "significant_p05": false,
+          "significant_p05": true,
           "n": {
-            "opus-4-5": 20,
+            "opus-4-5": 368,
             "opus-4-6": 20
           },
           "median": {
-            "opus-4-5": 15.999,
+            "opus-4-5": 67.21,
             "opus-4-6": 0.0
           },
           "mean": {
-            "opus-4-5": 60.627,
+            "opus-4-5": 86.478,
             "opus-4-6": 28.4
           },
           "std": {
-            "opus-4-5": 73.983,
+            "opus-4-5": 86.901,
             "opus-4-6": 42.776
           },
-          "bonferroni_significant": false
+          "bonferroni_significant": true
         },
         {
           "test": "mann-whitney-u",
           "field": "tools_per_file",
-          "u_statistic": 146.5,
-          "p_value": 0.151056,
-          "cohens_d": -0.2847,
-          "effect_size_label": "small",
-          "significant_p05": false,
+          "u_statistic": 1994.5,
+          "p_value": 0.000558,
+          "cohens_d": -0.6701,
+          "effect_size_label": "medium",
+          "significant_p05": true,
           "n": {
-            "opus-4-5": 20,
+            "opus-4-5": 368,
             "opus-4-6": 20
           },
           "median": {
-            "opus-4-5": 7.0,
+            "opus-4-5": 5.0,
             "opus-4-6": 12.0
           },
           "mean": {
-            "opus-4-5": 8.688,
+            "opus-4-5": 6.591,
             "opus-4-6": 10.387
           },
           "std": {
-            "opus-4-5": 6.716,
+            "opus-4-5": 5.693,
             "opus-4-6": 5.118
           },
           "bonferroni_significant": false
@@ -2831,17 +3068,17 @@
         {
           "test": "two-proportion-z",
           "field": "satisfaction_rate",
-          "z_statistic": -2.582,
-          "p_value": 0.009823,
-          "cohens_h": -0.8449,
-          "effect_size_label": "large",
-          "significant_p05": true,
+          "z_statistic": -1.7503,
+          "p_value": 0.080068,
+          "cohens_h": -0.3983,
+          "effect_size_label": "small",
+          "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.2,
-            "ci_lower": 0.0807,
-            "ci_upper": 0.416,
-            "count": 4,
-            "n": 20
+            "proportion": 0.4022,
+            "ci_lower": 0.3533,
+            "ci_upper": 0.453,
+            "count": 148,
+            "n": 368
           },
           "opus-4-6": {
             "proportion": 0.6,
@@ -2855,17 +3092,17 @@
         {
           "test": "two-proportion-z",
           "field": "dissatisfaction_rate",
-          "z_statistic": 0.7303,
-          "p_value": 0.465209,
-          "cohens_h": 0.232,
-          "effect_size_label": "small",
+          "z_statistic": -0.0779,
+          "p_value": 0.937888,
+          "cohens_h": -0.0178,
+          "effect_size_label": "negligible",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.3,
-            "ci_lower": 0.1455,
-            "ci_upper": 0.519,
-            "count": 6,
-            "n": 20
+            "proportion": 0.1929,
+            "ci_lower": 0.1559,
+            "ci_upper": 0.2363,
+            "count": 71,
+            "n": 368
           },
           "opus-4-6": {
             "proportion": 0.2,
@@ -2879,17 +3116,17 @@
         {
           "test": "two-proportion-z",
           "field": "complete_rate",
-          "z_statistic": -0.3266,
-          "p_value": 0.743971,
-          "cohens_h": -0.1033,
+          "z_statistic": -0.0776,
+          "p_value": 0.938158,
+          "cohens_h": -0.0178,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.35,
-            "ci_lower": 0.1812,
-            "ci_upper": 0.5671,
-            "count": 7,
-            "n": 20
+            "proportion": 0.3913,
+            "ci_lower": 0.3428,
+            "ci_upper": 0.442,
+            "count": 144,
+            "n": 368
           },
           "opus-4-6": {
             "proportion": 0.4,
@@ -2903,17 +3140,17 @@
         {
           "test": "two-proportion-z",
           "field": "failed_rate",
-          "z_statistic": 1.451,
-          "p_value": 0.146793,
-          "cohens_h": 0.6435,
-          "effect_size_label": "medium",
+          "z_statistic": 0.7844,
+          "p_value": 0.432811,
+          "cohens_h": 0.3475,
+          "effect_size_label": "small",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.1,
-            "ci_lower": 0.0279,
-            "ci_upper": 0.301,
-            "count": 2,
-            "n": 20
+            "proportion": 0.0299,
+            "ci_lower": 0.0168,
+            "ci_upper": 0.0527,
+            "count": 11,
+            "n": 368
           },
           "opus-4-6": {
             "proportion": 0.0,
@@ -2927,17 +3164,17 @@
         {
           "test": "two-proportion-z",
           "field": "scope_expanded_rate",
-          "z_statistic": 0.6003,
-          "p_value": 0.548306,
-          "cohens_h": 0.1925,
+          "z_statistic": -0.5059,
+          "p_value": 0.612935,
+          "cohens_h": -0.1035,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.1,
-            "ci_lower": 0.0279,
-            "ci_upper": 0.301,
-            "count": 2,
-            "n": 20
+            "proportion": 0.0299,
+            "ci_lower": 0.0168,
+            "ci_upper": 0.0527,
+            "count": 11,
+            "n": 368
           },
           "opus-4-6": {
             "proportion": 0.05,
@@ -2951,17 +3188,17 @@
         {
           "test": "two-proportion-z",
           "field": "one_shot_rate",
-          "z_statistic": -0.6901,
-          "p_value": 0.490153,
-          "cohens_h": -0.2189,
-          "effect_size_label": "small",
+          "z_statistic": 0.2009,
+          "p_value": 0.84079,
+          "cohens_h": 0.0464,
+          "effect_size_label": "negligible",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.25,
-            "ci_lower": 0.1119,
-            "ci_upper": 0.4687,
-            "count": 5,
-            "n": 20
+            "proportion": 0.3723,
+            "ci_lower": 0.3244,
+            "ci_upper": 0.4228,
+            "count": 137,
+            "n": 368
           },
           "opus-4-6": {
             "proportion": 0.35,
@@ -2975,17 +3212,17 @@
         {
           "test": "two-proportion-z",
           "field": "good_execution_rate",
-          "z_statistic": 0.3786,
-          "p_value": 0.704954,
-          "cohens_h": 0.1199,
-          "effect_size_label": "negligible",
-          "significant_p05": false,
+          "z_statistic": 2.5681,
+          "p_value": 0.010227,
+          "cohens_h": 0.6326,
+          "effect_size_label": "medium",
+          "significant_p05": true,
           "opus-4-5": {
-            "proportion": 0.25,
-            "ci_lower": 0.1119,
-            "ci_upper": 0.4687,
-            "count": 5,
-            "n": 20
+            "proportion": 0.4946,
+            "ci_lower": 0.4438,
+            "ci_upper": 0.5454,
+            "count": 182,
+            "n": 368
           },
           "opus-4-6": {
             "proportion": 0.2,
@@ -3004,29 +3241,35 @@
         {
           "test": "chi-square",
           "field": "task_completion",
-          "chi2": 1.4964,
-          "p_value": 0.221233,
-          "dof": 1,
-          "cramers_v": 0.2967,
-          "effect_size_label": "small",
+          "chi2": 3.1874,
+          "p_value": 0.363623,
+          "dof": 3,
+          "cramers_v": 0.1373,
+          "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
             "complete",
+            "failed",
+            "interrupted",
             "partial"
           ],
           "counts": {
             "opus-4-5": {
-              "complete": 8,
-              "partial": 4
+              "complete": 91,
+              "failed": 3,
+              "interrupted": 4,
+              "partial": 66
             },
             "opus-4-6": {
               "complete": 1,
+              "failed": 0,
+              "interrupted": 0,
               "partial": 4
             }
           },
           "n": {
-            "opus-4-5": 12,
+            "opus-4-5": 164,
             "opus-4-6": 5
           },
           "bonferroni_significant": false
@@ -3034,10 +3277,10 @@
         {
           "test": "chi-square",
           "field": "normalized_user_sentiment",
-          "chi2": 0.5431,
-          "p_value": 0.909335,
+          "chi2": 1.7209,
+          "p_value": 0.632292,
           "dof": 3,
-          "cramers_v": 0.1787,
+          "cramers_v": 0.1009,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
@@ -3049,10 +3292,10 @@
           ],
           "counts": {
             "opus-4-5": {
-              "ambiguous": 3,
-              "dissatisfied": 2,
-              "neutral": 1,
-              "satisfied": 6
+              "ambiguous": 11,
+              "dissatisfied": 20,
+              "neutral": 48,
+              "satisfied": 85
             },
             "opus-4-6": {
               "ambiguous": 1,
@@ -3062,7 +3305,7 @@
             }
           },
           "n": {
-            "opus-4-5": 12,
+            "opus-4-5": 164,
             "opus-4-6": 5
           },
           "bonferroni_significant": false
@@ -3070,29 +3313,35 @@
         {
           "test": "chi-square",
           "field": "scope_management",
-          "chi2": 0.0,
-          "p_value": 1.0,
-          "dof": 1,
-          "cramers_v": 0.0,
+          "chi2": 0.79,
+          "p_value": 0.851864,
+          "dof": 3,
+          "cramers_v": 0.0684,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
             "appropriate",
-            "focused"
+            "expanded",
+            "focused",
+            "over_engineered"
           ],
           "counts": {
             "opus-4-5": {
-              "appropriate": 8,
-              "focused": 4
+              "appropriate": 113,
+              "expanded": 7,
+              "focused": 41,
+              "over_engineered": 3
             },
             "opus-4-6": {
               "appropriate": 3,
-              "focused": 2
+              "expanded": 0,
+              "focused": 2,
+              "over_engineered": 0
             }
           },
           "n": {
-            "opus-4-5": 12,
+            "opus-4-5": 164,
             "opus-4-6": 5
           },
           "bonferroni_significant": false
@@ -3100,10 +3349,10 @@
         {
           "test": "chi-square",
           "field": "iteration_required",
-          "chi2": 0.3825,
-          "p_value": 0.825926,
+          "chi2": 0.1114,
+          "p_value": 0.945815,
           "dof": 2,
-          "cramers_v": 0.15,
+          "cramers_v": 0.0257,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
@@ -3114,9 +3363,9 @@
           ],
           "counts": {
             "opus-4-5": {
-              "minor": 3,
-              "one_shot": 6,
-              "significant": 3
+              "minor": 41,
+              "one_shot": 68,
+              "significant": 55
             },
             "opus-4-6": {
               "minor": 1,
@@ -3125,7 +3374,7 @@
             }
           },
           "n": {
-            "opus-4-5": 12,
+            "opus-4-5": 164,
             "opus-4-6": 5
           },
           "bonferroni_significant": false
@@ -3133,29 +3382,35 @@
         {
           "test": "chi-square",
           "field": "error_recovery",
-          "chi2": 2.269,
-          "p_value": 0.131983,
-          "dof": 1,
-          "cramers_v": 0.3653,
-          "effect_size_label": "small",
+          "chi2": 2.7425,
+          "p_value": 0.433058,
+          "dof": 3,
+          "cramers_v": 0.1274,
+          "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
+            "failed",
             "none_needed",
-            "recovered"
+            "recovered",
+            "struggled"
           ],
           "counts": {
             "opus-4-5": {
-              "none_needed": 12,
-              "recovered": 0
+              "failed": 2,
+              "none_needed": 132,
+              "recovered": 23,
+              "struggled": 7
             },
             "opus-4-6": {
+              "failed": 0,
               "none_needed": 3,
-              "recovered": 2
+              "recovered": 2,
+              "struggled": 0
             }
           },
           "n": {
-            "opus-4-5": 12,
+            "opus-4-5": 164,
             "opus-4-6": 5
           },
           "bonferroni_significant": false
@@ -3176,8 +3431,8 @@
           ],
           "counts": {
             "opus-4-5": {
-              "adequate": 7,
-              "clear": 5
+              "adequate": 99,
+              "clear": 65
             },
             "opus-4-6": {
               "adequate": 3,
@@ -3185,7 +3440,7 @@
             }
           },
           "n": {
-            "opus-4-5": 12,
+            "opus-4-5": 164,
             "opus-4-6": 5
           },
           "bonferroni_significant": false
@@ -3193,32 +3448,38 @@
         {
           "test": "chi-square",
           "field": "normalized_execution_quality",
-          "chi2": 3.8636,
-          "p_value": 0.144885,
-          "dof": 2,
-          "cramers_v": 0.4767,
-          "effect_size_label": "small",
+          "chi2": 4.4164,
+          "p_value": 0.352579,
+          "dof": 4,
+          "cramers_v": 0.1617,
+          "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
             "adequate",
+            "excellent",
+            "failed",
             "good",
             "poor"
           ],
           "counts": {
             "opus-4-5": {
-              "adequate": 6,
-              "good": 5,
-              "poor": 1
+              "adequate": 86,
+              "excellent": 12,
+              "failed": 1,
+              "good": 60,
+              "poor": 5
             },
             "opus-4-6": {
               "adequate": 5,
+              "excellent": 0,
+              "failed": 0,
               "good": 0,
               "poor": 0
             }
           },
           "n": {
-            "opus-4-5": 12,
+            "opus-4-5": 164,
             "opus-4-6": 5
           },
           "bonferroni_significant": false
@@ -3239,8 +3500,8 @@
           ],
           "counts": {
             "opus-4-5": {
-              "high": 11,
-              "medium": 1
+              "high": 150,
+              "medium": 14
             },
             "opus-4-6": {
               "high": 5,
@@ -3248,7 +3509,7 @@
             }
           },
           "n": {
-            "opus-4-5": 12,
+            "opus-4-5": 164,
             "opus-4-6": 5
           },
           "bonferroni_significant": false
@@ -3258,13 +3519,13 @@
         {
           "test": "mann-whitney-u",
           "field": "alignment_score",
-          "u_statistic": 38.0,
-          "p_value": 0.41176,
-          "cohens_d": 0.4461,
+          "u_statistic": 492.5,
+          "p_value": 0.423962,
+          "cohens_d": 0.3648,
           "effect_size_label": "small",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 12,
+            "opus-4-5": 164,
             "opus-4-6": 5
           },
           "median": {
@@ -3272,11 +3533,11 @@
             "opus-4-6": 3.0
           },
           "mean": {
-            "opus-4-5": 3.917,
+            "opus-4-5": 3.744,
             "opus-4-6": 3.4
           },
           "std": {
-            "opus-4-5": 1.165,
+            "opus-4-5": 0.937,
             "opus-4-6": 1.14
           },
           "bonferroni_significant": false
@@ -3284,25 +3545,25 @@
         {
           "test": "mann-whitney-u",
           "field": "duration_seconds",
-          "u_statistic": 11.0,
-          "p_value": 0.048481,
-          "cohens_d": -1.1018,
-          "effect_size_label": "large",
-          "significant_p05": true,
+          "u_statistic": 296.0,
+          "p_value": 0.29231,
+          "cohens_d": 0.1232,
+          "effect_size_label": "negligible",
+          "significant_p05": false,
           "n": {
-            "opus-4-5": 12,
+            "opus-4-5": 164,
             "opus-4-6": 5
           },
           "median": {
-            "opus-4-5": 238.991,
+            "opus-4-5": 296.419,
             "opus-4-6": 441.002
           },
           "mean": {
-            "opus-4-5": 286.187,
+            "opus-4-5": 1615.219,
             "opus-4-6": 461.102
           },
           "std": {
-            "opus-4-5": 128.819,
+            "opus-4-5": 9479.637,
             "opus-4-6": 221.097
           },
           "bonferroni_significant": false
@@ -3310,25 +3571,25 @@
         {
           "test": "mann-whitney-u",
           "field": "tool_calls",
-          "u_statistic": 26.0,
-          "p_value": 0.711502,
-          "cohens_d": -0.0898,
-          "effect_size_label": "negligible",
+          "u_statistic": 317.5,
+          "p_value": 0.393133,
+          "cohens_d": -0.2964,
+          "effect_size_label": "small",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 12,
+            "opus-4-5": 164,
             "opus-4-6": 5
           },
           "median": {
-            "opus-4-5": 31.0,
+            "opus-4-5": 32.0,
             "opus-4-6": 32.0
           },
           "mean": {
-            "opus-4-5": 34.167,
+            "opus-4-5": 31.61,
             "opus-4-6": 35.8
           },
           "std": {
-            "opus-4-5": 20.897,
+            "opus-4-5": 14.274,
             "opus-4-6": 6.38
           },
           "bonferroni_significant": false
@@ -3336,25 +3597,25 @@
         {
           "test": "mann-whitney-u",
           "field": "files_touched",
-          "u_statistic": 37.0,
-          "p_value": 0.487588,
-          "cohens_d": 0.5841,
+          "u_statistic": 539.0,
+          "p_value": 0.231324,
+          "cohens_d": 0.5774,
           "effect_size_label": "medium",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 12,
+            "opus-4-5": 164,
             "opus-4-6": 5
           },
           "median": {
-            "opus-4-5": 5.5,
+            "opus-4-5": 6.0,
             "opus-4-6": 5.0
           },
           "mean": {
-            "opus-4-5": 6.583,
+            "opus-4-5": 6.616,
             "opus-4-6": 4.2
           },
           "std": {
-            "opus-4-5": 4.66,
+            "opus-4-5": 4.227,
             "opus-4-6": 1.643
           },
           "bonferroni_significant": false
@@ -3362,25 +3623,25 @@
         {
           "test": "mann-whitney-u",
           "field": "lines_added",
-          "u_statistic": 57.0,
-          "p_value": 0.002262,
-          "cohens_d": 1.9244,
+          "u_statistic": 689.0,
+          "p_value": 0.009761,
+          "cohens_d": 1.0384,
           "effect_size_label": "large",
           "significant_p05": true,
           "n": {
-            "opus-4-5": 12,
+            "opus-4-5": 164,
             "opus-4-6": 5
           },
           "median": {
-            "opus-4-5": 704.0,
+            "opus-4-5": 463.5,
             "opus-4-6": 143.0
           },
           "mean": {
-            "opus-4-5": 694.417,
+            "opus-4-5": 556.152,
             "opus-4-6": 118.2
           },
           "std": {
-            "opus-4-5": 344.441,
+            "opus-4-5": 426.615,
             "opus-4-6": 99.698
           },
           "bonferroni_significant": false
@@ -3388,25 +3649,25 @@
         {
           "test": "mann-whitney-u",
           "field": "lines_removed",
-          "u_statistic": 43.0,
-          "p_value": 0.182182,
-          "cohens_d": 0.7916,
-          "effect_size_label": "medium",
+          "u_statistic": 542.0,
+          "p_value": 0.220705,
+          "cohens_d": 0.466,
+          "effect_size_label": "small",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 12,
+            "opus-4-5": 164,
             "opus-4-6": 5
           },
           "median": {
-            "opus-4-5": 225.0,
+            "opus-4-5": 94.5,
             "opus-4-6": 9.0
           },
           "mean": {
-            "opus-4-5": 265.417,
+            "opus-4-5": 128.274,
             "opus-4-6": 64.2
           },
           "std": {
-            "opus-4-5": 291.563,
+            "opus-4-5": 138.417,
             "opus-4-6": 92.459
           },
           "bonferroni_significant": false
@@ -3414,51 +3675,51 @@
         {
           "test": "mann-whitney-u",
           "field": "lines_per_minute",
-          "u_statistic": 60.0,
-          "p_value": 0.000323,
-          "cohens_d": 2.7283,
+          "u_statistic": 676.0,
+          "p_value": 0.013758,
+          "cohens_d": 1.0947,
           "effect_size_label": "large",
           "significant_p05": true,
           "n": {
-            "opus-4-5": 12,
+            "opus-4-5": 164,
             "opus-4-6": 5
           },
           "median": {
-            "opus-4-5": 181.936,
+            "opus-4-5": 134.167,
             "opus-4-6": 33.197
           },
           "mean": {
-            "opus-4-5": 210.667,
+            "opus-4-5": 136.984,
             "opus-4-6": 27.243
           },
           "std": {
-            "opus-4-5": 77.0,
+            "opus-4-5": 101.396,
             "opus-4-6": 25.384
           },
-          "bonferroni_significant": true
+          "bonferroni_significant": false
         },
         {
           "test": "mann-whitney-u",
           "field": "tools_per_file",
-          "u_statistic": 22.0,
-          "p_value": 0.442146,
-          "cohens_d": -0.0417,
-          "effect_size_label": "negligible",
+          "u_statistic": 206.0,
+          "p_value": 0.058993,
+          "cohens_d": -0.3366,
+          "effect_size_label": "small",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 12,
+            "opus-4-5": 164,
             "opus-4-6": 5
           },
           "median": {
-            "opus-4-5": 4.523,
+            "opus-4-5": 4.764,
             "opus-4-6": 9.0
           },
           "mean": {
-            "opus-4-5": 9.537,
+            "opus-4-5": 7.403,
             "opus-4-6": 9.88
           },
           "std": {
-            "opus-4-5": 9.234,
+            "opus-4-5": 7.417,
             "opus-4-6": 4.433
           },
           "bonferroni_significant": false
@@ -3468,17 +3729,17 @@
         {
           "test": "two-proportion-z",
           "field": "satisfaction_rate",
-          "z_statistic": 0.3764,
-          "p_value": 0.70663,
-          "cohens_h": 0.2014,
+          "z_statistic": 0.5214,
+          "p_value": 0.602113,
+          "cohens_h": 0.238,
           "effect_size_label": "small",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.5,
-            "ci_lower": 0.2538,
-            "ci_upper": 0.7462,
-            "count": 6,
-            "n": 12
+            "proportion": 0.5183,
+            "ci_lower": 0.4423,
+            "ci_upper": 0.5935,
+            "count": 85,
+            "n": 164
           },
           "opus-4-6": {
             "proportion": 0.4,
@@ -3492,17 +3753,17 @@
         {
           "test": "two-proportion-z",
           "field": "dissatisfaction_rate",
-          "z_statistic": -0.1643,
-          "p_value": 0.86952,
-          "cohens_h": -0.0862,
-          "effect_size_label": "negligible",
+          "z_statistic": -0.5212,
+          "p_value": 0.602251,
+          "cohens_h": -0.2138,
+          "effect_size_label": "small",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.1667,
-            "ci_lower": 0.047,
-            "ci_upper": 0.448,
-            "count": 2,
-            "n": 12
+            "proportion": 0.122,
+            "ci_lower": 0.0803,
+            "ci_upper": 0.1809,
+            "count": 20,
+            "n": 164
           },
           "opus-4-6": {
             "proportion": 0.2,
@@ -3516,17 +3777,17 @@
         {
           "test": "two-proportion-z",
           "field": "complete_rate",
-          "z_statistic": 1.7565,
-          "p_value": 0.079008,
-          "cohens_h": 0.9833,
-          "effect_size_label": "large",
+          "z_statistic": 1.5696,
+          "p_value": 0.116507,
+          "cohens_h": 0.7535,
+          "effect_size_label": "medium",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.6667,
-            "ci_lower": 0.3906,
-            "ci_upper": 0.8619,
-            "count": 8,
-            "n": 12
+            "proportion": 0.5549,
+            "ci_lower": 0.4784,
+            "ci_upper": 0.6288,
+            "count": 91,
+            "n": 164
           },
           "opus-4-6": {
             "proportion": 0.2,
@@ -3540,17 +3801,17 @@
         {
           "test": "two-proportion-z",
           "field": "failed_rate",
-          "z_statistic": 0,
-          "p_value": 1.0,
-          "cohens_h": 0.0,
-          "effect_size_label": "negligible",
+          "z_statistic": 0.3051,
+          "p_value": 0.760252,
+          "cohens_h": 0.2713,
+          "effect_size_label": "small",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.0,
-            "ci_lower": 0.0,
-            "ci_upper": 0.2425,
-            "count": 0,
-            "n": 12
+            "proportion": 0.0183,
+            "ci_lower": 0.0062,
+            "ci_upper": 0.0524,
+            "count": 3,
+            "n": 164
           },
           "opus-4-6": {
             "proportion": 0.0,
@@ -3564,17 +3825,17 @@
         {
           "test": "two-proportion-z",
           "field": "scope_expanded_rate",
-          "z_statistic": 0,
-          "p_value": 1.0,
-          "cohens_h": 0.0,
-          "effect_size_label": "negligible",
+          "z_statistic": 0.4718,
+          "p_value": 0.637039,
+          "cohens_h": 0.4162,
+          "effect_size_label": "small",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.0,
-            "ci_lower": 0.0,
-            "ci_upper": 0.2425,
-            "count": 0,
-            "n": 12
+            "proportion": 0.0427,
+            "ci_lower": 0.0208,
+            "ci_upper": 0.0855,
+            "count": 7,
+            "n": 164
           },
           "opus-4-6": {
             "proportion": 0.0,
@@ -3588,17 +3849,17 @@
         {
           "test": "two-proportion-z",
           "field": "one_shot_rate",
-          "z_statistic": 0.3764,
-          "p_value": 0.70663,
-          "cohens_h": 0.2014,
-          "effect_size_label": "small",
+          "z_statistic": 0.0654,
+          "p_value": 0.947823,
+          "cohens_h": 0.0298,
+          "effect_size_label": "negligible",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.5,
-            "ci_lower": 0.2538,
-            "ci_upper": 0.7462,
-            "count": 6,
-            "n": 12
+            "proportion": 0.4146,
+            "ci_lower": 0.342,
+            "ci_upper": 0.4911,
+            "count": 68,
+            "n": 164
           },
           "opus-4-6": {
             "proportion": 0.4,
@@ -3612,17 +3873,17 @@
         {
           "test": "two-proportion-z",
           "field": "good_execution_rate",
-          "z_statistic": 1.718,
-          "p_value": 0.085804,
-          "cohens_h": 1.4033,
+          "z_statistic": 1.6841,
+          "p_value": 0.092162,
+          "cohens_h": 1.2992,
           "effect_size_label": "large",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.4167,
-            "ci_lower": 0.1933,
-            "ci_upper": 0.6805,
-            "count": 5,
-            "n": 12
+            "proportion": 0.3659,
+            "ci_lower": 0.296,
+            "ci_upper": 0.4419,
+            "count": 60,
+            "n": 164
           },
           "opus-4-6": {
             "proportion": 0.0,

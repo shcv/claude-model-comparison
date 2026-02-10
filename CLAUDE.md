@@ -75,7 +75,12 @@ Edit the template at `report/report.html`, not the built output at `dist/public/
 
 ## Section Update System
 
-The `update` pipeline step (`scripts/update_sections.py`) auto-generates expansion tables from analysis data and LLM-checks prose against current numbers. It is driven by per-section spec files in `report/specs/`.
+The `update` pipeline step (`scripts/update_sections.py`) auto-generates expansion tables from analysis data and LLM-checks prose against current numbers. It runs in two phases:
+
+1. **Table generation**: Regenerate all expansion tables from analysis data, wrapping generated content in `<!-- GENERATED-TABLE -->` markers.
+2. **Whole-document prose check**: Build an annotated template (inlining all expansions between `BEGIN-EXPANSION`/`END-EXPANSION` sentinels), send it with all key metrics in a single LLM call, then decompose the result back into template + expansion files.
+
+The single-pass approach gives the LLM cross-section context and reduces SDK overhead vs per-section calls. `GENERATED-TABLE` markers tell the LLM which content is data-driven and should not be modified.
 
 ### Spec files
 
@@ -92,7 +97,7 @@ Column paths use `{model_a}`, `{model_b}`, `{row_key}` placeholders. Display nam
 
 ### Prose caching
 
-LLM results are cached in `report/.prose-cache/` keyed on content+data hash. Second runs are no-ops when data hasn't changed.
+A single cache key (hash of annotated template + all metrics) is used. Second runs are no-ops when data hasn't changed. Cache is stored in `report/.prose-cache/`.
 
 ## Privacy
 

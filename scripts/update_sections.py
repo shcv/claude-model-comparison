@@ -8,7 +8,6 @@ Usage:
     python scripts/update_sections.py --dir comparisons/opus-4.5-vs-4.6
     python scripts/update_sections.py --dir comparisons/opus-4.5-vs-4.6 --sections cost,edit-accuracy
     python scripts/update_sections.py --dir comparisons/opus-4.5-vs-4.6 --tables-only
-    python scripts/update_sections.py --dir comparisons/opus-4.5-vs-4.6 --prose-only
     python scripts/update_sections.py --dir comparisons/opus-4.5-vs-4.6 --dry-run
     python scripts/update_sections.py --dir comparisons/opus-4.5-vs-4.6 --model opus
 """
@@ -200,7 +199,7 @@ def generate_iterative_refinement(spec: dict, data: dict, config: dict) -> str:
         rate_b = cb.get("iterative_refinement_rate", 0) * 100
         n_a = ca.get("n", 0)
         n_b = cb.get("n", 0)
-        bar = table_gen.generate_bar_pair(rate_a, rate_b, scale=50)
+        bar = table_gen.generate_bar_pair(rate_a, rate_b, scale=100)
         cx_label = table_gen._label_case(cx)
         lines.append(f'        <tr><td class="label-cell">{cx_label}</td>')
         lines.append(f'            <td class="bar-cell">{bar}</td>')
@@ -239,7 +238,7 @@ def generate_iterative_refinement(spec: dict, data: dict, config: dict) -> str:
         else:
             dur_label = dur.title()
 
-        bar = table_gen.generate_bar_pair(rate_a, rate_b, scale=50)
+        bar = table_gen.generate_bar_pair(rate_a, rate_b, scale=100)
         lines.append(f'        <tr><td class="label-cell">{dur_label}</td>')
         lines.append(f'            <td class="bar-cell">{bar}</td>')
         lines.append(f'            <td class="right mono">{n_a} tasks</td>'
@@ -689,6 +688,12 @@ def extract_expansion_prose(content: str) -> dict:
         first_nl = content.index("\n") if "\n" in content else len(content)
         content = content[first_nl + 1:]
 
+    # Strip GENERATED-TABLE markers before extracting prose
+    content = content.replace("<!-- GENERATED-TABLE -->\n", "")
+    content = content.replace("<!-- /GENERATED-TABLE -->\n", "")
+    content = content.replace("<!-- GENERATED-TABLE -->", "")
+    content = content.replace("<!-- /GENERATED-TABLE -->", "")
+
     # Find first <table or <h3 tag
     first_table = re.search(r'<(?:table|h3)\b', content)
     last_table_end = None
@@ -708,56 +713,37 @@ def extract_expansion_prose(content: str) -> dict:
 
 # ── LLM Prose Check ──────────────────────────────────────────────
 
-SECTION_PROSE_PROMPT = """You are a fact-checker for a technical report comparing two AI models.
-Verify numerical claims in the HTML below against the provided data.
+DOCUMENT_PROSE_PROMPT = """You are a fact-checker for a technical report comparing two AI models.
+The document below has been auto-updated with fresh data tables, but the
+surrounding prose may contain stale numbers. Review ALL prose and identify
+corrections needed.
 
 RULES:
-1. ALWAYS correct wrong numbers, percentages, ratios, and comparisons.
-2. NEVER rewrite prose that is factually correct. Preserve voice and structure.
-3. If a relationship reversed (e.g., "A is higher" but data shows B is higher),
-   update the direction AND number. Add: <!-- DIRECTION CHANGE: was "X", now "Y" -->
-4. Update stat-card values (.value, .detail), table cells, bar-fill widths, and
-   delta values to match data. Recalculate derived values (ratios, deltas, pp).
-5. Preserve all HTML structure, CSS classes, and entities exactly.
+1. Only report numbers, percentages, ratios, comparisons, or bar-fill widths
+   that are WRONG when checked against the provided DATA.
+2. Do NOT report content that is factually correct.
+3. Do NOT touch content between <!-- GENERATED-TABLE --> and
+   <!-- /GENERATED-TABLE --> markers.
+4. The "old" field must be an exact substring of the document — include enough
+   surrounding text to make the match unique (aim for 40-120 chars).
+5. Preserve all HTML tags, CSS classes, and entities in "new".
+6. If a direction reversed (e.g., "A is higher" but data shows B is higher),
+   include "DIRECTION CHANGE" at the start of the reason.
 
-CRITICAL OUTPUT FORMAT: Your entire response must be raw HTML only.
-- Start your response with the first HTML tag (e.g., <h2>).
-- Do NOT include any explanation, commentary, markdown, or preamble.
-- Do NOT wrap output in code fences.
-- If data is missing for some values, keep the original HTML value unchanged.
+OUTPUT FORMAT: Return ONLY a JSON array. No commentary, no markdown fences.
+Each element:
+  {{"old": "exact substring to find", "new": "replacement", "reason": "brief explanation"}}
 
-GUIDANCE: {guidance}
+If everything is factually correct, return: []
+
+SECTION NOTES:
+{guidance}
 
 DATA:
 {data_json}
 
-SECTION HTML:
-{section_html}"""
-
-EXPANSION_PROSE_PROMPT = """You are a fact-checker for an expandable detail block in a technical report.
-The block contains a data table (already updated) and interpretive prose.
-Verify the prose against the data table and the provided metrics.
-
-RULES:
-1. ALWAYS correct wrong numbers and claims to match the table and data.
-2. NEVER rewrite prose that is factually correct. Preserve voice and structure.
-3. If a relationship reversed, flag with <!-- DIRECTION CHANGE: ... -->.
-4. The table HTML is authoritative — do not modify it. Only update surrounding prose.
-5. Output the complete expansion content (prose + table). Start with <!-- title: ... --> if there was one. No markdown fences.
-
-GUIDANCE: {guidance}
-
-DATA:
-{data_json}
-
-COMPUTED TABLE:
-{table_html}
-
-CURRENT EXPANSION PROSE (preamble before table):
-{preamble}
-
-CURRENT EXPANSION PROSE (postscript after table):
-{postscript}"""
+DOCUMENT:
+{document}"""
 
 
 def strip_code_fences(text: str) -> str:
@@ -783,7 +769,7 @@ def call_claude_sdk(prompt: str, model: str = "sonnet") -> str | None:
             input=prompt,
             capture_output=True,
             text=True,
-            timeout=300,
+            timeout=600,
         )
         if result.returncode != 0:
             print(f"  Warning: Claude SDK returned exit code {result.returncode}", file=sys.stderr)
@@ -795,7 +781,7 @@ def call_claude_sdk(prompt: str, model: str = "sonnet") -> str | None:
         print("  Error: 'claude' CLI not found. Install Claude Code SDK.", file=sys.stderr)
         return None
     except subprocess.TimeoutExpired:
-        print("  Error: Claude SDK timed out after 300s", file=sys.stderr)
+        print("  Error: Claude SDK timed out after 600s", file=sys.stderr)
         return None
 
 
@@ -817,27 +803,196 @@ def save_prose_cache(cache_dir: Path, cache: dict):
         f.write("\n")
 
 
-# ── Section extraction/replacement ────────────────────────────────
+# ── Annotated template build/decompose ────────────────────────────
 
-def extract_section(html: str, section_id: str) -> str | None:
-    """Extract content of <section id="...">...</section>."""
-    pattern = re.compile(
-        rf'(<section\s+id="{re.escape(section_id)}">)(.*?)(</section>)',
-        re.DOTALL
+def build_annotated_template(template_html: str, expansions_dir: Path,
+                              overrides: dict[str, str] | None = None) -> tuple[str, list[str]]:
+    """Replace <!-- expand: name --> with BEGIN/END-EXPANSION sentinels.
+
+    Inlines expansion file content (or override content) between markers so
+    the LLM sees the complete document in a single pass.
+
+    Args:
+        template_html: The report template with <!-- expand: name --> markers.
+        expansions_dir: Directory containing expansion HTML files.
+        overrides: Optional dict of expansion name -> content to use instead
+                   of reading from disk (used for dry-run with freshly
+                   generated tables).
+
+    Returns:
+        (annotated_html, expansion_names) tuple.
+    """
+    expansion_names = []
+    overrides = overrides or {}
+
+    def replace_marker(m):
+        name = m.group(1).strip()
+        expansion_names.append(name)
+        if name in overrides:
+            content = overrides[name].rstrip("\n")
+        else:
+            exp_path = expansions_dir / f"{name}.html"
+            if exp_path.exists():
+                content = exp_path.read_text().rstrip("\n")
+            else:
+                content = f"<!-- expansion file not found: {name} -->"
+        return f"<!-- BEGIN-EXPANSION: {name} -->\n{content}\n<!-- END-EXPANSION: {name} -->"
+
+    annotated = re.sub(r'<!-- expand: (\S+) -->', replace_marker, template_html)
+    return annotated, expansion_names
+
+
+def decompose_document(doc: str, expansion_names: list[str]) -> tuple[str, dict[str, str]]:
+    """Split annotated document back into template and expansion files.
+
+    Extracts content between BEGIN/END-EXPANSION sentinel pairs, restoring
+    <!-- expand: name --> markers in the template.
+
+    Returns:
+        (template_html, expansions) where expansions maps name -> content.
+    """
+    expansions = {}
+
+    def extract_and_replace(m):
+        name = m.group(1).strip()
+        content = m.group(2)
+        # Trim exactly one leading/trailing newline from the sentinel wrapper
+        if content.startswith("\n"):
+            content = content[1:]
+        if content.endswith("\n"):
+            content = content[:-1]
+        expansions[name] = content
+        return f"<!-- expand: {name} -->"
+
+    template = re.sub(
+        r'<!-- BEGIN-EXPANSION: (\S+) -->\n?(.*?)\n?<!-- END-EXPANSION: \1 -->',
+        extract_and_replace,
+        doc,
+        flags=re.DOTALL,
     )
-    m = pattern.search(html)
+
+    for name in expansion_names:
+        if name not in expansions:
+            print(f"  Warning: expansion '{name}' not found in LLM output", file=sys.stderr)
+
+    return template, expansions
+
+
+def parse_corrections(raw: str) -> list[dict] | None:
+    """Parse LLM output as a JSON array of corrections.
+
+    Handles code fences and leading/trailing junk around the JSON.
+    Returns None if parsing fails.
+    """
+    text = strip_code_fences(raw).strip()
+    # Try direct parse first
+    try:
+        result = json.loads(text)
+        if isinstance(result, list):
+            return result
+    except json.JSONDecodeError:
+        pass
+    # Try to extract JSON array from surrounding text
+    m = re.search(r'\[.*\]', text, re.DOTALL)
     if m:
-        return m.group(2)
+        try:
+            result = json.loads(m.group())
+            if isinstance(result, list):
+                return result
+        except json.JSONDecodeError:
+            pass
     return None
 
 
-def replace_section(html: str, section_id: str, new_content: str) -> str:
-    """Replace section content in HTML."""
-    pattern = re.compile(
-        rf'(<section\s+id="{re.escape(section_id)}">)(.*?)(</section>)',
-        re.DOTALL
-    )
-    return pattern.sub(rf'\g<1>{new_content}\g<3>', html)
+def apply_corrections(doc: str, corrections: list[dict]) -> tuple[str, int, list[str]]:
+    """Apply a list of corrections to the annotated document.
+
+    Each correction is {"old": "...", "new": "...", "reason": "..."}.
+
+    Returns:
+        (modified_doc, n_applied, direction_changes)
+    """
+    n_applied = 0
+    direction_changes = []
+    skipped = []
+
+    for i, corr in enumerate(corrections):
+        old = corr.get("old", "")
+        new = corr.get("new", "")
+        reason = corr.get("reason", "")
+
+        if not old or not new:
+            print(f"    Correction {i}: empty old/new, skipping")
+            continue
+
+        if old == new:
+            continue
+
+        # Check the correction isn't inside a GENERATED-TABLE block
+        pos = doc.find(old)
+        if pos == -1:
+            skipped.append(f"Correction {i}: old text not found: {old[:80]}...")
+            continue
+
+        # Find the nearest GENERATED-TABLE markers
+        gen_start = doc.rfind("<!-- GENERATED-TABLE -->", 0, pos)
+        gen_end = doc.find("<!-- /GENERATED-TABLE -->", pos)
+        if gen_start != -1 and gen_end != -1:
+            # old text is between markers — check if the end marker comes
+            # before any intervening close marker
+            close_before = doc.find("<!-- /GENERATED-TABLE -->", gen_start)
+            if close_before >= pos:
+                skipped.append(f"Correction {i}: inside GENERATED-TABLE block, skipping: {old[:60]}...")
+                continue
+
+        # Check uniqueness
+        count = doc.count(old)
+        if count > 1:
+            skipped.append(f"Correction {i}: old text matches {count} locations, skipping: {old[:60]}...")
+            continue
+
+        doc = doc.replace(old, new, 1)
+        n_applied += 1
+        print(f"    Applied: {reason}")
+
+        if "DIRECTION CHANGE" in reason.upper():
+            direction_changes.append(reason)
+
+    if skipped:
+        for msg in skipped:
+            print(f"    Skipped: {msg}")
+
+    return doc, n_applied, direction_changes
+
+
+def collect_all_metrics(specs_loaded: list[tuple], config: dict) -> dict:
+    """Merge key_metrics from all loaded specs into a single dict.
+
+    Args:
+        specs_loaded: List of (spec_file, spec, data) tuples.
+        config: Model config from parse_comparison_dir.
+    """
+    all_metrics = {}
+    for _spec_file, spec, data in specs_loaded:
+        key_metrics = spec.get("prose", {}).get("key_metrics", [])
+        metrics = resolve_key_metrics(key_metrics, data, config)
+        all_metrics.update(metrics)
+    return all_metrics
+
+
+def collect_guidance(specs_loaded: list[tuple]) -> str:
+    """Build per-section guidance notes from all loaded specs."""
+    lines = []
+    for _spec_file, spec, _data in specs_loaded:
+        section_id = spec.get("section_id", "")
+        section_guidance = spec.get("prose", {}).get("guidance", "")
+        if section_guidance:
+            lines.append(f"- {section_id}: {section_guidance}")
+        for table_name, table_spec in spec.get("tables", {}).items():
+            table_guidance = table_spec.get("prose", {}).get("guidance", "")
+            if table_guidance:
+                lines.append(f"- {table_name}: {table_guidance}")
+    return "\n".join(lines)
 
 
 # ── Main orchestrator ─────────────────────────────────────────────
@@ -851,8 +1006,6 @@ def main():
                         help="Comma-separated list of section IDs to process")
     parser.add_argument("--tables-only", action="store_true",
                         help="Only regenerate expansion tables, skip prose checking")
-    parser.add_argument("--prose-only", action="store_true",
-                        help="Only check prose, skip table regeneration")
     parser.add_argument("--dry-run", action="store_true",
                         help="Show what would change without writing files")
     parser.add_argument("--model", type=str, default="opus",
@@ -893,221 +1046,183 @@ def main():
         print(f"Error: template not found at {template_path}", file=sys.stderr)
         sys.exit(1)
     template_html = template_path.read_text()
-    template_modified = False
-
-    # Load prose cache
-    prose_cache = load_prose_cache(cache_dir)
 
     tables_generated = 0
-    tables_skipped = 0
-    prose_checked = 0
-    prose_cached = 0
-    prose_updated = 0
     direction_changes = []
+    specs_loaded = []  # (spec_file, spec, data) for phase 2
+    generated_expansions = {}  # name -> final_html for dry-run support
+
+    # ── Phase 1: Table generation ─────────────────────────────
 
     for spec_file in spec_files:
         spec = load_spec(spec_file)
         section_id = spec.get("section_id", spec_file.stem)
         print(f"\n--- Section: {section_id} ---")
 
-        # Load data
         data = load_data_sources(spec, comparison_dir)
+        specs_loaded.append((spec_file, spec, data))
 
-        # ── Table generation ──────────────────────────────────
-        if not args.prose_only:
-            for table_name, table_spec in spec.get("tables", {}).items():
-                print(f"  Table: {table_name}")
+        for table_name, table_spec in spec.get("tables", {}).items():
+            print(f"  Table: {table_name}")
 
-                # Generate table HTML
-                table_html = generate_expansion_html(table_name, table_spec, data, config)
+            table_html = generate_expansion_html(table_name, table_spec, data, config)
 
-                # Custom generators produce complete content; only extract
-                # existing prose for spec-driven tables (no row_gen).
-                is_custom = table_spec.get("row_gen") in CUSTOM_GENERATORS
-                expansion_path = expansions_dir / f"{table_name}.html"
+            is_custom = table_spec.get("row_gen") in CUSTOM_GENERATORS
+
+            # Extract title line
+            title_line = ""
+            table_body = table_html
+            if table_html.startswith("<!-- title:"):
+                first_nl = table_html.index("\n")
+                title_line = table_html[:first_nl]
+                table_body = table_html[first_nl + 1:]
+
+            # Resolve title placeholders
+            total_tests = data.get("stats", {}).get("metadata", {}).get("total_tests", "")
+            title_line = title_line.replace("{total_tests}", str(total_tests))
+
+            # Assemble expansion with GENERATED-TABLE markers
+            expansion_path = expansions_dir / f"{table_name}.html"
+            parts = []
+            if title_line:
+                parts.append(title_line)
+
+            if is_custom:
+                # Custom generators: wrap entire body in markers
+                parts.append("<!-- GENERATED-TABLE -->")
+                parts.append(table_body)
+                parts.append("<!-- /GENERATED-TABLE -->")
+            else:
+                # Spec-driven: preserve existing prose, wrap just the table
                 existing_prose = {"preamble": "", "postscript": ""}
-                if not is_custom and expansion_path.exists():
+                if expansion_path.exists():
                     existing_content = expansion_path.read_text()
                     existing_prose = extract_expansion_prose(existing_content)
 
-                # Extract title from generated table
-                title_line = ""
-                table_body = table_html
-                if table_html.startswith("<!-- title:"):
-                    first_nl = table_html.index("\n")
-                    title_line = table_html[:first_nl]
-                    table_body = table_html[first_nl + 1:]
-
-                # Resolve title placeholders
-                total_tests = data.get("stats", {}).get("metadata", {}).get("total_tests", "")
-                title_line = title_line.replace("{total_tests}", str(total_tests))
-
-                # ── Expansion prose check (if spec has prose guidance) ──
-                exp_prose_spec = table_spec.get("prose", {})
-                if exp_prose_spec and not args.tables_only and (existing_prose["preamble"] or existing_prose["postscript"]):
-                    # Build data summary for prose check
-                    key_metrics = spec.get("prose", {}).get("key_metrics", [])
-                    metrics_summary = resolve_key_metrics(key_metrics, data, config)
-
-                    cache_key = content_hash(
-                        existing_prose["preamble"] + existing_prose["postscript"] +
-                        table_body + json.dumps(metrics_summary, sort_keys=True)
-                    )
-
-                    if cache_key in prose_cache:
-                        print(f"    Expansion prose: cached (skipping)")
-                        checked_preamble = prose_cache[cache_key].get("preamble", existing_prose["preamble"])
-                        checked_postscript = prose_cache[cache_key].get("postscript", existing_prose["postscript"])
-                        prose_cached += 1
-                    else:
-                        prompt = EXPANSION_PROSE_PROMPT.format(
-                            guidance=exp_prose_spec.get("guidance", ""),
-                            data_json=json.dumps(metrics_summary, indent=2),
-                            table_html=table_body,
-                            preamble=existing_prose["preamble"] or "(no preamble)",
-                            postscript=existing_prose["postscript"] or "(no postscript)",
-                        )
-
-                        print(f"    Expansion prose: checking with LLM...")
-                        result = call_claude_sdk(prompt, args.model)
-                        prose_checked += 1
-
-                        if result:
-                            # Parse result to extract prose around tables
-                            checked_prose = extract_expansion_prose(result)
-                            checked_preamble = checked_prose.get("preamble", existing_prose["preamble"])
-                            checked_postscript = checked_prose.get("postscript", existing_prose["postscript"])
-
-                            # Check for direction changes
-                            if "DIRECTION CHANGE" in result:
-                                changes = re.findall(r'<!-- DIRECTION CHANGE:(.+?)-->', result)
-                                for change in changes:
-                                    direction_changes.append(f"  {table_name}: {change.strip()}")
-                                    print(f"    !! DIRECTION CHANGE: {change.strip()}")
-
-                            prose_cache[cache_key] = {
-                                "preamble": checked_preamble,
-                                "postscript": checked_postscript,
-                            }
-                            prose_updated += 1
-                        else:
-                            checked_preamble = existing_prose["preamble"]
-                            checked_postscript = existing_prose["postscript"]
-                else:
-                    checked_preamble = existing_prose["preamble"]
-                    checked_postscript = existing_prose["postscript"]
-
-                # Assemble final expansion
-                parts = []
-                if title_line:
-                    parts.append(title_line)
-                if checked_preamble:
-                    parts.append(checked_preamble)
+                if existing_prose["preamble"]:
+                    parts.append(existing_prose["preamble"])
+                parts.append("<!-- GENERATED-TABLE -->")
                 parts.append(table_body)
-                if checked_postscript:
-                    parts.append(checked_postscript)
-                final_html = "\n".join(parts) + "\n"
+                parts.append("<!-- /GENERATED-TABLE -->")
+                if existing_prose["postscript"]:
+                    parts.append(existing_prose["postscript"])
 
-                if args.dry_run:
-                    print(f"    Would write: {expansion_path}")
-                    tables_generated += 1
-                else:
-                    expansions_dir.mkdir(parents=True, exist_ok=True)
-                    expansion_path.write_text(final_html)
-                    print(f"    Wrote: {expansion_path.name}")
-                    tables_generated += 1
+            final_html = "\n".join(parts) + "\n"
+            generated_expansions[table_name] = final_html
 
-        # ── Section prose check ───────────────────────────────
-        if not args.tables_only and spec.get("prose"):
-            prose_spec = spec["prose"]
-            key_metrics = prose_spec.get("key_metrics", [])
-            metrics_summary = resolve_key_metrics(key_metrics, data, config)
+            if args.dry_run:
+                print(f"    Would write: {expansion_path}")
+            else:
+                expansions_dir.mkdir(parents=True, exist_ok=True)
+                expansion_path.write_text(final_html)
+                print(f"    Wrote: {expansion_path.name}")
+            tables_generated += 1
 
-            section_html = extract_section(template_html, section_id)
-            if section_html is None:
-                print(f"  Section '{section_id}' not found in template, skipping prose check")
-                continue
+    # ── Phase 2: Whole-document prose check ───────────────────
 
-            cache_key = content_hash(
-                section_html + json.dumps(metrics_summary, sort_keys=True)
+    prose_checked = 0
+    prose_cached = 0
+    prose_updated = 0
+
+    if not args.tables_only:
+        # Build annotated template — use overrides so dry-run sees fresh tables
+        annotated, expansion_names = build_annotated_template(
+            template_html, expansions_dir, overrides=generated_expansions)
+
+        # Collect all metrics and guidance from processed specs
+        all_metrics = collect_all_metrics(specs_loaded, config)
+        guidance = collect_guidance(specs_loaded)
+
+        # Single cache key (include sections filter for correctness)
+        sections_key = args.sections or "all"
+        cache_input = sections_key + "\n" + annotated + json.dumps(all_metrics, sort_keys=True)
+        cache_key = content_hash(cache_input)
+
+        prose_cache = load_prose_cache(cache_dir)
+
+        if cache_key in prose_cache:
+            print(f"\nDocument prose: cached (skipping)")
+            prose_cached = 1
+        else:
+            prompt = DOCUMENT_PROSE_PROMPT.format(
+                guidance=guidance,
+                data_json=json.dumps(all_metrics, indent=2),
+                document=annotated,
             )
 
-            if cache_key in prose_cache:
-                print(f"  Section prose: cached (skipping)")
-                prose_cached += 1
-                continue
-
-            prompt = SECTION_PROSE_PROMPT.format(
-                guidance=prose_spec.get("guidance", ""),
-                data_json=json.dumps(metrics_summary, indent=2),
-                section_html=section_html,
-            )
-
-            print(f"  Section prose: checking with LLM...")
+            print(f"\nDocument prose: checking with LLM...")
             result = call_claude_sdk(prompt, args.model)
-            prose_checked += 1
+            prose_checked = 1
 
             if result:
-                # Guard: reject LLM output that doesn't look like valid section HTML.
-                # Must start with an HTML tag — reject if it leads with explanatory
-                # prose, markdown, or questions. Fallback: try to extract HTML portion.
-                stripped = result.strip()
-                looks_like_html = (
-                    stripped.startswith("<") or
-                    stripped.startswith("<!--")
-                )
-                if not looks_like_html:
-                    # Fallback: try to find where HTML starts in mixed output
-                    html_start = re.search(r'\n\s*(<(?:h[1-6]|!--))', result)
-                    if html_start:
-                        result = result[html_start.start(1):]
-                        looks_like_html = True
-                        print(f"  Section '{section_id}': stripped non-HTML preamble ({html_start.start(1)} chars)")
-                if not looks_like_html:
-                    print(f"  Section '{section_id}': LLM returned non-HTML, skipping")
-                    print(f"    Preview: {result[:120]}...")
-                else:
-                    # Check for direction changes
-                    if "DIRECTION CHANGE" in result:
-                        changes = re.findall(r'<!-- DIRECTION CHANGE:(.+?)-->', result)
-                        for change in changes:
-                            direction_changes.append(f"  {section_id}: {change.strip()}")
-                            print(f"  !! DIRECTION CHANGE: {change.strip()}")
-
-                    # Check if content actually changed
-                    if result.strip() != section_html.strip():
-                        if args.dry_run:
-                            print(f"  Would update section '{section_id}' in template")
-                        else:
-                            template_html = replace_section(template_html, section_id, result)
-                            template_modified = True
-                            print(f"  Updated section '{section_id}'")
-                        prose_updated += 1
-                    else:
-                        print(f"  Section '{section_id}': no changes needed")
-
+                corrections = parse_corrections(result)
+                if corrections is None:
+                    print(f"  Warning: could not parse LLM output as JSON", file=sys.stderr)
+                    print(f"  Preview: {result[:200]}...", file=sys.stderr)
+                elif len(corrections) == 0:
+                    print(f"  No corrections needed (all prose is factually correct)")
                     prose_cache[cache_key] = {"unchanged": True}
-                    # Also cache the post-update content so re-runs are no-ops
-                    if result.strip() != section_html.strip():
-                        new_cache_key = content_hash(
-                            result.strip() + json.dumps(metrics_summary, sort_keys=True)
-                        )
-                        prose_cache[new_cache_key] = {"unchanged": True}
+                    if not args.dry_run:
+                        save_prose_cache(cache_dir, prose_cache)
+                else:
+                    print(f"  {len(corrections)} correction(s) found:")
 
-    # Write template if modified
-    if template_modified and not args.dry_run:
-        template_path.write_text(template_html)
-        print(f"\nWrote updated template: {template_path}")
+                    if args.dry_run:
+                        # Show what would change without applying
+                        for i, corr in enumerate(corrections):
+                            reason = corr.get("reason", "")
+                            old_preview = corr.get("old", "")[:80]
+                            print(f"    [{i}] {reason}: {old_preview}...")
+                            if "DIRECTION CHANGE" in reason.upper():
+                                direction_changes.append(reason)
+                        prose_updated = len(corrections)
+                    else:
+                        # Apply corrections to annotated template
+                        modified, n_applied, dir_changes = apply_corrections(
+                            annotated, corrections)
+                        direction_changes.extend(dir_changes)
 
-    # Save prose cache
-    if not args.dry_run:
-        save_prose_cache(cache_dir, prose_cache)
+                        if n_applied > 0:
+                            # Decompose back into template + expansions
+                            new_template, new_expansions = decompose_document(
+                                modified, expansion_names)
+
+                            # Write template
+                            if new_template.strip() != template_html.strip():
+                                template_path.write_text(new_template)
+                                print(f"  Updated template: {template_path}")
+                                prose_updated += 1
+
+                            # Write modified expansions
+                            for name, content in new_expansions.items():
+                                exp_path = expansions_dir / f"{name}.html"
+                                new_content = content + "\n"
+                                if exp_path.exists() and exp_path.read_text() == new_content:
+                                    continue
+                                exp_path.write_text(new_content)
+                                print(f"  Updated expansion: {name}")
+                                prose_updated += 1
+                        else:
+                            print(f"  No corrections could be applied")
+
+                        # Cache — both pre and post states
+                        prose_cache[cache_key] = {"unchanged": True}
+                        if n_applied > 0:
+                            new_annotated, _ = build_annotated_template(
+                                new_template, expansions_dir)
+                            new_cache_input = sections_key + "\n" + new_annotated + json.dumps(all_metrics, sort_keys=True)
+                            new_cache_key = content_hash(new_cache_input)
+                            if new_cache_key != cache_key:
+                                prose_cache[new_cache_key] = {"unchanged": True}
+                        save_prose_cache(cache_dir, prose_cache)
+            else:
+                print("  LLM call failed, prose unchanged")
 
     # Summary
     print(f"\n{'='*50}")
     print(f"  Tables generated: {tables_generated}")
     if not args.tables_only:
-        print(f"  Prose checks: {prose_checked} (cached: {prose_cached}, updated: {prose_updated})")
+        print(f"  Prose: {prose_checked} LLM call(s) (cached: {prose_cached}, updated: {prose_updated})")
     if direction_changes:
         print(f"  Direction changes detected: {len(direction_changes)}")
         for dc in direction_changes:
