@@ -25,7 +25,7 @@ from datetime import datetime
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from models import discover_models
+from models import discover_models, load_canonical_tasks
 
 
 def parse_timestamp(ts: str) -> datetime | None:
@@ -89,13 +89,10 @@ def compute_delta(pre: dict, post: dict) -> dict:
 
 def analyze_model_compaction(data_dir: Path, model: str, analysis_dir: Path) -> dict:
     """Analyze compaction for a single model using canonical task data."""
-    canonical_path = data_dir / f'tasks-canonical-{model}.json'
-    if not canonical_path.exists():
-        print(f"Error: {canonical_path} not found")
+    all_tasks = load_canonical_tasks(data_dir, model)
+    if not all_tasks:
+        print(f"Error: no tasks found for {model}")
         return {}
-
-    with open(canonical_path) as f:
-        all_tasks = json.load(f)
 
     # Filter meta tasks
     all_tasks = [t for t in all_tasks if not t.get('is_meta', False)]

@@ -251,7 +251,8 @@ def build_command(step, data_dir, analysis_dir):
     elif step == "stats":
         return [sys.executable, str(scripts_dir / "stat_tests.py"),
                 "--data-dir", str(data_dir),
-                "--analysis-dir", str(analysis_dir)]
+                "--analysis-dir", str(analysis_dir),
+                "--sensitivity"]
     elif step == "dataset":
         return [sys.executable, str(scripts_dir / "analyze_dataset.py"),
                 "--data-dir", str(data_dir),

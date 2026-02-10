@@ -26,7 +26,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from models import discover_models
+from models import discover_models, load_canonical_tasks
 
 # Bump this to invalidate all LLM caches
 PROMPT_VERSION = "v2"
@@ -497,6 +497,8 @@ def aggregate_signals(task, keyword_signals, edit_signals, llm_signals, complexi
     result = {
         'task_id': task['task_id'],
         'model': task.get('model', 'unknown'),
+        'session_id': task.get('session_id', ''),
+        'project_path': task.get('project_path', ''),
     }
 
     # Basic stats (for backward compat with stat_tests.py)
@@ -894,13 +896,10 @@ def main():
     print(f"Cache:  {cache_dir}")
 
     for model in models:
-        canonical_file = data_dir / f'tasks-canonical-{model}.json'
-        if not canonical_file.exists():
-            print(f"\nSkipping {model}: {canonical_file} not found")
+        tasks = load_canonical_tasks(data_dir, model)
+        if not tasks:
+            print(f"\nSkipping {model}: no tasks found")
             continue
-
-        with open(canonical_file) as f:
-            tasks = json.load(f)
 
         # Load classified tasks for complexity lookup
         classified_file = data_dir / f'tasks-classified-{model}.json'

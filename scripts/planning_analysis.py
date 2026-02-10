@@ -22,22 +22,14 @@ from collections import defaultdict
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from models import discover_models
+from models import discover_models, load_canonical_tasks
 
 COMPLEXITY_ORDER = ["trivial", "simple", "moderate", "complex", "major"]
 
 
 def load_tasks(data_dir, model):
-    """Load canonical tasks for a model."""
-    # Prefer canonical tasks
-    canonical_path = data_dir / f"tasks-canonical-{model}.json"
-    if canonical_path.exists():
-        with open(canonical_path) as f:
-            return json.load(f)
-    # Fall back to classified tasks
-    path = data_dir / f"tasks-classified-{model}.json"
-    with open(path) as f:
-        return json.load(f)
+    """Load canonical tasks for a model (excludes cleaned tasks)."""
+    return load_canonical_tasks(data_dir, model)
 
 
 def load_llm_analysis(analysis_dir, model):

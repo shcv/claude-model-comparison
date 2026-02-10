@@ -33,7 +33,7 @@ from dataclasses import dataclass, field, asdict
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from models import discover_models
+from models import discover_models, load_canonical_tasks
 
 
 # Dissatisfaction signals in user messages
@@ -480,13 +480,10 @@ def analyze_session_from_tasks(tasks: list[dict]) -> tuple[list[Overlap], dict[s
 
 def analyze_model(data_dir: Path, model: str, analysis_dir: Path):
     """Analyze all canonical tasks for a model. Write per-overlap and per-task output."""
-    canonical_path = data_dir / f'tasks-canonical-{model}.json'
-    if not canonical_path.exists():
-        print(f"Error: {canonical_path} not found")
+    all_tasks = load_canonical_tasks(data_dir, model)
+    if not all_tasks:
+        print(f"Error: no tasks found for {model}")
         return {}
-
-    with open(canonical_path, 'r', encoding='utf-8') as f:
-        all_tasks = json.load(f)
 
     # Group tasks by session_id
     sessions: dict[str, list[dict]] = defaultdict(list)

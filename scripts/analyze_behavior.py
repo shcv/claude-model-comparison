@@ -19,7 +19,7 @@ from typing import Optional
 import argparse
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from models import discover_models
+from models import discover_models, load_canonical_tasks
 
 
 @dataclass
@@ -129,17 +129,14 @@ def classify_agent_directive(prompt: str) -> str:
 
 def compute_subagent_success(data_dir: Path, model: str, metrics: BehaviorMetrics):
     """Cross-reference tasks-canonical with llm-analysis to compute subagent success rates."""
-    model_suffix = model.replace('-', '-')
-    deep_path = data_dir / f'tasks-canonical-{model_suffix}.json'
     analysis_dir = data_dir.parent / 'analysis'
-    llm_path = analysis_dir / f'llm-analysis-{model_suffix}.json'
+    llm_path = analysis_dir / f'llm-analysis-{model}.json'
 
-    if not deep_path.exists() or not llm_path.exists():
-        print(f"  Skipping subagent success: missing {deep_path} or {llm_path}")
+    deep_tasks = load_canonical_tasks(data_dir, model)
+    if not deep_tasks or not llm_path.exists():
+        print(f"  Skipping subagent success: missing tasks or {llm_path}")
         return
 
-    with open(deep_path, 'r', encoding='utf-8') as f:
-        deep_tasks = json.load(f)
     with open(llm_path, 'r', encoding='utf-8') as f:
         llm_analyses = json.load(f)
 
@@ -196,15 +193,10 @@ def compute_subagent_success(data_dir: Path, model: str, metrics: BehaviorMetric
 
 def compute_tool_ngrams(data_dir: Path, model: str, metrics: BehaviorMetrics):
     """Extract 2-gram and 3-gram tool call sequences from tasks-canonical data."""
-    model_suffix = model.replace('-', '-')
-    deep_path = data_dir / f'tasks-canonical-{model_suffix}.json'
-
-    if not deep_path.exists():
-        print(f"  Skipping n-grams: missing {deep_path}")
+    deep_tasks = load_canonical_tasks(data_dir, model)
+    if not deep_tasks:
+        print(f"  Skipping n-grams: no tasks found for {model}")
         return
-
-    with open(deep_path, 'r', encoding='utf-8') as f:
-        deep_tasks = json.load(f)
 
     bigrams = Counter()
     trigrams = Counter()
@@ -318,13 +310,10 @@ def analyze_canonical_tasks(tasks: list[dict], metrics: BehaviorMetrics):
 
 def analyze_model(data_dir: Path, model: str) -> BehaviorMetrics:
     """Analyze all canonical tasks for a model."""
-    canonical_path = data_dir / f'tasks-canonical-{model}.json'
-    if not canonical_path.exists():
-        print(f"Error: {canonical_path} not found")
+    tasks = load_canonical_tasks(data_dir, model)
+    if not tasks:
+        print(f"Error: no tasks found for {model}")
         return BehaviorMetrics(model=model)
-
-    with open(canonical_path, 'r', encoding='utf-8') as f:
-        tasks = json.load(f)
 
     metrics = BehaviorMetrics(model=model)
     analyze_canonical_tasks(tasks, metrics)

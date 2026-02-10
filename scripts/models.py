@@ -39,6 +39,30 @@ def discover_model_pair(data_dir, prefix="sessions"):
     return (models[0], models[1])
 
 
+def load_canonical_tasks(data_dir, model, include_excluded=False):
+    """Load canonical tasks for a model, filtering excluded tasks by default.
+
+    Args:
+        data_dir: Path to data directory
+        model: Model name (e.g., "opus-4-5")
+        include_excluded: If True, return all tasks including excluded ones
+
+    Returns list of task dicts. Empty list if file not found.
+    """
+    data_dir = Path(data_dir)
+    tasks_file = data_dir / f'tasks-canonical-{model}.json'
+    if not tasks_file.exists():
+        return []
+
+    with open(tasks_file) as f:
+        tasks = json.load(f)
+
+    if not include_excluded:
+        tasks = [t for t in tasks if not t.get('exclude_reason')]
+
+    return tasks
+
+
 def load_comparison_config(comparison_dir):
     """Parse comparison directory name to extract model configuration.
 

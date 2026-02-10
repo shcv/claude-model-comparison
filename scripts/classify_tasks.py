@@ -20,7 +20,7 @@ from pathlib import Path
 from typing import Optional
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from models import discover_models
+from models import discover_models, load_canonical_tasks
 
 
 # Task type patterns (checked in order, first match wins for primary type)
@@ -417,12 +417,7 @@ def reclassify_complexity_batch(tasks: list[dict], llm_model: str = "haiku",
 
 def load_and_classify(data_dir: Path, model: str, use_llm: bool = False) -> list[dict]:
     """Load tasks and add classifications."""
-    tasks_file = data_dir / f'tasks-canonical-{model}.json'
-    if not tasks_file.exists():
-        return []
-
-    with open(tasks_file) as f:
-        tasks = json.load(f)
+    tasks = load_canonical_tasks(data_dir, model)
 
     classified = []
     for task in tasks:

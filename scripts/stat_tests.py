@@ -21,7 +21,7 @@ import numpy as np
 from scipy import stats
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from models import discover_model_pair
+from models import discover_model_pair, load_canonical_tasks
 
 
 class NumpyEncoder(json.JSONEncoder):
@@ -85,6 +85,8 @@ def load_data(data_dir, analysis_dir):
     already contains merged LLM analysis + classification + canonical signals.
     Falls back to merging llm-analysis + tasks-classified if annotated files
     don't exist.
+
+    Enriches records with project_path from canonical tasks for sensitivity analysis.
     """
     data = {}
     for model in MODELS:
@@ -96,6 +98,15 @@ def load_data(data_dir, analysis_dir):
                 records = json.load(f)
             # Filter meta tasks
             records = [r for r in records if not r.get('is_meta', False)]
+            # Enrich with project_path from canonical tasks
+            canonical = load_canonical_tasks(data_dir, model)
+            canonical_by_id = {t['task_id']: t for t in canonical}
+            for rec in records:
+                tid = rec.get('task_id', '')
+                if tid in canonical_by_id:
+                    ct = canonical_by_id[tid]
+                    rec.setdefault('project_path', ct.get('project_path', ''))
+                    rec.setdefault('session_id', ct.get('session_id', ''))
             data[model] = records
             continue
 
@@ -443,12 +454,117 @@ def format_summary(all_results, total_tests):
     return "\n".join(lines)
 
 
+def find_overlapping_projects(data_dir):
+    """Find projects that appear in both models' canonical task data."""
+    projects = {}
+    for model in MODELS:
+        tasks = load_canonical_tasks(data_dir, model)
+        model_projects = set()
+        for t in tasks:
+            pp = t.get('project_path', '')
+            if pp:
+                model_projects.add(pp)
+        projects[model] = model_projects
+
+    overlapping = projects[MODELS[0]] & projects[MODELS[1]]
+    return sorted(overlapping)
+
+
+def filter_to_projects(records, project_paths):
+    """Filter records to only those from specified projects."""
+    project_set = set(project_paths)
+    return [r for r in records if r.get('project_path', '') in project_set]
+
+
+def run_test_suite(data, label_prefix=""):
+    """Run full + per-complexity test suite on data dict. Returns (all_results, total_tests)."""
+    prefix = f"{label_prefix}: " if label_prefix else ""
+
+    overall = run_all_tests(data[MODELS[0]], data[MODELS[1]], label=f"{prefix}overall")
+
+    complexity_results = []
+    for cbin in COMPLEXITY_BINS:
+        subset_a = [r for r in data[MODELS[0]] if r.get("complexity") == cbin]
+        subset_b = [r for r in data[MODELS[1]] if r.get("complexity") == cbin]
+        if len(subset_a) >= 3 and len(subset_b) >= 3:
+            result = run_all_tests(subset_a, subset_b, label=f"{prefix}complexity: {cbin}")
+            complexity_results.append(result)
+
+    all_results = [overall] + complexity_results
+    total_tests = count_tests(all_results)
+
+    bonferroni_threshold = 0.05 / total_tests if total_tests > 0 else 0.05
+    for group in all_results:
+        for test_list in [group["chi_square"], group["mann_whitney"], group["proportions"]]:
+            for t in test_list:
+                t["bonferroni_significant"] = t["p_value"] < bonferroni_threshold
+
+    return all_results, total_tests, bonferroni_threshold
+
+
+def compare_sensitivity(full_results, restricted_results, full_n, restricted_n):
+    """Compare full vs restricted results, highlighting divergences."""
+    lines = []
+    lines.append("=" * 90)
+    lines.append("SENSITIVITY ANALYSIS: Full Dataset vs Overlapping Projects Only")
+    lines.append("=" * 90)
+    lines.append(f"Full dataset:          {full_n[MODELS[0]]:>5} vs {full_n[MODELS[1]]:>5} tasks")
+    lines.append(f"Overlapping projects:  {restricted_n[MODELS[0]]:>5} vs {restricted_n[MODELS[1]]:>5} tasks")
+    lines.append("")
+
+    # Compare overall proportion tests (most interpretable)
+    full_overall = full_results[0]
+    restricted_overall = restricted_results[0]
+
+    full_props = {t["field"]: t for t in full_overall.get("proportions", [])}
+    rest_props = {t["field"]: t for t in restricted_overall.get("proportions", [])}
+
+    all_fields = sorted(set(full_props.keys()) | set(rest_props.keys()))
+
+    lines.append(f"  {'Metric':<28} {'Full Diff':>10} {'Full p':>10} {'Restr Diff':>10} {'Restr p':>10} {'Agreement':>10}")
+    lines.append(f"  {'-'*28} {'-'*10} {'-'*10} {'-'*10} {'-'*10} {'-'*10}")
+
+    for field in all_fields:
+        fp = full_props.get(field)
+        rp = rest_props.get(field)
+        if not fp or not rp:
+            continue
+        f_diff = fp[MODELS[0]]["proportion"] - fp[MODELS[1]]["proportion"]
+        r_diff = rp[MODELS[0]]["proportion"] - rp[MODELS[1]]["proportion"]
+        f_sig = fp["significant_p05"]
+        r_sig = rp["significant_p05"]
+
+        # Agreement: both sig same direction, both non-sig, or divergent
+        same_direction = (f_diff > 0) == (r_diff > 0) if f_diff != 0 and r_diff != 0 else True
+        if f_sig == r_sig and same_direction:
+            agreement = "agree"
+        elif same_direction and not (f_sig and r_sig):
+            agreement = "weak"
+        else:
+            agreement = "DIVERGE"
+
+        f_sig_str = "*" if f_sig else ""
+        r_sig_str = "*" if r_sig else ""
+        lines.append(
+            f"  {field:<28} {f_diff:>+9.1%}{f_sig_str} {fp['p_value']:>10.4f} {r_diff:>+9.1%}{r_sig_str} {rp['p_value']:>10.4f} {agreement:>10}"
+        )
+
+    lines.append("")
+    lines.append("Legend: agree=same conclusion, weak=same direction but significance differs, DIVERGE=opposite")
+    lines.append("=" * 90)
+    return "\n".join(lines)
+
+
 def main():
     global MODELS
     parser = argparse.ArgumentParser(description="Statistical significance tests for model comparison")
     parser.add_argument("--data-dir", default="data", help="Directory containing classified task JSONs")
     parser.add_argument("--analysis-dir", default="analysis", help="Directory containing LLM analysis JSONs")
     parser.add_argument("--output", default=None, help="Output JSON path (default: analysis-dir/stat-tests.json)")
+    parser.add_argument("--sensitivity", action="store_true",
+                        help="Run sensitivity analysis: full dataset vs overlapping projects only")
+    parser.add_argument("--overlapping-only", action="store_true",
+                        help="Restrict analysis to overlapping projects only")
     args = parser.parse_args()
 
     output_path = args.output or str(Path(args.analysis_dir) / "stat-tests.json")
@@ -461,11 +577,95 @@ def main():
     for model in MODELS:
         print(f"  {model}: {len(data[model])} tasks")
 
-    # Overall tests
+    # Sensitivity mode: run both full and restricted, then compare
+    if args.sensitivity:
+        overlapping = find_overlapping_projects(args.data_dir)
+        print(f"\nOverlapping projects ({len(overlapping)}):")
+        for p in overlapping:
+            print(f"  {p}")
+
+        restricted_data = {
+            model: filter_to_projects(data[model], overlapping) for model in MODELS
+        }
+        print(f"\nRestricted dataset:")
+        for model in MODELS:
+            print(f"  {model}: {len(restricted_data[model])} tasks (from {len(data[model])})")
+
+        print("\n--- Full dataset tests ---")
+        full_results, full_total, full_bonf = run_test_suite(data, "full")
+        print(f"  {full_total} tests run")
+
+        print("\n--- Overlapping projects tests ---")
+        rest_results, rest_total, rest_bonf = run_test_suite(restricted_data, "restricted")
+        print(f"  {rest_total} tests run")
+
+        # Build combined output
+        output = {
+            "metadata": {
+                "models": MODELS,
+                "analysis_type": "sensitivity",
+                "overlapping_projects": overlapping,
+            },
+            "full": {
+                "metadata": {
+                    "total_tests": full_total,
+                    "bonferroni_threshold": round(full_bonf, 8),
+                    "sample_sizes": {model: len(data[model]) for model in MODELS},
+                },
+                "overall": full_results[0],
+                "by_complexity": full_results[1:],
+            },
+            "restricted": {
+                "metadata": {
+                    "total_tests": rest_total,
+                    "bonferroni_threshold": round(rest_bonf, 8),
+                    "sample_sizes": {model: len(restricted_data[model]) for model in MODELS},
+                },
+                "overall": rest_results[0],
+                "by_complexity": rest_results[1:],
+            },
+        }
+
+        sensitivity_path = str(Path(args.analysis_dir) / "sensitivity-analysis.json")
+        with open(sensitivity_path, "w") as f:
+            json.dump(output, f, indent=2, cls=NumpyEncoder)
+        print(f"\nSensitivity results written to {sensitivity_path}")
+
+        full_n = {model: len(data[model]) for model in MODELS}
+        rest_n = {model: len(restricted_data[model]) for model in MODELS}
+        comparison = compare_sensitivity(full_results, rest_results, full_n, rest_n)
+        print("\n" + comparison)
+
+        # Also write the full-dataset results to the standard output path
+        standard_output = {
+            "metadata": {
+                "models": MODELS,
+                "total_tests": full_total,
+                "bonferroni_threshold": round(full_bonf, 8),
+                "sample_sizes": {model: len(data[model]) for model in MODELS},
+            },
+            "overall": full_results[0],
+            "by_complexity": full_results[1:],
+        }
+        with open(output_path, "w") as f:
+            json.dump(standard_output, f, indent=2, cls=NumpyEncoder)
+        print(f"Standard results also written to {output_path}")
+        return
+
+    # Filter to overlapping projects if requested
+    if args.overlapping_only:
+        overlapping = find_overlapping_projects(args.data_dir)
+        print(f"\nRestricting to {len(overlapping)} overlapping projects:")
+        for p in overlapping:
+            print(f"  {p}")
+        data = {model: filter_to_projects(data[model], overlapping) for model in MODELS}
+        for model in MODELS:
+            print(f"  {model}: {len(data[model])} tasks after filtering")
+
+    # Standard mode
     print("\nRunning overall tests...")
     overall = run_all_tests(data[MODELS[0]], data[MODELS[1]], label="overall")
 
-    # Per-complexity tests
     complexity_results = []
     for cbin in COMPLEXITY_BINS:
         subset_a = [r for r in data[MODELS[0]] if r.get("complexity") == cbin]
