@@ -309,19 +309,21 @@ def check_consistency(data_dir, analysis_dir):
 
     Returns True if consistent, False if mismatches found.
     """
-    # Discover models from canonical task files
+    # Discover models from canonical task files (count only included tasks)
     canonical_counts = {}
     for f in sorted(Path(data_dir).glob("tasks-canonical-*.json")):
         model = f.stem.replace("tasks-canonical-", "")
         with open(f) as fh:
             tasks = json.load(fh)
-        canonical_counts[model] = len(tasks)
+        total = len(tasks)
+        included = sum(1 for t in tasks if not t.get('exclude_reason'))
+        canonical_counts[model] = included
 
     if not canonical_counts:
         print("  No canonical task files found.")
         return True
 
-    print(f"\n  Canonical task counts:")
+    print(f"\n  Canonical task counts (included):")
     for model, count in canonical_counts.items():
         print(f"    {model}: {count} tasks")
 
