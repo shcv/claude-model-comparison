@@ -1,0 +1,53 @@
+{
+  "section_id": "dataset",
+  "data_sources": {
+    "overview": "analysis/dataset-overview.json"
+  },
+  "tables": {
+    "dataset-composition": {
+      "title": "Per-model composition",
+      "row_gen": "dataset_composition"
+    },
+    "dataset-task-mix": {
+      "title": "Task type and complexity distribution",
+      "row_gen": "dataset_task_mix"
+    },
+    "dataset-volume": {
+      "title": "Token volumes and code output",
+      "row_gen": "dataset_volume"
+    }
+  },
+  "prose": {
+    "key_metrics": [
+      "overview.{model_a}.sessions",
+      "overview.{model_b}.sessions",
+      "overview.{model_a}.tasks",
+      "overview.{model_b}.tasks",
+      "overview.combined.sessions",
+      "overview.combined.tasks",
+      "overview.combined.projects",
+      "overview.combined.total_cost_usd",
+      "overview.{model_a}.total_user_messages",
+      "overview.{model_b}.total_user_messages",
+      "overview.{model_a}.total_tool_calls",
+      "overview.{model_b}.total_tool_calls",
+      "overview.{model_a}.tasks_per_session",
+      "overview.{model_b}.tasks_per_session",
+      "overview.{model_a}.total_cost_usd",
+      "overview.{model_b}.total_cost_usd",
+      "overview.{model_a}.total_output_tokens",
+      "overview.{model_b}.total_output_tokens",
+      "overview.{model_a}.total_input_tokens",
+      "overview.{model_b}.total_input_tokens",
+      "overview.{model_a}.cache_read_tokens",
+      "overview.{model_b}.cache_read_tokens",
+      "overview.{model_a}.thinking_ratio",
+      "overview.{model_b}.thinking_ratio",
+      "overview.{model_a}.total_files_touched",
+      "overview.{model_b}.total_files_touched",
+      "overview.{model_a}.total_lines_added",
+      "overview.{model_b}.total_lines_added"
+    ],
+    "guidance": "This section provides foundational dataset statistics. Verify session counts, task counts, project counts, cost totals, token volumes, and code output figures in stat cards, expansion tables, and prose."
+  }
+}

@@ -1,0 +1,171 @@
+<!-- title: Task type and complexity distribution -->
+<!-- GENERATED-TABLE -->
+<h3>By task type</h3>
+<p>Tasks are classified by primary type using heuristic pattern matching on prompts, tool usage, and file operations. "Unknown" tasks lacked clear classification signals.</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th class="right">4.5 count</th>
+            <th class="right">4.5 %</th>
+            <th class="right">4.6 count</th>
+            <th class="right">4.6 %</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="label-cell">Investigation</td>
+            <td class="right mono">395</td>
+            <td class="right mono">20.6%</td>
+            <td class="right mono">24</td>
+            <td class="right mono">18.0%</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Continuation</td>
+            <td class="right mono">222</td>
+            <td class="right mono">11.6%</td>
+            <td class="right mono">21</td>
+            <td class="right mono">15.8%</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Feature</td>
+            <td class="right mono">166</td>
+            <td class="right mono">8.7%</td>
+            <td class="right mono">12</td>
+            <td class="right mono">9.0%</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Sysadmin</td>
+            <td class="right mono">152</td>
+            <td class="right mono">7.9%</td>
+            <td class="right mono">16</td>
+            <td class="right mono">12.0%</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Greenfield</td>
+            <td class="right mono">123</td>
+            <td class="right mono">6.4%</td>
+            <td class="right mono">5</td>
+            <td class="right mono">3.8%</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Bugfix</td>
+            <td class="right mono">120</td>
+            <td class="right mono">6.3%</td>
+            <td class="right mono">8</td>
+            <td class="right mono">6.0%</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Refactor</td>
+            <td class="right mono">68</td>
+            <td class="right mono">3.6%</td>
+            <td class="right mono">8</td>
+            <td class="right mono">6.0%</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Port</td>
+            <td class="right mono">33</td>
+            <td class="right mono">1.7%</td>
+            <td class="right mono">9</td>
+            <td class="right mono">6.8%</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Simple</td>
+            <td class="right mono">30</td>
+            <td class="right mono">1.6%</td>
+            <td class="right mono">4</td>
+            <td class="right mono">3.0%</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Docs</td>
+            <td class="right mono">7</td>
+            <td class="right mono">0.4%</td>
+            <td class="right mono">0</td>
+            <td class="right mono">&mdash;</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Unknown</td>
+            <td class="right mono">597</td>
+            <td class="right mono">31.2%</td>
+            <td class="right mono">26</td>
+            <td class="right mono">19.5%</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>By complexity</h3>
+<p>Complexity is inferred from tool count, files touched, and lines changed. Over half of all tasks are trivial (single-turn interactions), while major tasks (&gt;50 tool calls or &gt;500 lines) represent ~1% of volume but a significant share of cost.</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Complexity</th>
+            <th class="right">4.5 count</th>
+            <th class="right">4.5 %</th>
+            <th class="right">4.6 count</th>
+            <th class="right">4.6 %</th>
+            <th>Distribution</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="label-cell">Trivial</td>
+            <td class="right mono">1,013</td>
+            <td class="right mono">53.0%</td>
+            <td class="right mono">60</td>
+            <td class="right mono">45.1%</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:53.0%"></div></div><span class="bar-val">53.0%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:45.1%"></div></div><span class="bar-val">45.1%</span></div>
+            </div></td>
+        </tr>
+        <tr>
+            <td class="label-cell">Simple</td>
+            <td class="right mono">345</td>
+            <td class="right mono">18.0%</td>
+            <td class="right mono">27</td>
+            <td class="right mono">20.3%</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:18.0%"></div></div><span class="bar-val">18.0%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:20.3%"></div></div><span class="bar-val">20.3%</span></div>
+            </div></td>
+        </tr>
+        <tr>
+            <td class="label-cell">Moderate</td>
+            <td class="right mono">369</td>
+            <td class="right mono">19.3%</td>
+            <td class="right mono">33</td>
+            <td class="right mono">24.8%</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:19.3%"></div></div><span class="bar-val">19.3%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:24.8%"></div></div><span class="bar-val">24.8%</span></div>
+            </div></td>
+        </tr>
+        <tr>
+            <td class="label-cell">Complex</td>
+            <td class="right mono">164</td>
+            <td class="right mono">8.6%</td>
+            <td class="right mono">9</td>
+            <td class="right mono">6.8%</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:8.6%"></div></div><span class="bar-val">8.6%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:6.8%"></div></div><span class="bar-val">6.8%</span></div>
+            </div></td>
+        </tr>
+        <tr>
+            <td class="label-cell">Major</td>
+            <td class="right mono">22</td>
+            <td class="right mono">1.2%</td>
+            <td class="right mono">4</td>
+            <td class="right mono">3.0%</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:1.2%"></div></div><span class="bar-val">1.2%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:3.0%"></div></div><span class="bar-val">3.0%</span></div>
+            </div></td>
+        </tr>
+    </tbody>
+</table>
+
+<p>The task type distributions are broadly similar across models, suggesting the user's work patterns remained consistent. The complexity mix is also comparable, though Opus 4.6 has a slightly higher share of moderate-and-above tasks (34.6% vs 29.0%), likely reflecting the evaluation period's focus on substantive work rather than quick queries.</p>
+<!-- /GENERATED-TABLE -->

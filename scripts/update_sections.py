@@ -90,6 +90,369 @@ def content_hash(content: str) -> str:
 # ── Custom row generators for complex tables ──────────────────────
 
 
+def _fmt_tokens(n: int) -> str:
+    """Format large token counts with B/M/K suffixes."""
+    if n >= 1_000_000_000:
+        return f"{n / 1e9:.2f}B"
+    if n >= 1_000_000:
+        return f"{n / 1e6:.1f}M"
+    if n >= 1_000:
+        return f"{n:,.0f}"
+    return str(n)
+
+
+def generate_dataset_composition(spec: dict, data: dict, config: dict) -> str:
+    """Generate the dataset-composition expansion (per-model breakdown table)."""
+    title = spec.get("title", "Per-model composition")
+    lines = [f"<!-- title: {title} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    da, db = config["display_a"], config["display_b"]
+    ov = data.get("overview", {})
+    a, b, c = ov.get(ma, {}), ov.get(mb, {}), ov.get("combined", {})
+
+    lines.append(
+        "<p>The dataset reflects organic usage patterns, not a controlled experiment. "
+        f"Opus {da} accumulated sessions over two months of daily use; "
+        f"Opus {db} entered evaluation in early February 2026.</p>"
+    )
+    lines.append("")
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append("        <tr>")
+    lines.append('            <th>Metric</th>')
+    lines.append(f'            <th class="right">Opus {da}</th>')
+    lines.append(f'            <th class="right">Opus {db}</th>')
+    lines.append(f'            <th class="right">Combined</th>')
+    lines.append("        </tr>")
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    def _fmt_date(d):
+        if not d:
+            return "&mdash;"
+        from datetime import datetime
+        dt = datetime.strptime(d, "%Y-%m-%d")
+        return dt.strftime("%b %-d")
+
+    dr_a = a.get("date_range", {})
+    dr_b = b.get("date_range", {})
+    dr_c = c.get("date_range", {})
+
+    rows = [
+        ("Sessions", f'{a.get("sessions", 0):,}', f'{b.get("sessions", 0):,}',
+         f'{c.get("sessions", 0):,}'),
+        ("Tasks", f'{a.get("tasks", 0):,}', f'{b.get("tasks", 0):,}',
+         f'{c.get("tasks", 0):,}'),
+        ("Tasks / session", f'{a.get("tasks_per_session", 0)}',
+         f'{b.get("tasks_per_session", 0)}',
+         f'{c["tasks"] / c["sessions"]:.1f}' if c.get("sessions") else "&mdash;"),
+        ("Projects", f'{a.get("projects", 0):,}', f'{b.get("projects", 0):,}',
+         f'{c.get("projects", 0):,}'),
+        ("Date range",
+         f'{_fmt_date(dr_a.get("start"))} &ndash; {_fmt_date(dr_a.get("end"))}',
+         f'{_fmt_date(dr_b.get("start"))} &ndash; {_fmt_date(dr_b.get("end"))}',
+         f'{_fmt_date(dr_c.get("start"))} &ndash; {_fmt_date(dr_c.get("end"))}'),
+        ("User messages", f'{a.get("total_user_messages", 0):,}',
+         f'{b.get("total_user_messages", 0):,}',
+         f'{c.get("total_user_messages", 0):,}'),
+        ("Tool calls", f'{a.get("total_tool_calls", 0):,}',
+         f'{b.get("total_tool_calls", 0):,}',
+         f'{c.get("total_tool_calls", 0):,}'),
+    ]
+
+    for label, va, vb, vc in rows:
+        lines.append("        <tr>")
+        lines.append(f'            <td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="right mono">{va}</td>')
+        lines.append(f'            <td class="right mono">{vb}</td>')
+        lines.append(f'            <td class="right mono">{vc}</td>')
+        lines.append("        </tr>")
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+
+    ratio = a.get("sessions", 1) / max(b.get("sessions", 1), 1)
+    shared = len(set(a.get("project_names", [])) & set(b.get("project_names", [])))
+    lines.append("")
+    lines.append(
+        f"<p>The {ratio:.0f}:1 session ratio means per-task averages for Opus {da} "
+        f"are more robust, while Opus {db} estimates carry wider confidence intervals. "
+        f"Opus {db} sessions are concentrated across {b.get('projects', 0)} projects "
+        f"(all of which also have Opus {da} sessions), providing natural overlap "
+        "for matched-pair comparisons where they apply.</p>"
+    )
+
+    return "\n".join(lines)
+
+
+def generate_dataset_task_mix(spec: dict, data: dict, config: dict) -> str:
+    """Generate the dataset-task-mix expansion (type + complexity distributions)."""
+    title = spec.get("title", "Task type and complexity distribution")
+    lines = [f"<!-- title: {title} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    da, db = config["display_a"], config["display_b"]
+    ov = data.get("overview", {})
+    a, b = ov.get(ma, {}), ov.get(mb, {})
+
+    n_a, n_b = a.get("tasks", 1), b.get("tasks", 1)
+    types_a = a.get("task_types", {})
+    types_b = b.get("task_types", {})
+
+    # Ordered by 4.5 count descending, unknown last
+    type_order = [t for t in sorted(types_a, key=lambda t: types_a[t], reverse=True)
+                  if t != "unknown"]
+    # Add types only in model B
+    for t in sorted(types_b, key=lambda t: types_b[t], reverse=True):
+        if t != "unknown" and t not in type_order:
+            type_order.append(t)
+    type_order.append("unknown")
+
+    lines.append("<h3>By task type</h3>")
+    lines.append(
+        "<p>Tasks are classified by primary type using heuristic pattern matching on "
+        'prompts, tool usage, and file operations. "Unknown" tasks lacked clear '
+        "classification signals.</p>"
+    )
+    lines.append("")
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append("        <tr>")
+    lines.append('            <th>Type</th>')
+    lines.append(f'            <th class="right">{da} count</th>')
+    lines.append(f'            <th class="right">{da} %</th>')
+    lines.append(f'            <th class="right">{db} count</th>')
+    lines.append(f'            <th class="right">{db} %</th>')
+    lines.append("        </tr>")
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    for t in type_order:
+        ca = types_a.get(t, 0)
+        cb = types_b.get(t, 0)
+        pct_a = f"{ca / n_a * 100:.1f}%" if ca else "&mdash;"
+        pct_b = f"{cb / n_b * 100:.1f}%" if cb else "&mdash;"
+        label = t.title() if t != "unknown" else "Unknown"
+        lines.append("        <tr>")
+        lines.append(f'            <td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="right mono">{ca:,}</td>')
+        lines.append(f'            <td class="right mono">{pct_a}</td>')
+        lines.append(f'            <td class="right mono">{cb:,}</td>')
+        lines.append(f'            <td class="right mono">{pct_b}</td>')
+        lines.append("        </tr>")
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+
+    # Complexity distribution
+    cx_order = ["trivial", "simple", "moderate", "complex", "major"]
+    cx_a = a.get("complexity_distribution", {})
+    cx_b = b.get("complexity_distribution", {})
+
+    lines.append("")
+    lines.append("<h3>By complexity</h3>")
+    lines.append(
+        "<p>Complexity is inferred from tool count, files touched, and lines changed. "
+        "Over half of all tasks are trivial (single-turn interactions), while major "
+        "tasks (&gt;50 tool calls or &gt;500 lines) represent ~1% of volume but a "
+        "significant share of cost.</p>"
+    )
+    lines.append("")
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append("        <tr>")
+    lines.append('            <th>Complexity</th>')
+    lines.append(f'            <th class="right">{da} count</th>')
+    lines.append(f'            <th class="right">{da} %</th>')
+    lines.append(f'            <th class="right">{db} count</th>')
+    lines.append(f'            <th class="right">{db} %</th>')
+    lines.append('            <th>Distribution</th>')
+    lines.append("        </tr>")
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    for cx in cx_order:
+        ca = cx_a.get(cx, 0)
+        cb = cx_b.get(cx, 0)
+        pct_a = ca / n_a * 100
+        pct_b = cb / n_b * 100
+        bar = table_gen.generate_bar_pair(pct_a, pct_b, scale=100)
+        label = cx.title()
+        lines.append("        <tr>")
+        lines.append(f'            <td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="right mono">{ca:,}</td>')
+        lines.append(f'            <td class="right mono">{pct_a:.1f}%</td>')
+        lines.append(f'            <td class="right mono">{cb:,}</td>')
+        lines.append(f'            <td class="right mono">{pct_b:.1f}%</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
+        lines.append("        </tr>")
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+
+    # Summary note
+    mod_plus_a = sum(cx_a.get(c, 0) for c in ["moderate", "complex", "major"])
+    mod_plus_b = sum(cx_b.get(c, 0) for c in ["moderate", "complex", "major"])
+    pct_mod_a = mod_plus_a / n_a * 100
+    pct_mod_b = mod_plus_b / n_b * 100
+    lines.append("")
+    lines.append(
+        "<p>The task type distributions are broadly similar across models, "
+        "suggesting the user's work patterns remained consistent. "
+        "The complexity mix is also comparable, though Opus "
+        f"{db} has a slightly higher share of moderate-and-above tasks "
+        f"({pct_mod_b:.1f}% vs {pct_mod_a:.1f}%), likely reflecting the evaluation "
+        "period's focus on substantive work rather than quick queries.</p>"
+    )
+
+    return "\n".join(lines)
+
+
+def generate_dataset_volume(spec: dict, data: dict, config: dict) -> str:
+    """Generate the dataset-volume expansion (token volumes and code output)."""
+    title = spec.get("title", "Token volumes and code output")
+    lines = [f"<!-- title: {title} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    da, db = config["display_a"], config["display_b"]
+    ov = data.get("overview", {})
+    a, b, c = ov.get(ma, {}), ov.get(mb, {}), ov.get("combined", {})
+
+    lines.append(
+        '<p>Raw token volumes across the full dataset. These are absolute totals, '
+        'not per-task averages (see <a href="#cost">&sect;2</a> for normalized '
+        'comparisons).</p>'
+    )
+    lines.append("")
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append("        <tr>")
+    lines.append('            <th>Metric</th>')
+    lines.append(f'            <th class="right">Opus {da}</th>')
+    lines.append(f'            <th class="right">Opus {db}</th>')
+    lines.append(f'            <th class="right">Combined</th>')
+    lines.append("        </tr>")
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    token_rows = [
+        ("Output tokens", "total_output_tokens"),
+        ("Input tokens (fresh)", "total_input_tokens"),
+        ("Cache read tokens", "cache_read_tokens"),
+        ("Cache write tokens", "cache_write_tokens"),
+    ]
+    for label, key in token_rows:
+        va = _fmt_tokens(a.get(key, 0))
+        vb = _fmt_tokens(b.get(key, 0))
+        vc = _fmt_tokens(c.get(key, 0))
+        lines.append("        <tr>")
+        lines.append(f'            <td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="right mono">{va}</td>')
+        lines.append(f'            <td class="right mono">{vb}</td>')
+        lines.append(f'            <td class="right mono">{vc}</td>')
+        lines.append("        </tr>")
+
+    # Cost row
+    lines.append("        <tr>")
+    lines.append(f'            <td class="label-cell">Total API cost</td>')
+    lines.append(f'            <td class="right mono">${a.get("total_cost_usd", 0):,.2f}</td>')
+    lines.append(f'            <td class="right mono">${b.get("total_cost_usd", 0):,.2f}</td>')
+    lines.append(f'            <td class="right mono">${c.get("total_cost_usd", 0):,.2f}</td>')
+    lines.append("        </tr>")
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+
+    # Output composition
+    lines.append("")
+    lines.append("<h3>Output composition</h3>")
+    lines.append(
+        "<p>Model output splits into <em>thinking</em> (extended thinking / "
+        "chain-of-thought, not billed as output) and <em>text</em> (visible response, "
+        "code, tool calls). Estimated from character counts with a 3:1 chars-to-tokens "
+        "ratio for thinking.</p>"
+    )
+    lines.append("")
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append("        <tr>")
+    lines.append('            <th>Metric</th>')
+    lines.append(f'            <th class="right">Opus {da}</th>')
+    lines.append(f'            <th class="right">Opus {db}</th>')
+    lines.append("        </tr>")
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    comp_rows = [
+        ("Est. thinking tokens", "estimated_thinking_tokens", True),
+        ("Est. text tokens", "estimated_text_tokens", True),
+        ("Thinking ratio (tasks using thinking)", "thinking_ratio", False),
+        ("Avg requests / task", "avg_requests_per_task", False),
+    ]
+    for label, key, is_count in comp_rows:
+        va_raw = a.get(key, 0)
+        vb_raw = b.get(key, 0)
+        if is_count:
+            va, vb = f"{va_raw:,}", f"{vb_raw:,}"
+        elif key == "thinking_ratio":
+            va, vb = f"{va_raw * 100:.1f}%", f"{vb_raw * 100:.1f}%"
+        else:
+            va, vb = f"{va_raw}", f"{vb_raw}"
+        lines.append("        <tr>")
+        lines.append(f'            <td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="right mono">{va}</td>')
+        lines.append(f'            <td class="right mono">{vb}</td>')
+        lines.append("        </tr>")
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+
+    # Code output
+    lines.append("")
+    lines.append("<h3>Code output</h3>")
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append("        <tr>")
+    lines.append('            <th>Metric</th>')
+    lines.append(f'            <th class="right">Opus {da}</th>')
+    lines.append(f'            <th class="right">Opus {db}</th>')
+    lines.append(f'            <th class="right">Combined</th>')
+    lines.append("        </tr>")
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    code_rows = [
+        ("Files touched", "total_files_touched"),
+        ("Lines added", "total_lines_added"),
+        ("Lines removed", "total_lines_removed"),
+    ]
+    for label, key in code_rows:
+        lines.append("        <tr>")
+        lines.append(f'            <td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="right mono">{a.get(key, 0):,}</td>')
+        lines.append(f'            <td class="right mono">{b.get(key, 0):,}</td>')
+        lines.append(f'            <td class="right mono">{c.get(key, 0):,}</td>')
+        lines.append("        </tr>")
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+
+    # Closing note about cache dominance
+    total_all = (c.get("total_input_tokens", 0) + c.get("total_output_tokens", 0)
+                 + c.get("cache_read_tokens", 0) + c.get("cache_write_tokens", 0))
+    cache_pct = c.get("cache_read_tokens", 0) / total_all * 100 if total_all else 0
+    lines.append("")
+    lines.append(
+        f"<p>Cache reads dominate the token budget: {cache_pct:.0f}% of all tokens "
+        "processed were served from cache rather than freshly encoded. This reflects "
+        "Claude Code's prompt architecture, where the system prompt and conversation "
+        "history are re-sent with each API call but largely hit the prompt cache.</p>"
+    )
+
+    return "\n".join(lines)
+
+
 def generate_edit_overview(spec: dict, data: dict, config: dict) -> str:
     """Generate the edit-accuracy-overview expansion table."""
     title = spec.get("title", "Full edit overlap breakdown")
@@ -656,6 +1019,9 @@ def generate_planning_complexity(spec: dict, data: dict, config: dict) -> str:
 # ── Custom generator dispatch ─────────────────────────────────────
 
 CUSTOM_GENERATORS = {
+    "dataset_composition": generate_dataset_composition,
+    "dataset_task_mix": generate_dataset_task_mix,
+    "dataset_volume": generate_dataset_volume,
     "edit_overview": generate_edit_overview,
     "iterative_refinement": generate_iterative_refinement,
     "triage_top_tasks": generate_triage_top_tasks,

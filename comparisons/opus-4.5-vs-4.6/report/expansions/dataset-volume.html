@@ -1,0 +1,116 @@
+<!-- title: Token volumes and code output -->
+<!-- GENERATED-TABLE -->
+<p>Raw token volumes across the full dataset. These are absolute totals, not per-task averages (see <a href="#cost">&sect;2</a> for normalized comparisons).</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Metric</th>
+            <th class="right">Opus 4.5</th>
+            <th class="right">Opus 4.6</th>
+            <th class="right">Combined</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="label-cell">Output tokens</td>
+            <td class="right mono">1.7M</td>
+            <td class="right mono">160,562</td>
+            <td class="right mono">1.9M</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Input tokens (fresh)</td>
+            <td class="right mono">432,114</td>
+            <td class="right mono">10,686</td>
+            <td class="right mono">442,800</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Cache read tokens</td>
+            <td class="right mono">1.09B</td>
+            <td class="right mono">85.3M</td>
+            <td class="right mono">1.18B</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Cache write tokens</td>
+            <td class="right mono">120.4M</td>
+            <td class="right mono">4.9M</td>
+            <td class="right mono">125.2M</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Total API cost</td>
+            <td class="right mono">$4,442.58</td>
+            <td class="right mono">$263.04</td>
+            <td class="right mono">$4,705.62</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Output composition</h3>
+<p>Model output splits into <em>thinking</em> (extended thinking / chain-of-thought, not billed as output) and <em>text</em> (visible response, code, tool calls). Estimated from character counts with a 3:1 chars-to-tokens ratio for thinking.</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Metric</th>
+            <th class="right">Opus 4.5</th>
+            <th class="right">Opus 4.6</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="label-cell">Est. thinking tokens</td>
+            <td class="right mono">1,235,523</td>
+            <td class="right mono">94,051</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Est. text tokens</td>
+            <td class="right mono">485,049</td>
+            <td class="right mono">56,589</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Thinking ratio (tasks using thinking)</td>
+            <td class="right mono">77.7%</td>
+            <td class="right mono">56.4%</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Avg requests / task</td>
+            <td class="right mono">7.0</td>
+            <td class="right mono">7.8</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Code output</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Metric</th>
+            <th class="right">Opus 4.5</th>
+            <th class="right">Opus 4.6</th>
+            <th class="right">Combined</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="label-cell">Files touched</td>
+            <td class="right mono">3,026</td>
+            <td class="right mono">284</td>
+            <td class="right mono">3,310</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Lines added</td>
+            <td class="right mono">192,791</td>
+            <td class="right mono">7,741</td>
+            <td class="right mono">200,532</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Lines removed</td>
+            <td class="right mono">43,263</td>
+            <td class="right mono">1,799</td>
+            <td class="right mono">45,062</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>Cache reads dominate the token budget: 90% of all tokens processed were served from cache rather than freshly encoded. This reflects Claude Code's prompt architecture, where the system prompt and conversation history are re-sent with each API call but largely hit the prompt cache.</p>
+<!-- /GENERATED-TABLE -->

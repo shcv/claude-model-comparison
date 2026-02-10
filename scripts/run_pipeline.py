@@ -25,6 +25,7 @@ STEPS = [
     ("edits",    "Analyze edits"),
     ("planning", "Analyze planning by complexity"),
     ("compaction", "Analyze compaction"),
+    ("dataset",    "Generate dataset overview"),
     ("update",     "Update report sections"),
     ("report",     "Build report"),
 ]
@@ -66,6 +67,10 @@ def build_command(step, data_dir, analysis_dir):
                 "--analysis-dir", str(analysis_dir)]
     elif step == "compaction":
         return [sys.executable, str(scripts_dir / "analyze_compaction.py"),
+                "--data-dir", str(data_dir),
+                "--analysis-dir", str(analysis_dir)]
+    elif step == "dataset":
+        return [sys.executable, str(scripts_dir / "analyze_dataset.py"),
                 "--data-dir", str(data_dir),
                 "--analysis-dir", str(analysis_dir)]
     elif step == "update":

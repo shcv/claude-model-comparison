@@ -34,7 +34,7 @@ python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --ste
 python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --from stats
 ```
 
-Steps (in order): `collect`, `extract`, `classify`, `analyze`, `tokens`, `stats`, `edits`, `planning`, `compaction`, `update`, `report`.
+Steps (in order): `collect`, `extract`, `classify`, `analyze`, `tokens`, `stats`, `edits`, `planning`, `compaction`, `dataset`, `update`, `report`.
 
 Individual scripts can also be run directly with `--data-dir` and `--analysis-dir` arguments:
 
@@ -48,6 +48,7 @@ python scripts/stat_tests.py --data-dir comparisons/opus-4.5-vs-4.6/data --analy
 python scripts/analyze_edits.py --data-dir comparisons/opus-4.5-vs-4.6/data --analysis-dir comparisons/opus-4.5-vs-4.6/analysis
 python scripts/planning_analysis.py --data-dir comparisons/opus-4.5-vs-4.6/data --analysis-dir comparisons/opus-4.5-vs-4.6/analysis
 python scripts/analyze_compaction.py --data-dir comparisons/opus-4.5-vs-4.6/data --analysis-dir comparisons/opus-4.5-vs-4.6/analysis
+python scripts/analyze_dataset.py --data-dir comparisons/opus-4.5-vs-4.6/data --analysis-dir comparisons/opus-4.5-vs-4.6/analysis
 python scripts/update_sections.py --dir comparisons/opus-4.5-vs-4.6                          # update tables + prose
 python scripts/update_sections.py --dir comparisons/opus-4.5-vs-4.6 --tables-only            # tables only, no LLM
 python scripts/update_sections.py --dir comparisons/opus-4.5-vs-4.6 --sections cost --dry-run # preview changes
