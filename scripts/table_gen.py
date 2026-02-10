@@ -115,11 +115,27 @@ def format_value(value: Any, fmt: str) -> str:
         return str(value)
 
 
-def generate_bar_pair(val_a: float, val_b: float, scale: float = 100.0,
-                      format_fn=None) -> str:
-    """Generate bar-pair HTML matching the existing CSS conventions.
+def _ci_html(ci: tuple, scale: float) -> str:
+    """Generate CI whisker HTML for a bar track.
 
-    Produces the bar-cell structure used in iterative-refinement-detail.html.
+    Args:
+        ci: (lower, upper) in the same units as the bar value.
+        scale: Same scale used for bar width calculation.
+    """
+    lo = max(ci[0] / scale * 100, 0) if scale else 0
+    hi = min(ci[1] / scale * 100, 100) if scale else 0
+    w = hi - lo
+    if w < 0.1:
+        return ""
+    lo_val = ci[0] if scale == 100 else ci[0]
+    hi_val = ci[1] if scale == 100 else ci[1]
+    return (f'<div class="bar-ci" style="left:{lo:.1f}%;width:{w:.1f}%"'
+            f' title="95% CI: [{lo_val:.1f}, {hi_val:.1f}]"></div>')
+
+
+def generate_bar_pair(val_a: float, val_b: float, scale: float = 100.0,
+                      format_fn=None, ci_a=None, ci_b=None) -> str:
+    """Generate bar-pair HTML matching the existing CSS conventions.
 
     Args:
         val_a: Value for model A (percentage, 0-100 scale)
@@ -127,18 +143,22 @@ def generate_bar_pair(val_a: float, val_b: float, scale: float = 100.0,
         scale: Maximum value for scaling bar widths (default 100)
         format_fn: Optional callable(float) -> str for custom value display.
                    Defaults to "{val:.1f}%".
+        ci_a: Optional (lower, upper) CI for model A, same units as val_a.
+        ci_b: Optional (lower, upper) CI for model B, same units as val_b.
     """
     width_a = min(val_a / scale * 100, 100) if scale else 0
     width_b = min(val_b / scale * 100, 100) if scale else 0
     fmt = format_fn or (lambda v: f"{v:.1f}%")
+    ci_a_html = _ci_html(ci_a, scale) if ci_a else ""
+    ci_b_html = _ci_html(ci_b, scale) if ci_b else ""
     return (
         f'<div class="bar-pair">\n'
         f'                <div class="bar-row"><span class="bar-tag">A</span>'
         f'<div class="bar-track"><div class="bar-fill a" style="width:{width_a:.1f}%">'
-        f'</div></div><span class="bar-val">{fmt(val_a)}</span></div>\n'
+        f'</div>{ci_a_html}</div><span class="bar-val">{fmt(val_a)}</span></div>\n'
         f'                <div class="bar-row"><span class="bar-tag">B</span>'
         f'<div class="bar-track"><div class="bar-fill b" style="width:{width_b:.1f}%">'
-        f'</div></div><span class="bar-val">{fmt(val_b)}</span></div>\n'
+        f'</div>{ci_b_html}</div><span class="bar-val">{fmt(val_b)}</span></div>\n'
         f'            </div>'
     )
 

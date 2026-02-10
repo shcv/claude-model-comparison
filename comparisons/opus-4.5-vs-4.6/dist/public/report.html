@@ -201,6 +201,24 @@
             background: var(--light-gray);
             border-radius: 2px;
             overflow: hidden;
+            position: relative;
+        }
+        .bar-ci {
+            position: absolute;
+            top: 1px;
+            height: 8px;
+            border-left: 1.5px solid rgba(0,0,0,0.4);
+            border-right: 1.5px solid rgba(0,0,0,0.4);
+        }
+        .bar-ci::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1.5px;
+            background: rgba(0,0,0,0.3);
+            transform: translateY(-50%);
         }
         .bar-fill {
             height: 100%;
@@ -1026,51 +1044,51 @@
         <tr>
             <td class="label-cell">Trivial &mdash; thinking %</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:77.0%"></div></div><span class="bar-val">77.0%</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:37.2%"></div></div><span class="bar-val">37.2%</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:77.0%"></div><div class="bar-ci" style="left:74.0%;width:5.8%" title="95% CI: [74.0, 79.8]"></div></div><span class="bar-val">77.0%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:37.2%"></div><div class="bar-ci" style="left:27.3%;width:21.0%" title="95% CI: [27.3, 48.3]"></div></div><span class="bar-val">37.2%</span></div>
             </div></td>
-            <td class="right mono">77% (n=813) [74.0%, 79.8%]</td>
-            <td class="right mono">37% (n=78) [27.3%, 48.3%]</td>
+            <td class="right mono">813</td>
+            <td class="right mono">78</td>
             <td class="right mono v-orange">&minus;40pp</td>
         </tr>
         <tr>
             <td class="label-cell">Simple &mdash; thinking %</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:91.7%"></div></div><span class="bar-val">91.7%</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:69.8%"></div></div><span class="bar-val">69.8%</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:91.7%"></div><div class="bar-ci" style="left:88.4%;width:5.8%" title="95% CI: [88.4, 94.2]"></div></div><span class="bar-val">91.7%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:69.8%"></div><div class="bar-ci" style="left:54.9%;width:26.5%" title="95% CI: [54.9, 81.4]"></div></div><span class="bar-val">69.8%</span></div>
             </div></td>
-            <td class="right mono">92% (n=350) [88.4%, 94.2%]</td>
-            <td class="right mono">70% (n=43) [54.9%, 81.4%]</td>
+            <td class="right mono">350</td>
+            <td class="right mono">43</td>
             <td class="right mono v-orange">&minus;22pp</td>
         </tr>
         <tr>
             <td class="label-cell">Moderate &mdash; thinking %</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:89.5%"></div></div><span class="bar-val">89.5%</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:98.3%"></div></div><span class="bar-val">98.3%</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:89.5%"></div><div class="bar-ci" style="left:85.9%;width:6.3%" title="95% CI: [85.9, 92.2]"></div></div><span class="bar-val">89.5%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:98.3%"></div><div class="bar-ci" style="left:90.9%;width:8.8%" title="95% CI: [90.9, 99.7]"></div></div><span class="bar-val">98.3%</span></div>
             </div></td>
-            <td class="right mono">90% (n=370) [85.9%, 92.2%]</td>
-            <td class="right mono">98% (n=58) [90.9%, 99.7%]</td>
+            <td class="right mono">370</td>
+            <td class="right mono">58</td>
             <td class="right mono v-blue">+9pp</td>
         </tr>
         <tr>
             <td class="label-cell">Complex &mdash; thinking %</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:75.9%"></div></div><span class="bar-val">75.9%</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:77.8%"></div></div><span class="bar-val">77.8%</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:75.9%"></div><div class="bar-ci" style="left:69.4%;width:12.1%" title="95% CI: [69.4, 81.4]"></div></div><span class="bar-val">75.9%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:77.8%"></div><div class="bar-ci" style="left:54.8%;width:36.2%" title="95% CI: [54.8, 91.0]"></div></div><span class="bar-val">77.8%</span></div>
             </div></td>
-            <td class="right mono">76% (n=191) [69.4%, 81.4%]</td>
-            <td class="right mono">78% (n=18) [54.8%, 91.0%]</td>
+            <td class="right mono">191</td>
+            <td class="right mono">18</td>
             <td class="right mono ">+2pp</td>
         </tr>
         <tr>
             <td class="label-cell">Major &mdash; thinking %</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:77.8%"></div></div><span class="bar-val">77.8%</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:20.0%"></div></div><span class="bar-val">20.0%</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:77.8%"></div><div class="bar-ci" style="left:54.8%;width:36.2%" title="95% CI: [54.8, 91.0]"></div></div><span class="bar-val">77.8%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:20.0%"></div><div class="bar-ci" style="left:3.6%;width:58.8%" title="95% CI: [3.6, 62.4]"></div></div><span class="bar-val">20.0%</span></div>
             </div></td>
-            <td class="right mono">78% (n=18) [54.8%, 91.0%]</td>
-            <td class="right mono">20% (n=5) [3.6%, 62.4%]</td>
+            <td class="right mono">18</td>
+            <td class="right mono">5</td>
             <td class="right mono v-orange">&minus;58pp</td>
         </tr>
     </tbody>
@@ -1375,13 +1393,13 @@
     <tbody>
         <tr><td class="label-cell">Tasks with edits</td><td></td><td class="right mono">642</td><td class="right mono">29</td></tr>
         <tr><td class="label-cell">Edit calls (rewrite rate denom.)</td><td></td><td class="right mono">2,302</td><td class="right mono">102</td></tr>
-        <tr><td class="label-cell">Rewrite rate (95% CI)</td>
+        <tr><td class="label-cell">Rewrite rate</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:17.1%"></div></div><span class="bar-val">17.1%</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:8.8%"></div></div><span class="bar-val">8.8%</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:17.1%"></div><div class="bar-ci" style="left:15.6%;width:3.1%" title="95% CI: [15.6, 18.7]"></div></div><span class="bar-val">17.1%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:8.8%"></div><div class="bar-ci" style="left:4.7%;width:11.2%" title="95% CI: [4.7, 15.9]"></div></div><span class="bar-val">8.8%</span></div>
             </div></td>
-            <td class="right mono">17.1% [15.6%, 18.7%]</td>
-            <td class="right mono">8.8% [4.7%, 15.9%]</td></tr>
+            <td class="right mono">17.1%</td>
+            <td class="right mono">8.8%</td></tr>
         <tr><td class="label-cell">Total overlapping edits</td><td></td><td class="right mono">393</td><td class="right mono">9</td></tr>
         <tr><td class="label-cell"><span class="term" data-def="When the agent rewrites its own code within the same task without any error or user prompt.">Self-correction</span>s</td>
             <td class="bar-cell"><div class="bar-pair">
@@ -1779,37 +1797,31 @@
 <!-- GENERATED-TABLE: quality-sentiment -->
 <table>
     <thead>
-        <tr><th>Sentiment</th><th>Distribution</th><th class="right">4.5 (95% CI)</th><th class="right">4.6 (95% CI)</th><th class="right">&Delta;</th></tr>
+        <tr><th>Sentiment</th><th>Distribution (with 95% CI)</th><th class="right">&Delta;</th></tr>
     </thead>
     <tbody>
         <tr>
             <td class="label-cell">Satisfied</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:26.1%"></div></div><span class="bar-val">26.1%</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:26.7%"></div></div><span class="bar-val">26.7%</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:26.1%"></div><div class="bar-ci" style="left:24.1%;width:4.1%" title="95% CI: [24.1, 28.2]"></div></div><span class="bar-val">26.1%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:26.7%"></div><div class="bar-ci" style="left:21.1%;width:12.1%" title="95% CI: [21.1, 33.2]"></div></div><span class="bar-val">26.7%</span></div>
             </div></td>
-            <td class="right mono">26.1% [24.1%, 28.2%]</td>
-            <td class="right mono">26.7% [21.1%, 33.2%]</td>
             <td class="right mono" style="color:var(--mid-gray)">&asymp; Tie</td>
         </tr>
         <tr>
             <td class="label-cell">Neutral</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:56.3%"></div></div><span class="bar-val">56.3%</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:55.0%"></div></div><span class="bar-val">55.0%</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:56.3%"></div><div class="bar-ci" style="left:53.9%;width:4.7%" title="95% CI: [53.9, 58.6]"></div></div><span class="bar-val">56.3%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:55.0%"></div><div class="bar-ci" style="left:48.1%;width:13.6%" title="95% CI: [48.1, 61.7]"></div></div><span class="bar-val">55.0%</span></div>
             </div></td>
-            <td class="right mono">56.3% [53.9%, 58.6%]</td>
-            <td class="right mono">55.0% [48.1%, 61.7%]</td>
             <td class="right mono" style="color:var(--mid-gray)">&asymp; Tie</td>
         </tr>
         <tr>
             <td class="label-cell">Dissatisfied</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:13.2%"></div></div><span class="bar-val">13.2%</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:14.4%"></div></div><span class="bar-val">14.4%</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:13.2%"></div><div class="bar-ci" style="left:11.7%;width:3.2%" title="95% CI: [11.7, 14.9]"></div></div><span class="bar-val">13.2%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:14.4%"></div><div class="bar-ci" style="left:10.2%;width:9.7%" title="95% CI: [10.2, 19.9]"></div></div><span class="bar-val">14.4%</span></div>
             </div></td>
-            <td class="right mono">13.2% [11.7%, 14.9%]</td>
-            <td class="right mono">14.4% [10.2%, 19.9%]</td>
             <td class="right mono" style="color:var(--mid-gray)">&asymp; Tie</td>
         </tr>
     </tbody>
@@ -1820,47 +1832,39 @@
 <!-- GENERATED-TABLE: quality-completion -->
 <table>
     <thead>
-        <tr><th>Outcome</th><th>Distribution</th><th class="right">4.5 (95% CI)</th><th class="right">4.6 (95% CI)</th><th class="right">&Delta;</th></tr>
+        <tr><th>Outcome</th><th>Distribution (with 95% CI)</th><th class="right">&Delta;</th></tr>
     </thead>
     <tbody>
         <tr>
             <td class="label-cell">Complete</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:33.1%"></div></div><span class="bar-val">33.1%</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:35.1%"></div></div><span class="bar-val">35.1%</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:33.1%"></div><div class="bar-ci" style="left:30.9%;width:4.4%" title="95% CI: [30.9, 35.3]"></div></div><span class="bar-val">33.1%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:35.1%"></div><div class="bar-ci" style="left:28.9%;width:13.1%" title="95% CI: [28.9, 42.0]"></div></div><span class="bar-val">35.1%</span></div>
             </div></td>
-            <td class="right mono">33.1% [30.9%, 35.3%]</td>
-            <td class="right mono">35.1% [28.9%, 42.0%]</td>
             <td class="right mono" style="color:var(--mid-gray)">&asymp; Tie</td>
         </tr>
         <tr>
             <td class="label-cell">Partial</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:40.9%"></div></div><span class="bar-val">40.9%</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:48.5%"></div></div><span class="bar-val">48.5%</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:40.9%"></div><div class="bar-ci" style="left:38.6%;width:4.6%" title="95% CI: [38.6, 43.3]"></div></div><span class="bar-val">40.9%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:48.5%"></div><div class="bar-ci" style="left:41.7%;width:13.7%" title="95% CI: [41.7, 55.4]"></div></div><span class="bar-val">48.5%</span></div>
             </div></td>
-            <td class="right mono">40.9% [38.6%, 43.3%]</td>
-            <td class="right mono">48.5% [41.7%, 55.4%]</td>
             <td class="right mono" style="color:var(--blue)">B +7.6pp</td>
         </tr>
         <tr>
             <td class="label-cell">Interrupted</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:9.9%"></div></div><span class="bar-val">9.9%</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:7.4%"></div></div><span class="bar-val">7.4%</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:9.9%"></div><div class="bar-ci" style="left:8.6%;width:2.8%" title="95% CI: [8.6, 11.4]"></div></div><span class="bar-val">9.9%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:7.4%"></div><div class="bar-ci" style="left:4.6%;width:7.3%" title="95% CI: [4.6, 11.9]"></div></div><span class="bar-val">7.4%</span></div>
             </div></td>
-            <td class="right mono">9.9% [8.6%, 11.4%]</td>
-            <td class="right mono">7.4% [4.6%, 11.9%]</td>
             <td class="right mono" style="color:var(--mid-gray)">&asymp; Tie</td>
         </tr>
         <tr>
             <td class="label-cell">Failed</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:14.2%"></div></div><span class="bar-val">14.2%</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:8.4%"></div></div><span class="bar-val">8.4%</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:14.2%"></div><div class="bar-ci" style="left:12.6%;width:3.3%" title="95% CI: [12.6, 15.9]"></div></div><span class="bar-val">14.2%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:8.4%"></div><div class="bar-ci" style="left:5.3%;width:7.7%" title="95% CI: [5.3, 13.1]"></div></div><span class="bar-val">8.4%</span></div>
             </div></td>
-            <td class="right mono">14.2% [12.6%, 15.9%]</td>
-            <td class="right mono">8.4% [5.3%, 13.1%]</td>
             <td class="right mono" style="color:var(--blue)">B &minus;5.8pp</td>
         </tr>
     </tbody>

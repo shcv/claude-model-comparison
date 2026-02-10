@@ -1041,19 +1041,19 @@ def generate_thinking_calibration_inline(spec: dict, data: dict, config: dict) -
         if abs(delta_pp) < 5:
             css = ""
 
-        # Wilson CIs
+        # Wilson CIs (as percentages for bar display)
         ci_a = table_gen.wilson_ci(thinking_a, n_a) if n_a > 0 else (0, 0)
         ci_b = table_gen.wilson_ci(thinking_b, n_b) if n_b > 0 else (0, 0)
-        ci_a_str = table_gen.format_ci(ci_a[0], ci_a[1]) if n_a > 0 else ""
-        ci_b_str = table_gen.format_ci(ci_b[0], ci_b[1]) if n_b > 0 else ""
 
-        bar = table_gen.generate_bar_pair(pct_a, pct_b)
+        bar = table_gen.generate_bar_pair(pct_a, pct_b,
+                                          ci_a=(ci_a[0] * 100, ci_a[1] * 100) if n_a > 0 else None,
+                                          ci_b=(ci_b[0] * 100, ci_b[1] * 100) if n_b > 0 else None)
         label = table_gen._label_case(cx)
         lines.append("        <tr>")
         lines.append(f'            <td class="label-cell">{label} &mdash; thinking %</td>')
         lines.append(f'            <td class="bar-cell">{bar}</td>')
-        lines.append(f'            <td class="right mono">{pct_a:.0f}% (n={n_a}) {ci_a_str}</td>')
-        lines.append(f'            <td class="right mono">{pct_b:.0f}% (n={n_b}) {ci_b_str}</td>')
+        lines.append(f'            <td class="right mono">{n_a}</td>')
+        lines.append(f'            <td class="right mono">{n_b}</td>')
         lines.append(f'            <td class="right mono {css}">{delta_str}</td>')
         lines.append("        </tr>")
 
@@ -1208,14 +1208,14 @@ def generate_edit_overview_inline(spec: dict, data: dict, config: dict) -> str:
                  f'<td class="right mono">{edits_a:,}</td>'
                  f'<td class="right mono">{edits_b:,}</td></tr>')
 
-    # Rewrite rate with CI
-    rr_bar = table_gen.generate_bar_pair(rr_a * 100, rr_b * 100)
-    ci_a_str = table_gen.format_ci(ci_rr_a[0], ci_rr_a[1])
-    ci_b_str = table_gen.format_ci(ci_rr_b[0], ci_rr_b[1])
-    lines.append(f'        <tr><td class="label-cell">Rewrite rate (95% CI)</td>')
+    # Rewrite rate with CI on bars
+    rr_bar = table_gen.generate_bar_pair(rr_a * 100, rr_b * 100,
+                                         ci_a=(ci_rr_a[0] * 100, ci_rr_a[1] * 100),
+                                         ci_b=(ci_rr_b[0] * 100, ci_rr_b[1] * 100))
+    lines.append(f'        <tr><td class="label-cell">Rewrite rate</td>')
     lines.append(f'            <td class="bar-cell">{rr_bar}</td>')
-    lines.append(f'            <td class="right mono">{rr_a*100:.1f}% {ci_a_str}</td>')
-    lines.append(f'            <td class="right mono">{rr_b*100:.1f}% {ci_b_str}</td></tr>')
+    lines.append(f'            <td class="right mono">{rr_a*100:.1f}%</td>')
+    lines.append(f'            <td class="right mono">{rr_b*100:.1f}%</td></tr>')
 
     # Total overlaps
     lines.append(f'        <tr><td class="label-cell">Total overlapping edits</td><td></td>'
@@ -1358,8 +1358,7 @@ def generate_quality_sentiment_inline(spec: dict, data: dict, config: dict) -> s
 
     lines.append("<table>")
     lines.append("    <thead>")
-    lines.append('        <tr><th>Sentiment</th><th>Distribution</th>'
-                 '<th class="right">4.5 (95% CI)</th><th class="right">4.6 (95% CI)</th>'
+    lines.append('        <tr><th>Sentiment</th><th>Distribution (with 95% CI)</th>'
                  '<th class="right">&Delta;</th></tr>')
     lines.append("    </thead>")
     lines.append("    <tbody>")
@@ -1377,13 +1376,12 @@ def generate_quality_sentiment_inline(spec: dict, data: dict, config: dict) -> s
         pct_a = ca / n_a * 100
         pct_b = cb / n_b * 100
         delta_pp = pct_b - pct_a
-        bar = table_gen.generate_bar_pair(pct_a, pct_b)
-
-        # Wilson CIs
+        # Wilson CIs (as percentages for bar display)
         ci_a = table_gen.wilson_ci(ca, n_a)
         ci_b = table_gen.wilson_ci(cb, n_b)
-        ci_a_str = table_gen.format_ci(ci_a[0], ci_a[1])
-        ci_b_str = table_gen.format_ci(ci_b[0], ci_b[1])
+        bar = table_gen.generate_bar_pair(pct_a, pct_b,
+                                          ci_a=(ci_a[0] * 100, ci_a[1] * 100),
+                                          ci_b=(ci_b[0] * 100, ci_b[1] * 100))
 
         if abs(delta_pp) < 3:
             delta_str = '&asymp; Tie'
@@ -1399,8 +1397,6 @@ def generate_quality_sentiment_inline(spec: dict, data: dict, config: dict) -> s
         lines.append("        <tr>")
         lines.append(f'            <td class="label-cell">{label}</td>')
         lines.append(f'            <td class="bar-cell">{bar}</td>')
-        lines.append(f'            <td class="right mono">{pct_a:.1f}% {ci_a_str}</td>')
-        lines.append(f'            <td class="right mono">{pct_b:.1f}% {ci_b_str}</td>')
         lines.append(f'            <td class="right mono" style="{delta_css}">{delta_str}</td>')
         lines.append("        </tr>")
 
@@ -1451,8 +1447,7 @@ def generate_quality_completion_inline(spec: dict, data: dict, config: dict) -> 
 
     lines.append("<table>")
     lines.append("    <thead>")
-    lines.append('        <tr><th>Outcome</th><th>Distribution</th>'
-                 '<th class="right">4.5 (95% CI)</th><th class="right">4.6 (95% CI)</th>'
+    lines.append('        <tr><th>Outcome</th><th>Distribution (with 95% CI)</th>'
                  '<th class="right">&Delta;</th></tr>')
     lines.append("    </thead>")
     lines.append("    <tbody>")
@@ -1470,13 +1465,12 @@ def generate_quality_completion_inline(spec: dict, data: dict, config: dict) -> 
         pct_a = ca / n_a * 100
         pct_b = cb / n_b * 100
         delta_pp = pct_b - pct_a
-        bar = table_gen.generate_bar_pair(pct_a, pct_b)
-
-        # Wilson CIs
+        # Wilson CIs (as percentages for bar display)
         ci_a = table_gen.wilson_ci(ca, n_a)
         ci_b = table_gen.wilson_ci(cb, n_b)
-        ci_a_str = table_gen.format_ci(ci_a[0], ci_a[1])
-        ci_b_str = table_gen.format_ci(ci_b[0], ci_b[1])
+        bar = table_gen.generate_bar_pair(pct_a, pct_b,
+                                          ci_a=(ci_a[0] * 100, ci_a[1] * 100),
+                                          ci_b=(ci_b[0] * 100, ci_b[1] * 100))
 
         if abs(delta_pp) < 3:
             delta_str = '&asymp; Tie'
@@ -1497,8 +1491,6 @@ def generate_quality_completion_inline(spec: dict, data: dict, config: dict) -> 
         lines.append("        <tr>")
         lines.append(f'            <td class="label-cell">{label}</td>')
         lines.append(f'            <td class="bar-cell">{bar}</td>')
-        lines.append(f'            <td class="right mono">{pct_a:.1f}% {ci_a_str}</td>')
-        lines.append(f'            <td class="right mono">{pct_b:.1f}% {ci_b_str}</td>')
         lines.append(f'            <td class="right mono" style="{delta_css}">{delta_str}</td>')
         lines.append("        </tr>")
 
