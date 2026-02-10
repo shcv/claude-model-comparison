@@ -168,6 +168,11 @@ class CanonicalTask:
     parallel_tool_messages: int = 0
     run_in_background_count: int = 0
 
+    # --- Timing details ---
+    request_timings: list = field(default_factory=list)
+    # Each: {request_id, first_timestamp, last_timestamp, has_tool_use, tool_count}
+    turn_duration_ms: int = 0
+
     # --- Compaction context ---
     compaction_events_before: list = field(default_factory=list)
     # Each: {trigger, pre_tokens, msg_index, timestamp}
@@ -474,6 +479,9 @@ def extract_canonical_from_session(file_path: Path, model: str) -> list[Canonica
     seen_request_ids: set[str] = set()
     request_output_max: dict[str, int] = {}  # requestId -> max output_tokens
 
+    # Request timing tracking: per-request first/last timestamps and tool counts
+    request_timing_data: dict[str, dict] = {}  # requestId -> timing info
+
     # Edit tracking: pending edits waiting for tool_result
     pending_edits: dict[str, dict] = {}  # tool_use_id -> edit event dict
 
@@ -481,9 +489,12 @@ def extract_canonical_from_session(file_path: Path, model: str) -> list[Canonica
     pending_compactions: list[dict] = []
 
     def finalize_task(next_user_text: str = "", is_session_end: bool = False):
-        nonlocal current_task, seen_request_ids, request_output_max
+        nonlocal current_task, seen_request_ids, request_output_max, request_timing_data
         if current_task is None:
             return
+
+        # Compile request timings
+        current_task.request_timings = list(request_timing_data.values())
 
         # Outcome categorization
         if is_session_end:
@@ -535,10 +546,18 @@ def extract_canonical_from_session(file_path: Path, model: str) -> list[Canonica
         current_task = None
         seen_request_ids = set()
         request_output_max = {}
+        request_timing_data = {}
 
     for idx, msg in enumerate(messages):
         msg_type = msg.get('type')
         timestamp = msg.get('timestamp', '')
+
+        # --- Turn duration (system messages) ---
+        if msg_type == 'system' and msg.get('subtype') == 'turn_duration':
+            duration_ms = msg.get('durationMs', 0) or 0
+            if current_task is not None and duration_ms > 0:
+                current_task.turn_duration_ms += duration_ms
+            continue
 
         # --- Compaction events (system messages) ---
         if msg_type == 'system' and msg.get('subtype') == 'compact_boundary':
@@ -640,6 +659,19 @@ def extract_canonical_from_session(file_path: Path, model: str) -> list[Canonica
             usage = message.get('usage', {})
             request_id = msg.get('requestId', '')
 
+            # --- Request timing tracking ---
+            if request_id:
+                if request_id not in request_timing_data:
+                    request_timing_data[request_id] = {
+                        'request_id': request_id,
+                        'first_timestamp': timestamp,
+                        'last_timestamp': timestamp,
+                        'has_tool_use': False,
+                        'tool_count': 0,
+                    }
+                else:
+                    request_timing_data[request_id]['last_timestamp'] = timestamp
+
             # --- Token usage ---
             if request_id and request_id not in seen_request_ids:
                 seen_request_ids.add(request_id)
@@ -693,7 +725,14 @@ def extract_canonical_from_session(file_path: Path, model: str) -> list[Canonica
                 elif block_type == 'tool_use':
                     tool_uses_in_msg.append(block)
                     tool_info = extract_tool_info(block)
+                    tool_info['timestamp'] = timestamp
+                    tool_info['tool_use_id'] = block.get('id', '')
                     current_task.tool_calls.append(tool_info)
+
+                    # Update request timing tool counts
+                    if request_id and request_id in request_timing_data:
+                        request_timing_data[request_id]['has_tool_use'] = True
+                        request_timing_data[request_id]['tool_count'] += 1
 
                     name = tool_info.get('name')
                     file_path_str = tool_info.get('file', '')
@@ -868,6 +907,7 @@ def _merge_task_into(target: CanonicalTask, source: CanonicalTask) -> None:
     target.files_edited.extend(source.files_edited)
     target.bash_commands.extend(source.bash_commands)
     target.edit_events.extend(source.edit_events)
+    target.request_timings.extend(source.request_timings)
     target.compaction_events_before.extend(source.compaction_events_before)
     target.errors.extend(source.errors)
     target.subagent_types.extend(source.subagent_types)
@@ -888,6 +928,7 @@ def _merge_task_into(target: CanonicalTask, source: CanonicalTask) -> None:
     target.subagent_count += source.subagent_count
     target.parallel_tool_messages += source.parallel_tool_messages
     target.run_in_background_count += source.run_in_background_count
+    target.turn_duration_ms += source.turn_duration_ms
 
     # Booleans: OR
     target.used_planning = target.used_planning or source.used_planning

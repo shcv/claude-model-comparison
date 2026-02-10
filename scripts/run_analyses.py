@@ -42,6 +42,12 @@ ANALYSES = [
          "--data-dir", str(data_dir),
          "--analysis-dir", str(analysis_dir),
      ]),
+    ("analyze_timing.py", "Timing analysis",
+     lambda data_dir, analysis_dir: [
+         sys.executable, str(Path(__file__).resolve().parent / "analyze_timing.py"),
+         "--data-dir", str(data_dir),
+         "--analysis-dir", str(analysis_dir),
+     ]),
 ]
 
 

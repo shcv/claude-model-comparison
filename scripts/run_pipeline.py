@@ -26,7 +26,7 @@ STEPS = [
     ("extract",   "Extract tasks"),
     ("classify",  "Classify tasks"),
     ("annotate",  "Annotate tasks (LLM + signals)"),
-    ("analyze",   "Run all analyses (behavior, edits, planning, compaction)"),
+    ("analyze",   "Run all analyses (behavior, edits, planning, compaction, timing)"),
     ("tokens",    "Extract tokens"),
     ("stats",     "Run statistical tests"),
     ("dataset",   "Generate dataset overview"),
@@ -104,7 +104,8 @@ def get_step_io(step, data_dir, analysis_dir, comparison_dir):
         inputs = _glob_hashes(data_dir, "tasks-canonical-*.json")
         outputs = {}
         for name in ["behavior-metrics.json", "edit-analysis.json",
-                      "planning-analysis.json", "compaction-analysis.json"]:
+                      "planning-analysis.json", "compaction-analysis.json",
+                      "timing-analysis.json"]:
             h = _file_hash(analysis_dir / name)
             if h:
                 outputs[name] = h
