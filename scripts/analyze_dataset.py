@@ -8,8 +8,36 @@ Usage:
 
 import argparse
 import json
+import sys
 from collections import Counter
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from models import load_canonical_tasks
+
+
+def compute_cleaning_stats(data_dir: Path, model: str) -> dict:
+    """Compute data cleaning exclusion and flag counts from canonical tasks."""
+    all_tasks = load_canonical_tasks(data_dir, model, include_excluded=True)
+    total = len(all_tasks)
+    included = sum(1 for t in all_tasks if not t.get('exclude_reason'))
+    excluded = total - included
+
+    reasons = Counter(t['exclude_reason'] for t in all_tasks if t.get('exclude_reason'))
+    flags = Counter()
+    for t in all_tasks:
+        if not t.get('exclude_reason'):
+            for f in t.get('flags', []):
+                flags[f] += 1
+
+    return {
+        'total_extracted': total,
+        'included': included,
+        'excluded': excluded,
+        'exclusion_rate': round(excluded / total, 4) if total else 0,
+        'exclusion_reasons': dict(reasons.most_common()),
+        'flag_counts': dict(flags.most_common()),
+    }
 
 
 def analyze_model(data_dir: Path, analysis_dir: Path, model: str) -> dict:
@@ -134,6 +162,7 @@ def main():
     for model in models:
         print(f"Analyzing {model}...")
         result[model] = analyze_model(data_dir, analysis_dir, model)
+        result[model]['data_cleaning'] = compute_cleaning_stats(data_dir, model)
 
     # Combined stats
     all_projects = set()
@@ -158,6 +187,26 @@ def main():
         "start": min(starts) if starts else None,
         "end": max(ends) if ends else None,
     }
+
+    # Combined cleaning stats
+    combined_cleaning = {
+        'total_extracted': sum(result[m]['data_cleaning']['total_extracted'] for m in models),
+        'included': sum(result[m]['data_cleaning']['included'] for m in models),
+        'excluded': sum(result[m]['data_cleaning']['excluded'] for m in models),
+    }
+    total_ext = combined_cleaning['total_extracted']
+    combined_cleaning['exclusion_rate'] = round(combined_cleaning['excluded'] / total_ext, 4) if total_ext else 0
+    # Merge reason/flag counts
+    all_reasons = Counter()
+    all_flags = Counter()
+    for m in models:
+        for r, c in result[m]['data_cleaning']['exclusion_reasons'].items():
+            all_reasons[r] += c
+        for f, c in result[m]['data_cleaning']['flag_counts'].items():
+            all_flags[f] += c
+    combined_cleaning['exclusion_reasons'] = dict(all_reasons.most_common())
+    combined_cleaning['flag_counts'] = dict(all_flags.most_common())
+    combined['data_cleaning'] = combined_cleaning
 
     result["combined"] = combined
 

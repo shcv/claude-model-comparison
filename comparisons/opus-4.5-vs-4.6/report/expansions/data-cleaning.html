@@ -1,0 +1,34 @@
+<!-- title: Data Cleaning Methodology -->
+
+<p>Task-level data cleaning applied four exclusion rules and four informational flags to canonical tasks before analysis. Exclusions remove tasks that do not represent genuine user-model interactions; flags annotate tasks with contextual metadata without removing them.</p>
+
+<h4>Exclusion Rules</h4>
+
+<!-- GENERATED-TABLE: data-cleaning-exclusions -->
+<table class="data-table">
+<thead>
+<tr><th>Rule</th><th>Description</th><th>Opus 4.5</th><th>Opus 4.6</th></tr>
+</thead>
+<tbody>
+<tr><td><code>slash_command</code></td><td>Task prompt is a slash command (<code>/command</code>) or <code>&lt;command-name&gt;</code> tag &mdash; these invoke built-in features, not model reasoning</td><td>&mdash;</td><td>&mdash;</td></tr>
+<tr><td><code>system_continuation</code></td><td>Automatic continuations triggered by the system (e.g., context compaction boundaries, session resumptions) rather than deliberate user prompts</td><td>&mdash;</td><td>&mdash;</td></tr>
+<tr><td><code>empty_continuation</code></td><td>Bare acknowledgement prompts ("continue", "ok", "yes") with zero tool calls and &lt;5s duration &mdash; the model produced no meaningful work</td><td>&mdash;</td><td>&mdash;</td></tr>
+<tr><td><code>no_response_interrupt</code></td><td>Tasks where the model produced zero output (0 tool calls, 0 duration) before the session ended, typically user cancellations</td><td>&mdash;</td><td>&mdash;</td></tr>
+</tbody>
+</table>
+<!-- /GENERATED-TABLE: data-cleaning-exclusions -->
+
+<h4>Informational Flags</h4>
+
+<p>These flags are preserved on included tasks for subgroup analysis but do not trigger exclusion:</p>
+
+<ul>
+<li><strong><code>meta</code></strong> &mdash; Task occurred within a meta-analysis session (e.g., this report's own development), where the model analyzed its own output</li>
+<li><strong><code>no_project</code></strong> &mdash; No project directory was associated with the session</li>
+<li><strong><code>interrupted</code></strong> &mdash; User interrupted the model mid-response (based on session end pattern)</li>
+<li><strong><code>post_compaction</code></strong> &mdash; Task occurred after a context compaction event in the same session, potentially with degraded context</li>
+</ul>
+
+<h4>Project Overlap &amp; Sensitivity Analysis</h4>
+
+<p>A potential confound arises from unequal project coverage between models. To quantify this, a sensitivity analysis compares all statistical tests on the full dataset against a restricted subset containing only tasks from projects where both models were active. If results agree across both analyses, the project confound is unlikely to explain observed differences.</p>
