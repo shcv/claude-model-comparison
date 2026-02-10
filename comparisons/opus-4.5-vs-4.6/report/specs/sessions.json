@@ -1,7 +1,8 @@
 {
   "section_id": "sessions",
   "data_sources": {
-    "sessions": "analysis/session-analysis.json"
+    "sessions": "analysis/session-analysis.json",
+    "overview": "analysis/dataset-overview.json"
   },
   "tables": {
     "session-warmup": {
@@ -18,6 +19,11 @@
       "title": "Session Length Effects (inline)",
       "data_source": "sessions",
       "row_gen": "session_length_inline"
+    },
+    "duration-distribution": {
+      "title": "Task Duration Distribution (inline)",
+      "data_source": "overview",
+      "row_gen": "duration_distribution_inline"
     }
   },
   "prose": {

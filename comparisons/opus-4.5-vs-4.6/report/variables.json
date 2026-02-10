@@ -1,0 +1,396 @@
+{
+  "dataset.total_sessions": {
+    "source": "dataset",
+    "path": "combined.sessions",
+    "format": "{:,}"
+  },
+  "dataset.total_tasks": {
+    "source": "dataset",
+    "path": "combined.tasks",
+    "format": "{:,}"
+  },
+  "dataset.total_projects": {
+    "source": "dataset",
+    "path": "combined.projects",
+    "format": "{:,}"
+  },
+  "dataset.total_cost": {
+    "source": "dataset",
+    "path": "combined.total_cost_usd",
+    "format": "${:,.0f}"
+  },
+  "dataset.sessions_a": {
+    "source": "dataset",
+    "path": "{model_a}.sessions",
+    "format": "{:,}"
+  },
+  "dataset.sessions_b": {
+    "source": "dataset",
+    "path": "{model_b}.sessions",
+    "format": "{:,}"
+  },
+  "dataset.tasks_a": {
+    "source": "dataset",
+    "path": "{model_a}.tasks",
+    "format": "{:,}"
+  },
+  "dataset.tasks_b": {
+    "source": "dataset",
+    "path": "{model_b}.tasks",
+    "format": "{:,}"
+  },
+  "dataset.cost_a": {
+    "source": "dataset",
+    "path": "{model_a}.total_cost_usd",
+    "format": "${:,.0f}"
+  },
+  "dataset.cost_b": {
+    "source": "dataset",
+    "path": "{model_b}.total_cost_usd",
+    "format": "${:,.0f}"
+  },
+
+  "cost.avg_cost_a": {
+    "source": "tokens",
+    "path": "{model_a}.overall.avg_cost_usd",
+    "format": "${:.2f}"
+  },
+  "cost.avg_cost_b": {
+    "source": "tokens",
+    "path": "{model_b}.overall.avg_cost_usd",
+    "format": "${:.2f}"
+  },
+  "cost.avg_output_a": {
+    "source": "tokens",
+    "path": "{model_a}.overall.avg_output_tokens",
+    "format": "{:,.0f}"
+  },
+  "cost.avg_output_b": {
+    "source": "tokens",
+    "path": "{model_b}.overall.avg_output_tokens",
+    "format": "{:,.0f}"
+  },
+  "cost.thinking_ratio_a": {
+    "source": "tokens",
+    "path": "{model_a}.overall.thinking_ratio",
+    "format": "pct"
+  },
+  "cost.thinking_ratio_b": {
+    "source": "tokens",
+    "path": "{model_b}.overall.thinking_ratio",
+    "format": "pct"
+  },
+  "cost.avg_thinking_when_used_a": {
+    "source": "tokens",
+    "path": "{model_a}.overall.avg_thinking_chars_when_used",
+    "format": "{:,.0f}"
+  },
+  "cost.avg_thinking_when_used_b": {
+    "source": "tokens",
+    "path": "{model_b}.overall.avg_thinking_chars_when_used",
+    "format": "{:,.0f}"
+  },
+  "cost.total_cost_a": {
+    "source": "tokens",
+    "path": "{model_a}.overall.total_cost_usd",
+    "format": "${:,.0f}"
+  },
+  "cost.total_cost_b": {
+    "source": "tokens",
+    "path": "{model_b}.overall.total_cost_usd",
+    "format": "${:,.0f}"
+  },
+
+  "edits.total_overlaps_a": {
+    "source": "edits",
+    "path": "{model_a}.total_overlaps",
+    "format": "{:,}"
+  },
+  "edits.total_overlaps_b": {
+    "source": "edits",
+    "path": "{model_b}.total_overlaps",
+    "format": "{:,}"
+  },
+  "edits.rewrite_rate_a": {
+    "source": "edits",
+    "path": "{model_a}.rewrite_rate",
+    "format": "pct1"
+  },
+  "edits.rewrite_rate_b": {
+    "source": "edits",
+    "path": "{model_b}.rewrite_rate",
+    "format": "pct1"
+  },
+  "edits.self_correction_a": {
+    "source": "edits",
+    "path": "{model_a}.by_classification.self_correction",
+    "format": "{:,}"
+  },
+  "edits.self_correction_b": {
+    "source": "edits",
+    "path": "{model_b}.by_classification.self_correction",
+    "format": "{:,}"
+  },
+  "edits.error_recovery_a": {
+    "source": "edits",
+    "path": "{model_a}.by_classification.error_recovery",
+    "format": "{:,}"
+  },
+  "edits.error_recovery_b": {
+    "source": "edits",
+    "path": "{model_b}.by_classification.error_recovery",
+    "format": "{:,}"
+  },
+  "edits.user_directed_a": {
+    "source": "edits",
+    "path": "{model_a}.by_classification.user_directed",
+    "format": "{:,}"
+  },
+  "edits.user_directed_b": {
+    "source": "edits",
+    "path": "{model_b}.by_classification.user_directed",
+    "format": "{:,}"
+  },
+  "edits.iterative_a": {
+    "source": "edits",
+    "path": "{model_a}.by_classification.iterative_refinement",
+    "format": "{:,}"
+  },
+  "edits.iterative_b": {
+    "source": "edits",
+    "path": "{model_b}.by_classification.iterative_refinement",
+    "format": "{:,}"
+  },
+
+  "behavior.subagent_rate_a": {
+    "source": "behavior",
+    "path": "{model_a}.tasks_with_subagents",
+    "format": "{:,}"
+  },
+  "behavior.subagent_rate_b": {
+    "source": "behavior",
+    "path": "{model_b}.tasks_with_subagents",
+    "format": "{:,}"
+  },
+  "behavior.total_subagents_a": {
+    "source": "behavior",
+    "path": "{model_a}.total_subagent_calls",
+    "format": "{:,}"
+  },
+  "behavior.total_subagents_b": {
+    "source": "behavior",
+    "path": "{model_b}.total_subagent_calls",
+    "format": "{:,}"
+  },
+  "behavior.planning_tasks_a": {
+    "source": "behavior",
+    "path": "{model_a}.tasks_with_planning",
+    "format": "{:,}"
+  },
+  "behavior.planning_tasks_b": {
+    "source": "behavior",
+    "path": "{model_b}.tasks_with_planning",
+    "format": "{:,}"
+  },
+
+  "planning.rate_a": {
+    "source": "planning",
+    "path": "{model_a}.planning_rate_pct",
+    "format": "{:.1f}"
+  },
+  "planning.rate_b": {
+    "source": "planning",
+    "path": "{model_b}.planning_rate_pct",
+    "format": "{:.1f}"
+  },
+  "planning.total_planned_a": {
+    "source": "planning",
+    "path": "{model_a}.total_planned",
+    "format": "{:,}"
+  },
+  "planning.total_planned_b": {
+    "source": "planning",
+    "path": "{model_b}.total_planned",
+    "format": "{:,}"
+  },
+  "planning.total_tasks_a": {
+    "source": "planning",
+    "path": "{model_a}.total_tasks",
+    "format": "{:,}"
+  },
+  "planning.total_tasks_b": {
+    "source": "planning",
+    "path": "{model_b}.total_tasks",
+    "format": "{:,}"
+  },
+  "planning.alignment_delta_b": {
+    "source": "planning",
+    "path": "{model_b}.overall_alignment_delta",
+    "format": "{:.2f}"
+  },
+  "planning.alignment_planned_b": {
+    "source": "planning",
+    "path": "{model_b}.overall_alignment_planned",
+    "format": "{:.2f}"
+  },
+  "planning.alignment_unplanned_b": {
+    "source": "planning",
+    "path": "{model_b}.overall_alignment_unplanned",
+    "format": "{:.2f}"
+  },
+
+  "compaction.rate_a": {
+    "source": "compaction",
+    "path": "{model_a}.compaction_rate_pct",
+    "format": "{:.1f}"
+  },
+  "compaction.rate_b": {
+    "source": "compaction",
+    "path": "{model_b}.compaction_rate_pct",
+    "format": "{:.1f}"
+  },
+  "compaction.sessions_a": {
+    "source": "compaction",
+    "path": "{model_a}.sessions_with_compaction",
+    "format": "{:,}"
+  },
+  "compaction.total_sessions_a": {
+    "source": "compaction",
+    "path": "{model_a}.total_sessions",
+    "format": "{:,}"
+  },
+  "compaction.sessions_b": {
+    "source": "compaction",
+    "path": "{model_b}.sessions_with_compaction",
+    "format": "{:,}"
+  },
+  "compaction.total_sessions_b": {
+    "source": "compaction",
+    "path": "{model_b}.total_sessions",
+    "format": "{:,}"
+  },
+  "compaction.avg_pre_tokens_a": {
+    "source": "compaction",
+    "path": "{model_a}.avg_pre_tokens",
+    "format": "{:,.0f}"
+  },
+  "compaction.avg_pre_tokens_b": {
+    "source": "compaction",
+    "path": "{model_b}.avg_pre_tokens",
+    "format": "{:,.0f}"
+  },
+  "compaction.avg_position_a": {
+    "source": "compaction",
+    "path": "{model_a}.avg_position_pct",
+    "format": "{:.1f}"
+  },
+  "compaction.avg_position_b": {
+    "source": "compaction",
+    "path": "{model_b}.avg_position_pct",
+    "format": "{:.1f}"
+  },
+
+  "quality.alignment_p": {
+    "source": "stats",
+    "path": "overall.mann_whitney.[field=alignment_score].p_value",
+    "format": "{:.6f}"
+  },
+  "quality.alignment_d": {
+    "source": "stats",
+    "path": "overall.mann_whitney.[field=alignment_score].cohens_d",
+    "format": "{:.2f}"
+  },
+  "quality.failed_p": {
+    "source": "stats",
+    "path": "overall.proportions.[field=failed_rate].p_value",
+    "format": "{:.3f}"
+  },
+  "quality.complete_p": {
+    "source": "stats",
+    "path": "overall.proportions.[field=complete_rate].p_value",
+    "format": "{:.3f}"
+  },
+
+  "template_tables": {
+    "cost-thinking-calibration": {
+      "spec": "cost",
+      "table": "cost-thinking-calibration"
+    },
+    "cost-verbosity-by-type": {
+      "spec": "cost",
+      "table": "cost-verbosity-by-type"
+    },
+    "cost-by-complexity-inline": {
+      "spec": "cost",
+      "table": "cost-by-complexity-inline"
+    },
+    "edit-overview-inline": {
+      "spec": "edit-accuracy",
+      "table": "edit-overview-inline"
+    },
+    "edit-iterative-by-complexity": {
+      "spec": "edit-accuracy",
+      "table": "edit-iterative-by-complexity"
+    },
+    "edit-accuracy-by-complexity": {
+      "spec": "edit-accuracy",
+      "table": "edit-accuracy-by-complexity"
+    },
+    "quality-sentiment": {
+      "spec": "quality",
+      "table": "quality-sentiment"
+    },
+    "quality-completion": {
+      "spec": "quality",
+      "table": "quality-completion"
+    },
+    "behavior-adoption": {
+      "spec": "behavior",
+      "table": "behavior-adoption"
+    },
+    "behavior-subagent-types": {
+      "spec": "behavior",
+      "table": "behavior-subagent-types"
+    },
+    "complexity-distribution": {
+      "spec": "complexity",
+      "table": "complexity-distribution"
+    },
+    "complexity-resources": {
+      "spec": "complexity",
+      "table": "complexity-resources"
+    },
+    "planning-adoption": {
+      "spec": "planning",
+      "table": "planning-adoption"
+    },
+    "planning-by-complexity": {
+      "spec": "planning",
+      "table": "planning-by-complexity"
+    },
+    "compaction-overview": {
+      "spec": "compaction",
+      "table": "compaction-overview"
+    },
+    "compaction-impact": {
+      "spec": "compaction",
+      "table": "compaction-impact"
+    },
+    "session-warmup": {
+      "spec": "sessions",
+      "table": "session-warmup"
+    },
+    "session-effort": {
+      "spec": "sessions",
+      "table": "session-effort"
+    },
+    "session-length": {
+      "spec": "sessions",
+      "table": "session-length"
+    },
+    "duration-distribution": {
+      "spec": "sessions",
+      "table": "duration-distribution"
+    }
+  }
+}

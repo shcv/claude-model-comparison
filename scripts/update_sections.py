@@ -206,9 +206,8 @@ def generate_dataset_task_mix(spec: dict, data: dict, config: dict) -> str:
     lines.append("        <tr>")
     lines.append('            <th>Type</th>')
     lines.append(f'            <th class="right">{da} count</th>')
-    lines.append(f'            <th class="right">{da} %</th>')
     lines.append(f'            <th class="right">{db} count</th>')
-    lines.append(f'            <th class="right">{db} %</th>')
+    lines.append('            <th>Distribution</th>')
     lines.append("        </tr>")
     lines.append("    </thead>")
     lines.append("    <tbody>")
@@ -216,15 +215,15 @@ def generate_dataset_task_mix(spec: dict, data: dict, config: dict) -> str:
     for t in type_order:
         ca = types_a.get(t, 0)
         cb = types_b.get(t, 0)
-        pct_a = f"{ca / n_a * 100:.1f}%" if ca else "&mdash;"
-        pct_b = f"{cb / n_b * 100:.1f}%" if cb else "&mdash;"
+        pct_a = ca / n_a * 100 if ca else 0
+        pct_b = cb / n_b * 100 if cb else 0
+        bar = table_gen.generate_bar_pair(pct_a, pct_b, scale=100)
         label = t.title() if t != "unknown" else "Unknown"
         lines.append("        <tr>")
         lines.append(f'            <td class="label-cell">{label}</td>')
         lines.append(f'            <td class="right mono">{ca:,}</td>')
-        lines.append(f'            <td class="right mono">{pct_a}</td>')
         lines.append(f'            <td class="right mono">{cb:,}</td>')
-        lines.append(f'            <td class="right mono">{pct_b}</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
         lines.append("        </tr>")
 
     lines.append("    </tbody>")
@@ -1018,14 +1017,21 @@ def generate_thinking_calibration_inline(spec: dict, data: dict, config: dict) -
     lines.append("<table>")
     lines.append("    <thead>")
     lines.append('        <tr><th>Complexity</th><th>Distribution</th>'
-                 '<th class="right">4.5</th><th class="right">4.6</th>'
+                 '<th class="right">4.5 (n)</th><th class="right">4.6 (n)</th>'
                  '<th class="right">&Delta;</th></tr>')
     lines.append("    </thead>")
     lines.append("    <tbody>")
 
     for cx in table_gen.COMPLEXITY_ORDER:
-        ra = ta.get(cx, {}).get("thinking_ratio", 0)
-        rb = tb.get(cx, {}).get("thinking_ratio", 0)
+        ca = ta.get(cx, {})
+        cb = tb.get(cx, {})
+        ra = ca.get("thinking_ratio", 0)
+        rb = cb.get("thinking_ratio", 0)
+        n_a = ca.get("count", 0)
+        n_b = cb.get("count", 0)
+        # thinking_ratio is fraction of tasks that used thinking
+        thinking_a = round(ra * n_a)
+        thinking_b = round(rb * n_b)
         pct_a = ra * 100
         pct_b = rb * 100
         delta_pp = pct_b - pct_a
@@ -1035,13 +1041,19 @@ def generate_thinking_calibration_inline(spec: dict, data: dict, config: dict) -
         if abs(delta_pp) < 5:
             css = ""
 
+        # Wilson CIs
+        ci_a = table_gen.wilson_ci(thinking_a, n_a) if n_a > 0 else (0, 0)
+        ci_b = table_gen.wilson_ci(thinking_b, n_b) if n_b > 0 else (0, 0)
+        ci_a_str = table_gen.format_ci(ci_a[0], ci_a[1]) if n_a > 0 else ""
+        ci_b_str = table_gen.format_ci(ci_b[0], ci_b[1]) if n_b > 0 else ""
+
         bar = table_gen.generate_bar_pair(pct_a, pct_b)
         label = table_gen._label_case(cx)
         lines.append("        <tr>")
         lines.append(f'            <td class="label-cell">{label} &mdash; thinking %</td>')
         lines.append(f'            <td class="bar-cell">{bar}</td>')
-        lines.append(f'            <td class="right mono">{pct_a:.0f}%</td>')
-        lines.append(f'            <td class="right mono">{pct_b:.0f}%</td>')
+        lines.append(f'            <td class="right mono">{pct_a:.0f}% (n={n_a}) {ci_a_str}</td>')
+        lines.append(f'            <td class="right mono">{pct_b:.0f}% (n={n_b}) {ci_b_str}</td>')
         lines.append(f'            <td class="right mono {css}">{delta_str}</td>')
         lines.append("        </tr>")
 
@@ -1072,18 +1084,27 @@ def generate_verbosity_by_type_inline(spec: dict, data: dict, config: dict) -> s
 
     type_ratios.sort(key=lambda x: x[3], reverse=True)
 
+    # Find max output for bar scaling
+    all_outputs = [avg_a for _, avg_a, _, _ in type_ratios] + [avg_b for _, _, avg_b, _ in type_ratios]
+    max_output = max(all_outputs) if all_outputs else 1
+
+    tok_fmt = lambda v: f"{v:,.0f}"
+
     lines.append("<table>")
     lines.append("    <thead>")
-    lines.append('        <tr><th>Task Type</th><th class="right">4.5 avg output</th>'
-                 '<th class="right">4.6 avg output</th><th class="right">4.6/4.5</th></tr>')
+    lines.append('        <tr><th>Task Type</th><th>Output Comparison</th>'
+                 '<th class="right">4.5 avg</th>'
+                 '<th class="right">4.6 avg</th><th class="right">4.6/4.5</th></tr>')
     lines.append("    </thead>")
     lines.append("    <tbody>")
 
     for t, avg_a, avg_b, ratio in type_ratios:
         label = table_gen._label_case(t)
         css = ' v-blue' if ratio >= 2.0 else ''
-        lines.append(f'        <tr><td class="label-cell">{label}</td>'
-                     f'<td class="right mono">{avg_a:,.0f}</td>'
+        bar = table_gen.generate_bar_pair(avg_a, avg_b, scale=max_output, format_fn=tok_fmt)
+        lines.append(f'        <tr><td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
+        lines.append(f'            <td class="right mono">{avg_a:,.0f}</td>'
                      f'<td class="right mono">{avg_b:,.0f}</td>'
                      f'<td class="right mono{css}">{ratio:.1f}&times;</td></tr>')
 
@@ -1101,9 +1122,19 @@ def generate_cost_by_complexity_inline(spec: dict, data: dict, config: dict) -> 
     ta = tokens.get(ma, {}).get("by_complexity", {})
     tb = tokens.get(mb, {}).get("by_complexity", {})
 
+    # Compute max cost for bar scaling
+    all_costs = []
+    for cx in table_gen.COMPLEXITY_ORDER:
+        all_costs.append(ta.get(cx, {}).get("avg_cost_usd", 0))
+        all_costs.append(tb.get(cx, {}).get("avg_cost_usd", 0))
+    max_cost = max(all_costs) if all_costs else 1
+
+    cost_fmt = lambda v: f"${v:.2f}"
+
     lines.append("<table>")
     lines.append("    <thead>")
-    lines.append('        <tr><th>Complexity</th><th class="right">4.5 avg cost</th>'
+    lines.append('        <tr><th>Complexity</th><th>Cost Comparison</th>'
+                 '<th class="right">4.5 avg cost</th>'
                  '<th class="right">4.6 avg cost</th><th class="right">&Delta;</th></tr>')
     lines.append("    </thead>")
     lines.append("    <tbody>")
@@ -1120,9 +1151,13 @@ def generate_cost_by_complexity_inline(spec: dict, data: dict, config: dict) -> 
             delta_str = "&mdash;"
             css = ""
 
+        bar_html = table_gen.generate_bar_pair(
+            cost_a, cost_b, scale=max_cost, format_fn=cost_fmt
+        )
         label = table_gen._label_case(cx)
-        lines.append(f'        <tr><td class="label-cell">{label}</td>'
-                     f'<td class="right mono">${cost_a:.2f}</td>'
+        lines.append(f'        <tr><td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="bar-cell">{bar_html}</td>')
+        lines.append(f'            <td class="right mono">${cost_a:.2f}</td>'
                      f'<td class="right mono">${cost_b:.2f}</td>'
                      f'<td class="right mono {css}">{delta_str}</td></tr>')
 
@@ -1141,8 +1176,20 @@ def generate_edit_overview_inline(spec: dict, data: dict, config: dict) -> str:
 
     overlaps_a = ea.get("total_overlaps", 0)
     overlaps_b = eb.get("total_overlaps", 0)
+    edits_a = ea.get("total_edits", 0)
+    edits_b = eb.get("total_edits", 0)
+    writes_a = ea.get("total_writes", 0)
+    writes_b = eb.get("total_writes", 0)
+    tasks_a = ea.get("total_tasks", 0)
+    tasks_b = eb.get("total_tasks", 0)
+    rr_a = ea.get("rewrite_rate", 0)
+    rr_b = eb.get("rewrite_rate", 0)
     by_class_a = ea.get("by_classification", {})
     by_class_b = eb.get("by_classification", {})
+
+    # Wilson CIs for rewrite rate (overlaps / total_edits per analyze_edits.py)
+    ci_rr_a = table_gen.wilson_ci(overlaps_a, edits_a)
+    ci_rr_b = table_gen.wilson_ci(overlaps_b, edits_b)
 
     lines.append("<table>")
     lines.append("    <thead>")
@@ -1151,8 +1198,27 @@ def generate_edit_overview_inline(spec: dict, data: dict, config: dict) -> str:
     lines.append("    </thead>")
     lines.append("    <tbody>")
 
-    # Total edits analyzed row (no bars)
-    lines.append(f'        <tr><td class="label-cell">Total edits analyzed</td><td></td>'
+    # Tasks with edits
+    lines.append(f'        <tr><td class="label-cell">Tasks with edits</td><td></td>'
+                 f'<td class="right mono">{tasks_a:,}</td>'
+                 f'<td class="right mono">{tasks_b:,}</td></tr>')
+
+    # Total edits (denominator for rewrite rate)
+    lines.append(f'        <tr><td class="label-cell">Edit calls (rewrite rate denom.)</td><td></td>'
+                 f'<td class="right mono">{edits_a:,}</td>'
+                 f'<td class="right mono">{edits_b:,}</td></tr>')
+
+    # Rewrite rate with CI
+    rr_bar = table_gen.generate_bar_pair(rr_a * 100, rr_b * 100)
+    ci_a_str = table_gen.format_ci(ci_rr_a[0], ci_rr_a[1])
+    ci_b_str = table_gen.format_ci(ci_rr_b[0], ci_rr_b[1])
+    lines.append(f'        <tr><td class="label-cell">Rewrite rate (95% CI)</td>')
+    lines.append(f'            <td class="bar-cell">{rr_bar}</td>')
+    lines.append(f'            <td class="right mono">{rr_a*100:.1f}% {ci_a_str}</td>')
+    lines.append(f'            <td class="right mono">{rr_b*100:.1f}% {ci_b_str}</td></tr>')
+
+    # Total overlaps
+    lines.append(f'        <tr><td class="label-cell">Total overlapping edits</td><td></td>'
                  f'<td class="right mono">{overlaps_a:,}</td>'
                  f'<td class="right mono">{overlaps_b:,}</td></tr>')
 
@@ -1293,7 +1359,7 @@ def generate_quality_sentiment_inline(spec: dict, data: dict, config: dict) -> s
     lines.append("<table>")
     lines.append("    <thead>")
     lines.append('        <tr><th>Sentiment</th><th>Distribution</th>'
-                 '<th class="right">4.5</th><th class="right">4.6</th>'
+                 '<th class="right">4.5 (95% CI)</th><th class="right">4.6 (95% CI)</th>'
                  '<th class="right">&Delta;</th></tr>')
     lines.append("    </thead>")
     lines.append("    <tbody>")
@@ -1313,6 +1379,12 @@ def generate_quality_sentiment_inline(spec: dict, data: dict, config: dict) -> s
         delta_pp = pct_b - pct_a
         bar = table_gen.generate_bar_pair(pct_a, pct_b)
 
+        # Wilson CIs
+        ci_a = table_gen.wilson_ci(ca, n_a)
+        ci_b = table_gen.wilson_ci(cb, n_b)
+        ci_a_str = table_gen.format_ci(ci_a[0], ci_a[1])
+        ci_b_str = table_gen.format_ci(ci_b[0], ci_b[1])
+
         if abs(delta_pp) < 3:
             delta_str = '&asymp; Tie'
             delta_css = 'color:var(--mid-gray)'
@@ -1327,8 +1399,8 @@ def generate_quality_sentiment_inline(spec: dict, data: dict, config: dict) -> s
         lines.append("        <tr>")
         lines.append(f'            <td class="label-cell">{label}</td>')
         lines.append(f'            <td class="bar-cell">{bar}</td>')
-        lines.append(f'            <td class="right mono">{ca:,}</td>')
-        lines.append(f'            <td class="right mono">{cb:,}</td>')
+        lines.append(f'            <td class="right mono">{pct_a:.1f}% {ci_a_str}</td>')
+        lines.append(f'            <td class="right mono">{pct_b:.1f}% {ci_b_str}</td>')
         lines.append(f'            <td class="right mono" style="{delta_css}">{delta_str}</td>')
         lines.append("        </tr>")
 
@@ -1380,7 +1452,7 @@ def generate_quality_completion_inline(spec: dict, data: dict, config: dict) -> 
     lines.append("<table>")
     lines.append("    <thead>")
     lines.append('        <tr><th>Outcome</th><th>Distribution</th>'
-                 '<th class="right">4.5</th><th class="right">4.6</th>'
+                 '<th class="right">4.5 (95% CI)</th><th class="right">4.6 (95% CI)</th>'
                  '<th class="right">&Delta;</th></tr>')
     lines.append("    </thead>")
     lines.append("    <tbody>")
@@ -1399,6 +1471,12 @@ def generate_quality_completion_inline(spec: dict, data: dict, config: dict) -> 
         pct_b = cb / n_b * 100
         delta_pp = pct_b - pct_a
         bar = table_gen.generate_bar_pair(pct_a, pct_b)
+
+        # Wilson CIs
+        ci_a = table_gen.wilson_ci(ca, n_a)
+        ci_b = table_gen.wilson_ci(cb, n_b)
+        ci_a_str = table_gen.format_ci(ci_a[0], ci_a[1])
+        ci_b_str = table_gen.format_ci(ci_b[0], ci_b[1])
 
         if abs(delta_pp) < 3:
             delta_str = '&asymp; Tie'
@@ -1419,8 +1497,8 @@ def generate_quality_completion_inline(spec: dict, data: dict, config: dict) -> 
         lines.append("        <tr>")
         lines.append(f'            <td class="label-cell">{label}</td>')
         lines.append(f'            <td class="bar-cell">{bar}</td>')
-        lines.append(f'            <td class="right mono">{ca:,}</td>')
-        lines.append(f'            <td class="right mono">{cb:,}</td>')
+        lines.append(f'            <td class="right mono">{pct_a:.1f}% {ci_a_str}</td>')
+        lines.append(f'            <td class="right mono">{pct_b:.1f}% {ci_b_str}</td>')
         lines.append(f'            <td class="right mono" style="{delta_css}">{delta_str}</td>')
         lines.append("        </tr>")
 
@@ -1945,9 +2023,11 @@ def generate_session_warmup_inline(spec: dict, data: dict, config: dict) -> str:
     eb = wb.get("early", {})
     lb = wb.get("later", {})
 
+    align_fmt = lambda v: f"{v:.2f}"
+
     lines.append("<table>")
     lines.append("    <thead>")
-    lines.append('        <tr><th>Phase</th><th class="right">Alignment (4.5 / 4.6)</th>'
+    lines.append('        <tr><th>Phase</th><th>Alignment</th>'
                  '<th>Completion Rate</th><th class="right">Tools/File (4.5 / 4.6)</th></tr>')
     lines.append("    </thead>")
     lines.append("    <tbody>")
@@ -1964,12 +2044,15 @@ def generate_session_warmup_inline(spec: dict, data: dict, config: dict) -> str:
         comp_b = db.get("completion_rate", 0)
         tpf_a = da.get("avg_tools_per_file", 0)
         tpf_b = db.get("avg_tools_per_file", 0)
-        bar = table_gen.generate_bar_pair(comp_a, comp_b)
+        comp_bar = table_gen.generate_bar_pair(comp_a, comp_b)
+        align_bar = table_gen.generate_bar_pair(
+            align_a, align_b, scale=5.0, format_fn=align_fmt
+        )
 
         lines.append("        <tr>")
         lines.append(f'            <td class="label-cell">{label}</td>')
-        lines.append(f'            <td class="right mono">{align_a:.2f} / {align_b:.2f}</td>')
-        lines.append(f'            <td class="bar-cell">{bar}</td>')
+        lines.append(f'            <td class="bar-cell">{align_bar}</td>')
+        lines.append(f'            <td class="bar-cell">{comp_bar}</td>')
         lines.append(f'            <td class="right mono">{tpf_a:.2f} / {tpf_b:.2f}</td>')
         lines.append("        </tr>")
 
@@ -2071,6 +2154,80 @@ def generate_session_length_inline(spec: dict, data: dict, config: dict) -> str:
     return "\n".join(lines)
 
 
+def generate_duration_distribution_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate task duration distribution table with percentile + bucket comparisons."""
+    lines = [f"<!-- title: {spec.get('title', 'Task Duration Distribution')} -->"]
+
+    overview = data.get("overview", {})
+    da = overview.get(config["model_a"], {}).get("duration_distribution", {})
+    db = overview.get(config["model_b"], {}).get("duration_distribution", {})
+
+    pa = da.get("percentiles", {})
+    pb = db.get("percentiles", {})
+    ba = da.get("buckets", {})
+    bb = db.get("buckets", {})
+
+    def fmt_dur(s):
+        if s >= 60:
+            return f"{s / 60:.1f}m"
+        return f"{s:.0f}s"
+
+    # Percentile comparison
+    lines.append("<h3>Percentiles</h3>")
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Percentile</th><th>Comparison</th>'
+                 '<th class="right">4.5</th><th class="right">4.6</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    max_p90 = max(pa.get("p90", 1), pb.get("p90", 1))
+    for label, key in [("p10", "p10"), ("p25", "p25"), ("Median", "p50"),
+                       ("p75", "p75"), ("p90", "p90")]:
+        va = pa.get(key, 0)
+        vb = pb.get(key, 0)
+        bar = table_gen.generate_bar_pair(va, vb, scale=max_p90, format_fn=fmt_dur)
+        lines.append(f'        <tr><td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
+        lines.append(f'            <td class="right mono">{fmt_dur(va)}</td>')
+        lines.append(f'            <td class="right mono">{fmt_dur(vb)}</td></tr>')
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+
+    # Bucket comparison
+    lines.append("<h3>Duration buckets</h3>")
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Duration</th><th>Distribution</th>'
+                 '<th class="right">4.5</th><th class="right">4.6</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    bucket_display = [
+        ("Under 30s", "under_30s"),
+        ("30s &ndash; 2m", "30s_to_2m"),
+        ("2m &ndash; 10m", "2m_to_10m"),
+        ("10m &ndash; 1h", "10m_to_1h"),
+        ("Over 1h", "over_1h"),
+    ]
+
+    for label, key in bucket_display:
+        pct_a = ba.get(key, {}).get("pct", 0)
+        pct_b = bb.get(key, {}).get("pct", 0)
+        cnt_a = ba.get(key, {}).get("count", 0)
+        cnt_b = bb.get(key, {}).get("count", 0)
+        bar = table_gen.generate_bar_pair(pct_a, pct_b)
+        lines.append(f'        <tr><td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
+        lines.append(f'            <td class="right mono">{cnt_a:,} ({pct_a:.1f}%)</td>')
+        lines.append(f'            <td class="right mono">{cnt_b:,} ({pct_b:.1f}%)</td></tr>')
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
 # ── Custom generator dispatch ─────────────────────────────────────
 
 CUSTOM_GENERATORS = {
@@ -2102,6 +2259,7 @@ CUSTOM_GENERATORS = {
     "session_warmup_inline": generate_session_warmup_inline,
     "session_effort_inline": generate_session_effort_inline,
     "session_length_inline": generate_session_length_inline,
+    "duration_distribution_inline": generate_duration_distribution_inline,
     "stat_tests": None,  # handled by table_gen._generate_stat_test_rows
 }
 

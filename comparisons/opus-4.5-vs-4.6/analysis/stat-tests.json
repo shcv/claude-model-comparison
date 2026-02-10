@@ -7,8 +7,8 @@
     "total_tests": 115,
     "bonferroni_threshold": 0.00043478,
     "sample_sizes": {
-      "opus-4-5": 1727,
-      "opus-4-6": 193
+      "opus-4-5": 1742,
+      "opus-4-6": 202
     }
   },
   "overall": {
@@ -17,10 +17,10 @@
       {
         "test": "chi-square",
         "field": "task_completion",
-        "chi2": 47.6919,
-        "p_value": 5.3e-05,
+        "chi2": 46.5958,
+        "p_value": 7.9e-05,
         "dof": 16,
-        "cramers_v": 0.1576,
+        "cramers_v": 0.1548,
         "effect_size_label": "negligible",
         "significant_p05": true,
         "low_expected_warning": true,
@@ -45,13 +45,13 @@
         ],
         "counts": {
           "opus-4-5": {
-            "complete": 571,
+            "complete": 576,
             "failed": 247,
             "failed - the initial request for uncommitted changes status was not addressed with any tool output or response": 0,
             "incomplete": 28,
             "interrupted": 172,
             "not_applicable": 1,
-            "partial": 698,
+            "partial": 708,
             "partial - agent created a functional script but final validation was pending at message cutoff": 0,
             "partial - agent diagnosed and attempted to fix the database schema issue, but the actual resolution wasn't validated in the conversation": 1,
             "partial - agent identified and prepared the deploy script but was interrupted before execution by user's \"run it\" command": 1,
@@ -68,9 +68,9 @@
             "failed": 17,
             "failed - the initial request for uncommitted changes status was not addressed with any tool output or response": 1,
             "incomplete": 0,
-            "interrupted": 13,
+            "interrupted": 15,
             "not_applicable": 0,
-            "partial": 88,
+            "partial": 95,
             "partial - agent created a functional script but final validation was pending at message cutoff": 1,
             "partial - agent diagnosed and attempted to fix the database schema issue, but the actual resolution wasn't validated in the conversation": 0,
             "partial - agent identified and prepared the deploy script but was interrupted before execution by user's \"run it\" command": 0,
@@ -84,18 +84,18 @@
           }
         },
         "n": {
-          "opus-4-5": 1727,
-          "opus-4-6": 193
+          "opus-4-5": 1742,
+          "opus-4-6": 202
         },
         "bonferroni_significant": true
       },
       {
         "test": "chi-square",
         "field": "normalized_user_sentiment",
-        "chi2": 0.582,
-        "p_value": 0.900544,
+        "chi2": 0.3764,
+        "p_value": 0.945079,
         "dof": 3,
-        "cramers_v": 0.0174,
+        "cramers_v": 0.0139,
         "effect_size_label": "negligible",
         "significant_p05": false,
         "low_expected_warning": false,
@@ -108,30 +108,30 @@
         "counts": {
           "opus-4-5": {
             "ambiguous": 78,
-            "dissatisfied": 226,
-            "neutral": 974,
-            "satisfied": 449
+            "dissatisfied": 230,
+            "neutral": 980,
+            "satisfied": 454
           },
           "opus-4-6": {
-            "ambiguous": 7,
-            "dissatisfied": 28,
-            "neutral": 108,
-            "satisfied": 50
+            "ambiguous": 8,
+            "dissatisfied": 29,
+            "neutral": 111,
+            "satisfied": 54
           }
         },
         "n": {
-          "opus-4-5": 1727,
-          "opus-4-6": 193
+          "opus-4-5": 1742,
+          "opus-4-6": 202
         },
         "bonferroni_significant": false
       },
       {
         "test": "chi-square",
         "field": "scope_management",
-        "chi2": 50.0933,
-        "p_value": 1.2e-05,
+        "chi2": 50.795,
+        "p_value": 9e-06,
         "dof": 15,
-        "cramers_v": 0.1615,
+        "cramers_v": 0.1616,
         "effect_size_label": "negligible",
         "significant_p05": true,
         "low_expected_warning": true,
@@ -155,10 +155,10 @@
         ],
         "counts": {
           "opus-4-5": {
-            "appropriate": 306,
+            "appropriate": 315,
             "appropriate - agent stayed focused on the Chrome launch script without adding unnecessary features": 0,
-            "expanded": 34,
-            "focused": 1375,
+            "expanded": 35,
+            "focused": 1379,
             "focused - agent stayed narrowly on identifying the Guix deploy script and verifying its readiness": 1,
             "focused - agent stayed narrowly on integrating the provided LaTeX content without adding tangential work": 1,
             "focused - agent stayed narrowly on investigation, appropriately avoiding making breaking changes without explicit user approval": 0,
@@ -168,15 +168,15 @@
             "focused - the agent stuck to what was asked (investigation only) and didn't expand into writing documentation prematurely": 0,
             "focused - though no work was completed, the scope was appropriately narrow for what was requested": 0,
             "off_track": 1,
-            "over_engineered": 5,
+            "over_engineered": 6,
             "slightly_expanded": 1,
             "unclear": 0
           },
           "opus-4-6": {
-            "appropriate": 42,
+            "appropriate": 48,
             "appropriate - agent stayed focused on the Chrome launch script without adding unnecessary features": 1,
             "expanded": 1,
-            "focused": 145,
+            "focused": 148,
             "focused - agent stayed narrowly on identifying the Guix deploy script and verifying its readiness": 0,
             "focused - agent stayed narrowly on integrating the provided LaTeX content without adding tangential work": 0,
             "focused - agent stayed narrowly on investigation, appropriately avoiding making breaking changes without explicit user approval": 1,
@@ -192,18 +192,18 @@
           }
         },
         "n": {
-          "opus-4-5": 1727,
-          "opus-4-6": 193
+          "opus-4-5": 1742,
+          "opus-4-6": 202
         },
         "bonferroni_significant": true
       },
       {
         "test": "chi-square",
         "field": "iteration_required",
-        "chi2": 39.7193,
-        "p_value": 4e-05,
+        "chi2": 37.061,
+        "p_value": 0.000113,
         "dof": 11,
-        "cramers_v": 0.1438,
+        "cramers_v": 0.1381,
         "effect_size_label": "negligible",
         "significant_p05": true,
         "low_expected_warning": true,
@@ -223,21 +223,21 @@
         ],
         "counts": {
           "opus-4-5": {
-            "minor": 309,
+            "minor": 312,
             "minor - one round of investigation followed by user approval, then expected to proceed": 0,
             "minor - one round of testing and adjustment before user's validation attempt": 0,
             "minor - two distinct phases but straightforward progression from investigation to action request": 0,
             "minor - user's follow-up was a simple approval to continue, suggesting the agent's initial approach was sound": 1,
-            "one_shot": 615,
+            "one_shot": 616,
             "one_shot - single interaction on this specific issue before user moved to next task": 1,
             "one_shot - the user didn't ask for revisions or clarifications before moving to the next task": 1,
             "one_shot - user's initial question was answered directly, leading to immediate next action": 1,
-            "significant": 798,
+            "significant": 809,
             "significant - the user had to provide a new, more specific request after initial exploration, suggesting the first interaction needed clarification or context": 1,
             "significant - the user had to restate their intent with additional context (cleanup and commit) rather than getting a simple status response": 0
           },
           "opus-4-6": {
-            "minor": 41,
+            "minor": 42,
             "minor - one round of investigation followed by user approval, then expected to proceed": 1,
             "minor - one round of testing and adjustment before user's validation attempt": 1,
             "minor - two distinct phases but straightforward progression from investigation to action request": 1,
@@ -246,24 +246,24 @@
             "one_shot - single interaction on this specific issue before user moved to next task": 0,
             "one_shot - the user didn't ask for revisions or clarifications before moving to the next task": 0,
             "one_shot - user's initial question was answered directly, leading to immediate next action": 0,
-            "significant": 75,
+            "significant": 83,
             "significant - the user had to provide a new, more specific request after initial exploration, suggesting the first interaction needed clarification or context": 0,
             "significant - the user had to restate their intent with additional context (cleanup and commit) rather than getting a simple status response": 1
           }
         },
         "n": {
-          "opus-4-5": 1727,
-          "opus-4-6": 193
+          "opus-4-5": 1742,
+          "opus-4-6": 202
         },
         "bonferroni_significant": true
       },
       {
         "test": "chi-square",
         "field": "error_recovery",
-        "chi2": 46.7518,
-        "p_value": 0.00023,
+        "chi2": 46.1063,
+        "p_value": 0.000286,
         "dof": 18,
-        "cramers_v": 0.156,
+        "cramers_v": 0.154,
         "effect_size_label": "negligible",
         "significant_p05": true,
         "low_expected_warning": true,
@@ -296,7 +296,7 @@
             "none_needed": 908,
             "none_needed - no errors encountered in verification steps": 1,
             "none_needed - no errors were encountered because no actions were attempted": 0,
-            "recovered": 465,
+            "recovered": 476,
             "recovered - agent encountered 3 edit errors but appeared to work through them with read-verify cycles": 1,
             "recovered - agent encountered 3 errors during investigation but continued with alternative approaches rather than giving up": 0,
             "recovered - agent encountered 4 errors during bash execution but worked through them to understand the script behavior": 1,
@@ -306,7 +306,7 @@
             "recovered - agent encountered script execution errors and made corrections (permissions, shebang, syntax issues)": 0,
             "recovered - the agent encountered 15 errors but continued methodically searching for relevant information": 0,
             "recovered - the agent made an edit error but appears to have corrected it during the session": 1,
-            "struggled": 269,
+            "struggled": 273,
             "struggled - the agent encountered 2 errors during execution but proceeded despite these issues not being fully resolved": 1,
             "struggled - the agent encountered an edit error (1 error in edit activity) and did not appear to recover or retry the operation successfully": 1
           },
@@ -314,10 +314,10 @@
             "encountered 2 errors but unclear if properly resolved given user's follow-up": 0,
             "failed": 6,
             "needed": 1,
-            "none_needed": 101,
+            "none_needed": 102,
             "none_needed - no errors encountered in verification steps": 0,
             "none_needed - no errors were encountered because no actions were attempted": 1,
-            "recovered": 49,
+            "recovered": 52,
             "recovered - agent encountered 3 edit errors but appeared to work through them with read-verify cycles": 0,
             "recovered - agent encountered 3 errors during investigation but continued with alternative approaches rather than giving up": 1,
             "recovered - agent encountered 4 errors during bash execution but worked through them to understand the script behavior": 0,
@@ -327,24 +327,24 @@
             "recovered - agent encountered script execution errors and made corrections (permissions, shebang, syntax issues)": 1,
             "recovered - the agent encountered 15 errors but continued methodically searching for relevant information": 1,
             "recovered - the agent made an edit error but appears to have corrected it during the session": 0,
-            "struggled": 32,
+            "struggled": 37,
             "struggled - the agent encountered 2 errors during execution but proceeded despite these issues not being fully resolved": 0,
             "struggled - the agent encountered an edit error (1 error in edit activity) and did not appear to recover or retry the operation successfully": 0
           }
         },
         "n": {
-          "opus-4-5": 1727,
-          "opus-4-6": 193
+          "opus-4-5": 1742,
+          "opus-4-6": 202
         },
         "bonferroni_significant": true
       },
       {
         "test": "chi-square",
         "field": "communication_quality",
-        "chi2": 59.5913,
+        "chi2": 60.0791,
         "p_value": 0.0,
         "dof": 12,
-        "cramers_v": 0.1762,
+        "cramers_v": 0.1758,
         "effect_size_label": "negligible",
         "significant_p05": true,
         "low_expected_warning": true,
@@ -365,7 +365,7 @@
         ],
         "counts": {
           "opus-4-5": {
-            "adequate": 1053,
+            "adequate": 1068,
             "adequate - agent explained its findings and recommendations but could have been more explicit about what remained to be done": 1,
             "adequate - agent explained steps taken and showed debugging process, though could have been more explicit about what was being tested": 0,
             "adequate - agent ran verification commands and likely reported findings, though details suggest straightforward technical work": 0,
@@ -380,7 +380,7 @@
             "unclear - there is no record of the agent's response to the initial query, making it impossible to assess communication quality": 0
           },
           "opus-4-6": {
-            "adequate": 138,
+            "adequate": 147,
             "adequate - agent explained its findings and recommendations but could have been more explicit about what remained to be done": 0,
             "adequate - agent explained steps taken and showed debugging process, though could have been more explicit about what was being tested": 1,
             "adequate - agent ran verification commands and likely reported findings, though details suggest straightforward technical work": 1,
@@ -396,18 +396,18 @@
           }
         },
         "n": {
-          "opus-4-5": 1727,
-          "opus-4-6": 193
+          "opus-4-5": 1742,
+          "opus-4-6": 202
         },
         "bonferroni_significant": true
       },
       {
         "test": "chi-square",
         "field": "normalized_execution_quality",
-        "chi2": 0.0704,
-        "p_value": 0.999394,
+        "chi2": 0.2021,
+        "p_value": 0.995225,
         "dof": 4,
-        "cramers_v": 0.0061,
+        "cramers_v": 0.0102,
         "effect_size_label": "negligible",
         "significant_p05": false,
         "low_expected_warning": true,
@@ -420,33 +420,33 @@
         ],
         "counts": {
           "opus-4-5": {
-            "adequate": 1002,
+            "adequate": 1011,
             "excellent": 18,
             "failed": 67,
-            "good": 586,
+            "good": 592,
             "poor": 54
           },
           "opus-4-6": {
-            "adequate": 113,
+            "adequate": 119,
             "excellent": 2,
             "failed": 8,
-            "good": 64,
-            "poor": 6
+            "good": 66,
+            "poor": 7
           }
         },
         "n": {
-          "opus-4-5": 1727,
-          "opus-4-6": 193
+          "opus-4-5": 1742,
+          "opus-4-6": 202
         },
         "bonferroni_significant": false
       },
       {
         "test": "chi-square",
         "field": "autonomy_level",
-        "chi2": 33.2035,
-        "p_value": 0.000123,
+        "chi2": 33.8412,
+        "p_value": 9.5e-05,
         "dof": 9,
-        "cramers_v": 0.1315,
+        "cramers_v": 0.1319,
         "effect_size_label": "negligible",
         "significant_p05": true,
         "low_expected_warning": true,
@@ -464,11 +464,11 @@
         ],
         "counts": {
           "opus-4-5": {
-            "high": 754,
+            "high": 767,
             "high - the agent independently investigated, diagnosed the issue, and formulated recommendations without needing clarification": 1,
             "low": 567,
             "low - the agent did not take any autonomous action despite having clear tools available (git status via Bash) to answer the initial question": 0,
-            "medium": 402,
+            "medium": 404,
             "medium - agent investigated independently but correctly sought user confirmation before making destructive changes": 0,
             "medium - agent planned the work and created a structured approach but waited for user confirmation before final implementation": 1,
             "medium - agent verified the approach before executing, appropriately seeking confirmation before running deployment operations": 1,
@@ -476,11 +476,11 @@
             "medium - the agent independently searched and read files but failed to complete the requested edits without resolving the error": 1
           },
           "opus-4-6": {
-            "high": 94,
+            "high": 102,
             "high - the agent independently investigated, diagnosed the issue, and formulated recommendations without needing clarification": 0,
             "low": 46,
             "low - the agent did not take any autonomous action despite having clear tools available (git status via Bash) to answer the initial question": 1,
-            "medium": 50,
+            "medium": 51,
             "medium - agent investigated independently but correctly sought user confirmation before making destructive changes": 1,
             "medium - agent planned the work and created a structured approach but waited for user confirmation before final implementation": 0,
             "medium - agent verified the approach before executing, appropriately seeking confirmation before running deployment operations": 0,
@@ -489,8 +489,8 @@
           }
         },
         "n": {
-          "opus-4-5": 1727,
-          "opus-4-6": 193
+          "opus-4-5": 1742,
+          "opus-4-6": 202
         },
         "bonferroni_significant": true
       }
@@ -499,208 +499,368 @@
       {
         "test": "mann-whitney-u",
         "field": "alignment_score",
-        "u_statistic": 146958.5,
-        "p_value": 0.005771,
-        "cohens_d": -0.2122,
+        "u_statistic": 155566.0,
+        "p_value": 0.005735,
+        "cohens_d": -0.207,
         "effect_size_label": "small",
         "significant_p05": true,
         "n": {
-          "opus-4-5": 1727,
-          "opus-4-6": 193
+          "opus-4-5": 1742,
+          "opus-4-6": 202
         },
         "median": {
           "opus-4-5": 3.0,
           "opus-4-6": 3.0
         },
         "mean": {
-          "opus-4-5": 2.986,
-          "opus-4-6": 3.259
+          "opus-4-5": 2.987,
+          "opus-4-6": 3.252
         },
         "std": {
-          "opus-4-5": 1.296,
-          "opus-4-6": 1.197
+          "opus-4-5": 1.292,
+          "opus-4-6": 1.172
+        },
+        "mean_ci": {
+          "opus-4-5": [
+            2.924,
+            3.049
+          ],
+          "opus-4-6": [
+            3.089,
+            3.416
+          ]
+        },
+        "median_ci": {
+          "opus-4-5": [
+            3.0,
+            3.0
+          ],
+          "opus-4-6": [
+            3.0,
+            3.0
+          ]
         },
         "bonferroni_significant": false
       },
       {
         "test": "mann-whitney-u",
         "field": "duration_seconds",
-        "u_statistic": 150895.5,
-        "p_value": 0.030967,
-        "cohens_d": 0.0439,
+        "u_statistic": 155505.5,
+        "p_value": 0.006809,
+        "cohens_d": 0.0421,
         "effect_size_label": "negligible",
         "significant_p05": true,
         "n": {
-          "opus-4-5": 1727,
-          "opus-4-6": 193
+          "opus-4-5": 1742,
+          "opus-4-6": 202
         },
         "median": {
-          "opus-4-5": 39.162,
-          "opus-4-6": 53.819
+          "opus-4-5": 40.33,
+          "opus-4-6": 58.595
         },
         "mean": {
-          "opus-4-5": 385.297,
-          "opus-4-6": 171.359
+          "opus-4-5": 387.407,
+          "opus-4-6": 183.28
         },
         "std": {
-          "opus-4-5": 5140.344,
-          "opus-4-6": 431.958
+          "opus-4-5": 5118.584,
+          "opus-4-6": 429.32
+        },
+        "mean_ci": {
+          "opus-4-5": [
+            178.789,
+            648.895
+          ],
+          "opus-4-6": [
+            129.982,
+            248.958
+          ]
+        },
+        "median_ci": {
+          "opus-4-5": [
+            36.932,
+            44.037
+          ],
+          "opus-4-6": [
+            45.871,
+            74.757
+          ]
         },
         "bonferroni_significant": false
       },
       {
         "test": "mann-whitney-u",
         "field": "tool_calls",
-        "u_statistic": 142685.5,
-        "p_value": 0.000906,
-        "cohens_d": -0.0923,
-        "effect_size_label": "negligible",
+        "u_statistic": 146182.0,
+        "p_value": 6.8e-05,
+        "cohens_d": -0.226,
+        "effect_size_label": "small",
         "significant_p05": true,
         "n": {
-          "opus-4-5": 1727,
-          "opus-4-6": 193
+          "opus-4-5": 1742,
+          "opus-4-6": 202
         },
         "median": {
           "opus-4-5": 3.0,
           "opus-4-6": 5.0
         },
         "mean": {
-          "opus-4-5": 8.34,
-          "opus-4-6": 9.606
+          "opus-4-5": 8.68,
+          "opus-4-6": 12.02
         },
         "std": {
-          "opus-4-5": 13.686,
-          "opus-4-6": 14.016
+          "opus-4-5": 14.248,
+          "opus-4-6": 18.757
         },
-        "bonferroni_significant": false
+        "mean_ci": {
+          "opus-4-5": [
+            8.038,
+            9.36
+          ],
+          "opus-4-6": [
+            9.599,
+            14.906
+          ]
+        },
+        "median_ci": {
+          "opus-4-5": [
+            3.0,
+            4.0
+          ],
+          "opus-4-6": [
+            3.0,
+            7.0
+          ]
+        },
+        "bonferroni_significant": true
       },
       {
         "test": "mann-whitney-u",
         "field": "files_touched",
-        "u_statistic": 171910.0,
-        "p_value": 0.440692,
-        "cohens_d": 0.0412,
+        "u_statistic": 175794.5,
+        "p_value": 0.983398,
+        "cohens_d": -0.1245,
         "effect_size_label": "negligible",
         "significant_p05": false,
         "n": {
-          "opus-4-5": 1727,
-          "opus-4-6": 193
+          "opus-4-5": 1742,
+          "opus-4-6": 202
         },
         "median": {
           "opus-4-5": 1.0,
           "opus-4-6": 0.0
         },
         "mean": {
-          "opus-4-5": 1.581,
-          "opus-4-6": 1.456
+          "opus-4-5": 1.673,
+          "opus-4-6": 2.104
         },
         "std": {
-          "opus-4-5": 3.094,
-          "opus-4-6": 2.584
+          "opus-4-5": 3.304,
+          "opus-4-6": 4.58
+        },
+        "mean_ci": {
+          "opus-4-5": [
+            1.525,
+            1.831
+          ],
+          "opus-4-6": [
+            1.525,
+            2.792
+          ]
+        },
+        "median_ci": {
+          "opus-4-5": [
+            0.0,
+            1.0
+          ],
+          "opus-4-6": [
+            0.0,
+            1.0
+          ]
         },
         "bonferroni_significant": false
       },
       {
         "test": "mann-whitney-u",
         "field": "lines_added",
-        "u_statistic": 188124.0,
-        "p_value": 0.00083,
-        "cohens_d": 0.1836,
+        "u_statistic": 192963.5,
+        "p_value": 0.010756,
+        "cohens_d": 0.0843,
         "effect_size_label": "negligible",
         "significant_p05": true,
         "n": {
-          "opus-4-5": 1727,
-          "opus-4-6": 193
+          "opus-4-5": 1742,
+          "opus-4-6": 202
         },
         "median": {
           "opus-4-5": 0.0,
           "opus-4-6": 0.0
         },
         "mean": {
-          "opus-4-5": 84.254,
-          "opus-4-6": 38.933
+          "opus-4-5": 103.094,
+          "opus-4-6": 67.208
         },
         "std": {
-          "opus-4-5": 257.308,
-          "opus-4-6": 116.595
+          "opus-4-5": 444.27,
+          "opus-4-6": 203.037
+        },
+        "mean_ci": {
+          "opus-4-5": [
+            84.493,
+            126.063
+          ],
+          "opus-4-6": [
+            41.359,
+            96.45
+          ]
+        },
+        "median_ci": {
+          "opus-4-5": [
+            0.0,
+            0.0
+          ],
+          "opus-4-6": [
+            0.0,
+            0.0
+          ]
         },
         "bonferroni_significant": false
       },
       {
         "test": "mann-whitney-u",
         "field": "lines_removed",
-        "u_statistic": 191440.5,
-        "p_value": 4.8e-05,
-        "cohens_d": 0.1903,
+        "u_statistic": 196609.5,
+        "p_value": 0.001111,
+        "cohens_d": 0.1011,
         "effect_size_label": "negligible",
         "significant_p05": true,
         "n": {
-          "opus-4-5": 1727,
-          "opus-4-6": 193
+          "opus-4-5": 1742,
+          "opus-4-6": 202
         },
         "median": {
           "opus-4-5": 0.0,
           "opus-4-6": 0.0
         },
         "mean": {
-          "opus-4-5": 20.975,
-          "opus-4-6": 9.544
+          "opus-4-5": 21.691,
+          "opus-4-6": 15.332
         },
         "std": {
-          "opus-4-5": 61.689,
-          "opus-4-6": 42.764
+          "opus-4-5": 63.102,
+          "opus-4-6": 61.407
         },
-        "bonferroni_significant": true
+        "mean_ci": {
+          "opus-4-5": [
+            18.923,
+            24.781
+          ],
+          "opus-4-6": [
+            7.772,
+            24.877
+          ]
+        },
+        "median_ci": {
+          "opus-4-5": [
+            0.0,
+            0.0
+          ],
+          "opus-4-6": [
+            0.0,
+            0.0
+          ]
+        },
+        "bonferroni_significant": false
       },
       {
         "test": "mann-whitney-u",
         "field": "lines_per_minute",
-        "u_statistic": 193057.0,
-        "p_value": 4e-05,
-        "cohens_d": 0.3554,
+        "u_statistic": 199176.0,
+        "p_value": 0.000501,
+        "cohens_d": 0.306,
         "effect_size_label": "small",
         "significant_p05": true,
         "n": {
-          "opus-4-5": 1727,
-          "opus-4-6": 193
+          "opus-4-5": 1742,
+          "opus-4-6": 202
         },
         "median": {
           "opus-4-5": 0.0,
           "opus-4-6": 0.0
         },
         "mean": {
-          "opus-4-5": 38.563,
-          "opus-4-6": 13.851
+          "opus-4-5": 40.414,
+          "opus-4-6": 17.897
         },
         "std": {
-          "opus-4-5": 72.345,
-          "opus-4-6": 35.345
+          "opus-4-5": 76.418,
+          "opus-4-6": 41.455
         },
-        "bonferroni_significant": true
+        "mean_ci": {
+          "opus-4-5": [
+            36.993,
+            43.991
+          ],
+          "opus-4-6": [
+            12.4,
+            23.87
+          ]
+        },
+        "median_ci": {
+          "opus-4-5": [
+            0.0,
+            0.0
+          ],
+          "opus-4-6": [
+            0.0,
+            0.0
+          ]
+        },
+        "bonferroni_significant": false
       },
       {
         "test": "mann-whitney-u",
         "field": "tools_per_file",
-        "u_statistic": 137543.5,
-        "p_value": 5.6e-05,
-        "cohens_d": -0.1439,
+        "u_statistic": 143919.0,
+        "p_value": 1.8e-05,
+        "cohens_d": -0.1654,
         "effect_size_label": "negligible",
         "significant_p05": true,
         "n": {
-          "opus-4-5": 1727,
-          "opus-4-6": 193
+          "opus-4-5": 1742,
+          "opus-4-6": 202
         },
         "median": {
           "opus-4-5": 2.0,
           "opus-4-6": 3.0
         },
         "mean": {
-          "opus-4-5": 4.212,
-          "opus-4-6": 5.25
+          "opus-4-5": 4.217,
+          "opus-4-6": 5.41
         },
         "std": {
-          "opus-4-5": 7.317,
-          "opus-4-6": 6.19
+          "opus-4-5": 7.29,
+          "opus-4-6": 6.541
+        },
+        "mean_ci": {
+          "opus-4-5": [
+            3.885,
+            4.573
+          ],
+          "opus-4-6": [
+            4.563,
+            6.336
+          ]
+        },
+        "median_ci": {
+          "opus-4-5": [
+            2.0,
+            2.0
+          ],
+          "opus-4-6": [
+            2.25,
+            4.0
+          ]
         },
         "bonferroni_significant": true
       }
@@ -709,168 +869,168 @@
       {
         "test": "two-proportion-z",
         "field": "satisfaction_rate",
-        "z_statistic": 0.0277,
-        "p_value": 0.977925,
-        "cohens_h": 0.0021,
+        "z_statistic": -0.2054,
+        "p_value": 0.837278,
+        "cohens_h": -0.0152,
         "effect_size_label": "negligible",
         "significant_p05": false,
         "opus-4-5": {
-          "proportion": 0.26,
-          "ci_lower": 0.2398,
-          "ci_upper": 0.2812,
-          "count": 449,
-          "n": 1727
+          "proportion": 0.2606,
+          "ci_lower": 0.2405,
+          "ci_upper": 0.2817,
+          "count": 454,
+          "n": 1742
         },
         "opus-4-6": {
-          "proportion": 0.2591,
-          "ci_lower": 0.2024,
-          "ci_upper": 0.3252,
-          "count": 50,
-          "n": 193
+          "proportion": 0.2673,
+          "ci_lower": 0.2111,
+          "ci_upper": 0.3323,
+          "count": 54,
+          "n": 202
         },
         "bonferroni_significant": false
       },
       {
         "test": "two-proportion-z",
         "field": "dissatisfaction_rate",
-        "z_statistic": -0.5528,
-        "p_value": 0.580402,
-        "cohens_h": -0.0412,
+        "z_statistic": -0.4566,
+        "p_value": 0.647978,
+        "cohens_h": -0.0335,
         "effect_size_label": "negligible",
         "significant_p05": false,
         "opus-4-5": {
-          "proportion": 0.1309,
-          "ci_lower": 0.1158,
-          "ci_upper": 0.1476,
-          "count": 226,
-          "n": 1727
+          "proportion": 0.132,
+          "ci_lower": 0.1169,
+          "ci_upper": 0.1487,
+          "count": 230,
+          "n": 1742
         },
         "opus-4-6": {
-          "proportion": 0.1451,
-          "ci_lower": 0.1023,
-          "ci_upper": 0.2017,
-          "count": 28,
-          "n": 193
+          "proportion": 0.1436,
+          "ci_lower": 0.1019,
+          "ci_upper": 0.1986,
+          "count": 29,
+          "n": 202
         },
         "bonferroni_significant": false
       },
       {
         "test": "two-proportion-z",
         "field": "complete_rate",
-        "z_statistic": -1.0402,
-        "p_value": 0.298261,
-        "cohens_h": -0.0782,
+        "z_statistic": -0.5947,
+        "p_value": 0.552014,
+        "cohens_h": -0.0439,
         "effect_size_label": "negligible",
         "significant_p05": false,
         "opus-4-5": {
-          "proportion": 0.3306,
-          "ci_lower": 0.3088,
-          "ci_upper": 0.3532,
-          "count": 571,
-          "n": 1727
+          "proportion": 0.3307,
+          "ci_lower": 0.309,
+          "ci_upper": 0.3531,
+          "count": 576,
+          "n": 1742
         },
         "opus-4-6": {
-          "proportion": 0.3679,
-          "ci_lower": 0.303,
-          "ci_upper": 0.4379,
+          "proportion": 0.3515,
+          "ci_lower": 0.289,
+          "ci_upper": 0.4195,
           "count": 71,
-          "n": 193
+          "n": 202
         },
         "bonferroni_significant": false
       },
       {
         "test": "two-proportion-z",
         "field": "failed_rate",
-        "z_statistic": 2.102,
-        "p_value": 0.035555,
-        "cohens_h": 0.173,
+        "z_statistic": 2.2634,
+        "p_value": 0.023612,
+        "cohens_h": 0.1835,
         "effect_size_label": "negligible",
         "significant_p05": true,
         "opus-4-5": {
-          "proportion": 0.143,
-          "ci_lower": 0.1273,
-          "ci_upper": 0.1603,
+          "proportion": 0.1418,
+          "ci_lower": 0.1262,
+          "ci_upper": 0.159,
           "count": 247,
-          "n": 1727
+          "n": 1742
         },
         "opus-4-6": {
-          "proportion": 0.0881,
-          "ci_lower": 0.0557,
-          "ci_upper": 0.1365,
+          "proportion": 0.0842,
+          "ci_lower": 0.0532,
+          "ci_upper": 0.1306,
           "count": 17,
-          "n": 193
+          "n": 202
         },
         "bonferroni_significant": false
       },
       {
         "test": "two-proportion-z",
         "field": "scope_expanded_rate",
-        "z_statistic": 1.4287,
-        "p_value": 0.153098,
-        "cohens_h": 0.1375,
+        "z_statistic": 1.511,
+        "p_value": 0.130782,
+        "cohens_h": 0.1436,
         "effect_size_label": "negligible",
         "significant_p05": false,
         "opus-4-5": {
-          "proportion": 0.0197,
-          "ci_lower": 0.0141,
-          "ci_upper": 0.0274,
-          "count": 34,
-          "n": 1727
+          "proportion": 0.0201,
+          "ci_lower": 0.0145,
+          "ci_upper": 0.0278,
+          "count": 35,
+          "n": 1742
         },
         "opus-4-6": {
-          "proportion": 0.0052,
+          "proportion": 0.005,
           "ci_lower": 0.0009,
-          "ci_upper": 0.0288,
+          "ci_upper": 0.0275,
           "count": 1,
-          "n": 193
+          "n": 202
         },
         "bonferroni_significant": false
       },
       {
         "test": "two-proportion-z",
         "field": "one_shot_rate",
-        "z_statistic": -0.6081,
-        "p_value": 0.543147,
-        "cohens_h": -0.0459,
+        "z_statistic": -0.2185,
+        "p_value": 0.827014,
+        "cohens_h": -0.0162,
         "effect_size_label": "negligible",
         "significant_p05": false,
         "opus-4-5": {
-          "proportion": 0.3561,
-          "ci_lower": 0.3339,
-          "ci_upper": 0.379,
-          "count": 615,
-          "n": 1727
+          "proportion": 0.3536,
+          "ci_lower": 0.3315,
+          "ci_upper": 0.3764,
+          "count": 616,
+          "n": 1742
         },
         "opus-4-6": {
-          "proportion": 0.3782,
-          "ci_lower": 0.3128,
-          "ci_upper": 0.4484,
+          "proportion": 0.3614,
+          "ci_lower": 0.2983,
+          "ci_upper": 0.4297,
           "count": 73,
-          "n": 193
+          "n": 202
         },
         "bonferroni_significant": false
       },
       {
         "test": "two-proportion-z",
         "field": "good_execution_rate",
-        "z_statistic": 0.2147,
-        "p_value": 0.830013,
-        "cohens_h": 0.0163,
+        "z_statistic": 0.3727,
+        "p_value": 0.709407,
+        "cohens_h": 0.0278,
         "effect_size_label": "negligible",
         "significant_p05": false,
         "opus-4-5": {
-          "proportion": 0.3393,
-          "ci_lower": 0.3174,
-          "ci_upper": 0.362,
-          "count": 586,
-          "n": 1727
+          "proportion": 0.3398,
+          "ci_lower": 0.318,
+          "ci_upper": 0.3624,
+          "count": 592,
+          "n": 1742
         },
         "opus-4-6": {
-          "proportion": 0.3316,
-          "ci_lower": 0.269,
-          "ci_upper": 0.4007,
-          "count": 64,
-          "n": 193
+          "proportion": 0.3267,
+          "ci_lower": 0.2658,
+          "ci_upper": 0.3941,
+          "count": 66,
+          "n": 202
         },
         "bonferroni_significant": false
       }
@@ -1224,6 +1384,26 @@
             "opus-4-5": 1.429,
             "opus-4-6": 1.408
           },
+          "mean_ci": {
+            "opus-4-5": [
+              2.502,
+              2.697
+            ],
+            "opus-4-6": [
+              2.987,
+              3.615
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              2.0,
+              2.0
+            ],
+            "opus-4-6": [
+              3.0,
+              4.0
+            ]
+          },
           "bonferroni_significant": true
         },
         {
@@ -1249,6 +1429,26 @@
           "std": {
             "opus-4-5": 2744.895,
             "opus-4-6": 70.385
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              20.118,
+              315.755
+            ],
+            "opus-4-6": [
+              21.072,
+              51.932
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              12.416,
+              14.292
+            ],
+            "opus-4-6": [
+              10.571,
+              17.748
+            ]
           },
           "bonferroni_significant": false
         },
@@ -1276,6 +1476,26 @@
             "opus-4-5": 0.985,
             "opus-4-6": 0.996
           },
+          "mean_ci": {
+            "opus-4-5": [
+              0.615,
+              0.75
+            ],
+            "opus-4-6": [
+              0.872,
+              1.308
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              0.0,
+              0.0
+            ],
+            "opus-4-6": [
+              1.0,
+              1.0
+            ]
+          },
           "bonferroni_significant": true
         },
         {
@@ -1301,6 +1521,26 @@
           "std": {
             "opus-4-5": 0.334,
             "opus-4-6": 0.322
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              0.106,
+              0.151
+            ],
+            "opus-4-6": [
+              0.051,
+              0.192
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              0.0,
+              0.0
+            ],
+            "opus-4-6": [
+              0.0,
+              0.0
+            ]
           },
           "bonferroni_significant": false
         },
@@ -1328,6 +1568,26 @@
             "opus-4-5": 1.816,
             "opus-4-6": 0.639
           },
+          "mean_ci": {
+            "opus-4-5": [
+              0.315,
+              0.565
+            ],
+            "opus-4-6": [
+              0.026,
+              0.295
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              0.0,
+              0.0
+            ],
+            "opus-4-6": [
+              0.0,
+              0.0
+            ]
+          },
           "bonferroni_significant": false
         },
         {
@@ -1353,6 +1613,26 @@
           "std": {
             "opus-4-5": 1.361,
             "opus-4-6": 0.432
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              0.237,
+              0.423
+            ],
+            "opus-4-6": [
+              0.013,
+              0.192
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              0.0,
+              0.0
+            ],
+            "opus-4-6": [
+              0.0,
+              0.0
+            ]
           },
           "bonferroni_significant": false
         },
@@ -1380,6 +1660,26 @@
             "opus-4-5": 10.793,
             "opus-4-6": 5.636
           },
+          "mean_ci": {
+            "opus-4-5": [
+              1.982,
+              3.461
+            ],
+            "opus-4-6": [
+              0.058,
+              2.565
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              0.0,
+              0.0
+            ],
+            "opus-4-6": [
+              0.0,
+              0.0
+            ]
+          },
           "bonferroni_significant": false
         },
         {
@@ -1405,6 +1705,26 @@
           "std": {
             "opus-4-5": 0.985,
             "opus-4-6": 0.996
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              0.615,
+              0.75
+            ],
+            "opus-4-6": [
+              0.872,
+              1.308
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              0.0,
+              0.0
+            ],
+            "opus-4-6": [
+              1.0,
+              1.0
+            ]
           },
           "bonferroni_significant": true
         }
@@ -1957,6 +2277,26 @@
             "opus-4-5": 1.15,
             "opus-4-6": 1.113
           },
+          "mean_ci": {
+            "opus-4-5": [
+              3.171,
+              3.411
+            ],
+            "opus-4-6": [
+              2.674,
+              3.326
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              3.0,
+              3.0
+            ],
+            "opus-4-6": [
+              2.0,
+              3.0
+            ]
+          },
           "bonferroni_significant": false
         },
         {
@@ -1982,6 +2322,26 @@
           "std": {
             "opus-4-5": 88.722,
             "opus-4-6": 564.361
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              63.531,
+              81.959
+            ],
+            "opus-4-6": [
+              56.063,
+              343.589
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              46.055,
+              53.102
+            ],
+            "opus-4-6": [
+              43.747,
+              62.572
+            ]
           },
           "bonferroni_significant": false
         },
@@ -2009,6 +2369,26 @@
             "opus-4-5": 2.345,
             "opus-4-6": 2.074
           },
+          "mean_ci": {
+            "opus-4-5": [
+              5.22,
+              5.72
+            ],
+            "opus-4-6": [
+              4.93,
+              6.14
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              5.0,
+              5.5
+            ],
+            "opus-4-6": [
+              5.0,
+              6.0
+            ]
+          },
           "bonferroni_significant": false
         },
         {
@@ -2034,6 +2414,26 @@
           "std": {
             "opus-4-5": 0.868,
             "opus-4-6": 0.813
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              0.963,
+              1.143
+            ],
+            "opus-4-6": [
+              0.419,
+              0.907
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              1.0,
+              1.0
+            ],
+            "opus-4-6": [
+              0.0,
+              1.0
+            ]
           },
           "bonferroni_significant": false
         },
@@ -2061,6 +2461,26 @@
             "opus-4-5": 20.022,
             "opus-4-6": 12.882
           },
+          "mean_ci": {
+            "opus-4-5": [
+              12.326,
+              16.577
+            ],
+            "opus-4-6": [
+              1.465,
+              9.093
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              0.0,
+              7.0
+            ],
+            "opus-4-6": [
+              0.0,
+              0.0
+            ]
+          },
           "bonferroni_significant": true
         },
         {
@@ -2086,6 +2506,26 @@
           "std": {
             "opus-4-5": 12.478,
             "opus-4-6": 8.838
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              6.749,
+              9.377
+            ],
+            "opus-4-6": [
+              0.837,
+              6.0
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              0.0,
+              2.0
+            ],
+            "opus-4-6": [
+              0.0,
+              0.0
+            ]
           },
           "bonferroni_significant": false
         },
@@ -2113,6 +2553,26 @@
             "opus-4-5": 46.985,
             "opus-4-6": 39.988
           },
+          "mean_ci": {
+            "opus-4-5": [
+              26.591,
+              36.484
+            ],
+            "opus-4-6": [
+              4.106,
+              27.787
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              0.0,
+              13.072
+            ],
+            "opus-4-6": [
+              0.0,
+              0.0
+            ]
+          },
           "bonferroni_significant": false
         },
         {
@@ -2138,6 +2598,26 @@
           "std": {
             "opus-4-5": 2.464,
             "opus-4-6": 2.285
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              4.378,
+              4.898
+            ],
+            "opus-4-6": [
+              4.488,
+              5.837
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              4.0,
+              5.0
+            ],
+            "opus-4-6": [
+              4.0,
+              6.0
+            ]
           },
           "bonferroni_significant": false
         }
@@ -2319,10 +2799,10 @@
         {
           "test": "chi-square",
           "field": "task_completion",
-          "chi2": 20.4656,
-          "p_value": 0.008711,
+          "chi2": 20.9262,
+          "p_value": 0.007346,
           "dof": 8,
-          "cramers_v": 0.2189,
+          "cramers_v": 0.2211,
           "effect_size_label": "small",
           "significant_p05": true,
           "low_expected_warning": true,
@@ -2352,7 +2832,7 @@
             "opus-4-6": {
               "complete": 21,
               "failed": 1,
-              "interrupted": 2,
+              "interrupted": 3,
               "partial": 30,
               "partial - agent created a functional script but final validation was pending at message cutoff": 1,
               "partial - investigation was complete, but the actual cleanup removal work appears to have been left for the next task/interaction": 1,
@@ -2363,17 +2843,17 @@
           },
           "n": {
             "opus-4-5": 370,
-            "opus-4-6": 57
+            "opus-4-6": 58
           },
           "bonferroni_significant": false
         },
         {
           "test": "chi-square",
           "field": "normalized_user_sentiment",
-          "chi2": 1.967,
-          "p_value": 0.579287,
+          "chi2": 2.2332,
+          "p_value": 0.525445,
           "dof": 3,
-          "cramers_v": 0.0679,
+          "cramers_v": 0.0722,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
@@ -2393,23 +2873,23 @@
             "opus-4-6": {
               "ambiguous": 3,
               "dissatisfied": 6,
-              "neutral": 30,
+              "neutral": 31,
               "satisfied": 18
             }
           },
           "n": {
             "opus-4-5": 370,
-            "opus-4-6": 57
+            "opus-4-6": 58
           },
           "bonferroni_significant": false
         },
         {
           "test": "chi-square",
           "field": "scope_management",
-          "chi2": 21.4896,
-          "p_value": 0.010645,
+          "chi2": 21.0433,
+          "p_value": 0.012459,
           "dof": 9,
-          "cramers_v": 0.2243,
+          "cramers_v": 0.2217,
           "effect_size_label": "small",
           "significant_p05": true,
           "low_expected_warning": true,
@@ -2442,7 +2922,7 @@
               "appropriate": 16,
               "appropriate - agent stayed focused on the Chrome launch script without adding unnecessary features": 1,
               "expanded": 1,
-              "focused": 37,
+              "focused": 38,
               "focused - agent stayed narrowly on integrating the provided LaTeX content without adding tangential work": 0,
               "focused - agent stayed narrowly on investigation, appropriately avoiding making breaking changes without explicit user approval": 1,
               "focused - agent stayed narrowly on the specific issue of server cleanup without expanding into related concerns": 0,
@@ -2453,17 +2933,17 @@
           },
           "n": {
             "opus-4-5": 370,
-            "opus-4-6": 57
+            "opus-4-6": 58
           },
           "bonferroni_significant": false
         },
         {
           "test": "chi-square",
           "field": "iteration_required",
-          "chi2": 20.1591,
-          "p_value": 0.005236,
+          "chi2": 19.7583,
+          "p_value": 0.006116,
           "dof": 7,
-          "cramers_v": 0.2173,
+          "cramers_v": 0.2149,
           "effect_size_label": "small",
           "significant_p05": true,
           "low_expected_warning": true,
@@ -2496,22 +2976,22 @@
               "minor - user's follow-up was a simple approval to continue, suggesting the agent's initial approach was sound": 0,
               "one_shot": 20,
               "one_shot - the user didn't ask for revisions or clarifications before moving to the next task": 0,
-              "significant": 23
+              "significant": 24
             }
           },
           "n": {
             "opus-4-5": 370,
-            "opus-4-6": 57
+            "opus-4-6": 58
           },
           "bonferroni_significant": false
         },
         {
           "test": "chi-square",
           "field": "error_recovery",
-          "chi2": 21.2604,
-          "p_value": 0.030772,
+          "chi2": 21.0966,
+          "p_value": 0.032384,
           "dof": 11,
-          "cramers_v": 0.2231,
+          "cramers_v": 0.222,
           "effect_size_label": "small",
           "significant_p05": true,
           "low_expected_warning": true,
@@ -2547,7 +3027,7 @@
             "opus-4-6": {
               "encountered 2 errors but unclear if properly resolved given user's follow-up": 0,
               "failed": 0,
-              "none_needed": 16,
+              "none_needed": 17,
               "recovered": 29,
               "recovered - agent encountered 3 errors during investigation but continued with alternative approaches rather than giving up": 1,
               "recovered - agent encountered 4 errors during bash execution but worked through them to understand the script behavior": 0,
@@ -2561,17 +3041,17 @@
           },
           "n": {
             "opus-4-5": 370,
-            "opus-4-6": 57
+            "opus-4-6": 58
           },
           "bonferroni_significant": false
         },
         {
           "test": "chi-square",
           "field": "communication_quality",
-          "chi2": 21.6997,
-          "p_value": 0.002862,
+          "chi2": 21.2508,
+          "p_value": 0.003416,
           "dof": 7,
-          "cramers_v": 0.2254,
+          "cramers_v": 0.2228,
           "effect_size_label": "small",
           "significant_p05": true,
           "low_expected_warning": true,
@@ -2597,7 +3077,7 @@
               "unclear": 11
             },
             "opus-4-6": {
-              "adequate": 44,
+              "adequate": 45,
               "adequate - agent explained its findings and recommendations but could have been more explicit about what remained to be done": 0,
               "adequate - agent explained steps taken and showed debugging process, though could have been more explicit about what was being tested": 1,
               "adequate - agent ran verification commands and likely reported findings, though details suggest straightforward technical work": 1,
@@ -2609,17 +3089,17 @@
           },
           "n": {
             "opus-4-5": 370,
-            "opus-4-6": 57
+            "opus-4-6": 58
           },
           "bonferroni_significant": false
         },
         {
           "test": "chi-square",
           "field": "normalized_execution_quality",
-          "chi2": 9.5436,
-          "p_value": 0.048858,
+          "chi2": 10.1689,
+          "p_value": 0.037677,
           "dof": 4,
-          "cramers_v": 0.1495,
+          "cramers_v": 0.1541,
           "effect_size_label": "negligible",
           "significant_p05": true,
           "low_expected_warning": true,
@@ -2639,7 +3119,7 @@
               "poor": 12
             },
             "opus-4-6": {
-              "adequate": 30,
+              "adequate": 31,
               "excellent": 2,
               "failed": 2,
               "good": 20,
@@ -2648,17 +3128,17 @@
           },
           "n": {
             "opus-4-5": 370,
-            "opus-4-6": 57
+            "opus-4-6": 58
           },
           "bonferroni_significant": false
         },
         {
           "test": "chi-square",
           "field": "autonomy_level",
-          "chi2": 13.5577,
-          "p_value": 0.034986,
+          "chi2": 13.1904,
+          "p_value": 0.040111,
           "dof": 6,
-          "cramers_v": 0.1782,
+          "cramers_v": 0.1756,
           "effect_size_label": "negligible",
           "significant_p05": true,
           "low_expected_warning": true,
@@ -2685,7 +3165,7 @@
               "high": 40,
               "high - the agent independently investigated, diagnosed the issue, and formulated recommendations without needing clarification": 0,
               "low": 1,
-              "medium": 14,
+              "medium": 15,
               "medium - agent investigated independently but correctly sought user confirmation before making destructive changes": 1,
               "medium - agent planned the work and created a structured approach but waited for user confirmation before final implementation": 0,
               "medium - the agent independently investigated using multiple tools but was directed by explicit user requests throughout": 1
@@ -2693,7 +3173,7 @@
           },
           "n": {
             "opus-4-5": 370,
-            "opus-4-6": 57
+            "opus-4-6": 58
           },
           "bonferroni_significant": false
         }
@@ -2702,14 +3182,14 @@
         {
           "test": "mann-whitney-u",
           "field": "alignment_score",
-          "u_statistic": 10395.5,
-          "p_value": 0.858527,
-          "cohens_d": -0.0348,
+          "u_statistic": 10615.5,
+          "p_value": 0.892573,
+          "cohens_d": -0.0287,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "n": {
             "opus-4-5": 370,
-            "opus-4-6": 57
+            "opus-4-6": 58
           },
           "median": {
             "opus-4-5": 3.0,
@@ -2717,51 +3197,91 @@
           },
           "mean": {
             "opus-4-5": 3.332,
-            "opus-4-6": 3.368
+            "opus-4-6": 3.362
           },
           "std": {
             "opus-4-5": 1.033,
-            "opus-4-6": 1.029
+            "opus-4-6": 1.021
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              3.222,
+              3.438
+            ],
+            "opus-4-6": [
+              3.103,
+              3.621
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              3.0,
+              4.0
+            ],
+            "opus-4-6": [
+              3.0,
+              4.0
+            ]
           },
           "bonferroni_significant": false
         },
         {
           "test": "mann-whitney-u",
           "field": "duration_seconds",
-          "u_statistic": 8948.0,
-          "p_value": 0.065655,
-          "cohens_d": 0.065,
+          "u_statistic": 9318.0,
+          "p_value": 0.107073,
+          "cohens_d": 0.0655,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "n": {
             "opus-4-5": 370,
-            "opus-4-6": 57
+            "opus-4-6": 58
           },
           "median": {
             "opus-4-5": 110.848,
-            "opus-4-6": 116.864
+            "opus-4-6": 115.34
           },
           "mean": {
             "opus-4-5": 711.67,
-            "opus-4-6": 219.619
+            "opus-4-6": 216.145
           },
           "std": {
             "opus-4-5": 8128.169,
-            "opus-4-6": 299.792
+            "opus-4-6": 298.326
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              158.155,
+              1659.275
+            ],
+            "opus-4-6": [
+              154.692,
+              301.382
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              101.586,
+              121.742
+            ],
+            "opus-4-6": [
+              102.154,
+              171.464
+            ]
           },
           "bonferroni_significant": false
         },
         {
           "test": "mann-whitney-u",
           "field": "tool_calls",
-          "u_statistic": 7254.0,
-          "p_value": 0.000146,
-          "cohens_d": -0.5054,
-          "effect_size_label": "medium",
+          "u_statistic": 7510.0,
+          "p_value": 0.000234,
+          "cohens_d": -0.487,
+          "effect_size_label": "small",
           "significant_p05": true,
           "n": {
             "opus-4-5": 370,
-            "opus-4-6": 57
+            "opus-4-6": 58
           },
           "median": {
             "opus-4-5": 12.0,
@@ -2769,25 +3289,45 @@
           },
           "mean": {
             "opus-4-5": 12.859,
-            "opus-4-6": 16.333
+            "opus-4-6": 16.207
           },
           "std": {
             "opus-4-5": 6.934,
-            "opus-4-6": 6.457
+            "opus-4-6": 6.472
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              12.157,
+              13.595
+            ],
+            "opus-4-6": [
+              14.552,
+              17.811
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              11.0,
+              13.0
+            ],
+            "opus-4-6": [
+              14.0,
+              17.5
+            ]
           },
           "bonferroni_significant": true
         },
         {
           "test": "mann-whitney-u",
           "field": "files_touched",
-          "u_statistic": 11012.5,
-          "p_value": 0.582967,
-          "cohens_d": 0.0058,
+          "u_statistic": 11025.5,
+          "p_value": 0.73131,
+          "cohens_d": -0.0338,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "n": {
             "opus-4-5": 370,
-            "opus-4-6": 57
+            "opus-4-6": 58
           },
           "median": {
             "opus-4-5": 2.0,
@@ -2795,25 +3335,45 @@
           },
           "mean": {
             "opus-4-5": 2.768,
-            "opus-4-6": 2.754
+            "opus-4-6": 2.845
           },
           "std": {
             "opus-4-5": 2.231,
-            "opus-4-6": 2.551
+            "opus-4-6": 2.621
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              2.543,
+              2.992
+            ],
+            "opus-4-6": [
+              2.189,
+              3.517
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              2.0,
+              2.0
+            ],
+            "opus-4-6": [
+              1.0,
+              3.0
+            ]
           },
           "bonferroni_significant": false
         },
         {
           "test": "mann-whitney-u",
           "field": "lines_added",
-          "u_statistic": 14411.5,
-          "p_value": 7e-06,
-          "cohens_d": 0.4891,
+          "u_statistic": 14741.0,
+          "p_value": 4e-06,
+          "cohens_d": 0.4987,
           "effect_size_label": "small",
           "significant_p05": true,
           "n": {
             "opus-4-5": 370,
-            "opus-4-6": 57
+            "opus-4-6": 58
           },
           "median": {
             "opus-4-5": 81.5,
@@ -2821,25 +3381,45 @@
           },
           "mean": {
             "opus-4-5": 110.054,
-            "opus-4-6": 57.228
+            "opus-4-6": 56.241
           },
           "std": {
             "opus-4-5": 108.755,
-            "opus-4-6": 102.864
+            "opus-4-6": 102.235
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              99.084,
+              121.617
+            ],
+            "opus-4-6": [
+              31.741,
+              84.191
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              68.0,
+              103.5
+            ],
+            "opus-4-6": [
+              0.0,
+              12.5
+            ]
           },
           "bonferroni_significant": true
         },
         {
           "test": "mann-whitney-u",
           "field": "lines_removed",
-          "u_statistic": 14620.0,
+          "u_statistic": 14919.0,
           "p_value": 1e-06,
-          "cohens_d": 0.5668,
+          "cohens_d": 0.5714,
           "effect_size_label": "medium",
           "significant_p05": true,
           "n": {
             "opus-4-5": 370,
-            "opus-4-6": 57
+            "opus-4-6": 58
           },
           "median": {
             "opus-4-5": 16.0,
@@ -2847,25 +3427,45 @@
           },
           "mean": {
             "opus-4-5": 37.195,
-            "opus-4-6": 10.702
+            "opus-4-6": 10.517
           },
           "std": {
             "opus-4-5": 48.984,
-            "opus-4-6": 27.713
+            "opus-4-6": 27.505
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              32.221,
+              42.281
+            ],
+            "opus-4-6": [
+              4.31,
+              17.811
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              6.0,
+              21.5
+            ],
+            "opus-4-6": [
+              0.0,
+              0.0
+            ]
           },
           "bonferroni_significant": true
         },
         {
           "test": "mann-whitney-u",
           "field": "lines_per_minute",
-          "u_statistic": 15584.5,
+          "u_statistic": 15914.0,
           "p_value": 0.0,
-          "cohens_d": 0.7368,
+          "cohens_d": 0.7423,
           "effect_size_label": "medium",
           "significant_p05": true,
           "n": {
             "opus-4-5": 370,
-            "opus-4-6": 57
+            "opus-4-6": 58
           },
           "median": {
             "opus-4-5": 60.329,
@@ -2873,37 +3473,77 @@
           },
           "mean": {
             "opus-4-5": 83.795,
-            "opus-4-6": 22.33
+            "opus-4-6": 21.945
           },
           "std": {
             "opus-4-5": 88.003,
-            "opus-4-6": 42.161
+            "opus-4-6": 41.893
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              74.795,
+              92.857
+            ],
+            "opus-4-6": [
+              11.844,
+              33.507
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              48.161,
+              78.851
+            ],
+            "opus-4-6": [
+              0.0,
+              6.645
+            ]
           },
           "bonferroni_significant": true
         },
         {
           "test": "mann-whitney-u",
           "field": "tools_per_file",
-          "u_statistic": 8234.5,
-          "p_value": 0.007709,
-          "cohens_d": -0.3921,
+          "u_statistic": 8588.0,
+          "p_value": 0.014448,
+          "cohens_d": -0.3688,
           "effect_size_label": "small",
           "significant_p05": true,
           "n": {
             "opus-4-5": 370,
-            "opus-4-6": 57
+            "opus-4-6": 58
           },
           "median": {
             "opus-4-5": 5.0,
-            "opus-4-6": 6.5
+            "opus-4-6": 6.375
           },
           "mean": {
             "opus-4-5": 6.826,
-            "opus-4-6": 9.19
+            "opus-4-6": 9.051
           },
           "std": {
             "opus-4-5": 5.918,
-            "opus-4-6": 6.721
+            "opus-4-6": 6.746
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              6.235,
+              7.438
+            ],
+            "opus-4-6": [
+              7.435,
+              10.83
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              4.25,
+              5.5
+            ],
+            "opus-4-6": [
+              4.6,
+              11.0
+            ]
           },
           "bonferroni_significant": false
         }
@@ -2912,9 +3552,9 @@
         {
           "test": "two-proportion-z",
           "field": "satisfaction_rate",
-          "z_statistic": 0.0065,
-          "p_value": 0.994854,
-          "cohens_h": 0.0009,
+          "z_statistic": 0.0895,
+          "p_value": 0.928708,
+          "cohens_h": 0.0127,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "opus-4-5": {
@@ -2925,20 +3565,20 @@
             "n": 370
           },
           "opus-4-6": {
-            "proportion": 0.3158,
-            "ci_lower": 0.21,
-            "ci_upper": 0.4448,
+            "proportion": 0.3103,
+            "ci_lower": 0.2062,
+            "ci_upper": 0.438,
             "count": 18,
-            "n": 57
+            "n": 58
           },
           "bonferroni_significant": false
         },
         {
           "test": "two-proportion-z",
           "field": "dissatisfaction_rate",
-          "z_statistic": 1.2412,
-          "p_value": 0.214526,
-          "cohens_h": 0.1899,
+          "z_statistic": 1.2867,
+          "p_value": 0.198192,
+          "cohens_h": 0.1958,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "opus-4-5": {
@@ -2949,20 +3589,20 @@
             "n": 370
           },
           "opus-4-6": {
-            "proportion": 0.1053,
-            "ci_lower": 0.0491,
-            "ci_upper": 0.2112,
+            "proportion": 0.1034,
+            "ci_lower": 0.0483,
+            "ci_upper": 0.2079,
             "count": 6,
-            "n": 57
+            "n": 58
           },
           "bonferroni_significant": false
         },
         {
           "test": "two-proportion-z",
           "field": "complete_rate",
-          "z_statistic": 0.1444,
-          "p_value": 0.885191,
-          "cohens_h": 0.0206,
+          "z_statistic": 0.2384,
+          "p_value": 0.811571,
+          "cohens_h": 0.0338,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "opus-4-5": {
@@ -2973,20 +3613,20 @@
             "n": 370
           },
           "opus-4-6": {
-            "proportion": 0.3684,
-            "ci_lower": 0.2552,
-            "ci_upper": 0.4982,
+            "proportion": 0.3621,
+            "ci_lower": 0.2505,
+            "ci_upper": 0.4907,
             "count": 21,
-            "n": 57
+            "n": 58
           },
           "bonferroni_significant": false
         },
         {
           "test": "two-proportion-z",
           "field": "failed_rate",
-          "z_statistic": 0.7747,
-          "p_value": 0.438526,
-          "cohens_h": 0.1258,
+          "z_statistic": 0.7931,
+          "p_value": 0.42774,
+          "cohens_h": 0.1282,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "opus-4-5": {
@@ -2997,20 +3637,20 @@
             "n": 370
           },
           "opus-4-6": {
-            "proportion": 0.0175,
-            "ci_lower": 0.0031,
-            "ci_upper": 0.0929,
+            "proportion": 0.0172,
+            "ci_lower": 0.003,
+            "ci_upper": 0.0914,
             "count": 1,
-            "n": 57
+            "n": 58
           },
           "bonferroni_significant": false
         },
         {
           "test": "two-proportion-z",
           "field": "scope_expanded_rate",
-          "z_statistic": 0.6942,
-          "p_value": 0.487531,
-          "cohens_h": 0.1114,
+          "z_statistic": 0.7123,
+          "p_value": 0.476268,
+          "cohens_h": 0.1137,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "opus-4-5": {
@@ -3021,20 +3661,20 @@
             "n": 370
           },
           "opus-4-6": {
-            "proportion": 0.0175,
-            "ci_lower": 0.0031,
-            "ci_upper": 0.0929,
+            "proportion": 0.0172,
+            "ci_lower": 0.003,
+            "ci_upper": 0.0914,
             "count": 1,
-            "n": 57
+            "n": 58
           },
           "bonferroni_significant": false
         },
         {
           "test": "two-proportion-z",
           "field": "one_shot_rate",
-          "z_statistic": -0.2747,
-          "p_value": 0.783576,
-          "cohens_h": -0.0389,
+          "z_statistic": -0.1861,
+          "p_value": 0.852383,
+          "cohens_h": -0.0262,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "opus-4-5": {
@@ -3045,20 +3685,20 @@
             "n": 370
           },
           "opus-4-6": {
-            "proportion": 0.3509,
-            "ci_lower": 0.24,
-            "ci_upper": 0.4806,
+            "proportion": 0.3448,
+            "ci_lower": 0.2356,
+            "ci_upper": 0.4733,
             "count": 20,
-            "n": 57
+            "n": 58
           },
           "bonferroni_significant": false
         },
         {
           "test": "two-proportion-z",
           "field": "good_execution_rate",
-          "z_statistic": 2.8988,
-          "p_value": 0.003746,
-          "cohens_h": 0.4166,
+          "z_statistic": 3.0061,
+          "p_value": 0.002647,
+          "cohens_h": 0.4293,
           "effect_size_label": "small",
           "significant_p05": true,
           "opus-4-5": {
@@ -3069,11 +3709,11 @@
             "n": 370
           },
           "opus-4-6": {
-            "proportion": 0.3509,
-            "ci_lower": 0.24,
-            "ci_upper": 0.4806,
+            "proportion": 0.3448,
+            "ci_lower": 0.2356,
+            "ci_upper": 0.4733,
             "count": 20,
-            "n": 57
+            "n": 58
           },
           "bonferroni_significant": false
         }
@@ -3085,10 +3725,10 @@
         {
           "test": "chi-square",
           "field": "task_completion",
-          "chi2": 3.7831,
-          "p_value": 0.285859,
+          "chi2": 4.4016,
+          "p_value": 0.221237,
           "dof": 3,
-          "cramers_v": 0.1396,
+          "cramers_v": 0.1451,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
@@ -3100,31 +3740,31 @@
           ],
           "counts": {
             "opus-4-5": {
-              "complete": 86,
+              "complete": 89,
               "failed": 4,
               "interrupted": 7,
-              "partial": 83
+              "partial": 91
             },
             "opus-4-6": {
               "complete": 5,
               "failed": 0,
               "interrupted": 2,
-              "partial": 7
+              "partial": 11
             }
           },
           "n": {
-            "opus-4-5": 180,
-            "opus-4-6": 14
+            "opus-4-5": 191,
+            "opus-4-6": 18
           },
           "bonferroni_significant": false
         },
         {
           "test": "chi-square",
           "field": "normalized_user_sentiment",
-          "chi2": 4.1419,
-          "p_value": 0.246539,
+          "chi2": 1.5385,
+          "p_value": 0.673412,
           "dof": 3,
-          "cramers_v": 0.1461,
+          "cramers_v": 0.0858,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
@@ -3137,30 +3777,30 @@
           "counts": {
             "opus-4-5": {
               "ambiguous": 14,
-              "dissatisfied": 14,
-              "neutral": 71,
-              "satisfied": 81
+              "dissatisfied": 18,
+              "neutral": 74,
+              "satisfied": 85
             },
             "opus-4-6": {
-              "ambiguous": 0,
+              "ambiguous": 1,
               "dissatisfied": 3,
-              "neutral": 6,
-              "satisfied": 5
+              "neutral": 8,
+              "satisfied": 6
             }
           },
           "n": {
-            "opus-4-5": 180,
-            "opus-4-6": 14
+            "opus-4-5": 191,
+            "opus-4-6": 18
           },
           "bonferroni_significant": false
         },
         {
           "test": "chi-square",
           "field": "scope_management",
-          "chi2": 2.5033,
-          "p_value": 0.474695,
+          "chi2": 3.5171,
+          "p_value": 0.318548,
           "dof": 3,
-          "cramers_v": 0.1136,
+          "cramers_v": 0.1297,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
@@ -3172,31 +3812,31 @@
           ],
           "counts": {
             "opus-4-5": {
-              "appropriate": 92,
-              "expanded": 9,
-              "focused": 77,
-              "over_engineered": 2
+              "appropriate": 97,
+              "expanded": 10,
+              "focused": 81,
+              "over_engineered": 3
             },
             "opus-4-6": {
-              "appropriate": 10,
+              "appropriate": 13,
               "expanded": 0,
-              "focused": 4,
+              "focused": 5,
               "over_engineered": 0
             }
           },
           "n": {
-            "opus-4-5": 180,
-            "opus-4-6": 14
+            "opus-4-5": 191,
+            "opus-4-6": 18
           },
           "bonferroni_significant": false
         },
         {
           "test": "chi-square",
           "field": "iteration_required",
-          "chi2": 3.8235,
-          "p_value": 0.147821,
+          "chi2": 5.0091,
+          "p_value": 0.081711,
           "dof": 2,
-          "cramers_v": 0.1404,
+          "cramers_v": 0.1548,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
@@ -3207,29 +3847,29 @@
           ],
           "counts": {
             "opus-4-5": {
-              "minor": 55,
-              "one_shot": 51,
-              "significant": 74
+              "minor": 56,
+              "one_shot": 52,
+              "significant": 83
             },
             "opus-4-6": {
-              "minor": 4,
+              "minor": 5,
               "one_shot": 1,
-              "significant": 9
+              "significant": 12
             }
           },
           "n": {
-            "opus-4-5": 180,
-            "opus-4-6": 14
+            "opus-4-5": 191,
+            "opus-4-6": 18
           },
           "bonferroni_significant": false
         },
         {
           "test": "chi-square",
           "field": "error_recovery",
-          "chi2": 0.5366,
-          "p_value": 0.764666,
+          "chi2": 1.1683,
+          "p_value": 0.557578,
           "dof": 2,
-          "cramers_v": 0.0526,
+          "cramers_v": 0.0748,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
@@ -3241,28 +3881,28 @@
           "counts": {
             "opus-4-5": {
               "none_needed": 17,
-              "recovered": 131,
-              "struggled": 32
+              "recovered": 139,
+              "struggled": 35
             },
             "opus-4-6": {
               "none_needed": 2,
-              "recovered": 9,
-              "struggled": 3
+              "recovered": 11,
+              "struggled": 5
             }
           },
           "n": {
-            "opus-4-5": 180,
-            "opus-4-6": 14
+            "opus-4-5": 191,
+            "opus-4-6": 18
           },
           "bonferroni_significant": false
         },
         {
           "test": "chi-square",
           "field": "communication_quality",
-          "chi2": 3.456,
-          "p_value": 0.177636,
+          "chi2": 2.0961,
+          "p_value": 0.35062,
           "dof": 2,
-          "cramers_v": 0.1335,
+          "cramers_v": 0.1001,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
@@ -3273,29 +3913,29 @@
           ],
           "counts": {
             "opus-4-5": {
-              "adequate": 159,
+              "adequate": 170,
               "clear": 17,
               "unclear": 4
             },
             "opus-4-6": {
-              "adequate": 10,
+              "adequate": 14,
               "clear": 3,
               "unclear": 1
             }
           },
           "n": {
-            "opus-4-5": 180,
-            "opus-4-6": 14
+            "opus-4-5": 191,
+            "opus-4-6": 18
           },
           "bonferroni_significant": false
         },
         {
           "test": "chi-square",
           "field": "normalized_execution_quality",
-          "chi2": 3.9204,
-          "p_value": 0.270194,
+          "chi2": 4.9936,
+          "p_value": 0.17227,
           "dof": 3,
-          "cramers_v": 0.1422,
+          "cramers_v": 0.1546,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
@@ -3307,21 +3947,21 @@
           ],
           "counts": {
             "opus-4-5": {
-              "adequate": 73,
+              "adequate": 79,
               "excellent": 4,
-              "good": 96,
+              "good": 101,
               "poor": 7
             },
             "opus-4-6": {
-              "adequate": 9,
+              "adequate": 12,
               "excellent": 0,
-              "good": 4,
+              "good": 5,
               "poor": 1
             }
           },
           "n": {
-            "opus-4-5": 180,
-            "opus-4-6": 14
+            "opus-4-5": 191,
+            "opus-4-6": 18
           },
           "bonferroni_significant": false
         },
@@ -3341,17 +3981,17 @@
           ],
           "counts": {
             "opus-4-5": {
-              "high": 157,
-              "medium": 23
+              "high": 166,
+              "medium": 25
             },
             "opus-4-6": {
-              "high": 12,
+              "high": 16,
               "medium": 2
             }
           },
           "n": {
-            "opus-4-5": 180,
-            "opus-4-6": 14
+            "opus-4-5": 191,
+            "opus-4-6": 18
           },
           "bonferroni_significant": false
         }
@@ -3360,208 +4000,368 @@
         {
           "test": "mann-whitney-u",
           "field": "alignment_score",
-          "u_statistic": 1367.0,
-          "p_value": 0.573239,
-          "cohens_d": 0.1319,
+          "u_statistic": 1926.0,
+          "p_value": 0.369028,
+          "cohens_d": 0.1735,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 180,
-            "opus-4-6": 14
+            "opus-4-5": 191,
+            "opus-4-6": 18
           },
           "median": {
             "opus-4-5": 4.0,
             "opus-4-6": 3.0
           },
           "mean": {
-            "opus-4-5": 3.4,
-            "opus-4-6": 3.286
+            "opus-4-5": 3.372,
+            "opus-4-6": 3.222
           },
           "std": {
-            "opus-4-5": 0.875,
-            "opus-4-6": 0.726
+            "opus-4-5": 0.878,
+            "opus-4-6": 0.647
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              3.241,
+              3.497
+            ],
+            "opus-4-6": [
+              2.944,
+              3.5
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              3.0,
+              4.0
+            ],
+            "opus-4-6": [
+              3.0,
+              4.0
+            ]
           },
           "bonferroni_significant": false
         },
         {
           "test": "mann-whitney-u",
           "field": "duration_seconds",
-          "u_statistic": 798.0,
-          "p_value": 0.022573,
-          "cohens_d": 0.1018,
+          "u_statistic": 1140.0,
+          "p_value": 0.01835,
+          "cohens_d": 0.1044,
           "effect_size_label": "negligible",
           "significant_p05": true,
           "n": {
-            "opus-4-5": 180,
-            "opus-4-6": 14
+            "opus-4-5": 191,
+            "opus-4-6": 18
           },
           "median": {
-            "opus-4-5": 263.218,
-            "opus-4-6": 392.257
+            "opus-4-5": 262.847,
+            "opus-4-6": 404.485
           },
           "mean": {
-            "opus-4-5": 1452.733,
-            "opus-4-6": 562.607
+            "opus-4-5": 1400.405,
+            "opus-4-6": 520.488
           },
           "std": {
-            "opus-4-5": 9058.088,
-            "opus-4-6": 605.244
+            "opus-4-5": 8796.449,
+            "opus-4-6": 539.505
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              424.028,
+              2823.973
+            ],
+            "opus-4-6": [
+              343.689,
+              789.974
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              238.043,
+              279.994
+            ],
+            "opus-4-6": [
+              296.597,
+              477.691
+            ]
           },
           "bonferroni_significant": false
         },
         {
           "test": "mann-whitney-u",
           "field": "tool_calls",
-          "u_statistic": 1273.0,
-          "p_value": 0.95073,
-          "cohens_d": 0.0453,
-          "effect_size_label": "negligible",
+          "u_statistic": 1492.5,
+          "p_value": 0.356719,
+          "cohens_d": -0.2433,
+          "effect_size_label": "small",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 180,
-            "opus-4-6": 14
+            "opus-4-5": 191,
+            "opus-4-6": 18
           },
           "median": {
-            "opus-4-5": 33.0,
-            "opus-4-6": 34.5
+            "opus-4-5": 34.0,
+            "opus-4-6": 39.0
           },
           "mean": {
-            "opus-4-5": 33.95,
-            "opus-4-6": 33.214
+            "opus-4-5": 34.246,
+            "opus-4-6": 38.222
           },
           "std": {
-            "opus-4-5": 16.36,
-            "opus-4-6": 14.273
+            "opus-4-5": 16.261,
+            "opus-4-6": 17.258
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              31.901,
+              36.545
+            ],
+            "opus-4-6": [
+              30.387,
+              46.389
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              31.0,
+              37.0
+            ],
+            "opus-4-6": [
+              31.0,
+              44.0
+            ]
           },
           "bonferroni_significant": false
         },
         {
           "test": "mann-whitney-u",
           "field": "files_touched",
-          "u_statistic": 1231.5,
-          "p_value": 0.88933,
-          "cohens_d": -0.0814,
-          "effect_size_label": "negligible",
+          "u_statistic": 1638.0,
+          "p_value": 0.741504,
+          "cohens_d": -0.2486,
+          "effect_size_label": "small",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 180,
-            "opus-4-6": 14
+            "opus-4-5": 191,
+            "opus-4-6": 18
           },
           "median": {
             "opus-4-5": 4.0,
-            "opus-4-6": 3.5
+            "opus-4-6": 4.5
           },
           "mean": {
-            "opus-4-5": 5.428,
-            "opus-4-6": 5.786
+            "opus-4-5": 5.634,
+            "opus-4-6": 6.778
           },
           "std": {
-            "opus-4-5": 4.342,
-            "opus-4-6": 5.071
+            "opus-4-5": 4.388,
+            "opus-4-6": 6.54
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              5.031,
+              6.262
+            ],
+            "opus-4-6": [
+              4.111,
+              10.0
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              4.0,
+              5.0
+            ],
+            "opus-4-6": [
+              2.5,
+              8.0
+            ]
           },
           "bonferroni_significant": false
         },
         {
           "test": "mann-whitney-u",
           "field": "lines_added",
-          "u_statistic": 1526.0,
-          "p_value": 0.187097,
-          "cohens_d": 0.4889,
+          "u_statistic": 2032.5,
+          "p_value": 0.199963,
+          "cohens_d": 0.4358,
           "effect_size_label": "small",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 180,
-            "opus-4-6": 14
+            "opus-4-5": 191,
+            "opus-4-6": 18
           },
           "median": {
-            "opus-4-5": 397.0,
-            "opus-4-6": 150.5
+            "opus-4-5": 412.0,
+            "opus-4-6": 165.5
           },
           "mean": {
-            "opus-4-5": 448.239,
-            "opus-4-6": 241.143
+            "opus-4-5": 464.393,
+            "opus-4-6": 280.389
           },
           "std": {
-            "opus-4-5": 433.106,
-            "opus-4-6": 259.227
+            "opus-4-5": 432.967,
+            "opus-4-6": 274.133
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              405.234,
+              525.269
+            ],
+            "opus-4-6": [
+              163.275,
+              408.512
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              330.0,
+              470.0
+            ],
+            "opus-4-6": [
+              102.0,
+              418.0
+            ]
           },
           "bonferroni_significant": false
         },
         {
           "test": "mann-whitney-u",
           "field": "lines_removed",
-          "u_statistic": 1482.5,
-          "p_value": 0.261109,
-          "cohens_d": 0.3705,
+          "u_statistic": 1841.0,
+          "p_value": 0.613001,
+          "cohens_d": 0.2379,
           "effect_size_label": "small",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 180,
-            "opus-4-6": 14
+            "opus-4-5": 191,
+            "opus-4-6": 18
           },
           "median": {
-            "opus-4-5": 40.0,
-            "opus-4-6": 8.0
+            "opus-4-5": 41.0,
+            "opus-4-6": 10.5
           },
           "mean": {
-            "opus-4-5": 96.483,
-            "opus-4-6": 48.357
+            "opus-4-5": 98.037,
+            "opus-4-6": 66.944
           },
           "std": {
-            "opus-4-5": 132.206,
-            "opus-4-6": 92.539
+            "opus-4-5": 133.335,
+            "opus-4-6": 96.6
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              79.277,
+              117.854
+            ],
+            "opus-4-6": [
+              26.554,
+              111.947
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              15.0,
+              68.0
+            ],
+            "opus-4-6": [
+              1.0,
+              104.5
+            ]
           },
           "bonferroni_significant": false
         },
         {
           "test": "mann-whitney-u",
           "field": "lines_per_minute",
-          "u_statistic": 1605.0,
-          "p_value": 0.086944,
-          "cohens_d": 0.6156,
+          "u_statistic": 2160.0,
+          "p_value": 0.071273,
+          "cohens_d": 0.5641,
           "effect_size_label": "medium",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 180,
-            "opus-4-6": 14
+            "opus-4-5": 191,
+            "opus-4-6": 18
           },
           "median": {
-            "opus-4-5": 107.455,
-            "opus-4-6": 34.184
+            "opus-4-5": 119.12,
+            "opus-4-6": 45.017
           },
           "mean": {
-            "opus-4-5": 113.608,
-            "opus-4-6": 48.687
+            "opus-4-5": 117.736,
+            "opus-4-6": 58.508
           },
           "std": {
-            "opus-4-5": 108.265,
-            "opus-4-6": 53.352
+            "opus-4-5": 108.507,
+            "opus-4-6": 51.403
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              102.511,
+              133.651
+            ],
+            "opus-4-6": [
+              35.513,
+              81.572
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              74.274,
+              132.376
+            ],
+            "opus-4-6": [
+              18.011,
+              89.705
+            ]
           },
           "bonferroni_significant": false
         },
         {
           "test": "mann-whitney-u",
           "field": "tools_per_file",
-          "u_statistic": 1269.5,
-          "p_value": 0.964524,
-          "cohens_d": 0.1184,
+          "u_statistic": 1650.5,
+          "p_value": 0.781595,
+          "cohens_d": 0.0405,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "n": {
-            "opus-4-5": 180,
-            "opus-4-6": 14
+            "opus-4-5": 191,
+            "opus-4-6": 18
           },
           "median": {
-            "opus-4-5": 6.0,
-            "opus-4-6": 9.867
+            "opus-4-5": 5.5,
+            "opus-4-6": 8.25
           },
           "mean": {
-            "opus-4-5": 13.171,
-            "opus-4-6": 11.417
+            "opus-4-5": 12.695,
+            "opus-4-6": 12.105
           },
           "std": {
-            "opus-4-5": 15.083,
-            "opus-4-6": 10.623
+            "opus-4-5": 14.778,
+            "opus-4-6": 11.679
+          },
+          "mean_ci": {
+            "opus-4-5": [
+              10.714,
+              14.84
+            ],
+            "opus-4-6": [
+              7.162,
+              17.75
+            ]
+          },
+          "median_ci": {
+            "opus-4-5": [
+              4.667,
+              7.333
+            ],
+            "opus-4-6": [
+              3.858,
+              14.417
+            ]
           },
           "bonferroni_significant": false
         }
@@ -3570,168 +4370,168 @@
         {
           "test": "two-proportion-z",
           "field": "satisfaction_rate",
-          "z_statistic": 0.6737,
-          "p_value": 0.500513,
-          "cohens_h": 0.1896,
-          "effect_size_label": "negligible",
+          "z_statistic": 0.9137,
+          "p_value": 0.36089,
+          "cohens_h": 0.2297,
+          "effect_size_label": "small",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.45,
-            "ci_lower": 0.3791,
-            "ci_upper": 0.523,
-            "count": 81,
-            "n": 180
+            "proportion": 0.445,
+            "ci_lower": 0.3763,
+            "ci_upper": 0.5159,
+            "count": 85,
+            "n": 191
           },
           "opus-4-6": {
-            "proportion": 0.3571,
-            "ci_lower": 0.1634,
-            "ci_upper": 0.6124,
-            "count": 5,
-            "n": 14
+            "proportion": 0.3333,
+            "ci_lower": 0.1628,
+            "ci_upper": 0.5625,
+            "count": 6,
+            "n": 18
           },
           "bonferroni_significant": false
         },
         {
           "test": "two-proportion-z",
           "field": "dissatisfaction_rate",
-          "z_statistic": -1.74,
-          "p_value": 0.08186,
-          "cohens_h": -0.3973,
+          "z_statistic": -0.9771,
+          "p_value": 0.328529,
+          "cohens_h": -0.217,
           "effect_size_label": "small",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.0778,
-            "ci_lower": 0.0469,
-            "ci_upper": 0.1263,
-            "count": 14,
-            "n": 180
+            "proportion": 0.0942,
+            "ci_lower": 0.0604,
+            "ci_upper": 0.144,
+            "count": 18,
+            "n": 191
           },
           "opus-4-6": {
-            "proportion": 0.2143,
-            "ci_lower": 0.0757,
-            "ci_upper": 0.4759,
+            "proportion": 0.1667,
+            "ci_lower": 0.0584,
+            "ci_upper": 0.3922,
             "count": 3,
-            "n": 14
+            "n": 18
           },
           "bonferroni_significant": false
         },
         {
           "test": "two-proportion-z",
           "field": "complete_rate",
-          "z_statistic": 0.8712,
-          "p_value": 0.383626,
-          "cohens_h": 0.2453,
+          "z_statistic": 1.5343,
+          "p_value": 0.124955,
+          "cohens_h": 0.3924,
           "effect_size_label": "small",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.4778,
-            "ci_lower": 0.406,
-            "ci_upper": 0.5504,
-            "count": 86,
-            "n": 180
+            "proportion": 0.466,
+            "ci_lower": 0.3966,
+            "ci_upper": 0.5367,
+            "count": 89,
+            "n": 191
           },
           "opus-4-6": {
-            "proportion": 0.3571,
-            "ci_lower": 0.1634,
-            "ci_upper": 0.6124,
+            "proportion": 0.2778,
+            "ci_lower": 0.125,
+            "ci_upper": 0.5087,
             "count": 5,
-            "n": 14
+            "n": 18
           },
           "bonferroni_significant": false
         },
         {
           "test": "two-proportion-z",
           "field": "failed_rate",
-          "z_statistic": 0.5636,
-          "p_value": 0.573017,
-          "cohens_h": 0.2993,
+          "z_statistic": 0.6199,
+          "p_value": 0.535301,
+          "cohens_h": 0.2904,
           "effect_size_label": "small",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.0222,
-            "ci_lower": 0.0087,
-            "ci_upper": 0.0557,
+            "proportion": 0.0209,
+            "ci_lower": 0.0082,
+            "ci_upper": 0.0526,
             "count": 4,
-            "n": 180
+            "n": 191
           },
           "opus-4-6": {
             "proportion": 0.0,
             "ci_lower": 0.0,
-            "ci_upper": 0.2153,
+            "ci_upper": 0.1759,
             "count": 0,
-            "n": 14
+            "n": 18
           },
           "bonferroni_significant": false
         },
         {
           "test": "two-proportion-z",
           "field": "scope_expanded_rate",
-          "z_statistic": 0.8568,
-          "p_value": 0.391572,
-          "cohens_h": 0.451,
+          "z_statistic": 0.9949,
+          "p_value": 0.3198,
+          "cohens_h": 0.4617,
           "effect_size_label": "small",
           "significant_p05": false,
           "opus-4-5": {
-            "proportion": 0.05,
-            "ci_lower": 0.0265,
-            "ci_upper": 0.0923,
-            "count": 9,
-            "n": 180
+            "proportion": 0.0524,
+            "ci_lower": 0.0287,
+            "ci_upper": 0.0937,
+            "count": 10,
+            "n": 191
           },
           "opus-4-6": {
             "proportion": 0.0,
             "ci_lower": 0.0,
-            "ci_upper": 0.2153,
+            "ci_upper": 0.1759,
             "count": 0,
-            "n": 14
+            "n": 18
           },
           "bonferroni_significant": false
         },
         {
           "test": "two-proportion-z",
           "field": "one_shot_rate",
-          "z_statistic": 1.7242,
-          "p_value": 0.084666,
-          "cohens_h": 0.5815,
+          "z_statistic": 2.0201,
+          "p_value": 0.043371,
+          "cohens_h": 0.622,
           "effect_size_label": "medium",
-          "significant_p05": false,
+          "significant_p05": true,
           "opus-4-5": {
-            "proportion": 0.2833,
-            "ci_lower": 0.2226,
-            "ci_upper": 0.3532,
-            "count": 51,
-            "n": 180
+            "proportion": 0.2723,
+            "ci_lower": 0.2141,
+            "ci_upper": 0.3394,
+            "count": 52,
+            "n": 191
           },
           "opus-4-6": {
-            "proportion": 0.0714,
-            "ci_lower": 0.0127,
-            "ci_upper": 0.3147,
+            "proportion": 0.0556,
+            "ci_lower": 0.0099,
+            "ci_upper": 0.2576,
             "count": 1,
-            "n": 14
+            "n": 18
           },
           "bonferroni_significant": false
         },
         {
           "test": "two-proportion-z",
           "field": "good_execution_rate",
-          "z_statistic": 1.7858,
-          "p_value": 0.074139,
-          "cohens_h": 0.5096,
+          "z_statistic": 2.0364,
+          "p_value": 0.041712,
+          "cohens_h": 0.5182,
           "effect_size_label": "medium",
-          "significant_p05": false,
+          "significant_p05": true,
           "opus-4-5": {
-            "proportion": 0.5333,
-            "ci_lower": 0.4605,
-            "ci_upper": 0.6048,
-            "count": 96,
-            "n": 180
+            "proportion": 0.5288,
+            "ci_lower": 0.4581,
+            "ci_upper": 0.5983,
+            "count": 101,
+            "n": 191
           },
           "opus-4-6": {
-            "proportion": 0.2857,
-            "ci_lower": 0.1172,
-            "ci_upper": 0.5465,
-            "count": 4,
-            "n": 14
+            "proportion": 0.2778,
+            "ci_lower": 0.125,
+            "ci_upper": 0.5087,
+            "count": 5,
+            "n": 18
           },
           "bonferroni_significant": false
         }

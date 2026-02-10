@@ -40,6 +40,65 @@ def compute_cleaning_stats(data_dir: Path, model: str) -> dict:
     }
 
 
+def _percentile(sorted_vals: list, p: float) -> float:
+    """Compute the p-th percentile from a sorted list (nearest-rank method)."""
+    if not sorted_vals:
+        return 0.0
+    k = int(p / 100 * (len(sorted_vals) - 1) + 0.5)
+    return sorted_vals[k]
+
+
+def _compute_duration_distribution(task_durations: list) -> dict:
+    """Compute percentiles and bucket distribution from sorted task durations."""
+    n = len(task_durations)
+    if n == 0:
+        return {
+            "tasks_with_duration": 0,
+            "mean_seconds": 0.0,
+            "percentiles": {"p10": 0, "p25": 0, "p50": 0, "p75": 0, "p90": 0},
+            "buckets": {
+                "under_30s": {"count": 0, "pct": 0},
+                "30s_to_2m": {"count": 0, "pct": 0},
+                "2m_to_10m": {"count": 0, "pct": 0},
+                "10m_to_1h": {"count": 0, "pct": 0},
+                "over_1h": {"count": 0, "pct": 0},
+            },
+        }
+
+    mean_val = sum(task_durations) / n
+
+    percentiles = {
+        "p10": round(_percentile(task_durations, 10), 1),
+        "p25": round(_percentile(task_durations, 25), 1),
+        "p50": round(_percentile(task_durations, 50), 1),
+        "p75": round(_percentile(task_durations, 75), 1),
+        "p90": round(_percentile(task_durations, 90), 1),
+    }
+
+    # Bucket boundaries in seconds
+    buckets_def = [
+        ("under_30s", 0, 30),
+        ("30s_to_2m", 30, 120),
+        ("2m_to_10m", 120, 600),
+        ("10m_to_1h", 600, 3600),
+        ("over_1h", 3600, float("inf")),
+    ]
+    buckets = {}
+    for name, lo, hi in buckets_def:
+        count = sum(1 for d in task_durations if lo <= d < hi)
+        buckets[name] = {
+            "count": count,
+            "pct": round(count / n * 100, 1),
+        }
+
+    return {
+        "tasks_with_duration": n,
+        "mean_seconds": round(mean_val, 1),
+        "percentiles": percentiles,
+        "buckets": buckets,
+    }
+
+
 def analyze_model(data_dir: Path, analysis_dir: Path, model: str) -> dict:
     """Compute overview statistics for a single model."""
     sessions_path = data_dir / f"sessions-{model}.json"
@@ -88,6 +147,9 @@ def analyze_model(data_dir: Path, analysis_dir: Path, model: str) -> dict:
         if t.get("duration_seconds") and t["duration_seconds"] > 0
     )
 
+    # Duration distribution
+    duration_distribution = _compute_duration_distribution(task_durations)
+
     # Projects and messages
     projects = sorted(set(s.get("project_path", "") for s in sessions))
     total_user = sum(s.get("user_message_count", 0) for s in sessions)
@@ -124,6 +186,7 @@ def analyze_model(data_dir: Path, analysis_dir: Path, model: str) -> dict:
             if task_durations
             else 0
         ),
+        "duration_distribution": duration_distribution,
         "total_cost_usd": ta["total_cost_usd"],
         "total_input_tokens": ta["total_input_tokens"],
         "total_output_tokens": ta["total_output_tokens"],

@@ -849,6 +849,158 @@ def classify_data_cleaning(task: 'CanonicalTask') -> None:
         task.flags.append('post_compaction')
 
 
+# --- Plan mode continuation merging ---
+
+_PLAN_IMPL_RE = re.compile(r'^Implement the following plan:', re.IGNORECASE)
+_INTERRUPTED_RE = re.compile(r'^\[Request interrupted')
+
+
+def _merge_task_into(target: CanonicalTask, source: CanonicalTask) -> None:
+    """Merge source task's data into target task.
+
+    Combines tool calls, edit events, tokens, files, duration, etc.
+    Target keeps its identity (task_id, user_prompt) but gains source's work.
+    """
+    # Lists: extend
+    target.tool_calls.extend(source.tool_calls)
+    target.files_read.extend(source.files_read)
+    target.files_written.extend(source.files_written)
+    target.files_edited.extend(source.files_edited)
+    target.bash_commands.extend(source.bash_commands)
+    target.edit_events.extend(source.edit_events)
+    target.compaction_events_before.extend(source.compaction_events_before)
+    target.errors.extend(source.errors)
+    target.subagent_types.extend(source.subagent_types)
+
+    # Scalars: sum
+    target.total_lines_added += source.total_lines_added
+    target.total_lines_removed += source.total_lines_removed
+    target.input_tokens += source.input_tokens
+    target.output_tokens += source.output_tokens
+    target.cache_read_tokens += source.cache_read_tokens
+    target.cache_write_tokens += source.cache_write_tokens
+    target.thinking_chars += source.thinking_chars
+    target.thinking_blocks += source.thinking_blocks
+    target.text_chars += source.text_chars
+    target.text_blocks += source.text_blocks
+    target.estimated_cost += round(source.estimated_cost, 4)
+    target.request_count += source.request_count
+    target.subagent_count += source.subagent_count
+    target.parallel_tool_messages += source.parallel_tool_messages
+    target.run_in_background_count += source.run_in_background_count
+
+    # Booleans: OR
+    target.used_planning = target.used_planning or source.used_planning
+    target.used_subagents = target.used_subagents or source.used_subagents
+
+    # Time range: extend to cover both tasks
+    if source.end_time and (not target.end_time or source.end_time > target.end_time):
+        target.end_time = source.end_time
+    if source.start_time and (not target.start_time or source.start_time < target.start_time):
+        target.start_time = source.start_time
+    target.msg_index_end = max(target.msg_index_end, source.msg_index_end)
+
+    # Recompute derived fields
+    target.total_files_touched = len(set(
+        target.files_read + target.files_written + target.files_edited
+    ))
+    if target.start_time and target.end_time:
+        try:
+            start = datetime.fromisoformat(target.start_time.replace('Z', '+00:00'))
+            end = datetime.fromisoformat(target.end_time.replace('Z', '+00:00'))
+            target.duration_seconds = (end - start).total_seconds()
+        except ValueError:
+            target.duration_seconds += source.duration_seconds
+
+    # Recompute tool_sequence
+    tool_names = [t['name'] for t in target.tool_calls]
+    deduped = []
+    for name in tool_names:
+        if not deduped or deduped[-1] != name:
+            deduped.append(name)
+    target.tool_sequence = '\u2192'.join(deduped[:10])
+
+    # Merge flags (dedupe)
+    for flag in source.flags:
+        if flag not in target.flags:
+            target.flags.append(flag)
+
+
+def merge_plan_continuations(tasks: list[CanonicalTask]) -> list[CanonicalTask]:
+    """Merge plan-mode continuation chains into their parent tasks.
+
+    When plan mode is used, the implementation phase creates a separate 'task'
+    starting with "Implement the following plan:". This gets excluded as
+    system_continuation but contains all the actual editing work. This function
+    merges these back.
+
+    Patterns handled:
+    1. parent(used_planning) -> [Request interrupted...] -> Implement plan
+       -> all merged into parent
+    2. [Request interrupted...] -> Implement plan (no parent in session)
+       -> interrupt absorbed, plan implementation promoted to included task
+    """
+    from collections import defaultdict
+
+    session_tasks = defaultdict(list)
+    for t in tasks:
+        session_tasks[t.session_id].append(t)
+
+    absorbed = set()  # task_ids absorbed into another task
+    merge_count = 0
+
+    for sid, stasks in session_tasks.items():
+        stasks.sort(key=lambda t: t.msg_index_start)
+
+        for i, task in enumerate(stasks):
+            prompt = (task.user_prompt or '').strip()
+            if not _PLAN_IMPL_RE.match(prompt):
+                continue
+
+            # Found a plan implementation. Scan backwards for parent/interrupts.
+            parent = None
+            interrupts = []
+
+            for j in range(i - 1, -1, -1):
+                prev = stasks[j]
+                if prev.task_id in absorbed:
+                    continue
+                prev_prompt = (prev.user_prompt or '').strip()
+
+                if _INTERRUPTED_RE.match(prev_prompt):
+                    interrupts.append(prev)
+                    continue
+
+                # Real task — merge into it if it used planning
+                if prev.used_planning and not prev.exclude_reason:
+                    parent = prev
+                break
+
+            if parent is not None:
+                # Merge interrupts and implementation into parent
+                for intr in interrupts:
+                    _merge_task_into(parent, intr)
+                    absorbed.add(intr.task_id)
+                _merge_task_into(parent, task)
+                absorbed.add(task.task_id)
+            else:
+                # No parent in session — promote plan implementation
+                for intr in interrupts:
+                    _merge_task_into(task, intr)
+                    absorbed.add(intr.task_id)
+                task.used_planning = True
+                task.exclude_reason = ''
+
+            merge_count += 1
+
+    result = [t for t in tasks if t.task_id not in absorbed]
+
+    if merge_count:
+        print(f"  Merged {merge_count} plan continuation(s)")
+
+    return result
+
+
 def extract_all_canonical(sessions_file: Path, model: str,
                           include_meta: bool = True) -> list[CanonicalTask]:
     """Extract canonical tasks from all sessions in a sessions JSON file."""
@@ -881,6 +1033,9 @@ def extract_all_canonical(sessions_file: Path, model: str,
     # Apply data cleaning classification
     for task in all_tasks:
         classify_data_cleaning(task)
+
+    # Merge plan-mode continuations back into parent tasks
+    all_tasks = merge_plan_continuations(all_tasks)
 
     excluded = sum(1 for t in all_tasks if t.exclude_reason)
     if excluded:

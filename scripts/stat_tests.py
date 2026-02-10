@@ -257,6 +257,22 @@ def chi_square_test(data_a, data_b, field):
     }
 
 
+def bootstrap_ci(values, stat_func=np.mean, n_boot=5000, alpha=0.05):
+    """Compute bootstrap confidence interval for a statistic."""
+    rng = np.random.default_rng(42)
+    arr = np.array(values)
+    n = len(arr)
+    if n < 3:
+        return (float('nan'), float('nan'))
+    boot_stats = np.array([
+        stat_func(rng.choice(arr, size=n, replace=True))
+        for _ in range(n_boot)
+    ])
+    lo = float(np.percentile(boot_stats, 100 * alpha / 2))
+    hi = float(np.percentile(boot_stats, 100 * (1 - alpha / 2)))
+    return (round(lo, 3), round(hi, 3))
+
+
 def mann_whitney_test(data_a, data_b, field):
     """Run Mann-Whitney U test on a continuous field."""
     vals_a = [r[field] for r in data_a if r.get(field) is not None and not (isinstance(r[field], float) and math.isnan(r[field]))]
@@ -272,6 +288,11 @@ def mann_whitney_test(data_a, data_b, field):
 
     d = cohens_d(vals_a, vals_b)
 
+    ci_a = bootstrap_ci(vals_a, np.mean)
+    ci_b = bootstrap_ci(vals_b, np.mean)
+    ci_med_a = bootstrap_ci(vals_a, np.median)
+    ci_med_b = bootstrap_ci(vals_b, np.median)
+
     return {
         "test": "mann-whitney-u",
         "field": field,
@@ -284,6 +305,8 @@ def mann_whitney_test(data_a, data_b, field):
         "median": {MODELS[0]: round(float(np.median(vals_a)), 3), MODELS[1]: round(float(np.median(vals_b)), 3)},
         "mean": {MODELS[0]: round(float(np.mean(vals_a)), 3), MODELS[1]: round(float(np.mean(vals_b)), 3)},
         "std": {MODELS[0]: round(float(np.std(vals_a, ddof=1)), 3), MODELS[1]: round(float(np.std(vals_b, ddof=1)), 3)},
+        "mean_ci": {MODELS[0]: list(ci_a), MODELS[1]: list(ci_b)},
+        "median_ci": {MODELS[0]: list(ci_med_a), MODELS[1]: list(ci_med_b)},
     }
 
 

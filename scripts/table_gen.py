@@ -5,6 +5,7 @@ No LLM dependency. Produces HTML expansion fragments from table specs
 and resolved data. Used by update_sections.py.
 """
 
+import math
 import re
 from typing import Any
 
@@ -60,6 +61,24 @@ def resolve_path(data: dict, path: str, config: dict) -> Any:
     return current
 
 
+def wilson_ci(successes: int, total: int, z: float = 1.96) -> tuple[float, float]:
+    """Wilson score confidence interval for a proportion."""
+    if total == 0:
+        return (0.0, 0.0)
+    p = successes / total
+    denom = 1 + z**2 / total
+    centre = (p + z**2 / (2 * total)) / denom
+    spread = z * math.sqrt((p * (1 - p) + z**2 / (4 * total)) / total) / denom
+    return (max(0.0, centre - spread), min(1.0, centre + spread))
+
+
+def format_ci(lo: float, hi: float, as_pct: bool = True) -> str:
+    """Format a confidence interval as '[lo, hi]' for display in tables."""
+    if as_pct:
+        return f'[{lo*100:.1f}%, {hi*100:.1f}%]'
+    return f'[{lo:.2f}, {hi:.2f}]'
+
+
 def format_value(value: Any, fmt: str) -> str:
     """Apply a Python format string to a value.
 
@@ -96,7 +115,8 @@ def format_value(value: Any, fmt: str) -> str:
         return str(value)
 
 
-def generate_bar_pair(val_a: float, val_b: float, scale: float = 100.0) -> str:
+def generate_bar_pair(val_a: float, val_b: float, scale: float = 100.0,
+                      format_fn=None) -> str:
     """Generate bar-pair HTML matching the existing CSS conventions.
 
     Produces the bar-cell structure used in iterative-refinement-detail.html.
@@ -105,17 +125,20 @@ def generate_bar_pair(val_a: float, val_b: float, scale: float = 100.0) -> str:
         val_a: Value for model A (percentage, 0-100 scale)
         val_b: Value for model B (percentage, 0-100 scale)
         scale: Maximum value for scaling bar widths (default 100)
+        format_fn: Optional callable(float) -> str for custom value display.
+                   Defaults to "{val:.1f}%".
     """
     width_a = min(val_a / scale * 100, 100) if scale else 0
     width_b = min(val_b / scale * 100, 100) if scale else 0
+    fmt = format_fn or (lambda v: f"{v:.1f}%")
     return (
         f'<div class="bar-pair">\n'
         f'                <div class="bar-row"><span class="bar-tag">A</span>'
         f'<div class="bar-track"><div class="bar-fill a" style="width:{width_a:.1f}%">'
-        f'</div></div><span class="bar-val">{val_a:.1f}%</span></div>\n'
+        f'</div></div><span class="bar-val">{fmt(val_a)}</span></div>\n'
         f'                <div class="bar-row"><span class="bar-tag">B</span>'
         f'<div class="bar-track"><div class="bar-fill b" style="width:{width_b:.1f}%">'
-        f'</div></div><span class="bar-val">{val_b:.1f}%</span></div>\n'
+        f'</div></div><span class="bar-val">{fmt(val_b)}</span></div>\n'
         f'            </div>'
     )
 
@@ -399,13 +422,25 @@ def _generate_stat_test_rows(lines: list, spec: dict, data: dict, config: dict):
 
             # Effect size formatting depends on test type
             if test_type == "mann_whitney":
+                es_val = abs(result['cohens_d'])
                 effect = f"d = {result['cohens_d']:.4f}"
             elif test_type == "proportions":
+                es_val = abs(result['cohens_h'])
                 effect = f"h = {result['cohens_h']:.4f}"
             elif test_type == "chi_square":
+                es_val = result['cramers_v']
                 effect = f"V = {result['cramers_v']:.4f}"
             else:
+                es_val = 0
                 effect = ""
+
+            # Effect size bar (scale: 0.5 = full width, covers small-to-large effects)
+            es_width = min(es_val / 0.5 * 100, 100)
+            es_color = "green" if bonf else "a"
+            es_bar = (f'<div class="bar-single">'
+                      f'<div class="bar-track" style="width:60px">'
+                      f'<div class="bar-fill {es_color}" style="width:{es_width:.0f}%"></div>'
+                      f'</div></div>')
 
             # Result text
             result_text = _build_result_text(result, test_type, config)
@@ -415,7 +450,7 @@ def _generate_stat_test_rows(lines: list, spec: dict, data: dict, config: dict):
 
             lines.append(f'            <td class="label-cell">{field}</td>')
             lines.append(f'            <td{p_css}>{p_val:.6f}</td>')
-            lines.append(f'            <td class="right mono">{effect}</td>')
+            lines.append(f'            <td class="right mono">{effect} {es_bar}</td>')
             lines.append(f'            <td{bonf_css}>{bonf_mark}</td>')
             lines.append(f"            <td>{result_text}</td>")
             lines.append("        </tr>")
@@ -426,26 +461,42 @@ def _build_result_text(result: dict, test_type: str, config: dict) -> str:
     p = result["p_value"]
     bonf = result.get("bonferroni_significant", False)
     field = result["field"]
+    ma = config.get("model_a", "")
+    mb = config.get("model_b", "")
 
     if test_type == "mann_whitney":
         d = result["cohens_d"]
+        # Include CI if available
+        ci_a = result.get("mean_ci", {}).get(ma)
+        ci_b = result.get("mean_ci", {}).get(mb)
+        ci_text = ""
+        if ci_a and ci_b:
+            ci_text = (f" CI<sub>A</sub>: [{ci_a[0]:.1f}, {ci_a[1]:.1f}],"
+                       f" CI<sub>B</sub>: [{ci_b[0]:.1f}, {ci_b[1]:.1f}]")
         if not result.get("significant_p05", False):
-            return "No significant difference"
+            return f"No significant difference{ci_text}"
         direction = "higher" if d < 0 else "lower"
         model_label = f"Opus {config.get('display_b', '4.6')}"
-        if bonf:
-            return f"{model_label} {direction} (Bonferroni significant)"
-        return f"{model_label} {direction} (p < 0.05)"
+        sig = "Bonferroni significant" if bonf else "p < 0.05"
+        return f"{model_label} {direction} ({sig}){ci_text}"
 
     elif test_type == "proportions":
         h = result["cohens_h"]
+        # Include CI if available
+        ci_a = result.get(ma, {})
+        ci_b = result.get(mb, {})
+        ci_text = ""
+        if ci_a.get("ci_lower") is not None and ci_b.get("ci_lower") is not None:
+            ci_text = (f" A: {ci_a['proportion']:.1%}"
+                       f" [{ci_a['ci_lower']:.1%}, {ci_a['ci_upper']:.1%}],"
+                       f" B: {ci_b['proportion']:.1%}"
+                       f" [{ci_b['ci_lower']:.1%}, {ci_b['ci_upper']:.1%}]")
         if not result.get("significant_p05", False):
-            return "No significant difference"
+            return f"No significant difference{ci_text}"
         direction = "higher" if h < 0 else "lower"
         model_label = f"Opus {config.get('display_b', '4.6')}"
-        if bonf:
-            return f"{model_label} {direction} (Bonferroni significant)"
-        return f"{model_label} {direction} (p < 0.05)"
+        sig = "Bonferroni significant" if bonf else "p < 0.05"
+        return f"{model_label} {direction} ({sig}){ci_text}"
 
     elif test_type == "chi_square":
         v = result["cramers_v"]

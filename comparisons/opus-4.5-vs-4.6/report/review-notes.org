@@ -1,0 +1,2270 @@
+* Report Review Panel Notes
+Three-agent review panel (Analyst, Editor, Skeptic) — all Opus.
+Review of: comparisons/opus-4.5-vs-4.6/report/report.html
+
+** Executive Summary — Findings (COMPLETE)
+
+*** Must Fix: Factual Errors
+
+**** 1. Bonferroni count: "3/115" is wrong — actual 10/115
+- stat-tests.json has total_tests=115, bonferroni_threshold=0.00043478
+- 10 tests have bonferroni_significant=true (3 overall-stratum, 7 in complexity subgroups)
+- Stat card says "3/115", detail says "Tool usage, tools/file, alignment" (only the 3 overall ones)
+- Fix: either "10/115 total" or "3 of N overall tests" — be transparent about scope
+- Flagged by: all 3 agents
+
+**** 2. Task count mismatch: "2,394" vs "2,046" (PIPELINE ISSUE — investigating)
+- Exec summary: "2,394 tasks (2,034 vs 360)"
+- Dataset at a Glance: "2,046 tasks (1,913 + 133)"
+- Four different counts across pipeline stages:
+  | Stage                  | 4.5   | 4.6 | Total |
+  |------------------------+-------+-----+-------|
+  | tasks-*.json (raw)     |   576 | 332 |   908 |
+  | tasks-deep-*.json      | 1,913 | 133 | 2,046 |
+  | tasks-classified-*.json| 1,913 | 133 | 2,046 |
+  | llm-analysis-*.json    | 2,034 | 360 | 2,394 |
+- The 4.6 gap is 133 vs 360 = 2.7x difference
+- Different pipeline stages analyzing different populations
+- Stat tests use 2,394; dataset overview uses 2,046; edit analysis uses 754
+- BLOCKING: need to understand pipeline before fixing prose
+- Flagged by: all 3 agents, escalated by editor
+
+**** 3. Output token ratio: stat card "1.2x" contradicts itself
+- Stat card says "1.2x" but detail shows 1207/900 = 1.34x (rounds to 1.3x)
+- Callout in same section says "1.3x"
+- Fix: change stat card to "1.3x"
+- Flagged by: analyst + editor
+
+**** 4. Glossary Bonferroni threshold: "0.05/105" should be "0.05/115"
+- terms.json line 18 says "p<0.00048 (0.05/105)"
+- stat-tests.json confirms 115 tests, threshold 0.00043478 = 0.05/115
+- Three different denominators across three sources (105, 115, and the card says 115)
+- Fix: update terms.json line 18
+- Flagged by: all 3 agents
+
+**** 5. Unverifiable claims: "55% more tool calls" and "3x more subagents"
+- Analyst could not find data supporting "55% more tool calls" — sources show 33% or 61%
+- "3x more subagents" — analyst calculates 1.77x from behavior-metrics.json
+- Fix: verify against current data and correct
+- Flagged by: analyst + skeptic
+
+*** Should Fix: Misleading/Unclear
+
+**** 6. "User Correction Gap" stat card mislabeled
+- Shows rewrite rate (63.9% vs 51.7%), not user-directed corrections (241 vs 0)
+- Glossary (terms.json) defines these as distinct metrics (lines 14 vs 23)
+- Juxtaposition with "241 user-directed corrections" in callout creates false implication
+- Fix: rename to "Rewrite Rate Gap" or show actual user correction rate (8.6% vs 0%)
+- Flagged by: all 3 agents
+
+**** 7. "241 vs 0" lacks sample-size context
+- Edit analysis covers 722 tasks/2,792 edits (4.5) vs 32 tasks/145 edits (4.6)
+- 22:1 task ratio, 19:1 edit ratio
+- Zero corrections in 32 tasks is not remarkable without context
+- The 4.6 data spans 5 days across 4 projects (vs 2 months/31 projects)
+- Analyst notes: binomial test still significant (p~2e-6), but framing misleads
+- Fix: show rates (8.6% vs 0%) with denominators, add sample-size caveat
+- Flagged by: all 3 agents
+
+**** 8. "Strongest accuracy signal" is untested editorializing
+- The rewrite rate is NOT one of the Bonferroni survivors
+- edit-analysis.json has NO hypothesis tests — only descriptive stats
+- This inverts the evidence hierarchy: untested descriptor elevated to headline
+- while 10 formally tested Bonferroni survivors are downplayed as "3/115"
+- Fix: add formal test, or soften to "a notable accuracy indicator" + cross-ref
+- Flagged by: skeptic, confirmed by analyst
+
+**** 9. Callout overloaded with 3 unrelated findings
+- Packs accuracy, user corrections, and cost into one dense sentence
+- The "241 vs 0" gets no more visual weight than other claims
+- Fix: split into lead finding + supporting evidence, or two callouts
+- Flagged by: editor
+
+*** Consider: Framing Choices
+
+**** 10. "Explorer vs Executor" framing may be premature
+- Could reflect user workflow evolution, project phases, or the specific 4 projects
+- "Executor" has neutral-to-negative connotations vs "Explorer"
+- Fix: add qualifier ("In this dataset, ... tended to") or soften definite articles
+- Flagged by: skeptic + editor
+
+**** 11. Systematic pro-4.6 framing bias (skeptic)
+- Title connotations favor "Explorer" (4.6)
+- Stat card green coloring on 4.6 advantages; no card shows 4.5 strength
+- Callout structure: 4.5 weakness -> 4.5 failure -> 4.6 strength
+- Confounders absent from exec summary entirely
+- Fix: neutral coloring, add 4.5 strength card, one-line confounder acknowledgment
+
+**** 12. Missing glossary terms
+- "task", "session", "matched pair" are undefined despite being core units
+- "LLM annotator" says "Haiku or Sonnet" without specifying which for what
+- Fix: add definitions to terms.json
+
+** Pipeline Investigation — IN PROGRESS
+
+Agents investigating why task counts diverge across pipeline stages.
+- Analyst: tracing scripts (extract_tasks.py, classify_tasks.py, analyze_tasks_llm.py)
+- Skeptic: mapping which analysis files use which population
+- Editor: auditing every sample size reference in report.html — COMPLETE (see below)
+
+*** CRITICAL: Analysis files likely from different pipeline runs (skeptic + editor)
+
+The problem is worse than inconsistent denominators. Analysis files appear to come
+from DIFFERENT pipeline runs with different input data:
+
+**** 8 different data populations across the report
+| Analysis File             | 4.5 Tasks | 4.6 Tasks | Total |
+|---------------------------+-----------+-----------+-------|
+| LLM Classification/Stats  |     2,034 |       360 | 2,394 |
+| Dataset Overview/Tokens   |     1,913 |       133 | 2,046 |
+| Session Warmup            |     1,788 |       260 | 2,048 |
+| Session Effort            |     1,341 |       268 | 1,609 |
+| Dissatisfaction Audit     |       579 |       332 |   911 |
+| Behavior Metrics          |       349 |       217 |   566 |
+| Edit Analysis             |       722 |        32 |   754 |
+
+**** Impossible session counts prove different pipeline runs
+| Source             | 4.5 sessions | 4.6 sessions |
+|--------------------+--------------+--------------|
+| Edit/Compaction    |          232 |           21 |
+| Warmup             |           91 |           28 |
+| Dataset Overview   |          327 |           40 |
+| Behavior Metrics   |           89 |           61 |
+
+Behavior metrics shows 61 sessions for 4.6 but dataset overview shows only 40.
+A subset CANNOT exceed its superset. This proves the files are from different runs.
+
+**** Three critical implications
+1. Stale data: analysis files may not describe the same underlying dataset
+2. Headline finding (241 vs 0) uses smallest sample (32 tasks) while exec summary
+   implies 360-task support — 11x discrepancy between implied and actual denominator
+3. Findings from different populations are juxtaposed without disclosure
+
+**** Recommendation
+1. Re-run entire pipeline from single data snapshot (run_pipeline.py)
+2. Verify all analysis files are internally consistent
+3. Add data populations table to methodology section
+4. Each section should cite its own N rather than relying on exec summary's number
+
+*** ROOT CAUSE: Stale llm-analysis files from Feb 7 (analyst — CONFIRMED)
+
+The pipeline was NOT re-run end-to-end after session data changed.
+
+**** Timeline of pipeline runs
+| File                   | Date  | Contents                                     |
+|------------------------+-------+----------------------------------------------|
+| tasks-opus-4-*.json    | Feb 4-5 | Raw tasks from earlier session collection  |
+| llm-analysis-*.json    | Feb 7 | 2,034+360 tasks from Feb 7 session collection |
+| sessions-*.json        | Feb 9 | 327+40 sessions — CURRENT collection         |
+| tasks-deep-*.json      | Feb 9 | 1,913+133 tasks from current sessions        |
+| tasks-classified-*.json| Feb 9 | 1,913+133 classified from current tasks-deep |
+| stat-tests.json        | Feb 9 | Uses STALE llm-analysis merged with current  |
+
+**** Key: Feb 7 vs Feb 9 session populations are DIFFERENT
+- 4.6: Feb 7 had 64 sessions (360 tasks), Feb 9 has 40 sessions (133 tasks)
+  - Only 14 sessions overlap between the two collections
+  - 50 Feb-7 sessions NOT in current collection; 26 current sessions NOT in llm-analysis
+- 4.5: Feb 7 had 238 sessions, Feb 9 has 327 sessions
+  - 95 current sessions have no LLM analysis; 6 Feb-7 sessions dropped
+- The dramatic 4.6 reduction (64→40 sessions) likely = reclassification or filtering
+
+**** Impact
+- stat_tests.py uses llm-analysis (stale Feb 7 data) as primary input
+- Tasks in llm-analysis but not in tasks-classified get complexity="unknown"
+- So stat tests include sessions no longer in the canonical collection
+- The "2,394 tasks" in the report is STALE — authoritative count is 2,046
+
+**** Why this happened
+- analyze_tasks_llm.py is NOT a step in run_pipeline.py — it's manual-only
+- Session collection was re-run (Feb 9) but llm analysis was not
+
+**** Fix
+1. Add analyze_tasks_llm.py to run_pipeline.py
+2. Re-run analyze_tasks_llm.py against current tasks-classified
+3. Re-run stat_tests.py and all downstream analysis
+4. Add pipeline validation step checking count consistency
+5. Update report to use consistent counts from refreshed pipeline
+
+*** Editor Audit: Sample Size References (COMPLETE)
+
+**** 5 different task counts in the report
+| Line(s)    | Section               | Total | Per-Model       | Likely Source              |
+|------------+-----------------------+-------+-----------------+----------------------------|
+| 1455       | Methodology pipeline  | 2,395 | not given       | task extraction output     |
+| 418, 455   | Header + Exec Summary | 2,394 | 2,034 + 360     | llm-analysis files         |
+| 461, 488   | TOC + Dataset         | 2,046 | 1,913 + 133     | dataset-overview/tasks-deep |
+| 1362-1363  | Session Dynamics      | 1,062 | 868 + 194       | behavior-metrics subset    |
+| various    | Edit Accuracy         | ~754  | 722 + 32        | edit-analysis              |
+
+**** 3 different session counts in the report
+| Line(s)    | Section               | Total | Breakdown       |
+|------------+-----------------------+-------+-----------------|
+| 483-484    | Dataset at a Glance   |   367 | 327 + 40        |
+| 1223/1228  | Compaction            |   253 | 232 + 21        |
+| 1453       | Methodology pipeline  |   302 | not given       |
+
+**** No reader-facing explanation for varying denominators
+- Dataset section (line 503) mentions normalization but not varying task pools
+- Methodology (lines 1450-1509) shows pipeline diagram but doesn't map steps to sections
+- Developer note (line 1509) acknowledges discrepancy but is internal, not reader-facing
+
+**** RAW DEVELOPMENT NOTES IN PUBLISHED HTML (lines 1499-1509)
+- Markdown-formatted corrections table ("|Was|Now|Reason|" syntax)
+- Developer "DIRECTION CHANGE" comments
+- Pipeline explanation not meant for readers
+- These render as VISIBLE TEXT in a browser — must be removed or HTML-commented
+
+**** Recommendation: add "How to Read the Numbers" note
+Either in Dataset section or Methodology preamble, explaining that different analyses
+use different task subsets and listing the major denominators.
+
+** Section 2: Token Economy & Cost — COMPLETE (post-pipeline review)
+
+*** Must Fix: Data Contradictions
+
+**** 1. CRITICAL: Thinking calibration table vs expansion contradict
+- Main table (line 598): 4.6 thinks on 100% of Major tasks
+- Expansion (thinking-calibration-details.html line 65): 4.6 thinks on 25% of Major
+- Also diverges for Complex (98% main vs 89% expansion) and Moderate (90% vs 94%)
+- If 25% is correct, the "better calibration" narrative collapses
+- Root cause: hand-edited main table vs auto-generated expansion from different data
+- Flagged by: editor
+
+**** 2. CRITICAL: Cost expansion prose contradicts its own generated table
+- cost-by-complexity.html: GENERATED-TABLE shows one set of numbers
+- Prose paragraph directly below shows completely different numbers
+- Complex input tokens: table says 924 vs 29; prose says 27 vs 343
+- Complex output: table 4,607 vs 4,969; prose 4,398 vs 3,277
+- Every number in the prose disagrees with the table
+- Root cause: prose from earlier snapshot, table regenerated from newer data
+- Flagged by: editor
+
+**** 3. Output Verbosity table: 6/8 rows wrong, 2 REVERSED
+- Verified against current token-analysis.json by skeptic:
+  | Task Type     | Report | Actual | Status   |
+  |---------------+--------+--------+----------|
+  | Refactor      |  6.3x  |  2.2x  | WRONG    |
+  | Greenfield    |  3.6x  |  1.1x  | WRONG    |
+  | Bug fix       |  3.3x  |  1.1x  | WRONG    |
+  | Investigation |  2.7x  |  1.3x  | WRONG    |
+  | Sysadmin      |  1.5x  |  3.0x  | REVERSED |
+  | Port          |  1.4x  |  0.1x  | REVERSED |
+- 4.6 sample sizes tiny: refactor n=8, greenfield n=5, port n=9
+- Narrative "6.3x for refactoring" built on number that's 3x too high
+- Flagged by: skeptic + editor
+
+**** 4. Cost table magnitudes wrong; "-9 to -45%" range changes
+  | Complexity | Report | Actual | 4.6 n |
+  |------------+--------+--------+-------|
+  | Trivial    |   -45% |   -56% |    60 |
+  | Simple     |   -17% |   -53% |    27 |
+  | Moderate   |   -11% |   -23% |    33 |
+  | Complex    |    -9% |   -14% |     9 |
+  | Major      |   -14% |    -1% |     4 |
+- Exec summary range "-9 to -45%" becomes "-1 to -56%"
+- Direction preserved (4.6 cheaper) but magnitudes off; Major near-parity
+- Flagged by: skeptic
+
+**** 5. Output token ratio still says 1.2x (same as Section 1)
+- Line 525: "1.2x" with detail "1,207 vs 900" — actual 1.34x rounds to 1.3x
+- Flagged by: editor
+
+**** 6. Stat card thinking depth: +41% / "3,476 vs 2,459" wrong
+- Actual data: +51% / "3,763 vs 2,495"
+- Flagged by: skeptic
+
+*** Should Fix: Structural (persist after pipeline re-run)
+
+**** 7. "Better calibration" is unsupported value judgment
+- With correct data (Major=25% not 100%), thesis REVERSES — 4.6 UNDER-thinks hard tasks
+- Even with correct data, no evidence linking thinking frequency to outcomes
+- Fix: soften to "different calibration"; limit claim to trivial/simple where n is adequate
+- Flagged by: editor + skeptic
+
+**** 8. No sample sizes in ANY Section 2 table
+- 4.6 Major n=4, Complex n=9, Refactor n=8, Greenfield n=5
+- "100% thinking" based on 4 data points; readers can't evaluate claims
+- Fix: add N column to every table
+- Flagged by: editor + skeptic
+
+**** 9. Section intro states conclusion as fact without hedging
+- Line 513: "4.6 achieves lower per-task costs through more efficient caching"
+- The caveat paragraph (line 649) properly hedges, but opening doesn't
+- Fix: add hedge to opening
+- Flagged by: editor
+
+**** 10. Direction change comment has wrong value
+- Line 522 comment says new 4.6 cost is "$1.65" but card shows "$1.98"
+- Fix: remove stale HTML comments
+- Flagged by: editor
+
+**** 11. Calibration callout has NO caveats vs cost callout has GOOD caveats
+- Callout line 607-609: strong behavioral claims, no sample sizes, no confounders
+- Callout line 648-649: properly hedged, acknowledges confounders — model for report
+- Fix: bring calibration callout up to same quality standard
+
+*** Positive Notes
+- Cost caveat callout (line 649) is excellent — model for rest of report
+- Section structure and narrative arc are sound
+- Cost advantage direction preserved in current data
+- Continuation-tasks observation (1.0x ratio) interesting if it holds
+
+*** Previous findings status (pre-pipeline-fix)
+
+Findings 1-6 above from data inconsistency era. Status after pipeline re-run:
+
+**** RESOLVED by pipeline re-run
+- Thinking calibration table vs expansion contradiction (was: 100% vs 25% Major) — now consistent at 100%
+- Cost expansion prose vs generated table — regenerated, numbers consistent
+- Output verbosity 6/8 rows wrong / 2 reversed — now generated from current token-analysis.json
+- Cost table magnitude errors — now generated from current data
+- Stat card thinking depth wrong values — updated by pipeline
+- Direction change comment — cleaned up
+
+**** PERSISTS (structural, not data-dependent)
+- "Better calibration" unsupported value judgment — see new finding P2 below
+- No sample sizes in any Section 2 table — see new finding P8 below
+- Section intro states conclusion as fact — see new finding P4 below
+- Calibration callout has no caveats — see new finding P2 below
+
+*** Post-pipeline methodological review (current data)
+
+Review against current report.html and token-analysis.json after pipeline re-run.
+Three-panel review: Methodologist, Statistician, Editor.
+
+**** P1. (HIGH) Stat cards lead with misleading aggregate cost — Simpson's Paradox
+
+The section opens with a "Per-Task Cost ~$2.64" stat card showing 4.5 at $2.46
+vs 4.6 at $2.83. A reader scanning stat cards concludes 4.6 is more expensive.
+But the per-complexity table shows 4.6 is 8-47% CHEAPER at every level trivial
+through complex. This is textbook Simpson's Paradox.
+
+Verification: 4.6 skews harder (moderate 29.5% vs 21.4%, trivial 40.4% vs 47.1%).
+Reweighting 4.6's per-complexity costs using 4.5's complexity distribution:
+  0.471*$0.52 + 0.203*$1.19 + 0.214*$3.09 + 0.104*$6.77 + 0.008*$31.80 = ~$2.11
+So complexity-adjusted 4.6 average is $2.11 — 14% cheaper than 4.5's $2.46.
+
+Problems:
+- Section never names Simpson's Paradox
+- No complexity-reweighted estimate provided
+- "Counter-intuitive" in the callout is too soft — the stat card actively misleads
+- Per-complexity comparison still confounded: same user, different time periods,
+  different projects. "Trivial" tasks in 5-day 4.6 burst may differ from "trivial"
+  tasks across 2-month 4.5 period.
+
+Fix: Lead with per-complexity finding, then explain why aggregate differs.
+Add reweighted estimate. Name Simpson's Paradox explicitly.
+
+**** P2. (HIGH) Thinking calibration claims at n=1 and n=14
+
+The callout (line 609) claims "better calibration" with 4.6 "engaging thinking for
+100% of major tasks (vs 79%)." But n=1 for 4.6 Major. A single observation gives
+zero information about a rate.
+
+Per-complexity sample sizes for 4.6 thinking claims:
+| Complexity | 4.6 n | 4.6 thinking % | 95% CI (Clopper-Pearson) |
+|------------+-------+----------------+--------------------------|
+| Trivial    |    78 | 37.2%          | [26.5%, 48.9%]           |
+| Simple     |    43 | 69.8%          | [54.0%, 82.6%]           |
+| Moderate   |    57 | 100%           | [93.7%, 100%]            |
+| Complex    |    14 | 100%           | [76.8%, 100%]            |
+| Major      |     1 | 100%           | [2.5%, 100%]             |
+
+Key: Complex 4.6 CI [76.8%, 100%] overlaps 4.5's 78.3%. The difference is NOT
+distinguishable. Major CI is meaningless.
+
+The claim is defensible only at trivial (40pp gap, n=78) and simple (22pp gap, n=43).
+Moderate is borderline distinguishable from 4.5's 89.5%.
+Complex and major are not supported.
+
+Alternative explanation not considered: 4.6 simply has a higher threshold for
+engaging thinking (59% overall vs 76%). The apparent "calibration" pattern could
+be a higher activation threshold interacting with task signal strength —
+mechanistic, not teleological.
+
+Fix: Add n column to thinking calibration table. Remove or footnote Major (n=1).
+Soften from "better calibration" to "more selective thinking engagement."
+Drop "over-thinks easy problems and under-thinks hard ones" (line 609).
+
+**** P3. (HIGH) No statistical tests on cost comparisons
+
+stat-tests.json includes Mann-Whitney for alignment_score, duration_seconds,
+tool_calls, files_touched, lines_added/removed, lines_per_minute, tools_per_file.
+But NO test for per-task cost or output tokens — the section's central claims.
+
+The section presents 8-47% cost deltas and 0.1-1.5x verbosity ratios without
+any significance testing. Cost distributions are right-skewed (major costs 10-30x
+trivial), so means are poor summaries.
+
+The section also makes 20+ implicit comparisons (5 complexity cost, 10 type verbosity,
+5 complexity thinking rate) with no multiplicity correction.
+
+Fix: Add Mann-Whitney tests for cost_usd and output_tokens at overall level.
+For per-complexity, either bootstrap CIs or Fisher exact tests for thinking rates.
+Note that multiple comparison correction would likely eliminate many per-type findings.
+
+**** P4. (MEDIUM-HIGH) Caching efficiency attributed to model, not study design
+
+Line 513: "more efficient prompt caching" implies a model-level capability.
+
+Cache reuse ratios:
+- 4.5: 1,280M read / 147M write = 8.7x
+- 4.6: 257M read / 14.5M write = 17.7x
+
+But 4.6 used 4 projects vs 4.5's 31 projects. Fewer projects = less context
+switching = mechanically higher cache hit rates. This is a study design artifact,
+not a model capability.
+
+Fix: Change to "higher cache hit rates, likely reflecting concentrated project
+usage during the 4.6 evaluation period."
+
+**** P5. (MEDIUM-HIGH) Output token ratio misstated
+
+Line 524 stat card: "1.2x" but detail shows 1,322 vs 963 = 1.37x.
+Should be "1.4x" or "~37% more." The 1.2x figure understates the gap.
+
+**** P6. (MEDIUM) Verbosity table rows with tiny samples shown without caveats
+
+4.6 sample sizes by type:
+| Type         | 4.6 n | Shown ratio |
+|--------------+-------+-------------|
+| Port         |     7 | 0.1x        |
+| Simple       |     3 | 0.1x        |
+| Docs         |     5 | 1.5x        |
+| Greenfield   |     5 | 0.6x        |
+| Refactor     |     8 | 0.7x        |
+| Continuation |     9 | 0.6x        |
+
+The 0.1x Port and Simple ratios are visually dramatic but meaningless at n=7
+and n=3. Only Investigation (n=46) has both arms above n=30.
+
+Fix: Add n column. Move rows with n < 10 to expansion, or annotate with
+sample size warnings. Sort by reliability rather than ratio magnitude.
+
+**** P7. (MEDIUM) Session-hour normalization claimed to "confirm" findings
+
+$12.75/session-hour (4.5) vs $7.51/session-hour (4.6). The report says this
+"confirms the per-task cost advantage extends to session-level efficiency."
+
+Problems:
+- Session hours include idle time; 2-month usage likely has more idle sessions
+  than 5-day intensive burst
+- 4.6's 41 sessions over 5 days vs 4.5's 327 sessions over 2 months = different
+  usage patterns
+- This metric is just total_cost / total_session_hours — it doesn't add
+  information beyond what per-task cost already shows
+
+Fix: Soften "confirms" to "is consistent with." Add caveat about idle time and
+usage pattern differences.
+
+**** P8. (MEDIUM) No sample sizes in any table
+
+None of the three main Section 2 tables (thinking calibration, verbosity, cost
+by complexity) show sample sizes. Readers cannot evaluate claim reliability.
+
+Fix: Add an n column to all three tables showing per-arm counts.
+
+**** P9. (LOW) Token analysis denominator differs from report task counts
+
+token-analysis.json operates on 2,167 (4.5) and 276 (4.6) total extracted tasks
+(including system_continuation, slash_command, etc.). Report text references 1,727
+and 193 included tasks from dataset-overview.json. The per-task cost ($2.46 =
+$5327/2167) uses the larger denominator while other sections use the smaller one.
+
+Fix: Document which count is used for cost calculations. Consider whether
+excluded tasks (system continuations) should be included in cost averages.
+
+*** Post-pipeline summary severity table
+| Issue                                            | Severity    |
+|--------------------------------------------------+-------------|
+| Stat cards lead with misleading aggregate cost   | HIGH        |
+| No statistical tests on cost comparisons         | HIGH        |
+| Thinking calibration claims at n=1 and n=14      | HIGH        |
+| Output token ratio stated as 1.2x, actually 1.4x | MEDIUM-HIGH |
+| Caching efficiency attributed to model not design | MEDIUM-HIGH |
+| Verbosity table rows with n<10 shown w/o caveats | MEDIUM      |
+| Session-hour metric claimed to "confirm" findings | MEDIUM      |
+| No sample sizes shown in tables                  | MEDIUM      |
+| "Over-thinks / under-thinks" loaded framing      | MEDIUM      |
+| Token analysis uses different task count denom    | LOW         |
+** Pipeline Script Audit — IN PROGRESS
+
+*** Editor: Pipeline step inventory (COMPLETE)
+
+**** 12 steps defined in run_pipeline.py (matches CLAUDE.md)
+collect -> extract -> classify -> analyze -> tokens -> stats -> edits -> planning -> compaction -> dataset -> update -> report
+
+**** CRITICAL: 3 scripts missing from pipeline that produce data consumed by pipeline steps
+
+| Missing Script          | Produces                   | Consumed By                          |
+|-------------------------+----------------------------+--------------------------------------|
+| analyze_tasks_llm.py    | llm-analysis-*.json        | stats, analyze, planning, compaction |
+| normalize_llm_fields.py | normalized llm-analysis    | must follow analyze_tasks_llm.py     |
+| analyze_sessions.py     | session-analysis.json      | not consumed by pipeline (standalone) |
+
+**** 4 of 12 pipeline steps depend on stale llm-analysis data
+| Step       | Script                | How it uses llm-analysis              |
+|------------+-----------------------+---------------------------------------|
+| 4 analyze  | analyze_behavior.py   | cross-references for subagent success |
+| 6 stats    | stat_tests.py         | all statistical tests                 |
+| 8 planning | planning_analysis.py  | all planning metrics                  |
+| 9 compact  | analyze_compaction.py | compaction outcome analysis            |
+
+**** No staleness detection in pipeline
+- No timestamp checking of input vs output files
+- No warnings if upstream dependencies are stale
+- Partial runs (--steps, --from) can leave old intermediate files
+- Pipeline overwrites what it produces but doesn't clear files from skipped steps
+
+**** Recommended fix: add steps between classify and analyze
+collect -> extract -> classify -> llm-analyze -> normalize -> analyze -> tokens -> stats -> ...
+
+*** Analyst: Full pipeline data flow audit (COMPLETE)
+
+**** BUG 1 (CRITICAL): analyze_behavior.py is a SILENT NO-OP in the pipeline
+- run_pipeline.py calls it with --data-dir but never passes --output
+- Script only writes behavior-metrics.json when --output is explicitly provided
+- Without it: step runs, prints to stdout, exits 0, writes NOTHING
+- behavior-metrics.json (source for Sections 5-6) is NEVER updated by pipeline
+- Explains why Sections 5-6 are always stale
+
+**** BUG 2: analyze_behavior.py hardcodes model names
+- Lines 788-789: hardcodes sessions-opus-4-5.json / sessions-opus-4-6.json
+- Every other script uses glob to auto-discover models
+- Breaks for any other model pair
+
+**** BUG 3: stat_tests.py uses llm-analysis as PRIMARY data source
+- load_data() reads llm-analysis-{model}.json as primary records
+- Merges complexity from tasks-classified only as lookup
+- If llm-analysis is stale (different population), stats are wrong
+
+**** BUG 4: stat_tests.py hardcodes MODELS list
+- Line 39: MODELS = ["opus-4-5", "opus-4-6"]
+- No auto-discovery
+
+**** FIX for analyze_behavior.py no-op:
+Pass --output to analyze_behavior.py in build_command():
+  --output str(analysis_dir / "behavior-metrics.json")
+
+Also add staleness detection: check input file timestamps before running each step.
+
+*** Skeptic: Script-level data sources (COMPLETE)
+
+Three scripts use three DIFFERENT data selection strategies:
+
+| Script               | Primary Source        | Task Count  | Session Count | llm-analysis use |
+|----------------------+-----------------------+-------------+---------------+------------------|
+| stat_tests.py        | llm-analysis (STALE)  | 2,034/360   | N/A           | PRIMARY          |
+| analyze_behavior.py  | raw session JSONL     | 349/217     | 89/61 (STALE) | cross-ref        |
+| analyze_sessions.py  | tasks-classified      | ~1,788/~260 | inferred      | lookup           |
+
+**** stat_tests.py: llm-analysis is PRIMARY, tasks-classified only for complexity labels
+- Tasks in llm-analysis but not tasks-classified → complexity="unknown"
+- Tasks in tasks-classified but not llm-analysis → ABSENT from analysis
+- Result: stat tests run on stale Feb 7 population
+
+**** analyze_behavior.py: has ITS OWN task boundary definition
+- Counts tasks by: user message + preceding tool calls = new task
+- This differs from extract_tasks.py's segmentation
+- Task counts will ALWAYS differ even after pipeline fix (design issue)
+- behavior-metrics.json confirmed stale: shows 61 4.6 sessions vs current 40
+
+**** analyze_sessions.py: iterates tasks-classified, looks up in llm-analysis
+- Tasks with no llm-analysis match → LLM metrics silently skipped
+- Creates implicit intersection (1,788/260) documented nowhere
+- Warmup count 260 for 4.6 is between classified (133) and llm-analysis (360)
+
+**** Key design issues (persist after pipeline fix)
+1. No script consumes only upstream pipeline output — all have own loading logic
+2. analyze_behavior.py's independent task counting → permanent count mismatch
+3. analyze_sessions.py silently drops non-matching tasks → undocumented filtering
+4. All three depend on llm-analysis files → all contaminated by staleness
+
+*** Analyst: Data flow trace + Section 2 verification (COMPLETE)
+
+Confirmed systemic pattern: auto-generated expansion tables (GENERATED-TABLE) match
+current data, but ALL hand-edited content is stale:
+- Main report tables in report.html
+- Stat cards
+- Callout text
+- Prose paragraphs outside GENERATED-TABLE markers
+
+Section 2 specific: thinking calibration Major 4.6 = 25% (data) vs 100% (report),
+output verbosity table inflated 3-13x, cost magnitudes wrong.
+
+*** RISK: Pipeline re-run may invalidate findings (skeptic)
+
+Current stat tests use n=360 for 4.6. After re-run with current sessions: n=133 (63% drop).
+Only 14 of 40 current 4.6 sessions overlap with Feb 7 tested population.
+
+Implications:
+- Bonferroni survivors computed on mostly-different population
+- "3/115" could become "0/115" or any other number
+- Effect sizes may change direction or magnitude
+- Report conclusions may need rewriting, not just number updates
+
+*** SYSTEMIC: Two-tier data freshness in build system (editor)
+
+update_sections.py regenerates expansion tables (GENERATED-TABLE markers) but does NOT update:
+- Main report tables (hand-edited in report.html)
+- Stat cards
+- Callout text
+- Prose outside GENERATED-TABLE markers
+
+This means EVERY pipeline re-run creates contradictions between:
+- Expansion tables (current) vs main tables (stale)
+
+Fix options:
+1. Move all data-dependent tables into GENERATED-TABLE expansion system
+2. Add validation step comparing main-table numbers vs expansion-table numbers
+3. Or: accept hand-editing but add a post-pipeline check that flags mismatches
+
+*** DESIGN: Multiple denominators persist by design (editor + skeptic)
+
+Even after pipeline fix, different analyses use different task segmentation:
+- analyze_behavior.py: own heuristic (user message + tool calls = task boundary)
+- extract_tasks.py: deep extraction with full metadata
+- analyze_sessions.py: intersection of tasks-classified and llm-analysis
+
+Report needs a "Data Populations" note explaining this to readers.
+
+** Section 3: Edit Accuracy — IN PROGRESS
+
+*** Analyst Findings
+
+**** 1. (HIGH) "Accuracy by Complexity" table from ghost dataset
+- Lines 757-787: n values and percentages don't match ANY field in edit-analysis.json
+- 4.6 trivial: n=92 in report, data shows 11 tasks / 77 edits
+- 4.5 trivial self-correction: 10.4% in report, 5.31% in data
+- Same pattern as Section 2: hand-written table never updated after pipeline re-run
+
+**** 2. (HIGH) Coverage percentages wrong (line 755)
+- Report: "82% coverage for 4.5, 83% for 4.6"
+- Data: 93.4% and 84.4%
+- 4.5 figure off by 11pp
+
+**** 3. (MEDIUM) 241 user-directed corrections may have ~73% false positive rate
+- 241 count from keyword dissatisfaction signals between edit overlaps
+- dissatisfaction-audit.json: 73% of keyword-flagged messages for 4.5 = false positives
+  (workflow instructions, session continuations, task notifications)
+- If same FP rate applies: only ~65 true user-directed corrections
+- Report presents 241 uncorrected in Section 3 (audit presumably in Section 4)
+- THIS AFFECTS THE HEADLINE FINDING in the Executive Summary
+
+**** 4. (MEDIUM) n=3 complex+ convergence claim
+- Line 747: "both models iterate at same rate (24.9% vs 25.0%)" for complex+ tasks
+- 4.6 side has n=3 tasks; 95% CI at n=3 spans ~1-70%
+- Convergence claim is statistically meaningless
+
+*** Editor Findings
+
+**** 5. (HIGH) "Total edits analyzed" label is wrong (line 669)
+- Shows "1,783 / 75" but these are OVERLAPPING edits, not total edits
+- Total edits are 2,792 / 145
+- Expansion correctly labels them "Overlapping edits"
+- Mislabeling makes overlap rate look more severe (reader thinks 100% overlap)
+
+**** 6. (MEDIUM) "241 vs 0" repeated 3 times without sample context
+- Lines 709, 789, 794 all mention 241 vs 0
+- None include denominators — this is THE section to fully contextualize it
+- Fix: on first mention add "(from 1,783 vs 75 overlapping edits across 722 vs 32 tasks)"
+
+**** 7. (MEDIUM) "Most robust accuracy signal" still unsupported (lines 709, 751)
+- Same issue as Section 1: no Bonferroni-corrected test for rewrite rate
+- Soften language or add formal test
+
+**** 8. (STRUCTURAL) Keyword detection reliability applies to BOTH approaches
+- Methodology (line 1486) reports 73-93% false positive rate for keyword dissatisfaction
+- Report says this was "replaced by edit timeline analysis"
+- But edit timeline STILL uses same keywords for "user-directed" classification (line 704)
+- Report should clarify whether FP concern applies to current method too
+
+*** Skeptic Findings
+
+**** 9. (METHODOLOGICAL) 241 claim's false positive rate is the report's biggest vulnerability
+- Edit-level classification (241 edits) vs task-level audit (5/30 true dissatisfaction)
+- These measure DIFFERENT things but report never reconciles them
+- If 73% FP rate applies to edit-level: true count ~65, not 241
+- A hostile reviewer would demolish this immediately
+
+*** META-PATTERN (skeptic): strongest narrative claims have weakest methodological backing
+- "241 user corrections" — untested, likely inflated by 73% FP rate
+- "Strongest accuracy signal" — no formal test
+- "Convergence at complex+" — n=3, statistically meaningless
+- Auto-generated content is current; hand-authored content is stale
+
+*** Positive notes (editor)
+- Best narrative flow of any section — logical progression
+- Iterative refinement analysis genuinely insightful
+- Appropriately notes small sample sizes at line 789
+- Classification definitions clear and accessible
+
+*** Structural pattern confirmed
+- Main overlap classification + iterative refinement tables = correct (match data)
+- Hand-written by-complexity tables and derived prose = stale
+- Same two-tier freshness pattern as Section 2
+
+*** Deep-Dive: n=9 Problem and Statistical Validity (second review pass)
+
+After pipeline data was updated (edit-analysis.json now shows 4.5: 392 overlaps from
+629 tasks/229 sessions, 4.6: 9 overlaps from 25 tasks/20 sessions), a focused review
+of the statistical claims was conducted. Findings organized by review panel role.
+
+**** CRITICAL: All 4.6 category percentages are statistically meaningless
+
+4.6 has 9 total overlapping edits across 4 tasks. Every percentage is noise:
+
+| Category             | 4.5 (n=392) | 4.6 (n=9) | 4.6 95% CI (Clopper-Pearson) |
+|----------------------+-------------+-----------+------------------------------|
+| Self-correction      | 9.2% (36)   | 55.6% (5) | [21.2%, 86.3%]               |
+| Error recovery       | 15.1% (59)  | 0.0% (0)  | [0%, 33.6%]                  |
+| User-directed        | 10.7% (42)  | 0.0% (0)  | [0%, 33.6%]                  |
+| Iterative refinement | 65.1% (255) | 44.4% (4) | [13.7%, 78.8%]               |
+
+Every 4.5 rate falls within the 4.6 confidence interval. No category-level difference
+is statistically detectable. The bar charts present these with equal visual weight,
+which is misleading.
+
+**** CRITICAL: "Strongest accuracy signal" claim is untested and would fail
+
+Rewrite rate: 17.7% (392/2218) vs 14.8% (9/61).
+- 4.6 CI for rewrite rate (9/61): approximately [7.0%, 26.2%]
+- 4.5 rate of 17.7% falls squarely within this interval
+- Two-proportion z-test: p ~= 0.55 (not significant)
+- Claim appears without any formal test; calling an untested 2.9pp difference
+  "the strongest accuracy signal in the dataset" undermines report credibility
+
+**** HIGH: User-directed comparison (42 vs 0) is not significant
+
+Even at face value, Fisher exact test on 42/392 vs 0/9: p = 0.60.
+Binomial test on 0/9 with assumed rate 10.7%: p = 0.37.
+Neither reaches significance. Additionally:
+- Prior review established ~73% keyword FP rate
+- User-directed classification uses same keyword signals
+- Adjusted count: 42 * 0.27 = ~11 true corrections
+- Base rate: 42/629 tasks = 0.067 per task (low for both models)
+
+**** HIGH: Bar charts give equal visual weight to n=392 and n=9
+
+55.6% self-correction shown as wide bar; this represents 5 events.
+Each observation shifts the percentage by 11.1 points.
+One decimal place (55.6%, 44.4%) implies ~0.1% precision where none exists.
+Recommendation: suppress 4.6 bars or add (n=5), (n=0), (n=0), (n=4) labels.
+
+**** MEDIUM: Single task drives 4/5 of 4.6 self-corrections
+
+triage_top_10 shows task 31c0783f...-task-3 with 4 self-corrections (score=1.3).
+One remaining self-correction from d8ad8b03...-task-4.
+If the outlier task excluded: self-correction rate drops to 1/5 = 20%.
+The "4.6 catches its own mistakes" narrative depends on one task.
+
+**** MEDIUM: "Gap disappears at complex+" is absence of data, not convergence
+
+| Complexity | 4.5 iterative (n tasks) | 4.6 iterative (n tasks) |
+|------------+-------------------------+-------------------------|
+| Trivial    | 12 (n=67)               | 0 (n=3)                 |
+| Simple     | 47 (n=177)              | 0 (n=4)                 |
+| Moderate   | 124 (n=253)             | 4 (n=12)                |
+| Complex+   | 0 (n=0 in this bin!)    | 0 (n=6)                 |
+
+4.5 has zero complex+ tasks in the edit complexity bins. Comparing zero with zero
+is data absence, not convergence. For moderate (only bin with non-trivial sizes
+for both): Fisher test p ~= 0.46 (not significant).
+
+**** MEDIUM: 39:1 edit volume ratio creates base-rate confound
+
+4.5: 2218 edits + 657 writes = 2875 total operations.
+4.6: 61 edits + 12 writes = 73 total operations.
+With more edits, random spatial collisions on the same file region are statistically
+expected even without actual rework. The rewrite rate (overlaps/total_edits) still
+confounds editing style with accuracy. The section claims it "controls for confounds"
+but it does not control for volume-dependent spatial collision probability.
+
+**** MEDIUM: "Edit Accuracy" title overstates what overlaps measure
+
+Edit overlaps are a proxy that conflates:
+(a) mistakes needing correction
+(b) iterative development style
+(c) different coding approach (small incremental vs big-batch)
+(d) different task distribution
+The dominance of "iterative refinement" (65.1% for 4.5) confirms most overlaps
+are not errors. Better accuracy measures would be: test pass/fail rates after edits,
+git revert frequency, time-to-stable-state, or edit success rate (proportion of
+edits not overwritten within same task).
+
+**** Callout box framing too strong for evidence
+
+Green "Bottom line" callout states:
+- "Opus 4.6 catches its own mistakes (55.6% self-correction rate)" -- from n=5
+- "Opus 4.5 more often needs external feedback (42 vs zero)" -- not significant, FP-contaminated
+- "The overall rewrite rate remains the most robust accuracy signal" -- untested, would fail
+
+All three claims lack statistical support at given sample sizes.
+
+**** Recommended restructuring
+
+1. Lead with rewrite rate, note sample size disparity, report as "suggestive but not significant"
+2. Present 4.5 classification breakdown (n=392) as standalone finding about 4.5 error patterns
+3. Explicitly decline to characterize 4.6's distribution (n=9 insufficient)
+4. Note raw observation that 4.6 generated far fewer overlapping edits in absolute terms
+5. Remove "strongest accuracy signal" unless formal test supports it
+6. Add confidence intervals or suppress 4.6 category bars
+7. Acknowledge keyword FP contamination in user-directed classification
+
+**** Summary: severity ranking
+
+| # | Issue                                                              | Severity |
+|---+--------------------------------------------------------------------+----------|
+| 1 | n=9 for all 4.6 category analysis; no finding significant         | CRITICAL |
+| 2 | "Strongest accuracy signal" untested, would fail significance test | CRITICAL |
+| 3 | Rewrite rate difference (17.7% vs 14.8%) not significant (p~0.55) | HIGH     |
+| 4 | User-directed (42 vs 0) not significant AND keyword FP contaminated | HIGH     |
+| 5 | Bar charts give equal visual weight to n=392 and n=9              | HIGH     |
+| 6 | "Gap disappears at complex+" is data absence not convergence      | MEDIUM   |
+| 7 | Single task drives 4/5 of 4.6 self-corrections                   | MEDIUM   |
+| 8 | No confidence intervals anywhere in section                       | MEDIUM   |
+| 9 | 39:1 edit volume ratio creates base-rate overlap confound          | MEDIUM   |
+| 10 | Section title "Edit Accuracy" overstates what overlaps measure    | LOW      |
+
+** Section 4: Quality & Satisfaction — IN PROGRESS
+
+*** Analyst Findings
+
+**** 1. (CRITICAL) Three incompatible dissatisfaction counts, never reconciled
+Three different definitions give wildly different answers:
+| Definition                | 4.5         | 4.6         | Source                    |
+|---------------------------+-------------+-------------+---------------------------|
+| Sentiment table (line 835)| 8 (0.4%)    | 1 (0.3%)    | hand-edited report        |
+| Keyword-flagged           | 41          | 29          | dissatisfaction-audit.json |
+| LLM-annotated sentiment   | 377 (18.5%) | 46 (12.8%)  | stat-tests.json           |
+- Main prose says "<0.4%" (definition 1)
+- Expansion runs formal test on definition 3 (18.5% vs 12.8%, p=0.0083)
+- Reader who expands detail sees rates 47x higher than main text claims
+- Report picks whichever number supports current point without reconciling
+
+**** 2. (HIGH) Sentiment table totals don't match any known population
+- 4.5: 700+600+8 = 1,308 — not 2,034 (stale) or 1,913 (current)
+- 4.6: 156+113+1 = 270 — not 360 (stale) or 133 (current)
+- Even adding ambiguous category doesn't reach expected totals
+- These come from yet another unknown data processing stage
+
+**** 3. (MEDIUM) All numbers from stale dataset
+- Completion counts match stat-tests.json using stale llm-analysis (n=2034/360)
+- Everything changes after pipeline re-run
+
+**** 4. (LOW) Statistical reporting internally consistent
+- p-values and effect sizes match expansion tables correctly
+- Issue: tests run on stale data, and prose contradicts expansion test results
+** Sections 5-8: Behavioral, Complexity, Planning, Compaction — COMPLETE
+
+*** Analyst rapid assessment
+
+**** Section 5: Behavioral Patterns — ALL STALE
+- All numbers from behavior-metrics.json (n=349/217, Feb 5 data)
+- Subagent counts, type distributions, planning tasks — all superseded
+- Not worth verifying individual numbers; entire data source needs replacement
+
+**** Section 6: Complexity & Resource Usage — ALL STALE
+- Sums to 2,035/360 (stale llm-analysis), not current 1913/133
+- "55% more tool calls" consistent within stale dataset but will change
+
+**** Section 7: Planning — MIXED (mostly correct)
+- Overall planning rates match current data: 26/1913=1.4%, 5/133=3.8%
+- Alignment delta (+2.05) verified
+- HIGH: Complexity breakdown denominators don't match any data file
+  - 4.6 complex+: 3/11 (27.3%) in report vs 3/13 (23.1%) in planning-analysis.json
+  - Denominators appear to be filtered subset, filtering undocumented
+
+**** Section 8: Compaction — EXCELLENT (best section in report)
+- Every number matches compaction-analysis.json exactly
+- Compaction rates, trigger breakdowns, outcome impacts all verified
+- Only issue: stale DIRECTION CHANGE comment (line 1266) references wrong values
+
+*** SYSTEMIC PATTERN CONFIRMED (analyst)
+Section quality correlates perfectly with data source being in automated pipeline:
+| Data Source Status    | Examples                              | Accuracy |
+|-----------------------+---------------------------------------+----------|
+| In pipeline           | compaction, planning, edit, token      | Correct  |
+| Not in pipeline       | behavior-metrics, llm-analysis         | Stale    |
+| Hand-written tables   | thinking calibration, accuracy by cmplx| Often wrong |
+** Sections 9-11: Sessions, Profiles, Methodology — COMPLETE
+
+*** Round 1 Analyst Findings
+
+**** 1. (CRITICAL) Stat-test expansion has INVERTED direction labels — CODE BUG
+- stat-test-full-results.html: alignment_score d=-0.20 labeled "Opus 4.6 lower"
+- But negative d means 4.6 > 4.5 in these tests
+- EVERY "lower/higher" direction label is backwards
+- This is a bug in table_gen.py or update_sections.py, not stale data
+- Reader who expands stat details gets opposite interpretation for every test
+
+**** 2. (CRITICAL) Internal editorial notes visible in report HTML
+- Lines 1499-1509: raw markdown correction table renders as visible text
+- "|Was|Now|Reason|" table, "DIRECTION CHANGE" comments
+- NOT in HTML comments — visible to readers in built report
+- Fix: remove entirely or wrap in <!-- HTML comments -->
+
+**** 3. (HIGH) Sample ratio dramatically understated in methodology
+- Report says "5.7:1 ratio (2,034 vs 360 tasks)"
+- Current data: 1913/133 = 14.4:1
+- 2.5x difference in stated asymmetry
+- At 14.4:1, confidence intervals for 4.6 much wider than report implies
+
+**** 4. (MEDIUM) Stale pipeline counts in methodology
+- "302 sessions" should be 367
+- "2,395 tasks" should be 2,046
+- Coverage: "93% and 88%" should be "93% and 84%"
+
+**** 5. (LOW) Section 9 entirely stale
+- All session dynamics from stale Feb 7 snapshot
+- Session counts sum to 302 (stale) vs 367 (current)
+
+*** Round 2: Detailed Section Review (Post-Pipeline Rerun)
+
+Data now consistent: 1,920 tasks (1,727 vs 193), 368 sessions (327 vs 41).
+Review conducted as three-person panel: Methodologist, Statistician, Editor.
+
+**** Section 9: Session Dynamics
+
+***** Warm-up effect is not practically meaningful (Methodologist)
+- 4.6 alignment: 2.95 -> 3.06 (Delta=0.11) — a 2.2% shift on a 1-5 scale
+- Alignment scores come from LLM classifier, not a calibrated instrument
+- No CI or statistical test for this within-model comparison
+- 4.5 shows perfectly flat 2.85->2.85, which could be a floor effect
+- Completion rate shift (25.0% -> 33.5%, +8.5pp) is more compelling but still untested
+- Report correctly says "suggesting" but callout box frames more assertively
+- REVISE: qualify with "though the magnitude is small and untested"
+
+***** Session degradation is misleadingly framed (Statistician)
+- 4.6: 3.53->2.96 = -0.57 vs 4.5: 2.93->2.85 = -0.08
+- Three problems:
+  1. Regression to the mean: 4.6 starts higher, has more room to fall
+  2. Sample sizes: Short=26, Medium=27, Long=11 sessions for 4.6
+  3. Task complexity within sessions uncontrolled
+- Report DOES note "reflects 4.6's higher baseline, not a crossover" — honest
+- But section structure leads with alarming frame, then caveats
+- REVISE: lead with "4.6 scores higher in every session-length bucket"
+
+***** Front-loading is marginal and mechanical (Methodologist)
+- 59.3% vs 54.3% positive = 5pp difference
+- Mechanically linked to Explore subagent usage (4.6 uses 94% Explore)
+- Explore agents by definition front-load reads before edits
+- "Investigates first, then implements" anthropomorphizes tool composition
+- REVISE: note mechanical link to Explore usage, 5pp is marginal
+
+***** Duration distribution well-handled (Editor)
+- Median 59s vs 42s consistent with 75% more tool calls (Section 7)
+- Mean-vs-median commentary (395.6s vs 177.8s) correctly notes outlier issue
+- "4.6 simply takes longer per individual task" is well-framed
+- One of the better sections in the report
+
+**** Section 10: Model Profiles
+
+***** Routing table is the MOST PROBLEMATIC element in the report (Methodologist)
+
+| Task Type         | Evidence                                               | Verdict                     |
+|-------------------+--------------------------------------------------------+-----------------------------|
+| Trivial/simple    | Cost data supports                                     | Defensible                  |
+| Complex/major     | "Higher alignment" — LLM-judged, non-matched, confounded | Weakly supported at best    |
+| Refactoring       | 14.8% vs 17.7% rewrite rate — n=9 overlapping edits   | Insufficient evidence       |
+| Investigation     | "Natural fit with research-first" — circular reasoning | Tautological                |
+| Long sessions     | Appropriate hedge                                      | Defensible                  |
+| Parallel          | "Actually backgrounds tasks" — unverified claim        | Unverified                  |
+
+- Fundamental problem: routing table implies causal knowledge (choosing model X
+  will produce outcome Y). Study provides no causal evidence.
+- REVISE: either (a) relabel as "Observed Patterns" / "Behavioral Tendencies" or
+  (b) add prominent caveat: "observational; controlled testing needed"
+
+***** "Parallel execution" claim needs citation or removal
+- "Actually backgrounds tasks; 4.5 spawns more agents but runs them sequentially"
+- Is this verified from concurrent tool calls in session logs?
+- Or inference from subagent type distributions?
+- REVISE: cite specific evidence or remove
+
+***** Profile cards overfit narrative to confounded data (Editor)
+- "Executor vs Explorer" framing: 4.5=31 projects/2 months vs 4.6=4 projects/5 days
+- "Strategy" attributed to model may reflect tasks given, not model behavior
+- "Strength: Higher completion rate (+3.7pp)" — raw rates, not adjusted
+- REVISE: frame as "tendencies in this dataset" not inherent model traits
+
+**** Section 11: Methodology
+
+***** Pipeline diagram should show varying N at each stage (Statistician)
+- Shows "368 sessions -> 1,920 tasks" as single flow
+- Data cleaning drops 20.3% (4.5) vs 30.1% (4.6) of extracted tasks
+- Higher 4.6 exclusion rate is noteworthy and unmentioned
+- CRITICAL: 4.6 has 94 meta-flagged tasks out of 276 extracted (34.1%)
+  vs 210/2167 (9.7%) for 4.5
+- This 34% vs 10% meta-task rate suggests much of 4.6 usage was on THIS
+  analysis project — a critical confound not discussed
+
+***** Six additional threats to validity not listed (Methodologist)
+Current 5 threats are good but incomplete. Missing:
+
+1. Hawthorne effect: user knew they were comparing models, may have
+   behaved differently with 4.6 (harder tasks, more patience)
+2. Instrument bias: LLM classifiers may have systematic biases correlated
+   with model output style (more structured output -> different ratings)
+3. Selection bias: 30.1% vs 20.3% exclusion rates. 34% of 4.6 tasks are
+   meta (analysis project) vs 10% for 4.5
+4. Temporal confound (skill growth): user's Claude Code skill improved
+   over 2 months. 4.6 used exclusively in last 5 days.
+5. Project diversity: 4.5 spans 31 projects (work, personal, replication).
+   4.6 spans 4. Cross-project variance unsampled for 4.6.
+6. Novelty effect: users interact differently with new model (explore
+   capabilities, push boundaries)
+
+***** Development Process is genuinely excellent (Editor)
+- Reporting abandoned approaches (sentiment detection, LLM quality judgment,
+  reversed refactoring recommendation) is rare and valuable
+- Establishes intellectual honesty
+- Could go further:
+  - Does not mention report itself is largely LLM-generated/updated
+  - Does not discuss researcher degrees of freedom / p-hacking risk from
+    iterative analysis approach
+
+***** 73% FP rate taints any section using sentiment scores (Statistician)
+- Correctly identified as disqualifying for sentiment approach
+- Report claims replaced by edit timeline analysis
+- But Section 4 (Quality & Satisfaction) still exists — does it use sentiment?
+- Edit timeline (rewrite rates) is more defensible but n=9 for 4.6 overlaps
+
+*** Full Cross-Cutting Accuracy Map (analyst)
+| Section                   | Data Accuracy | Data Source                  |
+|---------------------------+---------------+------------------------------|
+| 1. Executive Summary      | Poor          | Mixed stale/current          |
+| 2. Token Economy          | Poor          | Mixed; hand tables wrong     |
+| 3. Edit Accuracy          | Good (main)   | edit-analysis (current)      |
+| 4. Quality & Satisfaction | Fair          | stale llm-analysis           |
+| 5. Behavioral Patterns    | Stale         | behavior-metrics (stale)     |
+| 6. Complexity & Resources | Stale         | llm-analysis (stale)         |
+| 7. Planning               | Good overall  | planning-analysis (current)  |
+| 8. Compaction             | Excellent     | compaction-analysis (current) |
+| 9. Session Dynamics       | Stale         | stale                        |
+| 10. Model Profiles        | Mixed         | qualitative, mixed sources   |
+| 11. Methodology           | Fair          | leaked edits, wrong counts   |
+
+Sections sourced from in-pipeline analyses (3, 7, 8) are accurate.
+Everything else needs regeneration.
+The report is a "palimpsest" — current pipeline data overlaid on stale hand-edited content
+from at least three different data snapshots.
+** Cross-cutting Synthesis: What Can This Study Conclude? — COMPLETE
+
+*** 1. Defensible vs indefensible claims
+
+**** Defensible claims (survive all design threats)
+- 4.6 uses more tool calls per task (Bonferroni-surviving, large sample)
+- 4.6 uses more tools per file edited (Bonferroni-surviving)
+- Models differ in categorical distributions of task completion, scope management,
+  iteration patterns, error recovery, communication quality (Bonferroni chi-square,
+  though effect sizes "negligible" by Cramer's V=0.10-0.16)
+- 4.6 uses Explore subagents almost exclusively; 4.5 uses a mix
+- 4.6 costs less per task at most complexity levels (descriptive, large sample)
+
+**** Claims needing heavy qualification
+- 4.6 is more "research-first" (confounded with task/project differences)
+- 4.6 has lower rewrite rates (n=9 overlapping edits for 4.6)
+- 4.6 degrades more in long sessions (small n, regression to mean)
+- 4.6 "plans" more (n=4 planned tasks)
+
+**** Claims that should be retracted or radically reframed
+- Routing recommendations (no causal basis)
+- "42 vs 0 user corrections" as quality signal (confounded with usage period length)
+- Warm-up effects (tiny magnitude, untested)
+
+*** 2. Evidence hierarchy across all findings
+
+| Tier                          | Finding                                              | Basis                                                              |
+|-------------------------------+------------------------------------------------------+--------------------------------------------------------------------|
+| A: Bonferroni-surviving       | Tool calls/task, tools/file, lines removed, lines/min | p<0.00043, but effect sizes mostly negligible (V=0.10-0.16)       |
+|                               | 5 categorical distributions                          | Chi-square with low_expected_warning (sparse cells)                |
+| B: Large effects, adequate n  | Cost/task by complexity, thinking calibration pattern | Clear descriptive differences, plausible mechanism, not randomized |
+|                               | Explore-vs-general subagent split                    |                                                                    |
+| C: Small effects/inadequate n | Rewrite rate (n=9 for 4.6), planning (n=4)           | n too small for stable estimates                                   |
+|                               | Completion rate (+3.7pp), session degradation         | Effect size marginal                                               |
+| D: Purely descriptive         | Duration distribution, effort ratios, front-loading  | Observable differences, no significance testing, confounded        |
+|                               | Verbosity patterns                                   |                                                                    |
+| E: Speculative/narrative      | "Executor vs Explorer" profiles, routing table       | Narrative overlay on observational data, causal language            |
+|                               | "Actually backgrounds tasks," warm-up benefit         | without causal evidence                                            |
+
+KEY INSIGHT: Report's headline findings (rewrite rates, routing) are Tier C-E.
+Strongest statistical findings (Tier A) are about tool usage — less narratively interesting.
+
+*** 3. Missing analyses (priority order)
+
+1. CRITICAL: Within-project comparisons on 4 shared projects
+   - Control for project-level confounds
+   - Single highest-value analysis not in report
+   - Could transform "interesting but confounded" into "suggestive with controlled evidence"
+
+2. HIGH: Matched-pair analysis
+   - Match tasks by complexity + type across models
+   - Even approximate matching more defensible than raw comparisons
+
+3. HIGH: Bootstrap confidence intervals for all 4.6 estimates
+   - "14.8% rewrite rate [CI: 0%-45%]" would self-calibrate reader confidence
+
+4. MEDIUM: Meta-task exclusion sensitivity
+   - Re-run excluding 94 meta-flagged 4.6 tasks (34% of extracted)
+   - Test whether results change when analysis-project tasks removed
+
+5. MEDIUM: Classifier reliability assessment
+   - Run subsample through multiple classifiers or human review
+   - 73% FP rate on sentiment suggests other classifications may be unreliable
+
+6. LOW: Temporal analysis of 4.5 drift
+   - Plot 4.5 metrics over its 2-month period
+   - If early-4.5 differs from late-4.5, the 4.6 comparison is really with late-4.5
+
+*** 4. Sections to cut or radically shorten
+
+| Section                   | Recommendation    | Reason                                            |
+|---------------------------+-------------------+---------------------------------------------------|
+| 8. Planning               | Cut or merge to 6 | n=4 planned tasks for 4.6; entire section on 4 obs |
+| 9. Compaction             | Cut to footnote   | Zero events. Null finding needs one sentence.     |
+| 10. Profiles routing table | Remove or rebrand | Implies causal knowledge study lacks              |
+| 3. Edit Accuracy          | Shorten           | 17.7% vs 14.8% relies on n=9; "42 vs 0" confounded |
+
+*** 5. The fundamental question: value vs overstatement
+
+The report is valuable as an EXPLORATORY CASE STUDY, not as a comparative
+behavioral analysis. Current title ("Comparative Behavioral Analysis") implies
+rigor the study design cannot support.
+
+Right framing: "Preliminary observations from one developer's experience with
+two Claude models." Value lies in:
+- Pipeline itself (reproducible, well-engineered)
+- Honest methodology section
+- Identification of patterns worth testing in controlled studies
+- Specific mechanistic observations (thinking calibration, Explore agent usage)
+
+Report overstates in three ways:
+1. Causal language: "research-first strategy," routing recommendations, "strengths"
+2. Headline-claim confidence: exec summary presents without adequate qualification
+3. Equal treatment of strong and weak findings: Bonferroni-surviving tool patterns
+   get same visual weight as n=4 planning observations
+
+*** 6. Top 3 improvements
+
+1. ADD WITHIN-PROJECT MATCHED COMPARISONS
+   The 4 shared projects are an untapped gold mine. Compare 4.5 vs 4.6 on same
+   codebases. Would address the biggest confound (project/task selection).
+
+2. ADD EVIDENCE-TIER INDICATORS TO EVERY SECTION
+   Simple visual marker (A/B/C or green/yellow/red) showing evidence strength.
+   Tool-usage findings (Bonferroni, large n) deserve more prominence.
+   Planning section (n=4) deserves clear "low confidence" marker.
+
+3. RETITLE AND REFRAME EXECUTIVE SUMMARY
+   Change "Comparative Behavioral Analysis" to "Exploratory Case Study" or
+   "Single-User Behavioral Observations." Lead exec summary with limitations.
+   Frame all findings as hypotheses for future testing, not conclusions.
+
+   Honorable mention: Bootstrap CIs on all 4.6 point estimates.
+
+** Cross-cutting: narrative arc, consistency, framing — COMPLETE
+
+*** Priority Fix List (analyst consensus, all agents aligned)
+
+| Priority  | Fix                                                         | Type       |
+|-----------+-------------------------------------------------------------+------------|
+| Immediate | Remove editorial notes from lines 1499-1509                 | HTML edit  |
+| Immediate | Fix stat-test direction label inversion                     | Code bug   |
+| High      | Re-run full pipeline (with new llm_analyze/normalize steps) | Pipeline   |
+| High      | Move hand-written tables into GENERATED-TABLE system        | Build sys  |
+| Medium    | Apply FP correction to 241 figure or add prominent caveat   | Content    |
+| Medium    | Add sample size disclosures to all tables                   | Content    |
+| Medium    | Add "Data Populations" note explaining varying denominators  | Content    |
+| Medium    | Reconcile three dissatisfaction definitions (Section 4)     | Content    |
+| Medium    | Fix stat card mislabels and framing bias (Section 1)        | Content    |
+| Low       | Clean up DIRECTION CHANGE HTML comments                     | Cleanup    |
+| Low       | Add missing glossary terms (task, session, matched pair)    | Content    |
+
+*** Late-arriving findings (skeptic + editor final reports)
+
+**** Section 7 ghost table erases 4.5 planning entirely (skeptic — CRITICAL)
+- Lines 1162-1204: "Planning Rate by Task Complexity" shows 4.5 at 0% for ALL levels
+- Actual data: 4.5 plans at 0.9% simple, 3.5% moderate, 5.4% complex+
+- Ghost table makes materially false claim that only 4.6 plans by complexity
+
+**** Section 6 unsourced "+0.26 alignment correlation" (skeptic)
+- Callout references correlation not found in any analysis file
+
+**** Section ordering contradicts "strongest signals first" promise (editor)
+- Section 6 (strongest Bonferroni survivors) comes AFTER Section 4 (mostly non-significant)
+- Actual signal-strength order: Cost > Resources > Accuracy > Satisfaction
+
+**** stat-test expansion claims 115 tests but shows only 21 (editor)
+- 94 stratum-level tests missing from the "complete" results expansion
+
+**** Bar chart normalization inconsistency in Section 6 (editor)
+- S6 normalizes bars to max value; all other sections use absolute percentages
+
+*** Key meta-findings
+
+1. 100% of hand-written tables contain errors; 100% of GENERATED-TABLE content is correct
+2. The report's strongest narrative claims have the weakest methodological backing
+3. Five different data snapshots are mixed without documentation
+4. Section quality correlates perfectly with whether data source is a pipeline step
+5. Pipeline re-run will change 4.6 sample from n=360 to n=133 — findings may not survive
+
+** Section 1 & Dataset: Panel Review (Round 2)
+Post-pipeline-rerun review. Data now consistent: 1,920 tasks (1,727 vs 193), 368 sessions
+(327 vs 41), 31 vs 4 projects, $6,109 total cost. Previous review issues #2 (task count
+mismatch) and #3 (stale pipeline) are resolved. This round focuses on whether the updated
+exec summary and dataset section are methodologically defensible.
+
+*** Debate 1: Headline Finding Validity
+
+"Opus 4.5 rewrites previously-edited regions 1.2x more often (17.7% vs 14.8%) -- the
+strongest accuracy signal in the dataset."
+
+**** Methodologist
+The headline claim rests on 392 overlapping edits (4.5) vs 9 overlapping edits (4.6),
+drawn from 629 tasks / 229 sessions vs 25 tasks / 20 sessions. The 25:1 task ratio
+(629 vs 25) in the edit analysis is far more extreme than the 9:1 ratio in the full
+dataset, because edit analysis requires sessions with actual file modifications.
+
+More critically: 42 user-directed corrections (4.5) vs 0 (4.6) is the claim that does
+the heavy narrative lifting, but zero events in 25 tasks is unremarkable. A simple
+binomial estimate: if the true rate were the same as 4.5 (42/629 = 6.7%), the probability
+of seeing 0 in 25 tasks is (1-0.067)^25 = 17.5%. That is NOT significant even at p<0.20.
+The previous review's binomial test (p~2e-6) used the edit-level denominator (0/61 edits
+at a 42/2218 = 1.9% rate), but conflating edit-level and task-level rates inflates
+significance.
+
+The label "strongest accuracy signal" is untested editorializing. There is no formal
+hypothesis test for this comparison anywhere in stat-tests.json -- the edit analysis
+file contains only descriptive statistics. Meanwhile, 21 formally tested comparisons
+survive Bonferroni correction. An untested descriptor should not outrank tested results
+in a headline.
+
+**** Statistician
+The numbers check out arithmetically: 392/2218 = 17.67%, 9/61 = 14.75%, ratio = 1.20x.
+But the statistical foundation is absent:
+
+1. No confidence interval for the 4.6 rate. With 9/61, the 95% Wilson CI is approximately
+   [7.9%, 25.7%]. The 4.5 rate (17.7%) falls well within this interval. There is no
+   evidence of a difference.
+
+2. No formal test. A two-proportion z-test on 392/2218 vs 9/61 gives z = 0.58, p = 0.56.
+   NOT significant. A Fisher exact test on the 2x2 table (overlap/no-overlap by model)
+   gives a similar non-significant result.
+
+3. Effect size is tiny. The raw difference is 2.9 percentage points. With 95% CI for
+   the difference spanning roughly [-12pp, +18pp], the direction isn't even established.
+
+4. The 42 vs 0 user-directed correction count is more compelling as a rate: 42/2218 =
+   1.89% vs 0/61 = 0%. Fisher exact test on this 2x2 gives p = 0.62 (one-tailed) because
+   n=61 is so small. Even the edit-level test doesn't survive once you account for the
+   multiple testing context.
+
+5. The previous review's concern about 73% keyword false-positive rate (from
+   dissatisfaction-audit.json) remains unaddressed. If applicable, true user-directed
+   corrections may be ~11, not 42 -- shrinking the rate to 0.5%.
+
+The claim "strongest accuracy signal" is empirically false. It is the WEAKEST signal in
+the dataset: the only major claim that has NOT been formally tested and would likely NOT
+reach significance if tested.
+
+**** Editor
+The headline callout (line 449-451) does three things simultaneously:
+1. States a rewrite rate comparison (1.2x)
+2. Introduces user-directed correction count (42 vs 0)
+3. Pivots to cost advantage
+
+This overloads the reader. The "42 vs 0" is doing enormous narrative work but gets no
+more visual weight than a subordinate clause. The "strongest accuracy signal" framing
+also appears without qualification -- no "in terms of," no "among descriptive metrics."
+
+The stat card (lines 428-431) labeled "User Correction Gap" actually shows the rewrite
+rate (17.7% vs 14.8%), not the user correction rate. The previous review flagged this
+as mislabeled (finding #6); the stat card value changed from "1.2x" to "1.2x" and
+detail from "63.9% vs 51.7%" to "17.7% vs 14.8%," so the label and values now match
+better, but the card name still implies it's about user corrections when it's about
+all rewrites.
+
+**** Synthesis
+The headline finding is NOT defensible as stated. Three independent problems:
+1. The comparison would not reach statistical significance if formally tested (p > 0.50)
+2. "Strongest accuracy signal" inverts the evidence hierarchy: untested > tested
+3. The 42 vs 0 count is undermined by a 25-task 4.6 sample and unaddressed FP concerns
+
+REVISE: Either (a) add a formal test and report confidence intervals, at which point
+the finding becomes "no significant difference in rewrite rates" and the headline must
+change; or (b) soften to "a descriptive accuracy indicator that did not reach statistical
+significance given the small 4.6 edit sample (n=61 edits across 25 tasks)."
+
+The user-directed correction count (42 vs 0) should be reported as a rate with
+denominators: "1.9% of 4.5 edits vs 0% of 4.6 edits (n=61)" and the 73% FP concern
+should be explicitly addressed or the count should be adjusted.
+
+*** Debate 2: Framing Balance
+
+**** Methodologist
+The experimental design is observational with non-random model assignment. In such
+designs, framing should be scrupulously neutral. Instead:
+
+- Title: "The Explorer and the Executor" -- "Explorer" has positive connotations
+  (curious, thorough), "Executor" is neutral-to-negative (blunt, mechanical). 4.6 gets
+  "Explorer," 4.5 gets "Executor."
+- Stat cards: Two of four use green coloring (v-green class), both highlighting 4.6
+  advantages (lower rewrite rate, lower cost). No card highlights a 4.5 advantage.
+- Callout structure: The headline callout leads with a 4.5 weakness (higher rewrite),
+  follows with a 4.5 failure (42 corrections), and closes with a 4.6 strength (lower
+  cost). This is a prosecutorial sequence, not a balanced comparison.
+
+The text below the callout is more balanced (line 453: "fundamentally different ways")
+but the visual hierarchy -- stat cards and callout are what 80% of readers absorb --
+is consistently pro-4.6.
+
+**** Statistician
+From a data perspective: three of the four stat cards present quantities where 4.6
+performs better. The fourth (Bonferroni Survivors: 8/115) is neutral. There are
+legitimate 4.5 strengths in the data:
+
+- 4.5 has dramatically larger sample (9:1 ratio), which means its estimates are more
+  stable and trustworthy
+- 4.5 spans 31 projects vs 4, demonstrating broader generalizability
+- 4.5's thinking frequency is higher (75.5% vs 59.4%), which could be a strength
+- 4.5 has lower median task duration (41.5s vs 58.7s at p50) suggesting efficiency
+
+None of these appear in the stat cards. A balanced set would include at least one
+metric where 4.5 demonstrates an advantage.
+
+The "8 / 115 Bonferroni Survivors" count itself has an issue: actual count from
+stat-tests.json is 21 (9 overall + 12 in complexity strata). Even counting only
+the overall stratum, there are 9, not 8. The report appears to exclude one of the
+6 chi-square survivors. This should be verified and corrected.
+
+**** Editor
+The subtitle is good: "A single-user comparative study" is appropriately modest.
+The meta line identifies author and program. But the title-to-subtitle sequence sets
+up a narrative arc (characterization first, caveats second) that primes the reader
+toward the Explorer/Executor frame before they encounter any data.
+
+The previous review (finding #11) flagged this same pattern. The update changed
+stat card values but did not address the structural pro-4.6 bias in card coloring
+or selection.
+
+**** Synthesis
+The framing has a consistent but not overwhelming pro-4.6 lean. The title, stat card
+selection, stat card coloring, and callout narrative order all favor 4.6. No single
+element is egregious, but the cumulative effect is real.
+
+REVISE:
+- Add at least one stat card showing a 4.5 strength (e.g., sample breadth: 31 projects,
+  or estimation stability from larger n)
+- Change "User Correction Gap" green coloring to neutral (v-dark) given the finding
+  isn't significant
+- Consider softening title to something that doesn't assign positive/negative connotations
+  differentially, or add a qualifier
+
+*** Debate 3: Confound Acknowledgment
+
+**** Methodologist
+The exec summary (line 455) mentions the 8.9:1 task ratio but omits EVERY other confound:
+
+| Confound                  | Status in Exec Summary | Severity |
+|---------------------------+------------------------+----------|
+| 8.9:1 task ratio          | Mentioned (line 455)   | High     |
+| 5 days vs 2 months        | Not mentioned           | Critical |
+| 4 vs 31 projects          | Not mentioned           | Critical |
+| Non-random assignment     | Not mentioned           | Critical |
+| Single user               | Not mentioned (subtitle)| High     |
+| User learning/adaptation  | Not mentioned           | High     |
+| Temporal confound (Feb)   | Not mentioned           | High     |
+
+"5 days vs 2 months" and "4 vs 31 projects" are arguably MORE important than the task
+ratio, because they directly threaten external validity. A model evaluated on 4 projects
+over 5 days could appear systematically different simply because those 4 projects have
+different characteristics than the 27 exclusive to 4.5.
+
+The dataset paragraph (line 503) acknowledges the asymmetry as "intentional" and claims
+"per-task and per-session comparisons normalize for this." This is a SPECIFIC CLAIM that
+demands examination (see Debate 6).
+
+**** Statistician
+The confound structure creates specific statistical threats:
+
+1. Project confound: 4.6's 4 projects are a subset of 4.5's 31. Any project-level
+   variation (e.g., one project has simpler tasks) would appear as a model difference.
+   A matched-project analysis restricting 4.5 to the same 4 projects would partially
+   control for this -- but this analysis is not presented in the exec summary.
+
+2. Temporal confound: 4.6's 5-day window is in early February; 4.5 spans December
+   through February. Seasonal effects, user workload patterns, and even Claude Code
+   platform changes over 2 months could contribute to differences.
+
+3. Learning effect: The user had 2 months of experience with 4.5 before encountering
+   4.6. Different prompting strategies, learned workarounds, and changed expectations
+   all confound the comparison.
+
+4. Selection bias: 4.6 entered "evaluation" -- the user may have preferentially given
+   it certain task types or difficulty levels to test it.
+
+The exec summary should flag at least the top 2-3 confounds. A reader who only reads
+Section 1 will not understand the limitations.
+
+**** Editor
+The subtitle says "single-user comparative study" which is the right register, but
+it's in small text. The exec summary body has ONE limitation sentence: "ordered from
+the strongest signals... through behavioral mechanics to weaker observational patterns"
+(line 455). This is about presentation order, not about validity threats.
+
+Best practice for an exec summary in an observational study: one clear sentence
+identifying the 2-3 most serious threats to causal inference, placed before or
+immediately after the headline finding. Example: "This observational comparison
+reflects one user's organic workflow across different time periods (2 months vs 5 days)
+and project sets (31 vs 4), so differences may reflect context rather than model
+capabilities."
+
+**** Synthesis
+The exec summary severely underreports confounds. The 8.9:1 ratio is mentioned but
+framed as a data feature ("ordered from strongest..."), not as a limitation. The
+temporal, project, and learning confounds are at least as important and completely
+absent.
+
+REVISE: Add one sentence before or after the headline callout identifying: (a) the
+temporal asymmetry (5 days vs 2 months), (b) the project overlap (4 shared projects
+out of 31), and (c) the single-user design as threats to causal interpretation.
+
+*** Debate 4: Dataset Legitimacy
+
+**** Methodologist
+193 tasks across 5 days and 4 projects is marginal for characterizing a model. The
+specific concerns:
+
+1. Project diversity: 4 projects is not enough to separate model behavior from project
+   characteristics. If one project (say, strabo-main) contributes 50%+ of 4.6 tasks,
+   the "model profile" is actually a project profile.
+
+2. Temporal stability: 5 days is not enough to capture workload variation. The user
+   might have been in a sprint, or debugging phase, or review phase -- all producing
+   different task distributions than a typical 2-month span.
+
+3. Task count: 193 tasks gives reasonable power for detecting large effects (d > 0.3
+   at 80% power with Mann-Whitney on 1727 vs 193) but NOT for detecting the kinds of
+   subtle behavioral differences the report claims (e.g., thinking calibration
+   differences at specific complexity levels where 4.6 has n=1-14 per cell).
+
+4. For the edit analysis specifically: 25 tasks with 61 edits is far below what's
+   needed for any reliable rewrite rate comparison.
+
+What would be adequate? For the kinds of analyses in this report:
+- Minimum 500 tasks per model for complexity-stratified comparisons
+- Minimum 100 tasks in the edit analysis subset
+- At least 10 shared projects
+- At least 30 days per model to capture workload variation
+- Ideally: randomized assignment (A/B testing) or at minimum, matched-pair comparison
+  on identical prompts
+
+**** Statistician
+Statistical power analysis for the current sample (n1=1727, n2=193):
+
+| Detectable effect (80% power) | Test Type      | Value  |
+|-------------------------------+----------------+--------|
+| Overall mean difference       | Mann-Whitney   | d=0.22 |
+| Overall proportion difference | Chi-square     | w=0.10 |
+| Trivial stratum (813 vs 78)  | Mann-Whitney   | d=0.34 |
+| Complex stratum (180 vs 14)  | Mann-Whitney   | d=0.80 |
+| Edit rewrite rate (2218 vs 61)| Proportion     | 12pp   |
+
+The overall sample is adequate for detecting medium effects. The stratified analyses
+(especially complex: n=14, major: n=1 for 4.6) are severely underpowered. The edit
+analysis comparison requires a 12 percentage-point difference to reach significance --
+larger than the observed 2.9pp difference.
+
+The report's claim that "per-task and per-session comparisons normalize for [sample
+asymmetry]" is technically correct for DETECTING EQUAL proportions, but normalization
+doesn't create statistical power that isn't there. With n=14 complex tasks for 4.6,
+no normalization method will produce reliable complexity-stratified estimates.
+
+**** Editor
+The dataset section (lines 477-508) does a reasonable job of disclosing the numbers.
+The expansion tables (dataset-composition, dataset-task-mix) are auto-generated and
+accurate. The paragraph at line 503 appropriately notes the asymmetry.
+
+However, the framing "intentionally asymmetric" at line 503 subtly normalizes what
+is actually a significant limitation. "Intentional" implies the design is adequate
+despite the asymmetry. A more honest framing: "The dataset is substantially asymmetric
+due to the evaluation timeline" followed by specific consequences for interpretation.
+
+The dataset-composition expansion notes "8:1 session ratio" (line 60 of the expansion)
+which is slightly off from the actual 327:41 = 8:1 (this is actually correct). It also
+says "4 projects (all of which also have Opus 4.5 sessions), providing natural overlap
+for matched-pair comparisons." This is good -- acknowledging the shared projects.
+
+**** Synthesis
+193 tasks across 5 days and 4 projects is sufficient for detecting LARGE overall
+differences but insufficient for:
+- Complexity-stratified analyses (n=14 complex, n=1 major for 4.6)
+- Edit accuracy comparison (n=25 tasks, 61 edits for 4.6)
+- Characterizing stable behavioral patterns vs. transient workflow effects
+
+The dataset section is honest about the numbers but not about their consequences.
+The claim "per-task and per-session comparisons normalize for this" overpromises.
+
+REVISE: Add a caveat that complexity-stratified and edit-level findings should be
+treated as exploratory observations, not confirmed differences, given the 4.6 sample
+sizes. Consider adding a column showing 4.6 n to each comparison table (this was
+recommended in Round 1, finding #8, and appears not yet implemented).
+
+*** Debate 5: The "8/115 Bonferroni Survivors" Framing
+
+**** Methodologist
+First, the count is wrong. stat-tests.json shows 21 Bonferroni survivors total:
+9 at the overall stratum, 12 in complexity strata. The report claims 8, apparently
+excluding one of the 6 overall chi-square survivors and all 12 stratum-level survivors.
+
+The Bonferroni correction divides alpha by total test count (115), treating all tests
+as independent. In reality:
+- Chi-square tests on related LLM-annotated fields (task_completion, error_recovery,
+  iteration_required) are correlated because LLM annotations are generated together
+- Mann-Whitney tests on lines_added and lines_removed are mechanically correlated
+- Complexity-stratum tests are subsets of overall tests -- NOT independent
+
+Bonferroni is therefore too conservative for the correlated tests (inflates Type II
+error) but arguably appropriate given the study's exploratory nature. A Benjamini-
+Hochberg FDR correction would be more appropriate for this mix of correlated and
+independent tests.
+
+**** Statistician
+There's a deeper issue: the chi-square tests that survive Bonferroni ALL have
+low_expected_warning=true. This means at least 20% of expected cell counts are below 5.
+With n=193 for 4.6 spread across 10+ categories (many LLM-annotated fields have verbose
+unique labels), sparse cells are inevitable. Chi-square is unreliable in this regime.
+
+The valid interpretation:
+- The 3 Mann-Whitney survivors (lines_removed, lines_per_minute, tools_per_file) are
+  methodologically solid -- continuous variables, no sparse-cell issue
+- The 6 chi-square survivors are suspect due to sparse cells and correlated annotations
+- The most defensible statement: "3 of N continuous-variable tests survive Bonferroni"
+
+That said, Bonferroni's conservatism partially compensates for the sparse-cell problem:
+if a test survives both low-expected warnings AND Bonferroni, it's probably real (just
+not precisely estimated).
+
+**** Editor
+The stat card "8 / 115" with detail "Lines metrics, tools/file, 5 categorical
+distributions" is compact but misleading in several ways:
+1. The count 8 doesn't match the actual 9 (overall) or 21 (total)
+2. "5 categorical distributions" understates (6 chi-square tests survive) and
+   simultaneously obscures the low_expected_warning issue
+3. The card gives equal visual weight to all 8 when 3 are methodologically robust
+   and 5-6 have sparse-cell warnings
+
+For the reader, "8 / 115" reads as "very few survived," framing the result as
+showing ABSENCE of differences. An equally valid framing: "9 of 13 overall tests
+survived," which reads as "most differences are real."
+
+**** Synthesis
+Three issues need fixing:
+1. Count accuracy: verify whether 8, 9, or 21 is the intended scope and state it clearly
+2. Methodological qualification: note that chi-square survivors have sparse-cell warnings
+3. Framing: "8/115" is misleadingly low if you don't explain that many of the 115 tests
+   are complexity strata with tiny 4.6 samples (some n=1) that could never reach
+   significance
+
+REVISE: Correct the count. Add a parenthetical like "(9 overall, plus 12 in complexity
+strata; chi-square tests affected by sparse expected counts due to 4.6 sample size)."
+Or: present overall and stratum results separately.
+
+Regarding Bonferroni vs BH-FDR: Bonferroni is defensible given the exploratory nature
+and non-independence. The issue is not the correction method but the framing of the
+result.
+
+*** Debate 6: Per-Task Normalization
+
+**** Methodologist
+The dataset paragraph (line 503) claims: "per-task and per-session comparisons normalize
+for [sample asymmetry]. Where sample size limits statistical power, the report notes it
+explicitly."
+
+This claim is misleading. Per-task normalization controls for ONE specific confound:
+unequal total task counts. It does NOT control for:
+
+1. Project differences: If 4.6's 4 projects are systematically different from 4.5's
+   27 unique projects, per-task averages still reflect project characteristics, not
+   model behavior. The 4.6 per-task average is an average over 4 projects; the 4.5
+   per-task average is over 31 projects. These are apples-to-oranges.
+
+2. Temporal effects: Per-task normalization doesn't remove the correlation between
+   model assignment and calendar date. Any February-specific workflow pattern (different
+   project types, urgency levels, learning effects) is baked into 4.6's per-task
+   statistics.
+
+3. User adaptation: The user's behavior toward 4.6 was INFORMED by 2 months of 4.5
+   experience. They may have pre-filtered tasks (giving 4.6 tasks they thought it would
+   handle), adjusted prompting style, or had different quality expectations.
+
+4. Evaluation bias: The user was explicitly evaluating 4.6. This creates observation
+   effects: paying closer attention, being more thorough in feedback, perhaps trying
+   harder prompts.
+
+The claim "per-task and per-session comparisons normalize for this" is a Simpson's
+Paradox trap. Normalization only works when the groups being compared have similar
+distributions of confounding variables. They demonstrably don't: 4 vs 31 projects,
+5 days vs 2 months, evaluation mode vs production mode.
+
+**** Statistician
+The strongest test of whether normalization is sufficient: compare 4.5's per-task
+metrics RESTRICTED TO THE SAME 4 PROJECTS AND FEBRUARY DATE RANGE against 4.6's
+overall metrics. If the normalized comparison changes substantially, the confounds
+matter.
+
+The data supports this analysis: dataset-overview.json shows both models share 4
+projects. But this analysis isn't presented in the exec summary or dataset section.
+Without it, the normalization claim is unsubstantiated.
+
+For what it's worth, the complexity distribution differs between models: 4.5 has 47.1%
+trivial vs 4.6 at 40.4%, and 4.5 has 10.4% complex vs 4.6 at 7.3%. Per-task averages
+across the full population confound model differences with complexity-mix differences.
+Complexity-stratified comparisons are better, but those have the n-problem for 4.6.
+
+**** Editor
+The sentence "per-task and per-session comparisons normalize for this" would satisfy
+a casual reader but not a methodological reviewer. It's the weakest sentence in the
+dataset section precisely because it makes a specific technical claim without evidence.
+
+Replace with something honest: "Per-task averages partially account for the volume
+difference, but cannot control for project mix, temporal effects, or user adaptation.
+Complexity-stratified comparisons address one additional dimension but are limited by
+4.6 cell sizes."
+
+**** Synthesis
+Per-task normalization is necessary but NOT sufficient. It controls for total volume
+but not for project composition, temporal effects, user learning, or evaluation bias.
+The claim at line 503 overstates what normalization achieves.
+
+REVISE: Replace "per-task and per-session comparisons normalize for this" with a more
+honest statement acknowledging what normalization does and doesn't control. Specifically:
+it addresses volume asymmetry but not the project, temporal, or behavioral confounds.
+
+*** Debate 7: Improvement Proposals
+
+**** Methodologist Proposals
+
+ADDITIONS:
+1. Matched-project comparison: Restrict 4.5 data to the 4 shared projects and
+   re-run all comparisons. This is the single most important additional analysis.
+2. Temporal matching: Compare Feb 5-10 for both models (if 4.5 has February data,
+   which it does since date_range ends Feb 10).
+3. Formal hypothesis test for rewrite rate comparison (Fisher exact or chi-square on
+   the 2x2 table).
+4. User-directed correction FP adjustment: apply the 73% FP rate from the
+   dissatisfaction audit and report the adjusted count alongside the raw count.
+
+CUTS:
+1. Remove "strongest accuracy signal" language entirely -- it's unsupported.
+2. Remove or heavily caveat any complexity-stratified finding where 4.6 n < 20.
+3. Remove the "42 vs 0" emphasis until FP rate is addressed and statistical test added.
+
+**** Statistician Proposals
+
+ADDITIONS:
+1. Add confidence intervals for all key comparisons (rewrite rate, cost gap, token ratio).
+2. Present the 9 overall Bonferroni survivors with effect sizes, not just p-values.
+3. Add a power analysis note: "With n=193 for 4.6, this study can detect effects of
+   d >= 0.22 at 80% power."
+4. Consider BH-FDR as a secondary correction alongside Bonferroni.
+5. Add sample size column to every table.
+
+CUTS:
+1. Remove or footnote all chi-square results with low_expected_warning -- they're
+   unreliable.
+2. Do not present per-complexity findings for 4.6 where n < 15 as if they're
+   meaningful.
+
+**** Editor Proposals
+
+ADDITIONS:
+1. Add a "Limitations" callout box to the exec summary (1-2 sentences, before or
+   after the headline callout).
+2. Add one stat card showing a 4.5 strength to balance the visual hierarchy.
+3. Reconcile the "42 vs 0" across sections -- it should be fully contextualized
+   at first mention with rate and denominator.
+
+CUTS:
+1. The callout should focus on ONE finding, not three. Lead with whatever survives
+   formal testing (probably the cost difference or tool usage pattern).
+2. Remove "Explorer and Executor" from the title if it can't be substantiated
+   without confound acknowledgment. Consider something more neutral like
+   "Different Paths to the Same Destination" or simply "Opus 4.5 vs 4.6: A
+   Behavioral Comparison."
+
+*** Verdicts
+
+**** Keep / Cut / Revise recommendations
+
+| Element                               | Verdict | Reason                                         |
+|---------------------------------------+---------+------------------------------------------------|
+| 1.2x rewrite rate headline            | REVISE  | Add CI and formal test; will likely become NS   |
+| "Strongest accuracy signal"           | CUT     | Untested, inverts evidence hierarchy            |
+| 42 vs 0 user corrections              | REVISE  | Show as rate with denominators, address FP rate |
+| -8 to -47% cost gap                   | KEEP    | Direction supported, verify magnitudes          |
+| 1.4x output token ratio               | KEEP    | Verify: exec says 1.4x (1322/963=1.37), fine   |
+| 8/115 Bonferroni count                | REVISE  | Correct to actual count (9 or 21), add context  |
+| "Explorer and Executor" title         | REVISE  | Add qualifier or choose neutral framing         |
+| Stat card color coding                | REVISE  | Use neutral color for non-significant findings  |
+| Dataset paragraph (line 503)          | REVISE  | Weaken normalization claim, add confound list   |
+| "Intentionally asymmetric" framing    | REVISE  | Honest about design, not about consequences     |
+| Per-model composition expansion       | KEEP    | Generated, accurate                             |
+| Task-mix expansion                    | KEEP    | Generated, accurate                             |
+| Token volume expansion                | KEEP    | Generated, accurate                             |
+
+**** Proposed improvements (immediate, no pipeline changes needed)
+1. Add formal test for rewrite rate (Fisher exact on overlap/no-overlap x model)
+2. Add confidence intervals for the rewrite rate comparison
+3. Add 1-2 sentence confound acknowledgment to exec summary
+4. Correct Bonferroni count to match stat-tests.json (9 overall / 21 total)
+5. Add sample size to edit analysis comparison (25 tasks / 61 edits for 4.6)
+6. Change "strongest accuracy signal" to "a notable accuracy indicator" with hedge
+7. Address 73% FP rate in user-correction count or add explicit caveat
+8. Add one 4.5-positive stat card (project breadth, estimation stability, etc.)
+9. Change green coloring on rewrite-rate card to neutral
+
+**** Proposed additional analyses
+1. CRITICAL: Matched-project comparison (restrict 4.5 to 4 shared projects)
+2. HIGH: Temporal match (Feb 5-10 data for both models)
+3. HIGH: Formal hypothesis test for rewrite rate
+4. MEDIUM: Power analysis disclosure
+5. MEDIUM: BH-FDR as secondary multiple-testing correction
+6. LOW: Stratified analysis limited to cells with n >= 20 for both models
+
+** Section 2: Token Economy & Cost — Panel Review (Round 2)
+
+Post-pipeline-rerun review. Three-person panel: Methodologist, Statistician, Editor.
+
+*** Debate 1: Cost Comparison Validity / Simpson's Paradox
+
+**** Methodologist
+This IS a classic Simpson's Paradox situation. Overall per-task cost: 4.5 ($2.46) < 4.6
+($2.83). But within EVERY complexity stratum trivial through complex, 4.6 is cheaper.
+The aggregate reversal happens because 4.6 does proportionally more moderate+ tasks.
+The per-complexity comparison is more appropriate... IF complexity is the only confounder.
+
+Even within complexity strata, confounds remain:
+- Different projects — 4.6 works on 4 projects that might have different cost profiles
+  (smaller files, better-cached contexts)
+- Different time period — API pricing, caching behavior, or system prompt may have changed
+- User adaptation — user may have learned to write more efficient prompts over 2 months
+- Self-selection — user may route "cleaner" tasks to the newer model
+
+**** Statistician
+The per-complexity comparison controls for ONE variable while ignoring many others.
+To properly test cost differences, need: matched-pairs on same projects, bootstrap CIs
+per stratum, and a formal interaction test (complexity × model).
+
+**** Editor
+The section's opening sentence states the cost advantage as fact: "Opus 4.6 achieves
+lower per-task costs." The excellent caveat paragraph at line 733 properly hedges this.
+But readers who skim stat cards and topic sentences get the uncaveated version.
+
+**** Synthesis
+Simpson's Paradox correctly handled by showing per-complexity costs. But residual
+confounds (project, temporal, user behavior) mean even per-complexity advantage could
+be artifactual. The caveat paragraph is excellent — make the opening match it.
+
+*** Debate 2: Thinking Calibration
+
+**** Statistician
+Major tasks for 4.6: n=1. Complex: n=14. The table shows "100%" for both — meaning
+the single major task and all 14 complex tasks used thinking. At n=14, the 95% CI
+for 100% is [77%, 100%] (Clopper-Pearson). At n=1, it's [2.5%, 100%]. The claim
+"Opus 4.6 shows better calibration" needs n>30 per stratum.
+
+**** Methodologist
+"Calibration" implies intentional resource allocation. But thinking may be controlled
+by system parameters, not model choice. If the system enables/disables thinking based
+on context length or estimated complexity, the model isn't "calibrating" — the system is.
+
+**** Editor
+The callout says "4.5 over-thinks easy problems and under-thinks hard ones." This is
+a strong behavioral claim. At n=1 for major, "under-thinks" is based on one task where
+4.5 happened not to use thinking (79% did). That's within normal variation.
+
+**** Synthesis
+Reframe as "observed thinking frequency" not "calibration." Suppress major-task claims
+(n=1). The trivial/simple pattern (larger n) is more defensible: 4.6 does skip thinking
+more often on trivial tasks. But "better" calibration requires evidence that skipping
+thinking on trivial tasks is actually BETTER (no outcome data linked to thinking).
+
+*** Debate 3: Output Verbosity Table — Small-n Rows
+
+**** Statistician
+Task types with 4.6 n<10: Port (7), Simple (3), Greenfield (5). At n=3, any single
+outlier task dominates the mean. The "0.1x" ratios for Port and Simple are essentially
+meaningless — one verbose task could flip the ratio from 0.1x to 2x.
+
+**** Synthesis
+Add n column to the table. Gray out or footnote rows where 4.6 n<10. Don't build
+narrative on those rows. The port/simple ratios (0.1x) are noise.
+
+*** Debate 4: Caching Efficiency Explanation
+
+**** Methodologist
+The report attributes cost savings to "more efficient prompt caching." This is plausible
+but untestable from the data as presented. Alternative explanations:
+- 4.6's 4 projects may have more repetitive context (less cache thrashing)
+- 4.6 tasks are from a 5-day burst — cache hits are higher within concentrated usage
+- API-side changes (caching infrastructure improvements between Dec and Feb)
+- Model architecture differences in how tokens are processed
+
+**** Statistician
+The data includes cache_read_tokens and cache_write_tokens. The ratio cache_read /
+cache_write could be computed per task and compared. This IS testable but apparently
+hasn't been done.
+
+**** Synthesis
+The caching explanation is speculative. Either test it (cache hit ratio analysis) or
+soften to "possibly due to caching differences, but untested."
+
+*** Debate 5: Session-Hour Normalization
+
+**** Statistician
+Session hours = wall-clock from first to last message. This includes: user thinking
+time, lunch breaks, overnight sessions left open. Extremely noisy denominator. 4.5's
+higher hours-per-session could mean longer idle gaps, not more work.
+
+**** Editor
+The report correctly caveats this ("includes idle time, not a direct measure"). But
+then uses it as confirming evidence. If the denominator is acknowledged as unreliable,
+the metric shouldn't be presented as reinforcement.
+
+**** Synthesis
+Drop or drastically de-emphasize session-hour cost. Per-task cost by complexity is
+the more defensible metric.
+
+*** Verdicts for Section 2
+
+| Element                              | Verdict | Reason                                    |
+|--------------------------------------+---------+-------------------------------------------|
+| Per-complexity cost comparison       | KEEP    | Simpson's Paradox correctly handled       |
+| "Better calibration" framing         | REVISE  | Change to "observed thinking frequency"   |
+| Major task claims (n=1 for 4.6)      | CUT     | Statistically meaningless                 |
+| Small-n verbosity rows (port, simple)| REVISE  | Add n column, flag/gray out n<10          |
+| Session-hour normalization           | CUT     | Noisy, acknowledged as unreliable         |
+| Caching explanation                  | REVISE  | Either test (cache hit ratios) or soften  |
+| Opening sentence (states as fact)    | REVISE  | Match the excellent caveat paragraph      |
+
+*** Proposed improvements for Section 2
+1. Cache hit ratio analysis — directly test the caching explanation
+2. Matched-pairs on shared projects for cost comparison
+3. Bootstrap CIs on per-complexity costs
+4. Cost-per-successful-task metric (cost × completion probability)
+5. Time-series analysis of 4.5 costs over 2 months
+
+** Section 3: Edit Accuracy — Panel Review (Round 2)
+
+Post-pipeline-rerun review. This is the report's claimed "strongest accuracy signal."
+
+*** Debate 1: The n=9 Problem (FATAL FLAW)
+
+**** Statistician
+4.6 has 9 overlapping edits total. Every percentage is noise:
+
+| Category             | 4.5 (n=392) | 4.6 (n=9) | 4.6 95% CI (Clopper-Pearson) |
+|----------------------+-------------+-----------+------------------------------|
+| Self-correction      | 9.2% (36)   | 55.6% (5) | [21.2%, 86.3%]               |
+| Error recovery       | 15.1% (59)  | 0.0% (0)  | [0%, 33.6%]                  |
+| User-directed        | 10.7% (42)  | 0.0% (0)  | [0%, 33.6%]                  |
+| Iterative refinement | 65.1% (255) | 44.4% (4) | [13.7%, 78.8%]               |
+
+Every 4.5 rate falls within the 4.6 confidence interval. No category-level
+difference is statistically detectable.
+
+**** Methodologist
+The fundamental question is: WHY does 4.6 have only 9 overlapping edits? Possibilities:
+(a) 4.6 makes fewer edits overall (fewer opportunities for overlap)
+(b) 4.6's editing style produces fewer detectable overlaps
+(c) 4.6 worked on fewer editing-heavy tasks
+(d) 4.6 is genuinely more accurate
+The report assumes (d) without ruling out (a)-(c).
+
+**** Editor
+The section presents a 6-row table comparing percentages from 392 vs 9 observations
+with identical visual formatting, creating a false impression of comparable precision.
+"55.6%" looks precise. It should show "5 of 9" prominently.
+
+**** Synthesis
+The n=9 comparison is NOT statistically interpretable. Every percentage for 4.6 has
+CIs spanning 40-60+ percentage points. The section should lead with this caveat.
+The interesting signal is the ASYMMETRY in edit volume (392 vs 9), which itself
+needs explanation.
+
+*** Debate 2: Does Overlap = Accuracy?
+
+**** Methodologist
+Edit overlaps conflate:
+(a) Fixing mistakes (accuracy signal)
+(b) Iterative development (normal workflow)
+(c) Refactoring (intentional restructuring)
+(d) Style changes (cosmetic edits)
+
+The "self-correction" category is a RESIDUAL — everything not classified as something
+else. It's the dustbin category, not the accuracy signal.
+
+**** Statistician
+The rewrite rate correlates with many things besides accuracy: total edit count, task
+complexity, project familiarity, editing style. A model that makes many small
+incremental edits will have higher overlap rates than one that makes fewer larger
+edits — even if both reach the same outcome.
+
+**** Synthesis
+Overlap rate measures editing PATTERNS, not accuracy. Renaming categories to be more
+neutral ("same-region re-edit" instead of "self-correction") would be more defensible.
+
+*** Debate 3: 42 User-Directed Corrections vs 0
+
+**** Statistician
+Expected user-directed at 4.5's rate (42/392 = 10.7%) × 9 = 0.96.
+P(X=0 | n=9, p=0.107) = 0.36. NOT significant.
+
+Different denominator approach: 42 out of 2,875 total edit operations = 1.46%.
+If 4.6 has ~73 edit operations, expected = 1.07. P(0|Poisson(1.07)) ≈ 0.34.
+Still not significant.
+
+**** Methodologist
+Prior review found 73% FP rate in keyword-based dissatisfaction detection. The
+"user-directed" classification ALSO uses keyword signals. If same FP rate applies:
+true count might be ~11, not 42. At 11/392 = 2.8%, expected in 9 overlaps = 0.25.
+P(0) = 0.78.
+
+**** Synthesis
+The 42-vs-0 comparison MIGHT be meaningful if (a) the 42 are verified against FP
+rate and (b) the 4.6 denominator is large enough that zero is surprising. Currently
+neither condition is met. At minimum: apply FP correction, show rates with
+denominators, compute formal test.
+
+*** Debate 4: Rewrite Rate Validity
+
+**** Statistician
+Rewrite rate = overlapping_edits / total_edits. 4.5: 392/2,218 = 17.7%.
+4.6: 9/61 = 14.8%. 95% Wilson CI for 4.6: [7.9%, 25.7%].
+The 4.5 rate (17.7%) falls well within. Two-proportion z-test: p ≈ 0.55.
+NOT significant.
+
+**** Methodologist
+The 39:1 edit volume ratio creates base-rate confound. With more edits, random
+spatial collisions on the same file region are statistically expected even without
+actual rework. The rewrite rate still confounds editing style with accuracy.
+
+**** Synthesis
+The 3pp difference (17.7% vs 14.8%) is within noise given n=9 for the 4.6 numerator.
+A formal test would find p > 0.5.
+
+*** Debate 5: "Strongest Accuracy Signal" Claim
+
+**** All three agree
+This claim is unsupported. No formal test. 392 vs 9 observations. CIs overlap
+massively. Calling it "strongest" when 8 Bonferroni-corrected tests HAVE survived
+inverts the evidence hierarchy.
+
+Either test formally (result: non-significant) or change to "a descriptive accuracy
+indicator."
+
+*** Debate 6: Better Accuracy Measures
+
+**** All three agree on alternatives
+1. Test pass rates: pre/post test results would be direct accuracy measure
+2. Git revert frequency: strong dissatisfaction signal, no FP risk
+3. Time-to-stable-state: how long until a file stops being edited
+4. User follow-up rate: does next message indicate success or correction needed?
+5. Edit-free task rate: fraction of tasks requiring zero edits after initial implementation
+6. Lines surviving: fraction of lines added that survive to end-of-session
+
+*** Verdicts for Section 3
+
+| Element                                  | Verdict | Reason                                    |
+|------------------------------------------+---------+-------------------------------------------|
+| Category percentage table (55.6% etc.)   | CUT     | n=9, CIs span 40-60pp, misleading         |
+| Rewrite rate (17.7% vs 14.8%)           | REVISE  | Keep as descriptive stat with CI + test    |
+| "Strongest accuracy signal"             | CUT     | Untested, would fail, inverts hierarchy    |
+| 42 vs 0 user-directed                   | REVISE  | Show rates + denominators + FP correction  |
+| Iterative refinement analysis           | KEEP    | Intellectually interesting for 4.5 data    |
+| "Gap disappears at complex+"            | CUT     | n=0 for 4.5, not convergence              |
+| Section title "Edit Accuracy"           | REVISE  | "Edit Patterns" more honest               |
+
+** Sections 4-8: Panel Review (Round 2)
+
+*** Section 4: Quality & Satisfaction
+
+**** Signal/noise verdict: RADICALLY SHORTEN
+
+The null result (no sentiment difference) IS valuable but doesn't need 110 lines.
+Compress to 2 paragraphs:
+1. "Sentiment distributions are statistically indistinguishable."
+2. "Completion rates favor 4.6 by 3.7pp (complete) and 5.5pp (failure), but
+   neither survives Bonferroni correction (effect size negligible, Cohen's h=0.17)."
+
+**** LLM annotation reliability
+ALL quality metrics are LLM-annotated (Haiku/Sonnet). No inter-rater reliability
+reported. No human validation sample. Without Cohen's kappa, we can't distinguish
+"models are similar" from "classifier can't tell the difference."
+
+**** "Dissatisfaction < 0.4%" cherry-picking
+Three different dissatisfaction measures exist:
+| Definition          | 4.5         | 4.6         | Source                    |
+|---------------------+-------------+-------------+---------------------------|
+| LLM audit           | 8 (0.4%)    | 1 (0.3%)    | hand-edited report        |
+| Keyword-flagged      | 41          | 29          | dissatisfaction-audit.json |
+| LLM sentiment annot  | 226 (13.1%) | 28 (14.5%)  | stat-tests.json           |
+
+The report uses whichever number supports the current point. Pick one definition
+and use it consistently, or present all three with clear labels.
+
+*** Section 5: Behavioral Patterns
+
+**** Signal/noise verdict: KEEP BUT ADD CAVEATS
+
+The qualitative observation (4.6 uses mostly Explore agents) is interesting but
+the quantitative framing is misleading.
+
+- 16 total subagent calls for 4.6. "94% Explore" = 15/16. Changing ONE call
+  makes it 88%. Present as "15 of 16 calls" not "94%."
+- 4 planned tasks for 4.6 — cannot characterize anything. Merge into Section 7
+  or cut planning data entirely.
+
+**** CRITICAL unacknowledged confound: system prompt differences
+Claude Code may configure models with different system prompts between versions.
+Behavioral differences (subagent types, planning mode, tool preferences) could
+reflect SYSTEM PROMPT differences rather than model capability. This is potentially
+the largest unacknowledged confound in the study.
+
+*** Section 6: Complexity & Resource Usage
+
+**** Signal/noise verdict: EXPAND, MOVE EARLIER
+
+This is the statistically strongest section (Bonferroni survivors: tools/task p=0.000002,
+tools/file p=0.000003). But it's buried after weaker sections.
+
+- "More tool calls" needs connection to user-relevant outcomes. Does more research
+  lead to better outcomes? Section doesn't answer this.
+- Lines-added comparison MUST be stratified by task type or it's meaningless
+  (4.5 does more greenfield tasks).
+- "+0.27 alignment correlation" in callout is unsourced — not found in any analysis
+  file. Either source it, compute it within-model, or remove it.
+
+*** Section 7: Planning
+
+**** Signal/noise verdict: MERGE INTO SECTION 5 or CUT
+
+n=4 planned tasks for 4.6. Self-selection bias extreme — tasks where model CHOOSES
+to plan are tasks where planning helps. Report acknowledges "insufficient evidence"
+but devotes full section to it anyway. Compress to 3 sentences:
+1. Planning rates differ (1.0% vs 4.0%)
+2. Planned tasks score higher but n<20, severe self-selection
+3. Cannot distinguish planning-as-strategy from planning-as-symptom-of-thoroughness
+
+*** Section 8: Compaction
+
+**** Signal/noise verdict: KEEP (already appropriate size)
+
+Zero compaction events = myth-busting value. One paragraph is right.
+ADD: "noting that median session duration was <3 minutes. The 58+11 long
+sessions (9+ tasks) would be most likely to trigger compaction, and none did."
+
+*** Cross-cutting: Sections 4-8
+
+| Rank | Section               | Evidence Quality          | Recommendation              |
+|------+-----------------------+---------------------------+-----------------------------|
+| 1    | S6: Complexity/Res    | Bonferroni survivors      | EXPAND, move earlier        |
+| 2    | S8: Compaction        | Clean null finding        | KEEP as-is                  |
+| 3    | S4: Quality           | Informative null          | RADICALLY SHORTEN           |
+| 4    | S5: Behavioral        | Interesting qualitative   | KEEP, add CIs + sys prompt  |
+| 5    | S7: Planning          | n too small               | MERGE into S5               |
+
+**** One analysis to replace Sections 4-7
+A TASK OUTCOME ANALYSIS tracking:
+1. Does user's next action indicate success (moves to new topic) or failure (repeats)?
+2. Does the task's code survive to end-of-session without revert?
+3. How many user turns needed to reach stable state?
+This would be mechanistic (not LLM-judged) and directly measures user value.
+
+** Sections 9-11 & Cross-Cutting Synthesis — Panel Review (Round 2)
+
+*** Section 9: Session Dynamics
+
+**** Warmup effect NOT practically meaningful
+4.6 alignment: 2.95 → 3.06 (Δ=0.11 on 1-5 scale, 2.2% of range).
+Alignment scores from LLM classifier, not calibrated instrument. No CI or test.
+4.5 shows perfectly flat 2.85→2.85 which could be floor effect.
+REVISE: "no evidence of substantial warmup effect for either model."
+
+**** Session degradation misleadingly framed
+4.6: 3.53→2.96 (−0.57) vs 4.5: 2.93→2.85 (−0.08). Three problems:
+1. Regression to mean: 4.6 starts higher, more room to fall
+2. Sample sizes: Long sessions n=11 for 4.6
+3. Task complexity within sessions uncontrolled
+Report DOES note "reflects higher baseline, not crossover" — honest.
+REVISE: lead with "4.6 scores higher in every session-length bucket."
+
+**** Front-loading is mechanical, not strategic
+59.3% vs 54.3% = 5pp difference. Mechanically linked to Explore subagent usage.
+Explore agents by definition front-load reads before edits. "Investigates first,
+then implements" anthropomorphizes tool composition.
+
+*** Section 10: Model Profiles
+
+**** Routing table is the MOST PROBLEMATIC element (consensus)
+
+| Task Type      | Evidence                                            | Verdict              |
+|----------------+-----------------------------------------------------+----------------------|
+| Trivial/simple | Cost data supports                                  | Defensible           |
+| Complex/major  | LLM-judged alignment, non-matched, confounded       | Weakly supported     |
+| Refactoring    | 14.8% vs 17.7% rewrite rate — n=9 overlapping edits | Insufficient         |
+| Investigation  | "Natural fit" — circular reasoning                  | Tautological         |
+| Long sessions  | Appropriate hedge                                   | Defensible           |
+| Parallel       | "Actually backgrounds tasks" — unverified            | Unverified           |
+
+The routing table implies causal knowledge (choosing model X will produce outcome Y).
+Study provides NO causal evidence.
+REVISE: relabel as "Observed Tendencies" or add prominent caveat.
+
+**** "Explorer vs Executor" profiles overfit narrative to confounded data
+4.5=31 projects/2 months vs 4.6=4 projects/5 days.
+"Strategy" attributed to model may reflect tasks given, not model behavior.
+Frame as "tendencies in this dataset" not inherent model traits.
+
+*** Section 11: Methodology
+
+**** Six additional threats to validity not listed
+Current 5 threats are good. Missing:
+1. System prompt confound: Claude Code may configure models differently
+2. Instrument bias: LLM classifiers may have systematic biases evaluating LLM output
+3. Novelty/Hawthorne effect: user used 4.6 more carefully because it was new
+4. Temporal confounds: API changes, caching infrastructure updates Dec→Feb
+5. Survivorship bias: session selection may exclude crashed/abandoned sessions
+6. Multiple informal comparisons beyond the 115 formal tests
+
+**** CRITICAL: 4.6 has 34% meta-flagged tasks
+94 of 276 extracted 4.6 tasks (34.1%) flagged as meta (analysis project) vs
+210/2167 (9.7%) for 4.5. Much of 4.6 usage was on THIS analysis project —
+a critical confound not discussed.
+
+**** Development Process section is genuinely excellent
+Reporting abandoned approaches is rare and valuable. Establishes intellectual honesty.
+Could go further: mention report is largely LLM-generated/updated; discuss researcher
+degrees of freedom from iterative analysis approach.
+
+**** 73% FP rate inconsistency
+Report says keyword sentiment detection was "replaced by edit timeline analysis."
+But edit timeline STILL uses keywords for "user-directed" classification.
+Report abandons keyword detection as unreliable but continues using it in its
+"strongest accuracy signal."
+
+** GRAND SYNTHESIS: What Can This Study Actually Conclude?
+
+*** 1. Defensible claims (survive all design threats)
+
+- 4.6 uses more tool calls per task (Bonferroni-surviving, adequate n)
+- 4.6 uses more tools per file edited (Bonferroni-surviving)
+- Models differ in categorical distributions (completion, scope, iteration,
+  error recovery, communication quality) — though effect sizes negligible
+  (Cramer's V=0.10-0.16) and chi-square sparse-cell warnings present
+- 4.6 uses Explore subagents almost exclusively; 4.5 uses a mix
+- Sentiment distributions are indistinguishable (informative null)
+- Zero compaction events (myth-busting null)
+
+*** 2. Claims needing heavy qualification
+
+- 4.6 costs less per task at most complexity levels (confounded by project/temporal)
+- 4.6 is more "research-first" (confounded with task/project differences)
+- 4.6 has lower rewrite rates (n=9 overlapping edits — not significant)
+- 4.6 degrades more in long sessions (small n, regression to mean)
+
+*** 3. Claims that should be retracted or radically reframed
+
+- "Strongest accuracy signal" (untested, would fail formal test)
+- Routing recommendations (no causal basis)
+- "42 vs 0 user corrections" as headline quality signal (FP-contaminated, not significant)
+- "Better thinking calibration" (n=1 for major, system prompt confound)
+- Warm-up effects (Δ=0.11, not meaningful)
+
+*** 4. Evidence hierarchy across ALL findings
+
+| Tier                         | Findings                                              |
+|------------------------------+-------------------------------------------------------|
+| A: Bonferroni + adequate n   | Tools/task, tools/file, lines removed, lines/min      |
+| B: Large descriptive, good n | Cost/complexity, token output ratio, thinking freq     |
+| C: Suggestive but underpowered| Rewrite rate, completion rate, planning, subagent mix  |
+| D: Purely descriptive        | Duration distribution, effort ratios, front-loading   |
+| E: Speculative/narrative     | Profiles, routing, "calibration," warm-up              |
+
+KEY: Report's headline findings (rewrite rates, routing) are Tier C-E.
+Strongest statistical findings (Tier A) are about tool usage — less narratively interesting.
+
+*** 5. Missing analyses (priority order)
+
+1. CRITICAL: Within-project comparison on 4 shared projects
+   - Controls for project-level confounds
+   - Single highest-value analysis not in report
+   - Can be done with existing data
+
+2. HIGH: Temporal match (4.5 restricted to Feb 5-10)
+   - Controls for temporal confounds and user learning
+   - Tests whether "model difference" is really "time difference"
+
+3. HIGH: Bootstrap confidence intervals for all 4.6 estimates
+   - Would immediately reveal which comparisons have power
+   - "14.8% rewrite rate [CI: 7.9%-25.7%]" is self-calibrating
+
+4. MEDIUM: Meta-task exclusion sensitivity analysis
+   - Re-run excluding 94 meta-flagged 4.6 tasks (34% of extracted)
+   - Test whether results change without analysis-project tasks
+
+5. MEDIUM: LLM classifier reliability assessment
+   - Subsample through multiple classifiers or human review
+   - 73% FP rate on sentiment suggests other classifications may be unreliable
+
+6. MEDIUM: System prompt comparison
+   - Document whether Claude Code uses different system prompts for the two models
+   - If yes, behavioral differences may be system-driven not model-driven
+
+7. LOW: Temporal analysis of 4.5 drift
+   - Plot 4.5 metrics over 2-month period
+   - If early-4.5 ≠ late-4.5, comparison is really late-4.5 vs 4.6
+
+*** 6. Sections to cut or radically shorten
+
+| Section                       | Recommendation       | Reason                              |
+|-------------------------------+----------------------+-------------------------------------|
+| S7: Planning                  | Merge into S5        | n=4, self-selection, 3 sentences    |
+| S4: Quality                   | Shorten to 2 paras   | Informative null ≠ interesting null  |
+| S8: Compaction                | Keep (already short)  | Clean null, myth-busting value      |
+| S10: Routing table            | Cut or "Observed"    | Implies causation study lacks       |
+| S3: Edit accuracy headline    | Downgrade            | n=9, p>0.5, CIs span ±20pp        |
+| S9: Session warmup            | Shorten              | Δ=0.11 not meaningful               |
+
+*** 7. Fundamental verdict: Valuable case study, overstated as analysis
+
+The report is valuable as an EXPLORATORY CASE STUDY, not as a "Comparative
+Behavioral Analysis" (current subtitle). Value lies in:
+- Pipeline itself (reproducible, well-engineered, innovative)
+- Honest methodology section and development process disclosure
+- Identification of patterns worth testing in controlled studies
+- Specific mechanistic observations (tool usage patterns, subagent types)
+
+The report overstates in three structural ways:
+1. Causal language: "strategy," routing recommendations, "strengths"
+2. Headline-claim confidence: exec summary presents without adequate qualification
+3. Equal treatment of strong and weak findings: Bonferroni survivors get same
+   visual weight as n=4 planning observations
+
+*** 8. Top 3 improvements (any one would substantially strengthen the report)
+
+**** 1. Add within-project matched comparisons
+The 4 shared projects are an untapped gold mine. Compare 4.5 vs 4.6 on same
+codebases. Would address the biggest confound (project/task selection). Can be
+done with EXISTING data — no new data collection needed.
+
+**** 2. Add confidence intervals to every comparison
+This single change would let readers see immediately which comparisons have power.
+The n=9 problem would be self-evident from a CI spanning [7.9%, 25.7%].
+
+**** 3. Reframe from "comparative analysis" to "exploratory case study"
+Change subtitle from "comparative behavioral analysis" to "exploratory observations
+from one developer's workflow." Downgrade routing recommendations to "observed
+tendencies." This doesn't reduce value — it makes claims match evidence.
