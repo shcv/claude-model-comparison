@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "neutral_to_positive",
+  "sentiment_confidence": "medium",
+  "execution_quality": "No work executed due to interruption. The subsequent commit request was a clear new task outside the scope of the interrupted work.",
+  "work_category": "Interrupted task with immediate context discovery. User started a request, interrupted themselves mid-task, then issued a new directive after finding relevant schema instructions.",
+  "scope_management": "focused",
+  "communication_quality": "clear",
+  "error_recovery": "none_needed",
+  "iteration_required": "one_shot",
+  "task_completion": "interrupted",
+  "alignment_score": 3,
+  "summary": "The initial task was interrupted by the user before any work commenced. The user then self-resolved their blocker by finding schema instructions and issued a new, unrelated directive to commit the emacs package. While the new request was clear, the interrupted first task leaves ambiguity about intent, reducing overall alignment.",
+  "follow_up_pattern": "User discovered needed context (schema instructions) independently and pivoted to a concrete commit task, suggesting they were self-sufficient and ready to move forward.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "investigation",
+  "normalized_user_sentiment": "neutral"
+}

@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "interrupted or uncertain - user provided incomplete input before completing their request.",
+  "sentiment_confidence": "low",
+  "execution_quality": "No execution occurred; agent did not attempt to process, analyze, or respond to the pasted content.",
+  "work_category": "Documentation reference task - user pasted pseudocode and referenced a documentation file without explicit request for action.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "one_shot",
+  "task_completion": "interrupted",
+  "alignment_score": 1,
+  "summary": "User provided a pseudocode snippet with a documentation reference but no explicit request before the interaction was interrupted. No work was performed or proposed by the agent, making assessment of alignment impossible. This appears to be an incomplete task submission.",
+  "follow_up_pattern": "User interrupted the task before the agent could respond, suggesting incomplete communication of intent.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "directed_impl",
+  "normalized_user_sentiment": "neutral"
+}

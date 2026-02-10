@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "uncertain/seeking clarification",
+  "sentiment_confidence": "medium",
+  "execution_quality": "No work was performed; the agent did not provide a response to clarify which key-id was appropriate.",
+  "work_category": "Clarification question about which cryptographic key identifier to use for an export operation.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "significant",
+  "task_completion": "failed",
+  "alignment_score": 1,
+  "summary": "The agent did not respond to a technical question about key selection, leaving the user to make assumptions. The user's follow-up narrowed the question, suggesting they lack context and are attempting to resolve the issue independently.",
+  "follow_up_pattern": "User posed a more specific follow-up question, narrowing the scope, suggesting they are trying to work around the agent's silence.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "directed_impl",
+  "normalized_user_sentiment": "neutral"
+}

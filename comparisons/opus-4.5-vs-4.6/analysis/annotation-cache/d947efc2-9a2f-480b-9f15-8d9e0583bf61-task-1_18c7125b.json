@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "unknown",
+  "sentiment_confidence": "low",
+  "execution_quality": "Agent took no action despite receiving a clear task definition with specific categorization rules.",
+  "work_category": "Email categorization task with detailed classification criteria provided by user.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "significant",
+  "task_completion": "failed",
+  "alignment_score": 1,
+  "summary": "The user provided an email categorization task but the request was truncated mid-sentence. The agent did not attempt to clarify or proceed with partial information, resulting in complete task failure with zero tool calls or actions taken.",
+  "follow_up_pattern": "No follow-up; session terminated without agent attempting the work.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "directed_impl",
+  "normalized_user_sentiment": "neutral"
+}

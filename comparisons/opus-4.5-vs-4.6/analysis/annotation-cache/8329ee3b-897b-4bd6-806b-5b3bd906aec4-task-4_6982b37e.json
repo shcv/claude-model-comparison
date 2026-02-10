@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "frustrated",
+  "sentiment_confidence": "high",
+  "execution_quality": "Unable to assess - the agent never received a complete request or had opportunity to execute work.",
+  "work_category": "Incomplete interaction - user's request was interrupted and no work was actually performed by the agent.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "significant",
+  "task_completion": "interrupted",
+  "alignment_score": 1,
+  "summary": "The interaction was cut short before any meaningful work could occur - the user's initial request was interrupted, no tool calls were made, and the agent never had a chance to act. The user's follow-up message reveals a critical blocker: a network connectivity issue preventing API access to Anthropic. This suggests the agent needs to shift focus from the original task to helping diagnose and resolve the network problem.",
+  "follow_up_pattern": "User is describing a technical blocker (VPN/network connection stealing) that prevents them from using the Claude API, suggesting they need help solving this infrastructure problem rather than proceeding with the original task.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "failed",
+  "normalized_work_category": "directed_impl",
+  "normalized_user_sentiment": "dissatisfied"
+}

@@ -1,0 +1,35 @@
+{
+  "section_id": "behavior",
+  "data_sources": {
+    "behavior": "analysis/behavior-metrics.json"
+  },
+  "tables": {
+    "behavior-adoption": {
+      "title": "Subagent & Planning Adoption (inline)",
+      "data_source": "behavior",
+      "row_gen": "behavior_adoption_inline"
+    },
+    "behavior-subagent-types": {
+      "title": "Subagent Type Distribution (inline)",
+      "data_source": "behavior",
+      "row_gen": "behavior_subagent_types_inline"
+    }
+  },
+  "prose": {
+    "key_metrics": [
+      "behavior.{model_a}.total_tasks",
+      "behavior.{model_b}.total_tasks",
+      "behavior.{model_a}.tasks_with_subagents",
+      "behavior.{model_b}.tasks_with_subagents",
+      "behavior.{model_a}.total_subagent_calls",
+      "behavior.{model_b}.total_subagent_calls",
+      "behavior.{model_a}.subagent_autonomous",
+      "behavior.{model_b}.subagent_autonomous",
+      "behavior.{model_a}.tasks_with_planning",
+      "behavior.{model_b}.tasks_with_planning",
+      "behavior.{model_a}.subagent_types",
+      "behavior.{model_b}.subagent_types"
+    ],
+    "guidance": "This section covers behavioral patterns. Key finding: 4.6 deploys more subagents but they are mostly read-only Explore agents. 4.5 uses more general-purpose implementation workers."
+  }
+}

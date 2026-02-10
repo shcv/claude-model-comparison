@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "frustrated",
+  "sentiment_confidence": "high",
+  "execution_quality": "Agent did not respond or engage with the technical troubleshooting data presented, failing to identify or explain the key format discrepancy.",
+  "work_category": "Debugging SSH key authentication failure; user provided key format evidence showing mismatch between stored and active keys.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "failed",
+  "iteration_required": "significant",
+  "task_completion": "incomplete",
+  "alignment_score": 1,
+  "summary": "Agent failed to engage with a clear technical problem where the user presented evidence of a key mismatch (truncated authorized_keys entry). No response, guidance, or troubleshooting was provided.",
+  "follow_up_pattern": "User provided detailed key fingerprint information showing truncation/format issues, but agent had not yet engaged with the problem.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "investigation",
+  "normalized_user_sentiment": "dissatisfied"
+}

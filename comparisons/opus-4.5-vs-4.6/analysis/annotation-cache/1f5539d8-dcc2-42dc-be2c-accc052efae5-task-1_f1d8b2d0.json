@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "neutral-inquisitive",
+  "sentiment_confidence": "low",
+  "execution_quality": "No work was executed. The agent received only a user query with no prior context or response, making assessment of execution quality impossible.",
+  "work_category": "Information request about Claude Code CLI options. User asked for documentation on --summarize flag capabilities and whether session-level summaries are possible.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "one_shot",
+  "task_completion": "interrupted",
+  "alignment_score": 1,
+  "summary": "This is an incomplete analysis fragment showing a user's information request with zero agent work performed. The task was interrupted or never started - there is no execution data to evaluate, making meaningful assessment impossible. The user's next message indicates they are seeking clarification about Claude Code CLI functionality.",
+  "follow_up_pattern": "User expects informational response about --summarize options and session summary capabilities. This is a documentation/feature inquiry that should prompt the agent to either explain existing options or search for documentation.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "directed_impl",
+  "normalized_user_sentiment": "neutral"
+}

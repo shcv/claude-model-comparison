@@ -1,0 +1,31 @@
+{
+  "section_id": "sessions",
+  "data_sources": {
+    "sessions": "analysis/session-analysis.json"
+  },
+  "tables": {
+    "session-warmup": {
+      "title": "Warm-up Effects (inline)",
+      "data_source": "sessions",
+      "row_gen": "session_warmup_inline"
+    },
+    "session-effort": {
+      "title": "Effort Distribution (inline)",
+      "data_source": "sessions",
+      "row_gen": "session_effort_inline"
+    },
+    "session-length": {
+      "title": "Session Length Effects (inline)",
+      "data_source": "sessions",
+      "row_gen": "session_length_inline"
+    }
+  },
+  "prose": {
+    "key_metrics": [
+      "sessions.warmup",
+      "sessions.effort_distribution",
+      "sessions.session_length"
+    ],
+    "guidance": "This section covers session dynamics. Key finding: 4.6 benefits from session context (warm-up improvement), both degrade in long sessions, 4.6 front-loads research."
+  }
+}

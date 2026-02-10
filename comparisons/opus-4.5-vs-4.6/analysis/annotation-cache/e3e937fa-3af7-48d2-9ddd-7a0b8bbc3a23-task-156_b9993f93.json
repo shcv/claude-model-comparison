@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "neutral",
+  "sentiment_confidence": "low",
+  "execution_quality": "Not applicable - no execution occurred. The agent received the new request but took no action before data collection stopped.",
+  "work_category": "No actual work was performed. The user provided a caveat message and then requested a new task, but the agent had not yet engaged with the new request.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "one_shot",
+  "task_completion": "interrupted",
+  "alignment_score": 1,
+  "summary": "The task record appears to capture a handoff moment rather than completed work. The user delivered a caveat about local command output and then issued a new instruction to investigate sandbox keys, but no agent work is evident in this snapshot. This represents an incomplete task transition rather than executed work.",
+  "follow_up_pattern": "User expects the agent to check sandbox for key information in the next interaction, continuing a series of infrastructure investigations.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "directed_impl",
+  "normalized_user_sentiment": "neutral"
+}

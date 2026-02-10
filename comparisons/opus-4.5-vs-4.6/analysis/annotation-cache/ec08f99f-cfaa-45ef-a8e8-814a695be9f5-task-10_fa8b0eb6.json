@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "neutral",
+  "sentiment_confidence": "low",
+  "execution_quality": "Agent encountered 3 errors during execution despite relatively straightforward bash operations, suggesting difficulties in path resolution or command construction.",
+  "work_category": "File system operation to move project directory to a new location within Claude Code project structure.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "struggled",
+  "iteration_required": "minor",
+  "task_completion": "uncertain",
+  "alignment_score": 2,
+  "summary": "Agent attempted to execute directory move operations but encountered multiple errors during execution. The lack of user feedback following session end makes it unclear if the task succeeded or failed, but the error count suggests the operation did not complete cleanly.",
+  "follow_up_pattern": "Session ended immediately after the task with no feedback, making it unclear whether the operation succeeded or user was dissatisfied.",
+  "autonomy_level": "medium",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "directed_impl",
+  "normalized_user_sentiment": "neutral"
+}

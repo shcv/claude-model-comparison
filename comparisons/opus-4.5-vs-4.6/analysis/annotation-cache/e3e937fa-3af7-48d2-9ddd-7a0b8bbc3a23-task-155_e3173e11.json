@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "neutral",
+  "sentiment_confidence": "low",
+  "execution_quality": "Unable to assess - agent received only incomplete context summary without a clear actionable request or new task to execute.",
+  "work_category": "Context continuation handoff - user provided session summary indicating prior work on YubiKey/PAM configuration, but the message was truncated mid-analysis with no actual new request.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "significant",
+  "task_completion": "interrupted",
+  "alignment_score": 1,
+  "summary": "Session received incomplete context handoff with a truncated summary of prior YubiKey/PAM work but no clear new request or actionable task. Agent had zero tool calls and no work to execute due to missing task definition. Requires user to provide complete context or explicit next steps to proceed.",
+  "follow_up_pattern": "User would need to provide complete context or explicit next steps, as the truncated message indicates the session handoff was incomplete.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "failed",
+  "normalized_work_category": "investigation",
+  "normalized_user_sentiment": "neutral"
+}

@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "neutral",
+  "sentiment_confidence": "medium",
+  "execution_quality": "No work was executed. The agent acknowledged the user's reference to a document but took no action before the session ended.",
+  "work_category": "Document review initiation - User presented a specification document for analysis but the session was interrupted before any work could be performed.",
+  "scope_management": "focused",
+  "communication_quality": "adequate",
+  "error_recovery": "none_needed",
+  "iteration_required": "one_shot",
+  "task_completion": "interrupted",
+  "alignment_score": 3,
+  "summary": "The user initiated a task by sharing a reference to a specification document (@spec/interruption.org) but the session was immediately interrupted before any analysis or work could begin. No tools were invoked and no files were accessed, leaving the request incomplete and the user's actual intent unclear.",
+  "follow_up_pattern": "Session was interrupted by the user before any substantive interaction occurred. Pattern suggests either the user cancelled mid-request or experienced a system interruption.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "investigation",
+  "normalized_user_sentiment": "neutral"
+}

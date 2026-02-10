@@ -1,8 +1,8 @@
 {
   "opus-4-5": {
     "sessions": 327,
-    "tasks": 1913,
-    "tasks_per_session": 5.9,
+    "tasks": 1727,
+    "tasks_per_session": 5.3,
     "projects": 31,
     "project_names": [
       "-home-shcv",
@@ -46,39 +46,39 @@
     "total_tool_calls": 17987,
     "total_session_hours": 417.9,
     "median_session_minutes": 1.8,
-    "total_files_touched": 3026,
-    "total_lines_added": 192791,
-    "total_lines_removed": 43263,
-    "avg_task_duration_sec": 408.3,
-    "median_task_duration_sec": 38.4,
-    "total_cost_usd": 4442.58,
-    "total_input_tokens": 432114,
-    "total_output_tokens": 1722655,
-    "cache_read_tokens": 1093358275,
-    "cache_write_tokens": 120365510,
-    "estimated_thinking_tokens": 1235523,
-    "estimated_text_tokens": 485049,
-    "thinking_ratio": 0.777,
-    "avg_requests_per_task": 7.0,
+    "total_files_touched": 2731,
+    "total_lines_added": 145506,
+    "total_lines_removed": 36224,
+    "avg_task_duration_sec": 395.6,
+    "median_task_duration_sec": 41.5,
+    "total_cost_usd": 5327.21,
+    "total_input_tokens": 678383,
+    "total_output_tokens": 2087846,
+    "cache_read_tokens": 1280308935,
+    "cache_write_tokens": 147193058,
+    "estimated_thinking_tokens": 1431583,
+    "estimated_text_tokens": 675583,
+    "thinking_ratio": 0.755,
+    "avg_requests_per_task": 7.4,
     "task_types": {
-      "unknown": 597,
-      "investigation": 395,
-      "continuation": 222,
-      "feature": 166,
-      "sysadmin": 152,
-      "greenfield": 123,
-      "bugfix": 120,
+      "unknown": 579,
+      "investigation": 416,
+      "feature": 143,
+      "sysadmin": 141,
+      "greenfield": 116,
+      "bugfix": 111,
       "refactor": 68,
-      "port": 33,
-      "simple": 30,
-      "docs": 7
+      "docs": 50,
+      "continuation": 41,
+      "simple": 32,
+      "port": 30
     },
     "complexity_distribution": {
-      "trivial": 1013,
-      "simple": 345,
-      "moderate": 369,
-      "complex": 164,
-      "major": 22
+      "trivial": 813,
+      "simple": 350,
+      "moderate": 370,
+      "complex": 180,
+      "major": 14
     },
     "tool_usage": {
       "Bash": 5300,
@@ -96,12 +96,28 @@
       "TaskCreate": 123,
       "TaskOutput": 91,
       "SendMessage": 47
+    },
+    "data_cleaning": {
+      "total_extracted": 2167,
+      "included": 1727,
+      "excluded": 440,
+      "exclusion_rate": 0.203,
+      "exclusion_reasons": {
+        "system_continuation": 417,
+        "slash_command": 21,
+        "no_response_interrupt": 2
+      },
+      "flag_counts": {
+        "no_project": 473,
+        "meta": 210,
+        "interrupted": 1
+      }
     }
   },
   "opus-4-6": {
-    "sessions": 40,
-    "tasks": 133,
-    "tasks_per_session": 3.3,
+    "sessions": 41,
+    "tasks": 193,
+    "tasks_per_session": 4.7,
     "projects": 4,
     "project_names": [
       "-home-shcv",
@@ -113,43 +129,44 @@
       "start": "2026-02-05",
       "end": "2026-02-10"
     },
-    "total_user_messages": 3869,
-    "total_assistant_messages": 6124,
+    "total_user_messages": 3871,
+    "total_assistant_messages": 6125,
     "total_tool_calls": 3504,
     "total_session_hours": 104.0,
     "median_session_minutes": 2.9,
-    "total_files_touched": 284,
-    "total_lines_added": 7741,
-    "total_lines_removed": 1799,
-    "avg_task_duration_sec": 140.6,
-    "median_task_duration_sec": 53.8,
-    "total_cost_usd": 263.04,
-    "total_input_tokens": 10686,
-    "total_output_tokens": 160562,
-    "cache_read_tokens": 85262205,
-    "cache_write_tokens": 4852022,
-    "estimated_thinking_tokens": 94051,
-    "estimated_text_tokens": 56589,
-    "thinking_ratio": 0.564,
-    "avg_requests_per_task": 7.8,
+    "total_files_touched": 281,
+    "total_lines_added": 7514,
+    "total_lines_removed": 1842,
+    "avg_task_duration_sec": 177.8,
+    "median_task_duration_sec": 58.7,
+    "total_cost_usd": 781.35,
+    "total_input_tokens": 13742,
+    "total_output_tokens": 364918,
+    "cache_read_tokens": 256626399,
+    "cache_write_tokens": 14538794,
+    "estimated_thinking_tokens": 216699,
+    "estimated_text_tokens": 160923,
+    "thinking_ratio": 0.594,
+    "avg_requests_per_task": 10.3,
     "task_types": {
-      "unknown": 26,
-      "investigation": 24,
-      "continuation": 21,
-      "sysadmin": 16,
-      "feature": 12,
-      "port": 9,
-      "bugfix": 8,
+      "unknown": 66,
+      "investigation": 46,
+      "sysadmin": 18,
+      "feature": 14,
+      "bugfix": 12,
+      "continuation": 9,
       "refactor": 8,
+      "port": 7,
       "greenfield": 5,
-      "simple": 4
+      "docs": 5,
+      "simple": 3
     },
     "complexity_distribution": {
-      "trivial": 60,
-      "simple": 27,
-      "moderate": 33,
-      "complex": 9,
-      "major": 4
+      "trivial": 78,
+      "simple": 43,
+      "moderate": 57,
+      "complex": 14,
+      "major": 1
     },
     "tool_usage": {
       "Bash": 1375,
@@ -167,26 +184,57 @@
       "SendMessage": 13,
       "EnterPlanMode": 9,
       "ExitPlanMode": 9
+    },
+    "data_cleaning": {
+      "total_extracted": 276,
+      "included": 193,
+      "excluded": 83,
+      "exclusion_rate": 0.3007,
+      "exclusion_reasons": {
+        "system_continuation": 81,
+        "no_response_interrupt": 1,
+        "slash_command": 1
+      },
+      "flag_counts": {
+        "meta": 94,
+        "no_project": 35
+      }
     }
   },
   "combined": {
     "projects": 31,
-    "sessions": 367,
-    "tasks": 2046,
-    "total_cost_usd": 4705.62,
-    "total_user_messages": 24406,
-    "total_assistant_messages": 44735,
+    "sessions": 368,
+    "tasks": 1920,
+    "total_cost_usd": 6108.56,
+    "total_user_messages": 24408,
+    "total_assistant_messages": 44736,
     "total_tool_calls": 21491,
-    "total_input_tokens": 442800,
-    "total_output_tokens": 1883217,
-    "cache_read_tokens": 1178620480,
-    "cache_write_tokens": 125217532,
-    "total_files_touched": 3310,
-    "total_lines_added": 200532,
-    "total_lines_removed": 45062,
+    "total_input_tokens": 692125,
+    "total_output_tokens": 2452764,
+    "cache_read_tokens": 1536935334,
+    "cache_write_tokens": 161731852,
+    "total_files_touched": 3012,
+    "total_lines_added": 153020,
+    "total_lines_removed": 38066,
     "date_range": {
       "start": "2025-12-05",
       "end": "2026-02-10"
+    },
+    "data_cleaning": {
+      "total_extracted": 2443,
+      "included": 1920,
+      "excluded": 523,
+      "exclusion_rate": 0.2141,
+      "exclusion_reasons": {
+        "system_continuation": 498,
+        "slash_command": 22,
+        "no_response_interrupt": 3
+      },
+      "flag_counts": {
+        "no_project": 508,
+        "meta": 304,
+        "interrupted": 1
+      }
     }
   }
 }

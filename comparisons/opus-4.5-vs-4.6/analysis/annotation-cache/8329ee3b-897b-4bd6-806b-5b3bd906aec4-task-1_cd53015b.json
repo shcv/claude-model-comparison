@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "interrupted/unknown",
+  "sentiment_confidence": "low",
+  "execution_quality": "No work was executed; the task was interrupted before any action was taken.",
+  "work_category": "Network infrastructure configuration task requiring research and certificate acquisition from ATT gateway to enable direct ONT authentication on Ubiquiti equipment.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "one_shot",
+  "task_completion": "interrupted",
+  "alignment_score": 1,
+  "summary": "The user issued a complex technical request involving network configuration and certificate retrieval from an ATT gateway, but the session was interrupted before the agent could attempt any work. With zero tool calls and zero file operations, the task remains entirely unstarted, making assessment of execution quality or alignment impossible.",
+  "follow_up_pattern": "Session ended abruptly with no follow-up, suggesting user either left the session or encountered an issue requiring a restart.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "investigation",
+  "normalized_user_sentiment": "neutral"
+}

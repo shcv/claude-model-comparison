@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "interrupted/unclear",
+  "sentiment_confidence": "low",
+  "execution_quality": "No execution occurred. The agent received the request but made zero tool calls and took no action before the user interrupted the session.",
+  "work_category": "Configuration modification task with incomplete execution. User requested changes to configs with a specific file reference, but the agent did not perform any work before the session was interrupted.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "one_shot",
+  "task_completion": "interrupted",
+  "alignment_score": 2,
+  "summary": "The user issued a clear configuration modification request referencing a specific file path, but the session was interrupted before the agent could begin work. Zero tool calls were executed, leaving the task completely unstarted. The interruption prevents assessment of whether the agent would have correctly interpreted the request.",
+  "follow_up_pattern": "Session interrupted mid-task. User message '[Request interrupted by user]' suggests the user stopped the interaction before the agent could respond or act, likely due to either a change in plan, network issue, or deliberate cancellation.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "directed_impl",
+  "normalized_user_sentiment": "neutral"
+}

@@ -41,6 +41,21 @@
       "prose": {
         "guidance": "Explain thinking calibration differences: how 4.6 reserves thinking for complex tasks while being more concise on trivial ones. Note the steeper gradient in thinking allocation."
       }
+    },
+    "cost-thinking-calibration": {
+      "title": "Thinking calibration by complexity (inline)",
+      "data_source": "tokens",
+      "row_gen": "thinking_calibration_inline"
+    },
+    "cost-verbosity-by-type": {
+      "title": "Output verbosity by task type (inline)",
+      "data_source": "tokens",
+      "row_gen": "verbosity_by_type_inline"
+    },
+    "cost-by-complexity-inline": {
+      "title": "Cost by complexity (inline)",
+      "data_source": "tokens",
+      "row_gen": "cost_by_complexity_inline"
     }
   },
   "prose": {

@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "Frustrated or efficiency-conscious",
+  "sentiment_confidence": "medium",
+  "execution_quality": "Not applicable - no work was executed. The agent received an interrupted request and had zero opportunity to demonstrate execution quality.",
+  "work_category": "Interrupted request with no execution. User initiated a task but interrupted themselves before tool use could occur, then followed up asking for a single-turn limitation.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "significant",
+  "task_completion": "interrupted",
+  "alignment_score": 2,
+  "summary": "The initial request was cut short before any action could be taken, leaving unclear what the actual task was. The follow-up message suggests the user wanted a single-pass solution to a problem that normally requires multiple iterations or pipeline steps, but without context about the original request, the agent had no opportunity to align with or execute the user's intent.",
+  "follow_up_pattern": "User is asking for constraint adjustment (single-turn limit) on what appears to be a re-run of some analysis pipeline, suggesting prior execution took too long or was repetitive.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "directed_impl",
+  "normalized_user_sentiment": "dissatisfied"
+}

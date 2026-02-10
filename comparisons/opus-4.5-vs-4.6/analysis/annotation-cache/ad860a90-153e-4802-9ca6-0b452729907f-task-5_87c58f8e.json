@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "neutral to pragmatic",
+  "sentiment_confidence": "medium",
+  "execution_quality": "Not applicable\u2014no execution occurred. The session captures only the initial request interruption and a follow-up clarification.",
+  "work_category": "No work was performed. The task shows zero tool calls and zero file interactions, with the work being interrupted before any implementation could occur.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "significant",
+  "task_completion": "interrupted",
+  "alignment_score": 2,
+  "summary": "The task was interrupted before any work began, capturing only a user clarification about implementation approach (preferring a local shell alias over hardcoded 'pass'). No execution quality can be assessed since no implementation occurred, and alignment is low because the agent never had the opportunity to understand or respond to the user's actual intent regarding the original request.",
+  "follow_up_pattern": "User provided a technical clarification (using shell alias instead of hardcoded 'pass') suggesting they want to iterate on the approach before or instead of the initial implementation.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "directed_impl",
+  "normalized_user_sentiment": "neutral"
+}

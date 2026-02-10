@@ -27,6 +27,21 @@
       "prose": {
         "guidance": "Compare worst-case rework between models. Note that 4.5's top scores are driven by user corrections, while 4.6's are more proactive (self-corrections and error recoveries)."
       }
+    },
+    "edit-overview-inline": {
+      "title": "Edit overview inline table",
+      "data_source": "edits",
+      "row_gen": "edit_overview_inline"
+    },
+    "edit-iterative-by-complexity": {
+      "title": "Iterative refinement by complexity (inline)",
+      "data_source": "edits",
+      "row_gen": "edit_iterative_by_complexity_inline"
+    },
+    "edit-accuracy-by-complexity": {
+      "title": "Self-correction rate by complexity (inline)",
+      "data_source": "edits",
+      "row_gen": "edit_accuracy_by_complexity_inline"
     }
   },
   "prose": {

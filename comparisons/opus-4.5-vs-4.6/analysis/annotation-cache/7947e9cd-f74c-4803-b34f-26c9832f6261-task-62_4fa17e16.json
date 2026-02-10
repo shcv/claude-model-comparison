@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "neutral",
+  "sentiment_confidence": "low",
+  "execution_quality": "No work performed; the agent simply received user input without analysis or action.",
+  "work_category": "Information exchange about an app ID and key validation.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "one_shot",
+  "task_completion": "partial",
+  "alignment_score": 2,
+  "summary": "The agent received a question about app ID and key validity but took no action. The user then provided a Firebase app ID, but the agent made no attempt to validate, apply, or work with the provided information.",
+  "follow_up_pattern": "User provided Firebase app ID string, likely expecting it to be used in configuration or testing.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "verification",
+  "normalized_user_sentiment": "neutral"
+}

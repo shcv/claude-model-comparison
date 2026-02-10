@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "uncertain",
+  "sentiment_confidence": "low",
+  "execution_quality": "No work was performed; the agent did not interpret the SSH protocol handshake logs or identify the failure point.",
+  "work_category": "SSH authentication protocol debugging with extended protocol trace.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "struggled",
+  "iteration_required": "significant",
+  "task_completion": "failed",
+  "alignment_score": 1,
+  "summary": "User provided detailed SSH protocol debug output with no agent intervention or analysis. The session shows continued user-directed troubleshooting of a complex authentication issue.",
+  "follow_up_pattern": "User provided additional verbose SSH debug output showing protocol details, continuing independent investigation.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "failed",
+  "normalized_work_category": "investigation",
+  "normalized_user_sentiment": "neutral"
+}

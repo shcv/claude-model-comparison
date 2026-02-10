@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "neutral",
+  "sentiment_confidence": "low",
+  "execution_quality": "No execution occurred. Task data shows zero tool calls, zero files touched, and zero duration.",
+  "work_category": "Request was interrupted and no work was initiated. User only provided a request header followed immediately by session continuation.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "significant",
+  "task_completion": "interrupted",
+  "alignment_score": 1,
+  "summary": "The initial user request was interrupted before the agent could begin work, leaving no task context or instructions. The subsequent 'continue' message provides no clarity on what should resume. Without knowing the original request or what 'continue' refers to, alignment is minimal and the task cannot be meaningfully evaluated.",
+  "follow_up_pattern": "User issued 'continue' command, suggesting they wanted the interrupted task resumed or clarified.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "directed_impl",
+  "normalized_user_sentiment": "neutral"
+}

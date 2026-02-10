@@ -4,6 +4,16 @@
     "compaction": "analysis/compaction-analysis.json"
   },
   "tables": {
+    "compaction-overview": {
+      "title": "Compaction Overview (inline)",
+      "data_source": "compaction",
+      "row_gen": "compaction_overview_inline"
+    },
+    "compaction-impact": {
+      "title": "Compaction Outcome Impact (inline)",
+      "data_source": "compaction",
+      "row_gen": "compaction_impact_inline"
+    },
     "compaction-outcomes": {
       "title": "Pre/post compaction outcome data",
       "data_source": "compaction",

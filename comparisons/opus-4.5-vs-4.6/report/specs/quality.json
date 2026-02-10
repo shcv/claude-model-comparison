@@ -11,6 +11,16 @@
       "prose": {
         "guidance": "Present detailed statistical results for satisfaction metrics. Highlight Bonferroni-significant results (alignment score, failed rate) and note which tests survive correction vs. are marginal."
       }
+    },
+    "quality-sentiment": {
+      "title": "Sentiment distribution (inline)",
+      "data_source": "stats",
+      "row_gen": "quality_sentiment_inline"
+    },
+    "quality-completion": {
+      "title": "Completion distribution (inline)",
+      "data_source": "stats",
+      "row_gen": "quality_completion_inline"
     }
   },
   "prose": {
@@ -35,6 +45,6 @@
       "stats.overall.mann_whitney.[field=alignment_score].mean",
       "stats.overall.mann_whitney.[field=alignment_score].bonferroni_significant"
     ],
-    "guidance": "This section covers output quality and satisfaction metrics. Key findings: alignment scores significantly higher for 4.6 (survives Bonferroni), lower failure rate (p<0.05 but not after correction), satisfaction/dissatisfaction not significant. Update stat-card values and bar-fill widths to match the data. The edit accuracy cross-reference in the final paragraph should match §3 findings."
+    "guidance": "This section covers output quality and satisfaction metrics. Key findings: alignment scores significantly higher for 4.6 (survives Bonferroni), lower failure rate (p<0.05 but not after correction), satisfaction/dissatisfaction not significant. Update stat-card values and bar-fill widths to match the data. The edit accuracy cross-reference in the final paragraph should match section 3 findings."
   }
 }

@@ -1,0 +1,32 @@
+{
+  "section_id": "complexity",
+  "data_sources": {
+    "dataset": "analysis/dataset-overview.json",
+    "stats": "analysis/stat-tests.json"
+  },
+  "tables": {
+    "complexity-distribution": {
+      "title": "Task Distribution by Complexity (inline)",
+      "data_source": "stats",
+      "row_gen": "complexity_distribution_inline"
+    },
+    "complexity-resources": {
+      "title": "Resource Usage (inline)",
+      "data_source": "dataset",
+      "row_gen": "complexity_resources_inline"
+    }
+  },
+  "prose": {
+    "key_metrics": [
+      "dataset.{model_a}.complexity_distribution",
+      "dataset.{model_b}.complexity_distribution",
+      "dataset.{model_a}.total_tool_calls",
+      "dataset.{model_b}.total_tool_calls",
+      "dataset.{model_a}.total_files_touched",
+      "dataset.{model_b}.total_files_touched",
+      "dataset.{model_a}.total_lines_added",
+      "dataset.{model_b}.total_lines_added"
+    ],
+    "guidance": "This section covers complexity distribution and resource usage. Key finding: 4.6 skews toward harder tasks. Tool usage gap is the strongest statistical signal."
+  }
+}

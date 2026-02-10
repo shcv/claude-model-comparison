@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "neutral",
+  "sentiment_confidence": "low",
+  "execution_quality": "No execution occurred; the agent did not attempt to parse, summarize, or ask clarifying questions about the debug logs.",
+  "work_category": "No work performed; agent received raw SSH debug output with no accompanying request or question.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "one_shot",
+  "task_completion": "failed",
+  "alignment_score": 1,
+  "summary": "The agent received truncated SSH debug logs without any request or context and took no action. The agent should have asked what problem the user was trying to solve or what help they needed.",
+  "follow_up_pattern": "User sent another SSH debug log snippet, continuing the pattern of sharing technical output without explicit requests.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "investigation",
+  "normalized_user_sentiment": "neutral"
+}

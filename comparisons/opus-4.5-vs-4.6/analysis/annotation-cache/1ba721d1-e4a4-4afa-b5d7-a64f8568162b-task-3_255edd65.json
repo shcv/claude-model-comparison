@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "unknown",
+  "sentiment_confidence": "low",
+  "execution_quality": "Unable to assess - insufficient data due to interrupted request and minimal tool usage without visible outcomes.",
+  "work_category": "Incomplete task analysis - user request was interrupted before completion, and only one Bash command was executed without clear context or results.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "one_shot",
+  "task_completion": "interrupted",
+  "alignment_score": 1,
+  "summary": "This task was interrupted before the user could fully articulate their request, resulting in an incomplete session with minimal agent action. The single Bash command executed provides insufficient evidence to assess alignment, quality, or completion status. No follow-up communication from the user suggests the session may have terminated unexpectedly.",
+  "follow_up_pattern": "Session ended after interrupted request with no subsequent user message, suggesting user may have closed the session or encountered a connectivity issue.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "failed",
+  "normalized_work_category": "investigation",
+  "normalized_user_sentiment": "neutral"
+}

@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "unknown",
+  "sentiment_confidence": "low",
+  "execution_quality": "The agent performed no work and provided no response despite receiving a task definition before session termination.",
+  "work_category": "Email categorization task with pre-defined categories (read/keep/archive) for Samuel Christie's email management, request was truncated mid-instruction.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "one_shot",
+  "task_completion": "failed",
+  "alignment_score": 1,
+  "summary": "The user provided a truncated email categorization task but the session terminated without the agent responding or attempting any work. The task was never initiated or acknowledged.",
+  "follow_up_pattern": "Session ended immediately without the agent acknowledging or acting on the task.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "directed_impl",
+  "normalized_user_sentiment": "neutral"
+}

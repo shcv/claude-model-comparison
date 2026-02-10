@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "neutral",
+  "sentiment_confidence": "low",
+  "execution_quality": "The agent received an incomplete request that was truncated mid-specification and did not attempt to clarify or request the complete categorization criteria.",
+  "work_category": "Email categorization task requesting the agent to classify a batch of emails into predefined categories (read, keep, delete).",
+  "scope_management": "focused",
+  "communication_quality": "adequate",
+  "error_recovery": "struggled",
+  "iteration_required": "significant",
+  "task_completion": "interrupted",
+  "alignment_score": 1,
+  "summary": "The agent received a truncated task specification and did not proactively request the complete categorization criteria before attempting work. The session ended without any email processing, indicating the task was interrupted or abandoned.",
+  "follow_up_pattern": "Session ended without user providing additional input, suggesting either accidental termination during incomplete request submission or user moving to a different task.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "directed_impl",
+  "normalized_user_sentiment": "neutral"
+}

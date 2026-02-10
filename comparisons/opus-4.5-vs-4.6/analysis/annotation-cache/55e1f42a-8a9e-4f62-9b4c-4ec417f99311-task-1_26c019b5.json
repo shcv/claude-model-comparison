@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "neutral_to_frustrated",
+  "sentiment_confidence": "low",
+  "execution_quality": "Task could not be executed - the user's request was incomplete, ending abruptly in the middle of defining the 'keep' category. The agent appropriately did not attempt to proceed without complete instructions.",
+  "work_category": "Email categorization task setup - user provided detailed instructions for categorizing emails into three categories (read, keep, archive) but the message was truncated mid-sentence, cutting off before the full task definition.",
+  "scope_management": "focused",
+  "communication_quality": "adequate",
+  "error_recovery": "none_needed",
+  "iteration_required": "one_shot",
+  "task_completion": "interrupted",
+  "alignment_score": 1,
+  "summary": "The user's request was truncated mid-sentence while defining email categorization criteria, leaving the task incomplete and unexecutable. The session ended without further communication, suggesting either an accidental submission or user abandonment. No meaningful work could be performed due to insufficient and incomplete instructions.",
+  "follow_up_pattern": "Session terminated without follow-up. User may have accidentally submitted incomplete message, or decided not to proceed. No indication of whether they intended to continue or had other sessions.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "failed",
+  "normalized_work_category": "directed_impl",
+  "normalized_user_sentiment": "neutral"
+}

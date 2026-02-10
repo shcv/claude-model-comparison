@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "urgent",
+  "sentiment_confidence": "high",
+  "execution_quality": "Agent provided no guidance; user received multiple TLS certificate unknown errors indicating a fundamental certificate configuration failure.",
+  "work_category": "Certificate setup and TLS error troubleshooting for an application with MITM/proxy components failing on multiple domain connections.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "failed",
+  "iteration_required": "significant",
+  "task_completion": "failed",
+  "alignment_score": 1,
+  "summary": "Agent failed to help with certificate setup that was blocking TLS connections. Multiple domains subsequently failed with ERR_SSL_SSLV3_ALERT_CERTIFICATE_UNKNOWN errors, indicating critical configuration remained incomplete and the user faced deployment-blocking certificate issues.",
+  "follow_up_pattern": "User is encountering cascading TLS failures across multiple domains (bugsnag, onesignal, foodlion, google), requiring immediate certificate resolution.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "failed",
+  "normalized_work_category": "directed_impl",
+  "normalized_user_sentiment": "neutral"
+}

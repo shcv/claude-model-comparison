@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "neutral to uncertain",
+  "sentiment_confidence": "low",
+  "execution_quality": "Unable to assess - no execution occurred. The task was interrupted before any work began.",
+  "work_category": "Interrupted task with no actual work performed. User's initial request was interrupted and no tools were called before the follow-up message.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "significant",
+  "task_completion": "interrupted",
+  "alignment_score": 1,
+  "summary": "No meaningful work was performed on this task. The user's initial request was interrupted before the agent could act, and with zero tool calls and no files touched, there is insufficient context to assess what the intended work was. The follow-up message 'continue checking' indicates the user expects continuation of an interrupted process, but without visibility into the original request, alignment cannot be determined.",
+  "follow_up_pattern": "User asked to 'continue checking', suggesting they want the agent to resume work on something that was interrupted or incomplete.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "failed",
+  "normalized_work_category": "directed_impl",
+  "normalized_user_sentiment": "neutral"
+}
