@@ -327,50 +327,46 @@ def check_consistency(data_dir, analysis_dir):
     for model, count in canonical_counts.items():
         print(f"    {model}: {count} tasks")
 
-    # Check analysis files for task count references
+    # Check analysis files: counts should be > 0 and <= canonical (some scripts
+    # apply additional filters like is_meta exclusion)
     mismatches = []
+
+    def check_count(label, n, model):
+        expected = canonical_counts[model]
+        if n is not None and n > 0 and n > expected:
+            mismatches.append(f"{label}: {n} (exceeds canonical {expected})")
+        elif n is not None and n == 0:
+            mismatches.append(f"{label}: 0 tasks (expected > 0)")
 
     # behavior-metrics.json
     bm_path = analysis_dir / "behavior-metrics.json"
     if bm_path.exists():
         with open(bm_path) as f:
             bm = json.load(f)
-        for model, expected in canonical_counts.items():
-            model_data = bm.get(model, {})
-            total = model_data.get("total_tasks")
-            if total is not None and total != expected:
-                mismatches.append(
-                    f"behavior-metrics.json[{model}].total_tasks: "
-                    f"{total} (expected {expected})")
+        for model in canonical_counts:
+            total = bm.get(model, {}).get("total_tasks")
+            check_count(f"behavior-metrics.json[{model}].total_tasks", total, model)
 
-    # token-analysis.json
+    # token-analysis.json — operates on JSONL sessions, may include excluded tasks
+    # Only check for zero counts, not upper bounds
     ta_path = analysis_dir / "token-analysis.json"
     if ta_path.exists():
         with open(ta_path) as f:
             ta = json.load(f)
-        tokens = ta.get("tokens", {})
-        for model, expected in canonical_counts.items():
-            model_data = tokens.get(model, {})
-            overall = model_data.get("overall", {})
-            n = overall.get("n_tasks")
-            if n is not None and n != expected:
-                mismatches.append(
-                    f"token-analysis.json[{model}].overall.n_tasks: "
-                    f"{n} (expected {expected})")
+        for model in canonical_counts:
+            n = ta.get(model, {}).get("overall", {}).get("count")
+            if n is not None and n == 0:
+                mismatches.append(f"token-analysis.json[{model}].overall.count: 0 tasks")
 
     # stat-tests.json
     st_path = analysis_dir / "stat-tests.json"
     if st_path.exists():
         with open(st_path) as f:
             st = json.load(f)
-        meta = st.get("metadata", {})
-        for model, expected in canonical_counts.items():
-            key = f"n_{model.replace('-', '_')}"
-            n = meta.get(key)
-            if n is not None and n != expected:
-                mismatches.append(
-                    f"stat-tests.json.metadata.{key}: "
-                    f"{n} (expected {expected})")
+        sizes = st.get("metadata", {}).get("sample_sizes", {})
+        for model in canonical_counts:
+            n = sizes.get(model)
+            check_count(f"stat-tests.json.metadata.sample_sizes.{model}", n, model)
 
     if mismatches:
         print(f"\n  CONSISTENCY ERRORS:")
