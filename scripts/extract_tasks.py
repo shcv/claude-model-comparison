@@ -176,6 +176,15 @@ class CanonicalTask:
     errors: list = field(default_factory=list)
     # Each: {msg_index, text, is_tool_error}
 
+    # --- Data cleaning ---
+    exclude_reason: str = ""
+    # Non-empty string means task should be excluded from primary analysis.
+    # Values: "slash_command", "system_continuation", "empty_continuation",
+    #         "no_response_interrupt"
+    flags: list = field(default_factory=list)
+    # Informational flags (task is still included). Values:
+    # "meta", "no_project", "interrupted", "post_compaction"
+
 
 # Patterns for categorizing user responses
 SATISFACTION_PATTERNS = [
@@ -766,6 +775,80 @@ def extract_canonical_from_session(file_path: Path, model: str) -> list[Canonica
     return tasks
 
 
+# --- Data cleaning patterns ---
+
+SLASH_COMMAND_PATTERN = re.compile(
+    r'^<command-(?:name|message)>|^/\w+',
+)
+
+BARE_CONTINUATION_PROMPTS = {
+    'continue', 'ok', 'yes', 'go ahead', 'proceed', 'sure',
+    'sounds good', 'yep', 'yeah', 'ok.', 'yes.', 'sure.',
+}
+
+
+def classify_data_cleaning(task: 'CanonicalTask') -> None:
+    """Set exclude_reason and flags on a canonical task based on data cleaning rules.
+
+    Exclusion rules (task removed from primary analysis):
+    1. Slash commands: user_prompt is a /command or <command-name> tag
+    2. System continuations: outcome_category == 'system_continuation'
+       OR user_prompt matches SYSTEM_CONTENT_PATTERNS
+    3. Empty bare continuations: bare ack ("ok","continue") with 0 tools and <5s
+    4. No-response interrupts: 0 tools, 0 duration, session_end outcome
+
+    Flags (informational, task still included):
+    - meta: from claude-investigations project
+    - no_project: session run from home dir (no specific project)
+    - interrupted: user interrupted the agent mid-work
+    - post_compaction: task started after a compaction event
+    """
+    prompt = (task.user_prompt or '').strip()
+    prompt_lower = prompt.lower().strip().rstrip('.')
+
+    # --- Exclusion rules ---
+
+    # 1. Slash commands
+    if SLASH_COMMAND_PATTERN.match(prompt):
+        task.exclude_reason = 'slash_command'
+        return
+
+    # 2. System continuations
+    if task.outcome_category == 'system_continuation':
+        task.exclude_reason = 'system_continuation'
+        return
+    if is_system_generated(prompt):
+        task.exclude_reason = 'system_continuation'
+        return
+
+    # 3. Empty bare continuations (no work done)
+    tool_count = len(task.tool_calls)
+    duration = task.duration_seconds or 0
+    if prompt_lower in BARE_CONTINUATION_PROMPTS and tool_count == 0 and duration < 5:
+        task.exclude_reason = 'empty_continuation'
+        return
+
+    # 4. No-response interrupts
+    if (tool_count == 0 and duration == 0
+            and task.outcome_category == 'session_end'):
+        task.exclude_reason = 'no_response_interrupt'
+        return
+
+    # --- Flags (non-exclusive) ---
+
+    if task.is_meta:
+        task.flags.append('meta')
+
+    if not task.project_path or task.project_path == '-home-shcv':
+        task.flags.append('no_project')
+
+    if '[Request interrupted' in prompt:
+        task.flags.append('interrupted')
+
+    if task.compaction_events_before:
+        task.flags.append('post_compaction')
+
+
 def extract_all_canonical(sessions_file: Path, model: str,
                           include_meta: bool = True) -> list[CanonicalTask]:
     """Extract canonical tasks from all sessions in a sessions JSON file."""
@@ -795,6 +878,18 @@ def extract_all_canonical(sessions_file: Path, model: str,
     if meta_skipped:
         print(f"  Skipped {meta_skipped} meta sessions")
 
+    # Apply data cleaning classification
+    for task in all_tasks:
+        classify_data_cleaning(task)
+
+    excluded = sum(1 for t in all_tasks if t.exclude_reason)
+    if excluded:
+        reasons = {}
+        for t in all_tasks:
+            if t.exclude_reason:
+                reasons[t.exclude_reason] = reasons.get(t.exclude_reason, 0) + 1
+        print(f"  Data cleaning: {excluded} excluded ({reasons})")
+
     return all_tasks
 
 
@@ -805,7 +900,10 @@ def print_canonical_summary(tasks: list[CanonicalTask], model: str):
         return
 
     n = len(tasks)
-    print(f"\n{model.upper()} Canonical Tasks: {n}")
+    excluded = sum(1 for t in tasks if t.exclude_reason)
+    included = n - excluded
+    flagged = sum(1 for t in tasks if t.flags and not t.exclude_reason)
+    print(f"\n{model.upper()} Canonical Tasks: {n} ({included} included, {excluded} excluded, {flagged} flagged)")
 
     # Outcome distribution
     outcomes = {}
