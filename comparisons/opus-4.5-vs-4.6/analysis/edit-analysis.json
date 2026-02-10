@@ -100,7 +100,112 @@
         "user_corrections": 5,
         "chain_depth": 2
       }
-    ]
+    ],
+    "complexity_bins": {
+      "by_complexity": {
+        "trivial": {
+          "n": 241,
+          "edits": 801,
+          "writes": 236,
+          "self_correction_rate": 0.0521,
+          "error_recovery_rate": 0.0771,
+          "user_correction_rate": 0.0588,
+          "iterative_refinement_rate": 0.2633,
+          "self_corrections": 54,
+          "error_recoveries": 80,
+          "user_corrections": 61,
+          "iterative_refinements": 273
+        },
+        "simple": {
+          "n": 167,
+          "edits": 595,
+          "writes": 165,
+          "self_correction_rate": 0.025,
+          "error_recovery_rate": 0.0803,
+          "user_correction_rate": 0.1053,
+          "iterative_refinement_rate": 0.3158,
+          "self_corrections": 19,
+          "error_recoveries": 61,
+          "user_corrections": 80,
+          "iterative_refinements": 240
+        },
+        "moderate": {
+          "n": 208,
+          "edits": 794,
+          "writes": 152,
+          "self_correction_rate": 0.0233,
+          "error_recovery_rate": 0.0814,
+          "user_correction_rate": 0.0835,
+          "iterative_refinement_rate": 0.4207,
+          "self_corrections": 22,
+          "error_recoveries": 77,
+          "user_corrections": 79,
+          "iterative_refinements": 398
+        },
+        "complex+": {
+          "n": 94,
+          "edits": 564,
+          "writes": 265,
+          "self_correction_rate": 0.029,
+          "error_recovery_rate": 0.1025,
+          "user_correction_rate": 0.0422,
+          "iterative_refinement_rate": 0.2497,
+          "self_corrections": 24,
+          "error_recoveries": 85,
+          "user_corrections": 35,
+          "iterative_refinements": 207
+        }
+      },
+      "by_duration_tercile": {
+        "short": {
+          "n": 283,
+          "edits": 1033,
+          "writes": 249,
+          "self_correction_rate": 0.0484,
+          "error_recovery_rate": 0.0733,
+          "user_correction_rate": 0.0733,
+          "iterative_refinement_rate": 0.2754,
+          "self_corrections": 62,
+          "error_recoveries": 94,
+          "user_corrections": 94,
+          "iterative_refinements": 353,
+          "range": "0-36s"
+        },
+        "medium": {
+          "n": 214,
+          "edits": 724,
+          "writes": 218,
+          "self_correction_rate": 0.0149,
+          "error_recovery_rate": 0.087,
+          "user_correction_rate": 0.1051,
+          "iterative_refinement_rate": 0.4363,
+          "self_corrections": 14,
+          "error_recoveries": 82,
+          "user_corrections": 99,
+          "iterative_refinements": 411,
+          "range": "36-112s"
+        },
+        "long": {
+          "n": 213,
+          "edits": 997,
+          "writes": 351,
+          "self_correction_rate": 0.0319,
+          "error_recovery_rate": 0.0942,
+          "user_correction_rate": 0.046,
+          "iterative_refinement_rate": 0.2626,
+          "self_corrections": 43,
+          "error_recoveries": 127,
+          "user_corrections": 62,
+          "iterative_refinements": 354,
+          "range": "112s+"
+        }
+      },
+      "coverage": {
+        "matched": 710,
+        "total": 759,
+        "pct": 93.5
+      }
+    }
   },
   "opus-4-6": {
     "model": "opus-4-6",
@@ -203,6 +308,111 @@
         "user_corrections": 0,
         "chain_depth": 1
       }
-    ]
+    ],
+    "complexity_bins": {
+      "by_complexity": {
+        "trivial": {
+          "n": 61,
+          "edits": 381,
+          "writes": 141,
+          "self_correction_rate": 0.0498,
+          "error_recovery_rate": 0.069,
+          "user_correction_rate": 0.0077,
+          "iterative_refinement_rate": 0.0268,
+          "self_corrections": 26,
+          "error_recoveries": 36,
+          "user_corrections": 4,
+          "iterative_refinements": 14
+        },
+        "simple": {
+          "n": 24,
+          "edits": 82,
+          "writes": 33,
+          "self_correction_rate": 0.0174,
+          "error_recovery_rate": 0.0435,
+          "user_correction_rate": 0.0,
+          "iterative_refinement_rate": 0.1478,
+          "self_corrections": 2,
+          "error_recoveries": 5,
+          "user_corrections": 0,
+          "iterative_refinements": 17
+        },
+        "moderate": {
+          "n": 27,
+          "edits": 105,
+          "writes": 26,
+          "self_correction_rate": 0.0687,
+          "error_recovery_rate": 0.1145,
+          "user_correction_rate": 0.0,
+          "iterative_refinement_rate": 0.2137,
+          "self_corrections": 9,
+          "error_recoveries": 15,
+          "user_corrections": 0,
+          "iterative_refinements": 28
+        },
+        "complex+": {
+          "n": 18,
+          "edits": 70,
+          "writes": 12,
+          "self_correction_rate": 0.0366,
+          "error_recovery_rate": 0.0854,
+          "user_correction_rate": 0.0,
+          "iterative_refinement_rate": 0.3171,
+          "self_corrections": 3,
+          "error_recoveries": 7,
+          "user_corrections": 0,
+          "iterative_refinements": 26
+        }
+      },
+      "by_duration_tercile": {
+        "short": {
+          "n": 68,
+          "edits": 410,
+          "writes": 161,
+          "self_correction_rate": 0.0385,
+          "error_recovery_rate": 0.0893,
+          "user_correction_rate": 0.007,
+          "iterative_refinement_rate": 0.0455,
+          "self_corrections": 22,
+          "error_recoveries": 51,
+          "user_corrections": 4,
+          "iterative_refinements": 26,
+          "range": "0-46s"
+        },
+        "medium": {
+          "n": 31,
+          "edits": 116,
+          "writes": 21,
+          "self_correction_rate": 0.1022,
+          "error_recovery_rate": 0.0365,
+          "user_correction_rate": 0.0,
+          "iterative_refinement_rate": 0.1022,
+          "self_corrections": 14,
+          "error_recoveries": 5,
+          "user_corrections": 0,
+          "iterative_refinements": 14,
+          "range": "46-117s"
+        },
+        "long": {
+          "n": 31,
+          "edits": 112,
+          "writes": 30,
+          "self_correction_rate": 0.0282,
+          "error_recovery_rate": 0.0493,
+          "user_correction_rate": 0.0,
+          "iterative_refinement_rate": 0.3169,
+          "self_corrections": 4,
+          "error_recoveries": 7,
+          "user_corrections": 0,
+          "iterative_refinements": 45,
+          "range": "117s+"
+        }
+      },
+      "coverage": {
+        "matched": 130,
+        "total": 147,
+        "pct": 88.4
+      }
+    }
   }
 }

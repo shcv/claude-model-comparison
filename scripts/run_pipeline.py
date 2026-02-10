@@ -23,6 +23,9 @@ STEPS = [
     ("tokens",   "Extract tokens"),
     ("stats",    "Run statistical tests"),
     ("edits",    "Analyze edits"),
+    ("planning", "Analyze planning by complexity"),
+    ("compaction", "Analyze compaction"),
+    ("report",     "Build report"),
 ]
 
 STEP_NAMES = [s[0] for s in STEPS]
@@ -56,6 +59,18 @@ def build_command(step, data_dir, analysis_dir):
         return [sys.executable, str(scripts_dir / "analyze_edits.py"),
                 "--data-dir", str(data_dir),
                 "--analysis-dir", str(analysis_dir)]
+    elif step == "planning":
+        return [sys.executable, str(scripts_dir / "planning_analysis.py"),
+                "--data-dir", str(data_dir),
+                "--analysis-dir", str(analysis_dir)]
+    elif step == "compaction":
+        return [sys.executable, str(scripts_dir / "analyze_compaction.py"),
+                "--data-dir", str(data_dir),
+                "--analysis-dir", str(analysis_dir)]
+    elif step == "report":
+        comparison_dir = data_dir.parent
+        return [sys.executable, str(scripts_dir / "build_report.py"),
+                "--dir", str(comparison_dir)]
     else:
         raise ValueError(f"Unknown step: {step}")
 

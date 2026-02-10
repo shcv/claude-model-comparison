@@ -167,11 +167,16 @@ def collect_sessions(days_back: int = 7, exclude_projects: list[str] = None) -> 
     claude_dir = Path.home() / '.claude' / 'projects'
     cutoff = datetime.now() - timedelta(days=days_back)
 
-    opus_4_5_sessions = []
-    opus_4_6_sessions = []
-    other_sessions = []
+    sessions = defaultdict(list)
     excluded_count = 0
     meta_count = 0
+
+    # Build reverse lookup: model_id -> canonical key
+    model_id_to_key = {}
+    for key, model_id in MODEL_IDS.items():
+        model_id_to_key[model_id] = key
+    for alias, key in MODEL_ALIASES.items():
+        model_id_to_key[alias] = key
 
     # Walk through all project directories
     for project_dir in claude_dir.iterdir():
@@ -206,26 +211,19 @@ def collect_sessions(days_back: int = 7, exclude_projects: list[str] = None) -> 
             if meta:
                 meta_count += 1
 
-            # Categorize by model (resolve aliases first)
-            model = metadata.model.lower()
-            resolved = MODEL_ALIASES.get(model, model)
-            if 'opus-4-6' in resolved:
-                opus_4_6_sessions.append(metadata)
-            elif 'opus-4-5' in resolved:
-                opus_4_5_sessions.append(metadata)
+            # Categorize by model using reverse lookup
+            canonical = model_id_to_key.get(metadata.model)
+            if canonical is None:
+                sessions['other'].append(metadata)
             else:
-                other_sessions.append(metadata)
+                sessions[canonical].append(metadata)
 
     if excluded_count:
         print(f"  Excluded {excluded_count} session files from: {', '.join(exclude_projects)}")
     if meta_count:
         print(f"  Tagged {meta_count} sessions as meta (claude-investigations)")
 
-    return {
-        'opus-4-5': opus_4_5_sessions,
-        'opus-4-6': opus_4_6_sessions,
-        'other': other_sessions
-    }
+    return dict(sessions)
 
 
 def print_summary(sessions: dict):
@@ -271,9 +269,11 @@ def save_results(sessions: dict, output_dir: Path):
     """Save session data to JSON files."""
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    for model_type in ['opus-4-5', 'opus-4-6']:
+    for model_type, session_list in sessions.items():
+        if model_type == 'other':
+            continue
         output_file = output_dir / f'sessions-{model_type}.json'
-        data = [asdict(s) for s in sessions.get(model_type, [])]
+        data = [asdict(s) for s in session_list]
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2)
         print(f"Saved {len(data)} sessions to {output_file}")
@@ -283,8 +283,8 @@ def main():
     import argparse
     parser = argparse.ArgumentParser(description='Collect Claude Code sessions by model')
     parser.add_argument('--days', type=int, default=7, help='Days back to scan (default: 7)')
-    parser.add_argument('--output', type=Path, default=Path('data'),
-                        help='Output directory (default: data)')
+    parser.add_argument('--data-dir', type=Path, default=Path('data'),
+                        help='Output directory for session files (default: data)')
     parser.add_argument('--exclude-projects', nargs='*', default=['model-comparison'],
                         help='Exclude projects containing these substrings (default: model-comparison)')
     args = parser.parse_args()
@@ -295,7 +295,7 @@ def main():
     sessions = collect_sessions(days_back=args.days, exclude_projects=args.exclude_projects)
 
     print_summary(sessions)
-    save_results(sessions, args.output)
+    save_results(sessions, args.data_dir)
 
 
 if __name__ == '__main__':

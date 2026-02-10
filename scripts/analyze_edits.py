@@ -690,6 +690,138 @@ def analyze_model(sessions_file: Path, model: str, analysis_dir: Path):
     return summary
 
 
+def compute_complexity_bins(model: str, data_dir: Path, analysis_dir: Path):
+    """Join edit-metrics with tasks-classified to compute per-bin edit accuracy.
+
+    Returns a dict with by_complexity, by_duration_tercile, and coverage keys,
+    or None if classified tasks aren't available.
+    """
+    classified_path = data_dir / f'tasks-classified-{model}.json'
+    metrics_path = analysis_dir / f'edit-metrics-{model}.json'
+
+    if not classified_path.exists() or not metrics_path.exists():
+        return None
+
+    with open(classified_path) as f:
+        classified = json.load(f)
+    with open(metrics_path) as f:
+        metrics = json.load(f)
+
+    # Build lookup: task_id -> classification + duration
+    task_info = {}
+    for t in classified:
+        task_info[t['task_id']] = {
+            'complexity': t.get('classification', {}).get('complexity', 'unknown'),
+            'duration_seconds': t.get('duration_seconds', 0),
+        }
+
+    # Join metrics with classified tasks
+    matched = []
+    for m in metrics:
+        tid = m['task_id']
+        if tid in task_info:
+            matched.append({**m, **task_info[tid]})
+
+    total = len(metrics)
+    n_matched = len(matched)
+    if n_matched == 0:
+        return None
+
+    print(f"    Complexity bins: {n_matched}/{total} tasks matched ({n_matched/total*100:.1f}%)")
+
+    # --- By complexity ---
+    COMPLEXITY_ORDER = ['trivial', 'simple', 'moderate', 'complex', 'major']
+    bins_by_complexity = defaultdict(list)
+    for m in matched:
+        bins_by_complexity[m['complexity']].append(m)
+
+    # Collapse complex+major if either has <10 tasks
+    complex_n = len(bins_by_complexity.get('complex', []))
+    major_n = len(bins_by_complexity.get('major', []))
+    collapse = complex_n < 10 or major_n < 10
+    if collapse and ('complex' in bins_by_complexity or 'major' in bins_by_complexity):
+        merged = bins_by_complexity.pop('complex', []) + bins_by_complexity.pop('major', [])
+        if merged:
+            bins_by_complexity['complex+'] = merged
+
+    by_complexity = {}
+    for level in COMPLEXITY_ORDER + ['complex+']:
+        tasks = bins_by_complexity.get(level)
+        if tasks is None:
+            continue
+        if collapse and level in ('complex', 'major'):
+            continue
+        by_complexity[level] = _compute_bin_rates(tasks)
+
+    # --- By duration tercile ---
+    durations = sorted(m['duration_seconds'] for m in matched if m['duration_seconds'] > 0)
+    if len(durations) >= 3:
+        t1 = durations[len(durations) // 3]
+        t2 = durations[2 * len(durations) // 3]
+    else:
+        t1 = t2 = 0
+
+    short, medium, long_ = [], [], []
+    for m in matched:
+        d = m['duration_seconds']
+        if d <= t1:
+            short.append(m)
+        elif d <= t2:
+            medium.append(m)
+        else:
+            long_.append(m)
+
+    by_duration = {}
+    if short:
+        by_duration['short'] = _compute_bin_rates(short)
+        by_duration['short']['range'] = f"0-{t1:.0f}s"
+    if medium:
+        by_duration['medium'] = _compute_bin_rates(medium)
+        by_duration['medium']['range'] = f"{t1:.0f}-{t2:.0f}s"
+    if long_:
+        by_duration['long'] = _compute_bin_rates(long_)
+        by_duration['long']['range'] = f"{t2:.0f}s+"
+
+    return {
+        'by_complexity': by_complexity,
+        'by_duration_tercile': by_duration,
+        'coverage': {
+            'matched': n_matched,
+            'total': total,
+            'pct': round(n_matched / total * 100, 1),
+        },
+    }
+
+
+def _compute_bin_rates(tasks: list) -> dict:
+    """Compute edit accuracy rates for a bin of tasks."""
+    n = len(tasks)
+    edits = sum(t['edit_count'] for t in tasks)
+    writes = sum(t['write_count'] for t in tasks)
+    total_ops = edits + writes
+    sc = sum(t['self_corrections'] for t in tasks)
+    er = sum(t['error_recoveries'] for t in tasks)
+    uc = sum(t['user_corrections'] for t in tasks)
+    ir = sum(t['iterative_refinements'] for t in tasks)
+
+    def rate(count):
+        return round(count / total_ops, 4) if total_ops > 0 else 0
+
+    return {
+        'n': n,
+        'edits': edits,
+        'writes': writes,
+        'self_correction_rate': rate(sc),
+        'error_recovery_rate': rate(er),
+        'user_correction_rate': rate(uc),
+        'iterative_refinement_rate': rate(ir),
+        'self_corrections': sc,
+        'error_recoveries': er,
+        'user_corrections': uc,
+        'iterative_refinements': ir,
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description='Analyze edit timelines for self-correction detection')
     parser.add_argument('--data-dir', type=Path, default=Path('data'),
@@ -720,6 +852,13 @@ def main():
     for model, sf in models.items():
         print(f"\nAnalyzing {model}...")
         summaries[model] = analyze_model(sf, model, analysis_dir)
+
+    # Compute complexity-binned accuracy
+    for model in summaries:
+        print(f"\n  Computing complexity bins for {model}...")
+        bins = compute_complexity_bins(model, data_dir, analysis_dir)
+        if bins:
+            summaries[model]['complexity_bins'] = bins
 
     # Write cross-model summary
     output_path = analysis_dir / 'edit-analysis.json'

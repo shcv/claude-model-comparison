@@ -1,0 +1,201 @@
+<!-- title: Highest-rework tasks by triage score -->
+
+<p>
+The triage score identifies tasks requiring exceptional attention, calculated as the ratio of rework events (user corrections + error recoveries + self-corrections) to independent edits. Higher scores indicate tasks where the model struggled most with correctness and coherence.
+</p>
+
+<p>
+Opus 4.5's worst-case tasks show scores ranging from 9.0 to 13.0, dominated by user corrections (1-5 per task) with minimal error recovery or self-correction. The highest scorer required 2 user corrections across a 3-edit chain for a triage score of 13.0. In contrast, Opus 4.6's worst-case scores range from 1.5 to 5.5, with its highest scorer requiring only 2 user corrections across a single edit. Notably, Opus 4.6's tail includes more self-corrections and error recoveries rather than user interventions, suggesting proactive rather than reactive rework.
+</p>
+
+<h3>Opus 4.5</h3>
+<table>
+<thead>
+<tr>
+<th class="label-cell">Rank</th>
+<th class="right">Triage Score</th>
+<th class="right">User Corrections</th>
+<th class="right">Error Recoveries</th>
+<th class="right">Self-Corrections</th>
+<th class="right">Chain Depth</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="label-cell"><span class="mono">37f58869</span></td>
+<td class="right">13.0</td>
+<td class="right">2</td>
+<td class="right">0</td>
+<td class="right">0</td>
+<td class="right">3</td>
+</tr>
+<tr>
+<td class="label-cell"><span class="mono">7947e9cd</span></td>
+<td class="right">12.5</td>
+<td class="right">4</td>
+<td class="right">0</td>
+<td class="right">0</td>
+<td class="right">5</td>
+</tr>
+<tr>
+<td class="label-cell"><span class="mono">7c00f189</span></td>
+<td class="right">12.0</td>
+<td class="right">2</td>
+<td class="right">0</td>
+<td class="right">0</td>
+<td class="right">2</td>
+</tr>
+<tr>
+<td class="label-cell"><span class="mono">7947e9cd</span></td>
+<td class="right">11.0</td>
+<td class="right">3</td>
+<td class="right">0</td>
+<td class="right">0</td>
+<td class="right">7</td>
+</tr>
+<tr>
+<td class="label-cell"><span class="mono">ad860a90</span></td>
+<td class="right">10.5</td>
+<td class="right">4</td>
+<td class="right">0</td>
+<td class="right">0</td>
+<td class="right">1</td>
+</tr>
+<tr>
+<td class="label-cell"><span class="mono">ca1dda64</span></td>
+<td class="right">9.0</td>
+<td class="right">3</td>
+<td class="right">0</td>
+<td class="right">0</td>
+<td class="right">3</td>
+</tr>
+<tr>
+<td class="label-cell"><span class="mono">ad860a90</span></td>
+<td class="right">9.0</td>
+<td class="right">1</td>
+<td class="right">0</td>
+<td class="right">0</td>
+<td class="right">4</td>
+</tr>
+<tr>
+<td class="label-cell"><span class="mono">7947e9cd</span></td>
+<td class="right">9.0</td>
+<td class="right">1</td>
+<td class="right">0</td>
+<td class="right">0</td>
+<td class="right">4</td>
+</tr>
+<tr>
+<td class="label-cell"><span class="mono">7c00f189</span></td>
+<td class="right">9.0</td>
+<td class="right">3</td>
+<td class="right">0</td>
+<td class="right">0</td>
+<td class="right">3</td>
+</tr>
+<tr>
+<td class="label-cell"><span class="mono">37f58869</span></td>
+<td class="right">9.0</td>
+<td class="right">5</td>
+<td class="right">0</td>
+<td class="right">0</td>
+<td class="right">2</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Opus 4.6</h3>
+<table>
+<thead>
+<tr>
+<th class="label-cell">Rank</th>
+<th class="right">Triage Score</th>
+<th class="right">User Corrections</th>
+<th class="right">Error Recoveries</th>
+<th class="right">Self-Corrections</th>
+<th class="right">Chain Depth</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="label-cell"><span class="mono">27e85e1e</span></td>
+<td class="right">5.5</td>
+<td class="right">2</td>
+<td class="right">0</td>
+<td class="right">0</td>
+<td class="right">1</td>
+</tr>
+<tr>
+<td class="label-cell"><span class="mono">27e85e1e</span></td>
+<td class="right">4.7</td>
+<td class="right">2</td>
+<td class="right">1</td>
+<td class="right">0</td>
+<td class="right">2</td>
+</tr>
+<tr>
+<td class="label-cell"><span class="mono">c4f4f555</span></td>
+<td class="right">4.0</td>
+<td class="right">0</td>
+<td class="right">0</td>
+<td class="right">0</td>
+<td class="right">4</td>
+</tr>
+<tr>
+<td class="label-cell"><span class="mono">c4f4f555</span></td>
+<td class="right">3.0</td>
+<td class="right">0</td>
+<td class="right">0</td>
+<td class="right">1</td>
+<td class="right">3</td>
+</tr>
+<tr>
+<td class="label-cell"><span class="mono">8df2928f</span></td>
+<td class="right">2.0</td>
+<td class="right">0</td>
+<td class="right">0</td>
+<td class="right">0</td>
+<td class="right">2</td>
+</tr>
+<tr>
+<td class="label-cell"><span class="mono">c4f4f555</span></td>
+<td class="right">2.0</td>
+<td class="right">0</td>
+<td class="right">0</td>
+<td class="right">1</td>
+<td class="right">1</td>
+</tr>
+<tr>
+<td class="label-cell"><span class="mono">627078d6</span></td>
+<td class="right">1.9</td>
+<td class="right">0</td>
+<td class="right">12</td>
+<td class="right">1</td>
+<td class="right">6</td>
+</tr>
+<tr>
+<td class="label-cell"><span class="mono">f302c88c</span></td>
+<td class="right">1.8</td>
+<td class="right">0</td>
+<td class="right">0</td>
+<td class="right">3</td>
+<td class="right">2</td>
+</tr>
+<tr>
+<td class="label-cell"><span class="mono">2e35fd9b</span></td>
+<td class="right">1.5</td>
+<td class="right">0</td>
+<td class="right">1</td>
+<td class="right">0</td>
+<td class="right">1</td>
+</tr>
+<tr>
+<td class="label-cell"><span class="mono">113ef9c7</span></td>
+<td class="right">1.5</td>
+<td class="right">0</td>
+<td class="right">1</td>
+<td class="right">0</td>
+<td class="right">1</td>
+</tr>
+</tbody>
+</table>
