@@ -123,7 +123,9 @@ def load_data(data_dir, analysis_dir):
         # Build lookup from classified tasks by task_id
         classified_by_id = {t["task_id"]: t for t in classified}
 
-        # Merge complexity from classified into analysis records
+        # Enrich with complexity from classified and project_path from canonical
+        canonical = load_canonical_tasks(data_dir, model)
+        canonical_by_id = {t['task_id']: t for t in canonical}
         for rec in analysis:
             tid = rec["task_id"]
             if tid in classified_by_id:
@@ -131,6 +133,10 @@ def load_data(data_dir, analysis_dir):
                 rec["complexity"] = cl.get("complexity", "unknown")
             else:
                 rec["complexity"] = "unknown"
+            if tid in canonical_by_id:
+                ct = canonical_by_id[tid]
+                rec.setdefault('project_path', ct.get('project_path', ''))
+                rec.setdefault('session_id', ct.get('session_id', ''))
 
         data[model] = analysis
 
