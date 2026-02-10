@@ -25,6 +25,7 @@ STEPS = [
     ("edits",    "Analyze edits"),
     ("planning", "Analyze planning by complexity"),
     ("compaction", "Analyze compaction"),
+    ("update",     "Update report sections"),
     ("report",     "Build report"),
 ]
 
@@ -67,6 +68,10 @@ def build_command(step, data_dir, analysis_dir):
         return [sys.executable, str(scripts_dir / "analyze_compaction.py"),
                 "--data-dir", str(data_dir),
                 "--analysis-dir", str(analysis_dir)]
+    elif step == "update":
+        comparison_dir = data_dir.parent
+        return [sys.executable, str(scripts_dir / "update_sections.py"),
+                "--dir", str(comparison_dir)]
     elif step == "report":
         comparison_dir = data_dir.parent
         return [sys.executable, str(scripts_dir / "build_report.py"),

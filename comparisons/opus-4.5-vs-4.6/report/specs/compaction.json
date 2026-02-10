@@ -1,0 +1,45 @@
+{
+  "section_id": "compaction",
+  "data_sources": {
+    "compaction": "analysis/compaction-analysis.json"
+  },
+  "tables": {
+    "compaction-outcomes": {
+      "title": "Pre/post compaction outcome data",
+      "data_source": "compaction",
+      "row_gen": "compaction_outcomes",
+      "prose": {
+        "guidance": "Discuss pre/post compaction outcome differences. For 4.5, the compaction effect is near zero after controlling for position. For 4.6, negative effects are larger but sample is too small. Possible task-ordering confound."
+      }
+    }
+  },
+  "prose": {
+    "key_metrics": [
+      "compaction.{model_a}.total_sessions",
+      "compaction.{model_b}.total_sessions",
+      "compaction.{model_a}.sessions_with_compaction",
+      "compaction.{model_b}.sessions_with_compaction",
+      "compaction.{model_a}.compaction_rate_pct",
+      "compaction.{model_b}.compaction_rate_pct",
+      "compaction.{model_a}.total_events",
+      "compaction.{model_b}.total_events",
+      "compaction.{model_a}.avg_pre_tokens",
+      "compaction.{model_b}.avg_pre_tokens",
+      "compaction.{model_a}.avg_events_per_compacting_session",
+      "compaction.{model_b}.avg_events_per_compacting_session",
+      "compaction.{model_a}.avg_position_pct",
+      "compaction.{model_b}.avg_position_pct",
+      "compaction.{model_a}.trigger_breakdown",
+      "compaction.{model_b}.trigger_breakdown",
+      "compaction.{model_a}.outcome_correlation.compacting",
+      "compaction.{model_b}.outcome_correlation.compacting",
+      "compaction.{model_a}.outcome_correlation.control",
+      "compaction.{model_b}.outcome_correlation.control",
+      "compaction.{model_a}.outcome_correlation.compaction_effect",
+      "compaction.{model_b}.outcome_correlation.compaction_effect",
+      "compaction.{model_a}.outcome_correlation.median_split_position_pct",
+      "compaction.{model_b}.outcome_correlation.median_split_position_pct"
+    ],
+    "guidance": "This section covers context window compaction events. Update stat-cards, bar-fill widths, table cells, and delta values. Note very small sample sizes may limit the outcome correlation analysis. If data has fewer sessions than the HTML shows, update accordingly."
+  }
+}

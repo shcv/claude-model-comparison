@@ -13,6 +13,9 @@ comparisons/*/dist/private/
 # Legacy private export directory
 comparisons/*/dist/anthropic/
 
+# Prose-check LLM cache (update_sections.py)
+comparisons/*/report/.prose-cache/
+
 # Playwright MCP artifacts
 .playwright-mcp/
 

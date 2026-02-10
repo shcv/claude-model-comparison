@@ -1,15 +1,14 @@
 <!-- title: Full edit overlap breakdown -->
-<p>Edit rework detected by overlap tier across all sessions:</p>
 <table>
     <thead>
         <tr><th>Metric</th><th class="right">Opus 4.5</th><th class="right">Opus 4.6</th></tr>
     </thead>
     <tbody>
-        <tr><td class="label-cell">Total edits + writes</td><td class="right mono">2,880 + 895</td><td class="right mono">720 + 240</td></tr>
-        <tr><td class="label-cell">Overlapping edits</td><td class="right mono">1,861 (64.6%)</td><td class="right mono">207 (28.8%)</td></tr>
-        <tr><td class="label-cell">&mdash; Exact match</td><td class="right mono">251 (13.5%)</td><td class="right mono">20 (9.7%)</td></tr>
-        <tr><td class="label-cell">&mdash; Containment</td><td class="right mono">359 (19.3%)</td><td class="right mono">34 (16.4%)</td></tr>
-        <tr><td class="label-cell">&mdash; Line overlap</td><td class="right mono">1,251 (67.2%)</td><td class="right mono">153 (73.9%)</td></tr>
+        <tr><td class="label-cell">Total edits + writes</td><td class="right mono">122 + 62</td><td class="right mono">91 + 44</td></tr>
+        <tr><td class="label-cell">Overlapping edits</td><td class="right mono">66 (54.1%)</td><td class="right mono">22 (24.2%)</td></tr>
+        <tr><td class="label-cell">&mdash; Exact match</td><td class="right mono">4 (6.1%)</td><td class="right mono">8 (36.4%)</td></tr>
+        <tr><td class="label-cell">&mdash; Containment</td><td class="right mono">6 (9.1%)</td><td class="right mono">6 (27.3%)</td></tr>
+        <tr><td class="label-cell">&mdash; Line overlap</td><td class="right mono">56 (84.8%)</td><td class="right mono">8 (36.4%)</td></tr>
     </tbody>
 </table>
 <p>Classification of what drove the rework:</p>
@@ -18,10 +17,9 @@
         <tr><th>Cause</th><th class="right">Opus 4.5</th><th class="right">Opus 4.6</th></tr>
     </thead>
     <tbody>
-        <tr><td class="label-cell">Self-correction</td><td class="right mono">131 (7.0%)</td><td class="right mono">44 (21.3%)</td></tr>
-        <tr><td class="label-cell">Error recovery</td><td class="right mono">330 (17.7%)</td><td class="right mono">68 (32.9%)</td></tr>
-        <tr><td class="label-cell">User-directed</td><td class="right mono">256 (13.8%)</td><td class="right mono">4 (1.9%)</td></tr>
-        <tr><td class="label-cell">Iterative refinement</td><td class="right mono">1,144 (61.5%)</td><td class="right mono">91 (44.0%)</td></tr>
+        <tr><td class="label-cell">Self-correction</td><td class="right mono">19 (28.8%)</td><td class="right mono">7 (31.8%)</td></tr>
+        <tr><td class="label-cell">Error recovery</td><td class="right mono">17 (25.8%)</td><td class="right mono">5 (22.7%)</td></tr>
+        <tr><td class="label-cell">User-directed</td><td class="right mono">0 (0.0%)</td><td class="right mono">0 (0.0%)</td></tr>
+        <tr><td class="label-cell">Iterative refinement</td><td class="right mono">30 (45.5%)</td><td class="right mono">10 (45.5%)</td></tr>
     </tbody>
 </table>
-<p>Opus 4.5 has a much higher <em>volume</em> of rework (1,861 vs 207 overlaps), but the key quality signal is the user-directed correction rate: 256 instances vs just 4. When controlled for task complexity, the user correction rate is significantly higher across all bins for Opus 4.5, while self-correction and error recovery rates are comparable.</p>

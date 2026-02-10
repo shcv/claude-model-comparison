@@ -2,15 +2,64 @@
 <p>Per-task average token usage driving the cost differences. Opus 4.6 produces more output but uses less fresh input, relying more on cached context:</p>
 <table>
     <thead>
-        <tr><th>Complexity</th><th class="right">4.5 output/task</th><th class="right">4.6 output/task</th><th class="right">4.5 input/task</th><th class="right">4.6 input/task</th><th class="right">4.5 requests</th><th class="right">4.6 requests</th></tr>
+        <tr>
+            <th>Complexity</th>
+            <th class="right">4.5 output/task</th>
+            <th class="right">4.6 output/task</th>
+            <th class="right">4.5 input/task</th>
+            <th class="right">4.6 input/task</th>
+            <th class="right">4.5 requests</th>
+            <th class="right">4.6 requests</th>
+        </tr>
     </thead>
     <tbody>
-        <tr><td class="label-cell">Trivial</td><td class="right mono">69</td><td class="right mono">149</td><td class="right mono">11</td><td class="right mono">9</td><td class="right mono">1.3</td><td class="right mono">1.1</td></tr>
-        <tr><td class="label-cell">Simple</td><td class="right mono">556</td><td class="right mono">842</td><td class="right mono">158</td><td class="right mono">275</td><td class="right mono">5.4</td><td class="right mono">5.4</td></tr>
-        <tr><td class="label-cell">Moderate</td><td class="right mono">1,365</td><td class="right mono">2,586</td><td class="right mono">463</td><td class="right mono">323</td><td class="right mono">11.5</td><td class="right mono">11.2</td></tr>
-        <tr><td class="label-cell">Complex</td><td class="right mono">4,717</td><td class="right mono">9,203</td><td class="right mono">915</td><td class="right mono">409</td><td class="right mono">27.5</td><td class="right mono">30.4</td></tr>
-        <tr><td class="label-cell">Major</td><td class="right mono">10,939</td><td class="right mono">20,115</td><td class="right mono">1,743</td><td class="right mono">785</td><td class="right mono">65.8</td><td class="right mono">58.7</td></tr>
+        <tr>
+            <td class="label-cell">Trivial</td>
+            <td class="right mono">45</td>
+            <td class="right mono">52</td>
+            <td class="right mono">17</td>
+            <td class="right mono">19</td>
+            <td class="right mono">1.1</td>
+            <td class="right mono">1.3</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Simple</td>
+            <td class="right mono">769</td>
+            <td class="right mono">453</td>
+            <td class="right mono">46</td>
+            <td class="right mono">54</td>
+            <td class="right mono">5.8</td>
+            <td class="right mono">5.1</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Moderate</td>
+            <td class="right mono">830</td>
+            <td class="right mono">1,574</td>
+            <td class="right mono">278</td>
+            <td class="right mono">259</td>
+            <td class="right mono">11.4</td>
+            <td class="right mono">9.7</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Complex</td>
+            <td class="right mono">3,277</td>
+            <td class="right mono">4,398</td>
+            <td class="right mono">343</td>
+            <td class="right mono">27</td>
+            <td class="right mono">30.2</td>
+            <td class="right mono">24.8</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Major</td>
+            <td class="right mono">1,124</td>
+            <td class="right mono">7,961</td>
+            <td class="right mono">78</td>
+            <td class="right mono">57</td>
+            <td class="right mono">57.0</td>
+            <td class="right mono">54.0</td>
+        </tr>
     </tbody>
 </table>
-<p>At moderate-and-above complexity, Opus 4.6 uses <em>fewer</em> fresh input tokens per task despite producing more output. This reflects its strategy of batching more work into each API call (higher tool calls per request), which means the prompt is re-sent fewer times. Combined with more effective cache utilization (cache reads of 79k&ndash;4.7M tokens/task vs 69k&ndash;6.1M), the output cost premium is more than offset by input savings.</p>
+<p>At complex tasks, Opus 4.6 uses <em>dramatically fewer</em> fresh input tokens per task (27 vs 343) despite producing 34% more output (4,398 vs 3,277). This reflects its strategy of batching more work into each API call (lower requests per task: 24.8 vs 30.2 for complex tasks; 6.8 vs 9.5 overall), which means the prompt is re-sent fewer times. Combined with more effective cache utilization, the output cost premium is more than offset by input savings.</p>
+
 <p><strong>Caveat:</strong> These averages come from organic sessions with different task mixes per model. Some of the per-complexity gap may reflect session-level factors (e.g., caching benefits accumulate within longer sessions).</p>

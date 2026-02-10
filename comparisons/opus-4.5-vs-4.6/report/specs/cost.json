@@ -1,0 +1,63 @@
+{
+  "section_id": "cost",
+  "data_sources": {
+    "tokens": "analysis/token-analysis.json"
+  },
+  "tables": {
+    "cost-by-complexity": {
+      "title": "Token breakdown by complexity level",
+      "data_source": "tokens",
+      "row_source": "by_complexity",
+      "row_order": ["trivial", "simple", "moderate", "complex", "major"],
+      "columns": [
+        {"header": "Complexity", "key": "_label", "cell_class": "label-cell"},
+        {"header": "{display_a} output/task", "path": "tokens.{model_a}.by_complexity.{row_key}.avg_output_tokens", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
+        {"header": "{display_b} output/task", "path": "tokens.{model_b}.by_complexity.{row_key}.avg_output_tokens", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
+        {"header": "{display_a} input/task", "path": "tokens.{model_a}.by_complexity.{row_key}.avg_input_tokens", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
+        {"header": "{display_b} input/task", "path": "tokens.{model_b}.by_complexity.{row_key}.avg_input_tokens", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
+        {"header": "{display_a} requests", "path": "tokens.{model_a}.by_complexity.{row_key}.avg_requests_per_task", "format": "{:.1f}", "class": "right", "cell_class": "right mono"},
+        {"header": "{display_b} requests", "path": "tokens.{model_b}.by_complexity.{row_key}.avg_requests_per_task", "format": "{:.1f}", "class": "right", "cell_class": "right mono"}
+      ],
+      "prose": {
+        "guidance": "Explain token breakdown patterns: output volume differences, input savings from caching, request batching efficiency. Note caveats about organic session differences."
+      }
+    },
+    "thinking-calibration-details": {
+      "title": "Thinking depth by complexity",
+      "data_source": "tokens",
+      "row_source": "by_complexity",
+      "row_order": ["trivial", "simple", "moderate", "complex", "major"],
+      "columns": [
+        {"header": "Complexity", "key": "_label", "cell_class": "label-cell"},
+        {"header": "{display_a} Thinking Ratio", "path": "tokens.{model_a}.by_complexity.{row_key}.thinking_ratio", "format": "pct", "class": "right", "cell_class": "right mono"},
+        {"header": "{display_b} Thinking Ratio", "path": "tokens.{model_b}.by_complexity.{row_key}.thinking_ratio", "format": "pct", "class": "right", "cell_class": "right mono"},
+        {"header": "{display_a} Thinking Chars (when used)", "path": "tokens.{model_a}.by_complexity.{row_key}.avg_thinking_chars_when_used", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
+        {"header": "{display_b} Thinking Chars (when used)", "path": "tokens.{model_b}.by_complexity.{row_key}.avg_thinking_chars_when_used", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
+        {"header": "{display_a} Text Chars", "path": "tokens.{model_a}.by_complexity.{row_key}.avg_text_chars", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
+        {"header": "{display_b} Text Chars", "path": "tokens.{model_b}.by_complexity.{row_key}.avg_text_chars", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
+        {"header": "{display_a} Think/Text", "numerator": "tokens.{model_a}.by_complexity.{row_key}.avg_thinking_chars_when_used", "denominator": "tokens.{model_a}.by_complexity.{row_key}.avg_text_chars", "format": "{:.2f}", "class": "right", "cell_class": "right mono"},
+        {"header": "{display_b} Think/Text", "numerator": "tokens.{model_b}.by_complexity.{row_key}.avg_thinking_chars_when_used", "denominator": "tokens.{model_b}.by_complexity.{row_key}.avg_text_chars", "format": "{:.2f}", "class": "right", "cell_class": "right mono"}
+      ],
+      "prose": {
+        "guidance": "Explain thinking calibration differences: how 4.6 reserves thinking for complex tasks while being more concise on trivial ones. Note the steeper gradient in thinking allocation."
+      }
+    }
+  },
+  "prose": {
+    "key_metrics": [
+      "tokens.{model_a}.overall.avg_cost_usd",
+      "tokens.{model_b}.overall.avg_cost_usd",
+      "tokens.{model_a}.overall.avg_output_tokens",
+      "tokens.{model_b}.overall.avg_output_tokens",
+      "tokens.{model_a}.overall.avg_input_tokens",
+      "tokens.{model_b}.overall.avg_input_tokens",
+      "tokens.{model_a}.overall.thinking_ratio",
+      "tokens.{model_b}.overall.thinking_ratio",
+      "tokens.{model_a}.overall.avg_requests_per_task",
+      "tokens.{model_b}.overall.avg_requests_per_task",
+      "tokens.{model_a}.overall.count",
+      "tokens.{model_b}.overall.count"
+    ],
+    "guidance": "This section covers token economy. Key narrative: despite more output, 4.6 achieves similar per-task cost through caching and batching. Verify all cost, token count, and ratio claims against the data."
+  }
+}

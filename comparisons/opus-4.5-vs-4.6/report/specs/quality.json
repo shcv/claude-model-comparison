@@ -1,0 +1,40 @@
+{
+  "section_id": "quality",
+  "data_sources": {
+    "stats": "analysis/stat-tests.json"
+  },
+  "tables": {
+    "satisfaction-stat-tests": {
+      "title": "Full statistical test details for satisfaction metrics",
+      "data_source": "stats",
+      "row_gen": "satisfaction_stats",
+      "prose": {
+        "guidance": "Present detailed statistical results for satisfaction metrics. Highlight Bonferroni-significant results (alignment score, failed rate) and note which tests survive correction vs. are marginal."
+      }
+    }
+  },
+  "prose": {
+    "key_metrics": [
+      "stats.metadata.sample_sizes.{model_a}",
+      "stats.metadata.sample_sizes.{model_b}",
+      "stats.metadata.bonferroni_threshold",
+      "stats.overall.proportions.[field=satisfaction_rate].{model_a}",
+      "stats.overall.proportions.[field=satisfaction_rate].{model_b}",
+      "stats.overall.proportions.[field=satisfaction_rate].p_value",
+      "stats.overall.proportions.[field=dissatisfaction_rate].{model_a}",
+      "stats.overall.proportions.[field=dissatisfaction_rate].{model_b}",
+      "stats.overall.proportions.[field=dissatisfaction_rate].p_value",
+      "stats.overall.proportions.[field=complete_rate].{model_a}",
+      "stats.overall.proportions.[field=complete_rate].{model_b}",
+      "stats.overall.proportions.[field=complete_rate].p_value",
+      "stats.overall.proportions.[field=failed_rate].{model_a}",
+      "stats.overall.proportions.[field=failed_rate].{model_b}",
+      "stats.overall.proportions.[field=failed_rate].p_value",
+      "stats.overall.mann_whitney.[field=alignment_score].p_value",
+      "stats.overall.mann_whitney.[field=alignment_score].cohens_d",
+      "stats.overall.mann_whitney.[field=alignment_score].mean",
+      "stats.overall.mann_whitney.[field=alignment_score].bonferroni_significant"
+    ],
+    "guidance": "This section covers output quality and satisfaction metrics. Key findings: alignment scores significantly higher for 4.6 (survives Bonferroni), lower failure rate (p<0.05 but not after correction), satisfaction/dissatisfaction not significant. Update stat-card values and bar-fill widths to match the data. The edit accuracy cross-reference in the final paragraph should match §3 findings."
+  }
+}

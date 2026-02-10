@@ -34,7 +34,7 @@ python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --ste
 python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --from stats
 ```
 
-Steps (in order): `collect`, `extract`, `classify`, `analyze`, `tokens`, `stats`, `edits`, `planning`, `compaction`, `report`.
+Steps (in order): `collect`, `extract`, `classify`, `analyze`, `tokens`, `stats`, `edits`, `planning`, `compaction`, `update`, `report`.
 
 Individual scripts can also be run directly with `--data-dir` and `--analysis-dir` arguments:
 
@@ -48,6 +48,9 @@ python scripts/stat_tests.py --data-dir comparisons/opus-4.5-vs-4.6/data --analy
 python scripts/analyze_edits.py --data-dir comparisons/opus-4.5-vs-4.6/data --analysis-dir comparisons/opus-4.5-vs-4.6/analysis
 python scripts/planning_analysis.py --data-dir comparisons/opus-4.5-vs-4.6/data --analysis-dir comparisons/opus-4.5-vs-4.6/analysis
 python scripts/analyze_compaction.py --data-dir comparisons/opus-4.5-vs-4.6/data --analysis-dir comparisons/opus-4.5-vs-4.6/analysis
+python scripts/update_sections.py --dir comparisons/opus-4.5-vs-4.6                          # update tables + prose
+python scripts/update_sections.py --dir comparisons/opus-4.5-vs-4.6 --tables-only            # tables only, no LLM
+python scripts/update_sections.py --dir comparisons/opus-4.5-vs-4.6 --sections cost --dry-run # preview changes
 python scripts/build_report.py --dir comparisons/opus-4.5-vs-4.6
 python scripts/build_report.py --dir comparisons/opus-4.5-vs-4.6 --check-stale  # check for outdated expansions
 ```
@@ -69,6 +72,27 @@ The report uses a source template (`report/report.html`) that gets built into th
 - **Invalidation**: `report/manifest.json` tracks section content hashes. Run `--check-stale` to see which expansions need updating after template edits.
 
 Edit the template at `report/report.html`, not the built output at `dist/public/report.html`.
+
+## Section Update System
+
+The `update` pipeline step (`scripts/update_sections.py`) auto-generates expansion tables from analysis data and LLM-checks prose against current numbers. It is driven by per-section spec files in `report/specs/`.
+
+### Spec files
+
+Each `report/specs/{section-id}.json` defines:
+- **`data_sources`**: analysis JSON files to load
+- **`tables`**: expansion table definitions (columns, row order, data paths)
+- **`prose`**: key metrics paths and guidance for LLM fact-checking
+
+Column paths use `{model_a}`, `{model_b}`, `{row_key}` placeholders. Display names use `{display_a}`, `{display_b}`.
+
+### Table generation
+
+`scripts/table_gen.py` is a pure computation module (no LLM). It generates HTML tables from spec + data. Complex tables (edit overlaps, stat tests) use custom row generators in `update_sections.py`.
+
+### Prose caching
+
+LLM results are cached in `report/.prose-cache/` keyed on content+data hash. Second runs are no-ops when data hasn't changed.
 
 ## Privacy
 

@@ -1,0 +1,53 @@
+{
+  "section_id": "edit-accuracy",
+  "data_sources": {
+    "edits": "analysis/edit-analysis.json"
+  },
+  "tables": {
+    "edit-accuracy-overview": {
+      "title": "Full edit overlap breakdown",
+      "data_source": "edits",
+      "row_gen": "edit_overview",
+      "prose": {
+        "guidance": "Explain edit rework volume differences and the significance of user-directed corrections as a quality signal. Note the lower user correction rate for 4.6."
+      }
+    },
+    "iterative-refinement-detail": {
+      "title": "Iterative refinement breakdown by complexity and duration",
+      "data_source": "edits",
+      "row_gen": "iterative_refinement",
+      "prose": {
+        "guidance": "Discuss factors driving the iterative refinement gap: user participation patterns, task granularity, self-selection of task difficulty. Note convergence at complex+ tasks."
+      }
+    },
+    "edit-triage-top-tasks": {
+      "title": "Highest-rework tasks by triage score",
+      "data_source": "edits",
+      "row_gen": "triage_top_tasks",
+      "prose": {
+        "guidance": "Compare worst-case rework between models. Note that 4.5's top scores are driven by user corrections, while 4.6's are more proactive (self-corrections and error recoveries)."
+      }
+    }
+  },
+  "prose": {
+    "key_metrics": [
+      "edits.{model_a}.total_edits",
+      "edits.{model_b}.total_edits",
+      "edits.{model_a}.total_writes",
+      "edits.{model_b}.total_writes",
+      "edits.{model_a}.total_overlaps",
+      "edits.{model_b}.total_overlaps",
+      "edits.{model_a}.rewrite_rate",
+      "edits.{model_b}.rewrite_rate",
+      "edits.{model_a}.by_classification.user_directed",
+      "edits.{model_b}.by_classification.user_directed",
+      "edits.{model_a}.by_classification.self_correction",
+      "edits.{model_b}.by_classification.self_correction",
+      "edits.{model_a}.by_classification.error_recovery",
+      "edits.{model_b}.by_classification.error_recovery",
+      "edits.{model_a}.by_classification.iterative_refinement",
+      "edits.{model_b}.by_classification.iterative_refinement"
+    ],
+    "guidance": "This section covers edit accuracy and rework patterns. Key signals: overlap volume, user-directed correction rate, and the qualitative shift from user-directed to proactive rework in 4.6."
+  }
+}

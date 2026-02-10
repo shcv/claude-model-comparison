@@ -1,0 +1,51 @@
+{
+  "section_id": "planning",
+  "data_sources": {
+    "planning": "analysis/planning-analysis.json"
+  },
+  "tables": {
+    "planning-complexity-detail": {
+      "title": "Planning alignment by complexity bin",
+      "data_source": "planning",
+      "row_gen": "planning_complexity",
+      "row_source": "by_complexity",
+      "row_order": ["trivial", "simple", "moderate", "complex+"],
+      "multi_header": [
+        {"header": "", "colspan": 1},
+        {"header": "Opus {display_a}", "colspan": 3, "class": "right"},
+        {"header": "Opus {display_b}", "colspan": 3, "class": "right"}
+      ],
+      "columns": [
+        {"header": "Complexity", "key": "_label", "cell_class": "label-cell"},
+        {"header": "Planned", "path": "planning.{model_a}.by_complexity.{row_key}.alignment_planned", "format": "dash_if_none", "class": "right", "cell_class": "right mono",
+         "_with_n": "planning.{model_a}.by_complexity.{row_key}.n_scored_planned"},
+        {"header": "Unplanned", "path": "planning.{model_a}.by_complexity.{row_key}.alignment_unplanned", "format": "{:.2f}", "class": "right", "cell_class": "right mono",
+         "_with_n": "planning.{model_a}.by_complexity.{row_key}.n_scored_unplanned"},
+        {"header": "&Delta;", "path": "planning.{model_a}.by_complexity.{row_key}.alignment_delta", "format": "delta", "class": "right", "cell_class": "right mono"},
+        {"header": "Planned", "path": "planning.{model_b}.by_complexity.{row_key}.alignment_planned", "format": "dash_if_none", "class": "right", "cell_class": "right mono",
+         "_with_n": "planning.{model_b}.by_complexity.{row_key}.n_scored_planned"},
+        {"header": "Unplanned", "path": "planning.{model_b}.by_complexity.{row_key}.alignment_unplanned", "format": "{:.2f}", "class": "right", "cell_class": "right mono",
+         "_with_n": "planning.{model_b}.by_complexity.{row_key}.n_scored_unplanned"},
+        {"header": "&Delta;", "path": "planning.{model_b}.by_complexity.{row_key}.alignment_delta", "format": "delta", "class": "right", "cell_class": "right mono"}
+      ],
+      "prose": {
+        "guidance": "Discuss planning alignment by complexity. Note very small sample sizes for planned tasks. The moderate bin is the most reliable indicator. Opus 4.6 shows consistently positive deltas."
+      }
+    }
+  },
+  "prose": {
+    "key_metrics": [
+      "planning.{model_a}.total_tasks",
+      "planning.{model_b}.total_tasks",
+      "planning.{model_a}.total_planned",
+      "planning.{model_b}.total_planned",
+      "planning.{model_a}.planning_rate_pct",
+      "planning.{model_b}.planning_rate_pct",
+      "planning.{model_a}.overall_alignment_planned",
+      "planning.{model_b}.overall_alignment_planned",
+      "planning.{model_a}.overall_alignment_unplanned",
+      "planning.{model_b}.overall_alignment_unplanned"
+    ],
+    "guidance": "This section covers planning behavior. Key finding: Opus 4.5 never plans (0% rate), while 4.6 plans 4% of the time, mostly on complex+ tasks. Small sample caveat applies."
+  }
+}

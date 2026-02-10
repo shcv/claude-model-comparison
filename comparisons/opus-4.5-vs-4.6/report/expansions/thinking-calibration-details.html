@@ -1,78 +1,73 @@
 <!-- title: Thinking depth by complexity -->
-
-<p>
-The thinking calibration differences between Opus 4.5 and 4.6 become more pronounced when broken down by task complexity. While 4.5 applies extensive thinking across all complexity levels (66-94% of tasks use thinking), 4.6 shows a steeper gradient, reserving its thinking budget primarily for complex and moderate tasks (90-100%) while dramatically reducing thinking on trivial tasks (29%). This selective deployment results in 4.6 using 68% less thinking on trivial tasks (175 vs 550 chars) while maintaining comparable or higher thinking-to-text ratios on complex work.
-</p>
-
 <table>
-<thead>
-<tr>
-<th class="label-cell">Complexity</th>
-<th class="right">4.5 Thinking Ratio</th>
-<th class="right">4.6 Thinking Ratio</th>
-<th class="right">4.5 Thinking Chars (when used)</th>
-<th class="right">4.6 Thinking Chars (when used)</th>
-<th class="right">4.5 Text Chars</th>
-<th class="right">4.6 Text Chars</th>
-<th class="right">4.5 Think/Text</th>
-<th class="right">4.6 Think/Text</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="label-cell">Trivial</td>
-<td class="right mono">66%</td>
-<td class="right mono">29%</td>
-<td class="right mono">833</td>
-<td class="right mono">604</td>
-<td class="right mono">696</td>
-<td class="right mono">492</td>
-<td class="right mono">0.79</td>
-<td class="right mono">0.36</td>
-</tr>
-<tr>
-<td class="label-cell">Simple</td>
-<td class="right mono">94%</td>
-<td class="right mono">58%</td>
-<td class="right mono">1,689</td>
-<td class="right mono">1,104</td>
-<td class="right mono">787</td>
-<td class="right mono">1,162</td>
-<td class="right mono">2.02</td>
-<td class="right mono">0.55</td>
-</tr>
-<tr>
-<td class="label-cell">Moderate</td>
-<td class="right mono">92%</td>
-<td class="right mono">90%</td>
-<td class="right mono">3,739</td>
-<td class="right mono">4,120</td>
-<td class="right mono">1,316</td>
-<td class="right mono">1,709</td>
-<td class="right mono">2.60</td>
-<td class="right mono">2.18</td>
-</tr>
-<tr>
-<td class="label-cell">Complex</td>
-<td class="right mono">90%</td>
-<td class="right mono">98%</td>
-<td class="right mono">7,797</td>
-<td class="right mono">7,075</td>
-<td class="right mono">2,302</td>
-<td class="right mono">3,159</td>
-<td class="right mono">3.06</td>
-<td class="right mono">2.19</td>
-</tr>
-<tr>
-<td class="label-cell">Major</td>
-<td class="right mono">82%</td>
-<td class="right mono">100%</td>
-<td class="right mono">9,906</td>
-<td class="right mono">6,196</td>
-<td class="right mono">4,482</td>
-<td class="right mono">4,269</td>
-<td class="right mono">1.81</td>
-<td class="right mono">1.45</td>
-</tr>
-</tbody>
+    <thead>
+        <tr>
+            <th>Complexity</th>
+            <th class="right">4.5 Thinking Ratio</th>
+            <th class="right">4.6 Thinking Ratio</th>
+            <th class="right">4.5 Thinking Chars (when used)</th>
+            <th class="right">4.6 Thinking Chars (when used)</th>
+            <th class="right">4.5 Text Chars</th>
+            <th class="right">4.6 Text Chars</th>
+            <th class="right">4.5 Think/Text</th>
+            <th class="right">4.6 Think/Text</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="label-cell">Trivial</td>
+            <td class="right mono">57%</td>
+            <td class="right mono">30%</td>
+            <td class="right mono">683</td>
+            <td class="right mono">506</td>
+            <td class="right mono">597</td>
+            <td class="right mono">464</td>
+            <td class="right mono">1.14</td>
+            <td class="right mono">1.09</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Simple</td>
+            <td class="right mono">100%</td>
+            <td class="right mono">63%</td>
+            <td class="right mono">1,514</td>
+            <td class="right mono">1,024</td>
+            <td class="right mono">475</td>
+            <td class="right mono">1,483</td>
+            <td class="right mono">3.19</td>
+            <td class="right mono">0.69</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Moderate</td>
+            <td class="right mono">100%</td>
+            <td class="right mono">93%</td>
+            <td class="right mono">3,421</td>
+            <td class="right mono">3,268</td>
+            <td class="right mono">1,487</td>
+            <td class="right mono">2,560</td>
+            <td class="right mono">2.30</td>
+            <td class="right mono">1.28</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Complex</td>
+            <td class="right mono">83%</td>
+            <td class="right mono">88%</td>
+            <td class="right mono">8,692</td>
+            <td class="right mono">9,733</td>
+            <td class="right mono">2,097</td>
+            <td class="right mono">3,277</td>
+            <td class="right mono">4.14</td>
+            <td class="right mono">2.97</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Major</td>
+            <td class="right mono">50%</td>
+            <td class="right mono">0%</td>
+            <td class="right mono">8,325</td>
+            <td class="right mono">0</td>
+            <td class="right mono">2,145</td>
+            <td class="right mono">9,911</td>
+            <td class="right mono">3.88</td>
+            <td class="right mono">0.00</td>
+        </tr>
+    </tbody>
 </table>

@@ -1,0 +1,53 @@
+{
+  "section_id": "methodology",
+  "data_sources": {
+    "stats": "analysis/stat-tests.json"
+  },
+  "tables": {
+    "stat-test-full-results": {
+      "title": "Complete statistical test results ({total_tests} tests)",
+      "data_source": "stats",
+      "row_gen": "stat_tests",
+      "test_groups": [
+        {
+          "label": "Mann-Whitney U",
+          "test_type": "mann_whitney",
+          "data_key": "mann_whitney",
+          "fields": ["alignment_score", "duration_seconds", "tool_calls", "files_touched", "lines_added", "lines_removed", "lines_per_minute", "tools_per_file"]
+        },
+        {
+          "label": "Proportion Test",
+          "test_type": "proportions",
+          "data_key": "proportions",
+          "fields": ["satisfaction_rate", "dissatisfaction_rate", "complete_rate", "failed_rate", "scope_expanded_rate", "one_shot_rate", "good_execution_rate"]
+        },
+        {
+          "label": "Chi-square",
+          "test_type": "chi_square",
+          "data_key": "chi_square",
+          "fields": ["task_completion", "scope_management", "iteration_required", "error_recovery", "communication_quality", "autonomy_level"]
+        }
+      ],
+      "columns": [
+        {"header": "Test Category", "class": "label-cell", "cell_class": "label-cell"},
+        {"header": "Field", "class": "label-cell", "cell_class": "label-cell"},
+        {"header": "p-value", "class": "right", "cell_class": "right mono"},
+        {"header": "Effect Size", "class": "right", "cell_class": "right mono"},
+        {"header": "Bonferroni", "class": "right", "cell_class": "right"},
+        {"header": "Result", "cell_class": ""}
+      ],
+      "prose": {
+        "guidance": "Present the complete statistical test battery. Highlight Bonferroni-corrected significance threshold and which tests survive it."
+      }
+    }
+  },
+  "prose": {
+    "key_metrics": [
+      "stats.metadata.total_tests",
+      "stats.metadata.bonferroni_threshold",
+      "stats.metadata.sample_sizes.{model_a}",
+      "stats.metadata.sample_sizes.{model_b}"
+    ],
+    "guidance": "This is the methodology section. Key data: total tests run, Bonferroni threshold, sample sizes. Verify test count and significance claims."
+  }
+}
