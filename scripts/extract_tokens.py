@@ -373,8 +373,8 @@ def main():
         print(f"Extracting tokens for {model}")
         print(f"{'='*60}")
 
-        # Extract tokens
-        tasks = extract_all_tokens(sessions_file, model)
+        # Extract tokens (include meta sessions for consistent cost reporting)
+        tasks = extract_all_tokens(sessions_file, model, include_meta=True)
         print(f"  Total tasks: {len(tasks)}")
 
         # Save raw per-task token data
