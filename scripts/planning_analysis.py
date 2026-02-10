@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Cross-tabulate planning mode usage by complexity and alignment scores.
 
-For each model, identifies tasks that used EnterPlanMode and cross-tabulates
-planning rates by complexity bin. Joins with LLM analysis alignment scores
-to compare outcomes for planned vs unplanned tasks.
+For each model, identifies tasks that used EnterPlanMode (from canonical task
+`used_planning` field) and cross-tabulates planning rates by complexity bin.
+Joins with LLM analysis alignment scores to compare outcomes for planned vs
+unplanned tasks.
 
 Output (to analysis/):
   - planning-analysis.json: per-model planning rates and alignment correlations
@@ -16,13 +17,24 @@ Usage:
 
 import argparse
 import json
+import sys
 from collections import defaultdict
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from models import discover_models
 
 COMPLEXITY_ORDER = ["trivial", "simple", "moderate", "complex", "major"]
 
 
 def load_tasks(data_dir, model):
+    """Load canonical tasks for a model."""
+    # Prefer canonical tasks
+    canonical_path = data_dir / f"tasks-canonical-{model}.json"
+    if canonical_path.exists():
+        with open(canonical_path) as f:
+            return json.load(f)
+    # Fall back to classified tasks
     path = data_dir / f"tasks-classified-{model}.json"
     with open(path) as f:
         return json.load(f)
@@ -38,11 +50,27 @@ def load_llm_analysis(analysis_dir, model):
 
 
 def has_planning(task):
-    """Check if a task used EnterPlanMode in its tool calls."""
+    """Check if a task used planning mode.
+
+    Uses canonical `used_planning` field if available, falls back to
+    checking tool_calls for EnterPlanMode.
+    """
+    if 'used_planning' in task:
+        return bool(task['used_planning'])
+    # Fallback for classified tasks without used_planning
     for tc in task.get("tool_calls", []):
         if tc.get("name") == "EnterPlanMode":
             return True
     return False
+
+
+def get_complexity(task):
+    """Extract complexity from a canonical or classified task."""
+    # Canonical tasks may not have classification dict; check both
+    cl = task.get("classification", {})
+    if isinstance(cl, dict):
+        return cl.get("complexity", "unknown")
+    return "unknown"
 
 
 def analyze_model(data_dir, analysis_dir, model):
@@ -50,18 +78,35 @@ def analyze_model(data_dir, analysis_dir, model):
     tasks = load_tasks(data_dir, model)
     llm = load_llm_analysis(analysis_dir, model)
 
+    # Filter meta tasks
+    tasks = [t for t in tasks if not t.get('is_meta', False)]
+
+    # For canonical tasks, load classified data for complexity info
+    classified_by_id = {}
+    classified_path = data_dir / f"tasks-classified-{model}.json"
+    if classified_path.exists():
+        with open(classified_path) as f:
+            for t in json.load(f):
+                classified_by_id[t['task_id']] = t
+
     # Build cross-tab: complexity -> {planned: count, unplanned: count}
     cross_tab = defaultdict(lambda: {"planned": 0, "unplanned": 0})
     # Alignment scores: complexity -> {planned: [scores], unplanned: [scores]}
     alignment = defaultdict(lambda: {"planned": [], "unplanned": []})
 
     for task in tasks:
-        complexity = task.get("classification", {}).get("complexity", "unknown")
+        task_id = task['task_id']
+
+        # Get complexity from classified data if available
+        if task_id in classified_by_id:
+            complexity = get_complexity(classified_by_id[task_id])
+        else:
+            complexity = get_complexity(task)
+
         planned = has_planning(task)
         key = "planned" if planned else "unplanned"
         cross_tab[complexity][key] += 1
 
-        task_id = task["task_id"]
         if task_id in llm and llm[task_id].get("alignment_score") is not None:
             alignment[complexity][key].append(llm[task_id]["alignment_score"])
 
@@ -194,7 +239,7 @@ def analyze_model(data_dir, analysis_dir, model):
 def main():
     parser = argparse.ArgumentParser(description='Cross-tabulate planning mode usage by complexity')
     parser.add_argument('--data-dir', type=Path, required=True,
-                        help='Data directory with tasks-classified-*.json files')
+                        help='Data directory with tasks-canonical-*.json files')
     parser.add_argument('--analysis-dir', type=Path, default=None,
                         help='Output directory for analysis results (default: data/../analysis)')
     args = parser.parse_args()
@@ -203,16 +248,13 @@ def main():
     analysis_dir = (args.analysis_dir or data_dir.parent / 'analysis').resolve()
     analysis_dir.mkdir(parents=True, exist_ok=True)
 
-    # Auto-discover models from tasks-classified-*.json
-    classified_files = sorted(data_dir.glob('tasks-classified-*.json'))
-    if not classified_files:
-        print(f"Error: No tasks-classified-*.json files found in {data_dir}")
+    # Auto-discover models from canonical or classified files
+    models = discover_models(data_dir, prefix="tasks-canonical")
+    if not models:
+        models = discover_models(data_dir, prefix="tasks-classified")
+    if not models:
+        print(f"Error: No task files found in {data_dir}")
         return
-
-    models = []
-    for cf in classified_files:
-        model_name = cf.stem.replace('tasks-classified-', '')
-        models.append(model_name)
 
     print(f"Found {len(models)} model(s): {', '.join(models)}")
 
@@ -228,9 +270,23 @@ def main():
 
         for model in models:
             tasks = load_tasks(data_dir, model)
+            tasks = [t for t in tasks if not t.get('is_meta', False)]
+
+            # Load classified for complexity
+            classified_by_id = {}
+            classified_path = data_dir / f"tasks-classified-{model}.json"
+            if classified_path.exists():
+                with open(classified_path) as f:
+                    for t in json.load(f):
+                        classified_by_id[t['task_id']] = t
+
             by_complexity = defaultdict(lambda: {"total": 0, "planned": 0})
             for t in tasks:
-                c = t.get("classification", {}).get("complexity", "unknown")
+                tid = t['task_id']
+                if tid in classified_by_id:
+                    c = get_complexity(classified_by_id[tid])
+                else:
+                    c = get_complexity(t)
                 by_complexity[c]["total"] += 1
                 if has_planning(t):
                     by_complexity[c]["planned"] += 1

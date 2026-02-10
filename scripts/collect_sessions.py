@@ -282,7 +282,7 @@ def save_results(sessions: dict, output_dir: Path):
 def main():
     import argparse
     parser = argparse.ArgumentParser(description='Collect Claude Code sessions by model')
-    parser.add_argument('--days', type=int, default=7, help='Days back to scan (default: 7)')
+    parser.add_argument('--days', type=int, default=90, help='Days back to scan (default: 90)')
     parser.add_argument('--data-dir', type=Path, default=Path('data'),
                         help='Output directory for session files (default: data)')
     parser.add_argument('--exclude-projects', nargs='*', default=['model-comparison'],

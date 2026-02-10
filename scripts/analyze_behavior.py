@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-"""
-Behavioral Analysis: Planning, Subagents, and Parallelization
+"""Behavioral Analysis: Planning, Subagents, and Parallelization
 
-Extracts and compares behavioral patterns from Claude session data:
+Extracts and compares behavioral patterns from canonical task data:
 - Subagent (Task tool) usage patterns
 - EnterPlanMode usage
 - Parallel tool calls
@@ -12,21 +11,15 @@ Extracts and compares behavioral patterns from Claude session data:
 
 import json
 import re
+import sys
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from typing import Optional
 import argparse
 
-
-@dataclass
-class SubagentCall:
-    """Single Task tool invocation."""
-    subagent_type: str
-    description: str
-    prompt: str
-    run_in_background: bool
-    user_prompt: str  # Context: what user asked for
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from models import discover_models
 
 
 @dataclass
@@ -99,13 +92,6 @@ PLANNING_KEYWORDS = [
     "what's the best way", 'think through'
 ]
 
-CREATE_MODULE_PATTERN = re.compile(
-    r'\b(create|implement|build|write)\b.*\b(module|file|class|component|helper|server|agent)\b',
-    re.IGNORECASE
-)
-
-FIX_PATTERN = re.compile(r'\b(fix|repair|resolve|patch)\b', re.IGNORECASE)
-
 
 def is_user_requested_agents(user_prompt: str) -> bool:
     """Check if user explicitly requested agent usage."""
@@ -119,39 +105,11 @@ def is_user_requested_planning(user_prompt: str) -> bool:
     return any(kw in prompt_lower for kw in PLANNING_KEYWORDS)
 
 
-def categorize_gp_scope(description: str, prompt: str) -> str:
-    """Categorize general-purpose task scope."""
-    combined = f"{description} {prompt}"
-
-    if CREATE_MODULE_PATTERN.search(combined):
-        return 'create_module'
-    elif FIX_PATTERN.search(combined):
-        return 'fix_targeted'
-    else:
-        return 'other'
-
-
-def extract_user_text(content) -> str:
-    """Extract text from message content."""
-    if isinstance(content, str):
-        return content
-    if isinstance(content, list):
-        texts = []
-        for block in content:
-            if isinstance(block, dict) and block.get('type') == 'text':
-                texts.append(block.get('text', ''))
-            elif isinstance(block, str):
-                texts.append(block)
-        return ' '.join(texts)
-    return ''
-
-
 def classify_agent_directive(prompt: str) -> str:
     """Classify the type of agent directive in the prompt.
 
     Returns: 'parallel', 'use_agents', or None
     """
-    import re
     prompt_lower = prompt.lower()
 
     # Check for explicit parallel
@@ -169,20 +127,10 @@ def classify_agent_directive(prompt: str) -> str:
     return None
 
 
-def has_parallel_directive(prompt: str) -> bool:
-    """Check if user requested parallel execution."""
-    return classify_agent_directive(prompt) == 'parallel'
-
-
 def compute_subagent_success(data_dir: Path, model: str, metrics: BehaviorMetrics):
-    """Cross-reference tasks-deep with llm-analysis to compute subagent success rates.
-
-    For each task, determines whether it used subagents (Task tool), then
-    compares alignment scores and satisfaction between subagent-using and
-    non-subagent tasks.
-    """
+    """Cross-reference tasks-canonical with llm-analysis to compute subagent success rates."""
     model_suffix = model.replace('-', '-')
-    deep_path = data_dir / f'tasks-deep-{model_suffix}.json'
+    deep_path = data_dir / f'tasks-canonical-{model_suffix}.json'
     analysis_dir = data_dir.parent / 'analysis'
     llm_path = analysis_dir / f'llm-analysis-{model_suffix}.json'
 
@@ -198,7 +146,6 @@ def compute_subagent_success(data_dir: Path, model: str, metrics: BehaviorMetric
     # Index LLM analysis by task_id
     llm_by_task = {a['task_id']: a for a in llm_analyses}
 
-    # Categorize tasks: with-subagents vs without
     satisfaction = {
         'with_subagents': {'satisfied': 0, 'neutral': 0, 'dissatisfied': 0, 'total': 0,
                            'scores': [], 'completions': Counter()},
@@ -214,11 +161,9 @@ def compute_subagent_success(data_dir: Path, model: str, metrics: BehaviorMetric
         has_subagent = 'Task' in tool_names
         category = 'with_subagents' if has_subagent else 'without_subagents'
 
-        # Cross-reference with LLM analysis
         llm = llm_by_task.get(task_id)
         if llm:
             satisfaction[category]['total'] += 1
-
             sentiment = llm.get('normalized_user_sentiment', 'neutral')
             if sentiment == 'satisfied':
                 satisfaction[category]['satisfied'] += 1
@@ -232,12 +177,10 @@ def compute_subagent_success(data_dir: Path, model: str, metrics: BehaviorMetric
                 satisfaction[category]['scores'].append(score)
 
             completion = llm.get('task_completion', 'unknown')
-            # Normalize long completion strings like "complete - the agent..."
             if ' - ' in completion:
                 completion = completion.split(' - ')[0].strip()
             satisfaction[category]['completions'][completion] += 1
 
-    # Store results - convert Counters to plain dicts for serialization
     metrics.subagent_task_satisfaction = {
         k: {
             'satisfied': v['satisfied'],
@@ -250,14 +193,11 @@ def compute_subagent_success(data_dir: Path, model: str, metrics: BehaviorMetric
         for k, v in satisfaction.items()
     }
 
-    # Note: subagent_prompt_lengths and avg are computed in analyze_session
-    # from raw session data (tasks-deep doesn't include prompt text)
-
 
 def compute_tool_ngrams(data_dir: Path, model: str, metrics: BehaviorMetrics):
-    """Extract 2-gram and 3-gram tool call sequences from tasks-deep data."""
+    """Extract 2-gram and 3-gram tool call sequences from tasks-canonical data."""
     model_suffix = model.replace('-', '-')
-    deep_path = data_dir / f'tasks-deep-{model_suffix}.json'
+    deep_path = data_dir / f'tasks-canonical-{model_suffix}.json'
 
     if not deep_path.exists():
         print(f"  Skipping n-grams: missing {deep_path}")
@@ -276,12 +216,10 @@ def compute_tool_ngrams(data_dir: Path, model: str, metrics: BehaviorMetrics):
         if len(names) < 2:
             continue
 
-        # Extract 2-grams
         for i in range(len(names) - 1):
             bigram = f"{names[i]}->{names[i+1]}"
             bigrams[bigram] += 1
 
-        # Extract 3-grams
         if len(names) >= 3:
             for i in range(len(names) - 2):
                 trigram = f"{names[i]}->{names[i+1]}->{names[i+2]}"
@@ -293,163 +231,105 @@ def compute_tool_ngrams(data_dir: Path, model: str, metrics: BehaviorMetrics):
     metrics.common_3grams = trigrams.most_common(10)
 
 
-def analyze_session(session_path: Path, metrics: BehaviorMetrics):
-    """Analyze a single session file."""
-    try:
-        with open(session_path, 'r', encoding='utf-8') as f:
-            lines = [json.loads(line) for line in f if line.strip()]
-    except Exception as e:
-        print(f"Error reading {session_path}: {e}")
-        return
+def analyze_canonical_tasks(tasks: list[dict], metrics: BehaviorMetrics):
+    """Aggregate behavioral metrics from canonical task records."""
+    session_ids = set()
 
-    last_user_prompt = ""
-    task_tools_in_current_task = set()
-    current_task_agents = []  # Track agents for directive compliance
+    for task in tasks:
+        if task.get('is_meta', False):
+            continue
 
-    for msg in lines:
-        msg_type = msg.get('type')
-
-        if msg_type == 'user':
-            content = msg.get('message', {}).get('content', [])
-            # Skip tool results
-            if isinstance(content, list):
-                if any(isinstance(b, dict) and b.get('type') == 'tool_result' for b in content):
-                    continue
-
-            text = extract_user_text(content)
-            if text.strip() and not text.startswith('<'):
-                # New user message = potentially new task
-                if task_tools_in_current_task:
-                    metrics.total_tasks += 1
-                    if 'Task' in task_tools_in_current_task:
-                        metrics.tasks_with_subagents += 1
-                    if 'EnterPlanMode' in task_tools_in_current_task:
-                        metrics.tasks_with_planning += 1
-
-                    # Check directive compliance
-                    if current_task_agents:
-                        directive = classify_agent_directive(last_user_prompt)
-                        if directive:
-                            bg_count = sum(1 for a in current_task_agents if a.get('background', False))
-                            task_info = {
-                                'agents': len(current_task_agents),
-                                'background': bg_count
-                            }
-
-                            if directive == 'parallel':
-                                metrics.parallel_directive_tasks += 1
-                                metrics.parallel_directive_agents += len(current_task_agents)
-                                metrics.parallel_directive_background += bg_count
-                                metrics.parallel_directive_per_task.append(task_info)
-                            elif directive == 'use_agents':
-                                metrics.useagents_directive_tasks += 1
-                                metrics.useagents_directive_agents += len(current_task_agents)
-                                metrics.useagents_directive_background += bg_count
-                                metrics.useagents_directive_per_task.append(task_info)
-
-                last_user_prompt = text
-                task_tools_in_current_task = set()
-                current_task_agents = []
-
-        elif msg_type == 'assistant':
-            content = msg.get('message', {}).get('content', [])
-            if not isinstance(content, list):
-                continue
-
-            # Count tool_use blocks in this message
-            tool_uses = [b for b in content if isinstance(b, dict) and b.get('type') == 'tool_use']
-
-            if tool_uses:
-                metrics.messages_with_tools += 1
-                if len(tool_uses) > 1:
-                    metrics.messages_with_parallel += 1
-                    metrics.max_parallel_tools = max(metrics.max_parallel_tools, len(tool_uses))
-
-            for block in tool_uses:
-                tool_name = block.get('name', '')
-                task_tools_in_current_task.add(tool_name)
-
-                if tool_name == 'Task':
-                    inp = block.get('input', {})
-                    subagent_type = inp.get('subagent_type', 'unknown')
-                    description = inp.get('description', '')
-                    prompt = inp.get('prompt', '')
-                    background = inp.get('run_in_background', False)
-
-                    metrics.total_subagent_calls += 1
-                    metrics.subagent_types[subagent_type] = metrics.subagent_types.get(subagent_type, 0) + 1
-
-                    # Track subagent prompt length
-                    if prompt:
-                        metrics.subagent_prompt_lengths.append(len(prompt))
-
-                    # Track for directive compliance
-                    current_task_agents.append({'background': background})
-
-                    if background:
-                        metrics.background_tasks += 1
-                    else:
-                        metrics.foreground_tasks += 1
-
-                    # User requested vs autonomous
-                    if is_user_requested_agents(last_user_prompt):
-                        metrics.subagent_user_requested += 1
-                    else:
-                        metrics.subagent_autonomous += 1
-
-                    # General-purpose breakdown
-                    if subagent_type == 'general-purpose':
-                        metrics.gp_total += 1
-
-                        if is_user_requested_agents(last_user_prompt):
-                            metrics.gp_user_requested += 1
-                        else:
-                            metrics.gp_autonomous += 1
-
-                        scope = categorize_gp_scope(description, prompt)
-                        if scope == 'create_module':
-                            metrics.gp_create_module += 1
-                        elif scope == 'fix_targeted':
-                            metrics.gp_fix_targeted += 1
-                        else:
-                            metrics.gp_other += 1
-
-                elif tool_name == 'EnterPlanMode':
-                    if is_user_requested_planning(last_user_prompt):
-                        metrics.planning_user_requested += 1
-                    else:
-                        metrics.planning_autonomous += 1
-
-    # Finalize last task
-    if task_tools_in_current_task:
         metrics.total_tasks += 1
-        if 'Task' in task_tools_in_current_task:
+        session_ids.add(task['session_id'])
+
+        user_prompt = task.get('user_prompt', '') or ''
+
+        # Subagent usage
+        if task.get('used_subagents'):
             metrics.tasks_with_subagents += 1
-        if 'EnterPlanMode' in task_tools_in_current_task:
+            count = task.get('subagent_count', 0)
+            metrics.total_subagent_calls += count
+
+            # Track subagent types
+            for st in task.get('subagent_types', []):
+                metrics.subagent_types[st] = metrics.subagent_types.get(st, 0) + 1
+
+            # Background vs foreground from run_in_background_count
+            bg = task.get('run_in_background_count', 0)
+            fg = count - bg
+            metrics.background_tasks += bg
+            metrics.foreground_tasks += fg
+
+            # General-purpose breakdown
+            gp_count = sum(1 for st in task.get('subagent_types', [])
+                           if st == 'general-purpose')
+            metrics.gp_total += gp_count
+
+            # User-requested vs autonomous (task-level classification)
+            if is_user_requested_agents(user_prompt):
+                metrics.subagent_user_requested += count
+                metrics.gp_user_requested += gp_count
+            else:
+                metrics.subagent_autonomous += count
+                metrics.gp_autonomous += gp_count
+
+            # Directive compliance
+            directive = classify_agent_directive(user_prompt)
+            if directive:
+                task_info = {
+                    'agents': count,
+                    'background': bg,
+                }
+                if directive == 'parallel':
+                    metrics.parallel_directive_tasks += 1
+                    metrics.parallel_directive_agents += count
+                    metrics.parallel_directive_background += bg
+                    metrics.parallel_directive_per_task.append(task_info)
+                elif directive == 'use_agents':
+                    metrics.useagents_directive_tasks += 1
+                    metrics.useagents_directive_agents += count
+                    metrics.useagents_directive_background += bg
+                    metrics.useagents_directive_per_task.append(task_info)
+
+        # Planning
+        if task.get('used_planning'):
             metrics.tasks_with_planning += 1
+            if is_user_requested_planning(user_prompt):
+                metrics.planning_user_requested += 1
+            else:
+                metrics.planning_autonomous += 1
+
+        # Parallel tool calls: parallel_tool_messages is the count of
+        # assistant messages with >1 tool_use block
+        ptm = task.get('parallel_tool_messages', 0)
+        if ptm > 0:
+            metrics.messages_with_parallel += ptm
+
+        # Count total tool-bearing messages from tool_calls length as approximation
+        # (each tool call is one invocation; messages_with_tools counts messages)
+        tc_count = len(task.get('tool_calls', []))
+        if tc_count > 0:
+            # We don't have exact messages_with_tools from canonical;
+            # approximate: at least 1 message per task with tools
+            metrics.messages_with_tools += max(tc_count - ptm, 0) + ptm
+
+    metrics.total_sessions = len(session_ids)
 
 
-def analyze_model(sessions_file: Path, model: str) -> BehaviorMetrics:
-    """Analyze all sessions for a model."""
-    with open(sessions_file, 'r', encoding='utf-8') as f:
-        sessions = json.load(f)
+def analyze_model(data_dir: Path, model: str) -> BehaviorMetrics:
+    """Analyze all canonical tasks for a model."""
+    canonical_path = data_dir / f'tasks-canonical-{model}.json'
+    if not canonical_path.exists():
+        print(f"Error: {canonical_path} not found")
+        return BehaviorMetrics(model=model)
+
+    with open(canonical_path, 'r', encoding='utf-8') as f:
+        tasks = json.load(f)
 
     metrics = BehaviorMetrics(model=model)
-    metrics.total_sessions = len(sessions)
+    analyze_canonical_tasks(tasks, metrics)
 
-    for session in sessions:
-        session_path = Path(session['file_path'])
-        if session_path.exists():
-            analyze_session(session_path, metrics)
-
-    # Compute avg subagent prompt length from session data
-    if metrics.subagent_prompt_lengths:
-        metrics.avg_subagent_prompt_length = (
-            sum(metrics.subagent_prompt_lengths) / len(metrics.subagent_prompt_lengths)
-        )
-
-    # Cross-reference with tasks-deep and llm-analysis
-    data_dir = sessions_file.parent
+    # Cross-reference with tasks-canonical and llm-analysis
     compute_subagent_success(data_dir, model, metrics)
     compute_tool_ngrams(data_dir, model, metrics)
 
@@ -500,9 +380,6 @@ def print_comparison(opus_4_5: BehaviorMetrics, opus_4_6: BehaviorMetrics):
     print(f"{'User requested':<35} {opus_4_5.gp_user_requested:>15} {opus_4_6.gp_user_requested:>15}")
     print(f"{'Autonomous':<35} {opus_4_5.gp_autonomous:>15} {opus_4_6.gp_autonomous:>15}")
     print(f"{'  % autonomous':<35} {pct(opus_4_5.gp_autonomous, opus_4_5.gp_total):>15} {pct(opus_4_6.gp_autonomous, opus_4_6.gp_total):>15}")
-    print(f"{'Create module/file':<35} {opus_4_5.gp_create_module:>15} {opus_4_6.gp_create_module:>15}")
-    print(f"{'Fix targeted issue':<35} {opus_4_5.gp_fix_targeted:>15} {opus_4_6.gp_fix_targeted:>15}")
-    print(f"{'Other':<35} {opus_4_5.gp_other:>15} {opus_4_6.gp_other:>15}")
 
     print("\n## Planning (EnterPlanMode)")
     print(f"{'Metric':<35} {'Opus 4.5':>15} {'Opus 4.6':>15}")
@@ -529,7 +406,6 @@ def print_comparison(opus_4_5: BehaviorMetrics, opus_4_6: BehaviorMetrics):
 
     print("\n## Directive Compliance: User-Directed Agent Usage")
 
-    # Parallel directive
     print(f"\n### 'Parallel' Directive")
     print(f"{'Metric':<35} {'Opus 4.5':>15} {'Opus 4.6':>15}")
     print("-" * 65)
@@ -538,7 +414,6 @@ def print_comparison(opus_4_5: BehaviorMetrics, opus_4_6: BehaviorMetrics):
     print(f"{'Background (true parallel)':<35} {opus_4_5.parallel_directive_background:>15} {opus_4_6.parallel_directive_background:>15}")
     print(f"{'  % actually parallel':<35} {pct(opus_4_5.parallel_directive_background, opus_4_5.parallel_directive_agents):>15} {pct(opus_4_6.parallel_directive_background, opus_4_6.parallel_directive_agents):>15}")
 
-    # Use agents directive
     print(f"\n### 'Use Agents' Directive (non-parallel)")
     print(f"{'Metric':<35} {'Opus 4.5':>15} {'Opus 4.6':>15}")
     print("-" * 65)
@@ -573,7 +448,6 @@ def print_comparison(opus_4_5: BehaviorMetrics, opus_4_6: BehaviorMetrics):
         print(f"{'    Avg alignment score':<35} {o_data.get('avg_alignment', 0):>15.2f} {f_data.get('avg_alignment', 0):>15.2f}")
         print(f"{'    % satisfied':<35} {pct(o_data.get('satisfied', 0), o_total):>15} {pct(f_data.get('satisfied', 0), f_total):>15}")
 
-        # Show completion breakdown
         o_comp = o_data.get('completions', {})
         f_comp = f_data.get('completions', {})
         all_comp = sorted(set(o_comp.keys()) | set(f_comp.keys()))
@@ -666,9 +540,9 @@ def generate_org_report(opus_4_5: BehaviorMetrics, opus_4_6: BehaviorMetrics, ou
         "",
         "| Scope | Opus 4.5 | Opus 4.6 |",
         "|-------|----------|----------|",
-        f"| Create module/file | {opus_4_5.gp_create_module} | {opus_4_6.gp_create_module} |",
-        f"| Fix targeted issue | {opus_4_5.gp_fix_targeted} | {opus_4_6.gp_fix_targeted} |",
-        f"| Other | {opus_4_5.gp_other} | {opus_4_6.gp_other} |",
+        f"| Total GP | {opus_4_5.gp_total} | {opus_4_6.gp_total} |",
+        f"| User requested | {opus_4_5.gp_user_requested} | {opus_4_6.gp_user_requested} |",
+        f"| Autonomous | {opus_4_5.gp_autonomous} | {opus_4_6.gp_autonomous} |",
         "",
     ])
 
@@ -785,33 +659,33 @@ def main():
                         help='Generate org-mode report')
     args = parser.parse_args()
 
-    opus_4_5_sessions = args.data_dir / 'sessions-opus-4-5.json'
-    opus_4_6_sessions = args.data_dir / 'sessions-opus-4-6.json'
-
-    if not opus_4_5_sessions.exists() or not opus_4_6_sessions.exists():
-        print(f"Error: Need both {opus_4_5_sessions} and {opus_4_6_sessions}")
+    models = discover_models(args.data_dir, prefix="tasks-canonical")
+    if len(models) < 2:
+        # Fall back to session file discovery
+        models = discover_models(args.data_dir)
+    if len(models) < 2:
+        print(f"Error: Need at least 2 models in {args.data_dir}, found: {models}")
         return
 
-    print("Analyzing Opus 4.5 sessions...")
-    opus_4_5 = analyze_model(opus_4_5_sessions, 'opus-4-5')
+    model_metrics = {}
+    for model in models:
+        print(f"Analyzing {model} from canonical tasks...")
+        model_metrics[model] = analyze_model(args.data_dir, model)
 
-    print("Analyzing Opus 4.6 sessions...")
-    opus_4_6 = analyze_model(opus_4_6_sessions, 'opus-4-6')
-
-    print_comparison(opus_4_5, opus_4_6)
+    if len(model_metrics) >= 2:
+        model_names = list(model_metrics.keys())
+        print_comparison(model_metrics[model_names[0]], model_metrics[model_names[1]])
 
     if args.output:
         with open(args.output, 'w') as f:
-            json.dump({
-                'opus-4-5': asdict(opus_4_5),
-                'opus-4-6': asdict(opus_4_6)
-            }, f, indent=2)
+            json.dump({m: asdict(v) for m, v in model_metrics.items()}, f, indent=2)
         print(f"\nMetrics saved to: {args.output}")
 
-    if args.report:
+    if args.report and len(model_metrics) >= 2:
+        model_names = list(model_metrics.keys())
         report_path = args.data_dir.parent / 'analysis' / 'behavior-report.org'
         report_path.parent.mkdir(exist_ok=True)
-        generate_org_report(opus_4_5, opus_4_6, report_path)
+        generate_org_report(model_metrics[model_names[0]], model_metrics[model_names[1]], report_path)
 
 
 if __name__ == '__main__':

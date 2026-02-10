@@ -32,22 +32,25 @@ Or select specific steps:
 ```sh
 python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --steps extract,classify
 python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --from stats
+python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --force          # ignore staleness
+python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --check-stale    # show stale steps
+python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --check-consistency  # verify counts
 ```
 
-Steps (in order): `collect`, `extract`, `classify`, `analyze`, `tokens`, `stats`, `edits`, `planning`, `compaction`, `dataset`, `update`, `report`.
+The pipeline tracks input/output file hashes in `data/pipeline-manifest.json`. Steps are skipped when inputs are unchanged since the last run. Use `--force` to override.
+
+Steps (in order): `collect`, `extract`, `classify`, `annotate`, `analyze`, `tokens`, `stats`, `dataset`, `update`, `report`.
 
 Individual scripts can also be run directly with `--data-dir` and `--analysis-dir` arguments:
 
 ```sh
 python scripts/collect_sessions.py --data-dir comparisons/opus-4.5-vs-4.6/data
-python scripts/extract_tasks.py --data-dir comparisons/opus-4.5-vs-4.6/data
+python scripts/extract_tasks.py --data-dir comparisons/opus-4.5-vs-4.6/data --canonical
 python scripts/classify_tasks.py --data-dir comparisons/opus-4.5-vs-4.6/data
-python scripts/analyze_behavior.py --data-dir comparisons/opus-4.5-vs-4.6/data
+python scripts/annotate_tasks.py --data-dir comparisons/opus-4.5-vs-4.6/data
+python scripts/run_analyses.py --data-dir comparisons/opus-4.5-vs-4.6/data --analysis-dir comparisons/opus-4.5-vs-4.6/analysis
 python scripts/extract_tokens.py --dir comparisons/opus-4.5-vs-4.6
 python scripts/stat_tests.py --data-dir comparisons/opus-4.5-vs-4.6/data --analysis-dir comparisons/opus-4.5-vs-4.6/analysis
-python scripts/analyze_edits.py --data-dir comparisons/opus-4.5-vs-4.6/data --analysis-dir comparisons/opus-4.5-vs-4.6/analysis
-python scripts/planning_analysis.py --data-dir comparisons/opus-4.5-vs-4.6/data --analysis-dir comparisons/opus-4.5-vs-4.6/analysis
-python scripts/analyze_compaction.py --data-dir comparisons/opus-4.5-vs-4.6/data --analysis-dir comparisons/opus-4.5-vs-4.6/analysis
 python scripts/analyze_dataset.py --data-dir comparisons/opus-4.5-vs-4.6/data --analysis-dir comparisons/opus-4.5-vs-4.6/analysis
 python scripts/update_sections.py --dir comparisons/opus-4.5-vs-4.6                          # update tables + prose
 python scripts/update_sections.py --dir comparisons/opus-4.5-vs-4.6 --tables-only            # tables only, no LLM
@@ -72,14 +75,18 @@ The report uses a source template (`report/report.html`) that gets built into th
 - **Expansion blocks**: `<!-- expand: name -->` markers in the template get replaced with `<details>` elements containing content from `report/expansions/{name}.html`. Each fragment can specify a title via `<!-- title: ... -->` on its first line.
 - **Invalidation**: `report/manifest.json` tracks section content hashes. Run `--check-stale` to see which expansions need updating after template edits.
 
+- **Template variables**: `{{section.metric_name}}` syntax in the template gets resolved from `report/variables.json`, which maps variable names to data paths in analysis JSON files.
+- **Stale variable check**: Run `--check-stale-vars` to verify all `{{...}}` markers are resolved in the built output.
+
 Edit the template at `report/report.html`, not the built output at `dist/public/report.html`.
 
 ## Section Update System
 
 The `update` pipeline step (`scripts/update_sections.py`) auto-generates expansion tables from analysis data and LLM-checks prose against current numbers. It runs in two phases:
 
-1. **Table generation**: Regenerate all expansion tables from analysis data, wrapping generated content in `<!-- GENERATED-TABLE -->` markers.
-2. **Whole-document prose check**: Build an annotated template (inlining all expansions between `BEGIN-EXPANSION`/`END-EXPANSION` sentinels), send it with all key metrics in a single LLM call, then decompose the result back into template + expansion files.
+1. **Table generation**: Regenerate all tables from analysis data. Tables in both expansions and the main template use `<!-- GENERATED-TABLE: table-id -->` named markers.
+2. **Template variable resolution**: Replace `{{section.metric}}` markers with data values from `report/variables.json`.
+3. **Whole-document prose check**: Build an annotated template (inlining all expansions between `BEGIN-EXPANSION`/`END-EXPANSION` sentinels), send it with all key metrics in a single LLM call, then decompose the result back into template + expansion files.
 
 The single-pass approach gives the LLM cross-section context and reduces SDK overhead vs per-section calls. `GENERATED-TABLE` markers tell the LLM which content is data-driven and should not be modified.
 
@@ -99,6 +106,19 @@ Column paths use `{model_a}`, `{model_b}`, `{row_key}` placeholders. Display nam
 ### Prose caching
 
 A single cache key (hash of annotated template + all metrics) is used. Second runs are no-ops when data hasn't changed. Cache is stored in `report/.prose-cache/`.
+
+## Shared Utilities
+
+- **`scripts/models.py`**: Model discovery (`discover_models()`, `discover_model_pair()`) and config parsing (`load_comparison_config()`). Eliminates hardcoded model lists.
+- **`scripts/session_utils.py`**: Canonical JSONL parsing (`iter_messages()`, `iter_tasks()`, `extract_user_text()`). Single task boundary definition used by all scripts.
+
+## Canonical Data Flow
+
+```
+JSONL sessions → tasks-canonical-{model}.json → tasks-annotated-{model}.json → analysis JSONs → report
+```
+
+No script after `extract_tasks.py` opens a JSONL file. All downstream analysis reads from canonical or annotated task files.
 
 ## Privacy
 

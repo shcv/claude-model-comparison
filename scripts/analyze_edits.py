@@ -10,6 +10,9 @@ each successful Edit/Write updates a per-file content map tracking which edit
 "owns" each piece of content. When a new edit removes content, we check which
 prior edit placed it.
 
+Reads edit events from canonical task files (tasks-canonical-{model}.json)
+instead of raw JSONL session data.
+
 Output (to analysis/):
   - edit-overlaps-{model}.json: per-overlap records
   - edit-metrics-{model}.json: per-task aggregated metrics
@@ -24,57 +27,13 @@ Usage:
 import argparse
 import json
 import re
+import sys
 from collections import defaultdict
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 
-
-# ---------------------------------------------------------------------------
-# JSONL parsing helpers (shared patterns with extract_tasks.py)
-# ---------------------------------------------------------------------------
-
-def extract_user_text(content) -> str:
-    """Extract text from message content."""
-    if isinstance(content, str):
-        return content
-    if isinstance(content, list):
-        texts = []
-        for block in content:
-            if isinstance(block, dict) and block.get('type') == 'text':
-                texts.append(block.get('text', ''))
-            elif isinstance(block, str):
-                texts.append(block)
-        return ' '.join(texts)
-    return ''
-
-
-def is_tool_result(content) -> bool:
-    """Check if user message is a tool result."""
-    if isinstance(content, list):
-        for block in content:
-            if isinstance(block, dict) and block.get('type') == 'tool_result':
-                return True
-    return False
-
-
-SKIP_PATTERNS = [
-    r'^<local-command', r'^<command-name>', r'^<system-reminder>',
-    r'^<task-notification>', r'^<teammate-message>', r'^\s*$',
-]
-
-SYSTEM_CONTENT_PATTERNS = [
-    r'^This session is being continued from a previous conversation',
-    r'^# Iteration workflow', r'^Implement the following plan:',
-    r'^\[Request interrupted', r'^<summary>', r'^Analysis:',
-]
-
-
-def should_skip_message(text: str) -> bool:
-    return any(re.match(p, text.strip()) for p in SKIP_PATTERNS)
-
-
-def is_system_generated(text: str) -> bool:
-    return any(re.match(p, text.strip(), re.IGNORECASE) for p in SYSTEM_CONTENT_PATTERNS)
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from models import discover_models
 
 
 # Dissatisfaction signals in user messages
@@ -82,14 +41,6 @@ DISSATISFACTION_SIGNALS = [
     r'\bwrong\b', r'\btry again\b', r'\bnot what\b', r'\bincorrect\b',
     r"\bthat's not\b", r'\bno[,.]?\s+(?:that|this)\b', r'\bundo\b',
     r'\brevert\b', r'\bfix (?:that|this|it)\b', r'\bbreak\b', r'\bbroke\b',
-]
-
-# Error indicators in tool results
-ERROR_PATTERNS = [
-    r'error', r'failed', r'FAIL', r'traceback', r'exception',
-    r'SyntaxError', r'TypeError', r'NameError', r'ImportError',
-    r'is_error.*true', r'tool_use_error', r'exit code [1-9]',
-    r'compilation failed', r'build failed',
 ]
 
 
@@ -164,7 +115,7 @@ class FileContentTracker:
     """
 
     def __init__(self):
-        # List of (content, edit_index, edit_event) — most recent last
+        # List of (content, edit_index, edit_event) -- most recent last
         self.chunks: list[tuple[str, int, EditEvent]] = []
 
     def add_content(self, content: str, edit: EditEvent):
@@ -210,7 +161,7 @@ def _compute_overlap(a_new: str, b_old: str) -> tuple[str | None, float]:
     if a_new == b_old:
         return 'exact', 1.0
 
-    # Tier 2: Containment — the contained string must be >=40 chars AND
+    # Tier 2: Containment -- the contained string must be >=40 chars AND
     # represent at least 30% of the larger string (to avoid flagging cases
     # where a small prior edit happens to be a substring of a much larger region)
     if len(a_new) >= 40 and a_new in b_old:
@@ -253,150 +204,79 @@ def _nontrivial_lines(text: str) -> set[str]:
 
 
 # ---------------------------------------------------------------------------
-# Session analysis
+# Session analysis from canonical tasks
 # ---------------------------------------------------------------------------
 
-def parse_session(file_path: Path, model: str) -> tuple[list[EditEvent], list[dict]]:
-    """Parse a session JSONL file and extract edit events + context.
+def build_session_data(tasks: list[dict]) -> tuple[list[EditEvent], list[dict]]:
+    """Build edit events and context from canonical task records for one session.
 
-    Returns (edit_events, context_events) where context_events track
-    user messages, tool errors, and task boundaries.
+    Tasks should be pre-sorted by msg_index_start within the session.
+    Returns (edit_events, context_events).
     """
-    try:
-        with open(file_path, 'r', encoding='utf-8') as f:
-            messages = [json.loads(line) for line in f if line.strip()]
-    except Exception as e:
-        print(f"  Error reading {file_path}: {e}")
-        return [], []
-
-    session_id = file_path.stem
     edits = []
-    context = []  # user messages, errors, task boundaries
-    task_counter = 1
-    current_task_id = f"{session_id}-task-1"
-    msg_index = 0
+    context = []
 
-    # Map tool_use_id -> EditEvent for matching results
-    pending_edits: dict[str, EditEvent] = {}
+    for task in tasks:
+        task_id = task['task_id']
 
-    for msg in messages:
-        msg_type = msg.get('type')
-        timestamp = msg.get('timestamp', '')
+        # Add user message as context (task boundary)
+        user_prompt = task.get('user_prompt', '') or ''
+        if user_prompt.strip():
+            context.append({
+                'type': 'user_message',
+                'index': task.get('msg_index_start', 0),
+                'task_id': task_id,
+                'text': user_prompt[:500],
+            })
 
-        if msg_type == 'user':
-            content = msg.get('message', {}).get('content', [])
+        # Add errors as context
+        for err in task.get('errors', []):
+            context.append({
+                'type': 'error',
+                'index': err.get('msg_index', 0),
+                'task_id': task_id,
+                'text': err.get('text', '')[:200],
+            })
 
-            # Check tool results for edit success/failure and errors
-            if isinstance(content, list):
-                for block in content:
-                    if not isinstance(block, dict):
-                        continue
+        # Track subagent usage for flagging
+        if task.get('used_subagents'):
+            context.append({
+                'type': 'subagent',
+                'index': task.get('msg_index_start', 0),
+                'task_id': task_id,
+            })
 
-                    if block.get('type') == 'tool_result':
-                        tool_use_id = block.get('tool_use_id', '')
-                        is_error = block.get('is_error', False)
+        # Track bash file modifications
+        for cmd in task.get('bash_commands', []):
+            if re.search(r'\b(sed|tee|>>|>\s)\b', cmd):
+                context.append({
+                    'type': 'bash_file_mod',
+                    'index': task.get('msg_index_start', 0),
+                    'task_id': task_id,
+                    'command': cmd[:100],
+                })
 
-                        # Match to pending edit
-                        if tool_use_id in pending_edits:
-                            edit = pending_edits.pop(tool_use_id)
-                            edit.succeeded = not is_error
-                            if edit.succeeded:
-                                edits.append(edit)
-
-                        # Track errors for classification
-                        result_text = ''
-                        rc = block.get('content', '')
-                        if isinstance(rc, str):
-                            result_text = rc
-                        elif isinstance(rc, list):
-                            for rb in rc:
-                                if isinstance(rb, dict) and rb.get('type') == 'text':
-                                    result_text += rb.get('text', '')
-
-                        if is_error or any(re.search(p, result_text, re.IGNORECASE)
-                                           for p in ERROR_PATTERNS):
-                            context.append({
-                                'type': 'error',
-                                'index': msg_index,
-                                'task_id': current_task_id,
-                                'text': result_text[:200],
-                            })
-
-            # Check for real user messages (task boundaries)
-            if not is_tool_result(content):
-                text = extract_user_text(content)
-                if text.strip() and not should_skip_message(text) and not is_system_generated(text):
-                    task_counter += 1
-                    current_task_id = f"{session_id}-task-{task_counter}"
-                    context.append({
-                        'type': 'user_message',
-                        'index': msg_index,
-                        'task_id': current_task_id,
-                        'text': text[:500],
-                    })
-
-        elif msg_type == 'assistant':
-            content = msg.get('message', {}).get('content', [])
-            if not isinstance(content, list):
-                msg_index += 1
+        # Build EditEvent objects from canonical edit_events
+        for ee in task.get('edit_events', []):
+            if not ee.get('succeeded', False):
                 continue
 
-            for block in content:
-                if not isinstance(block, dict) or block.get('type') != 'tool_use':
-                    continue
+            edit = EditEvent(
+                index=ee.get('msg_index', 0),
+                tool_use_id=ee.get('tool_use_id', ''),
+                tool_name=ee.get('tool_name', 'Edit'),
+                file_path=ee.get('file_path', ''),
+                old_string=ee.get('old_string', ''),
+                new_string=ee.get('new_string', ''),
+                replace_all=ee.get('replace_all', False),
+                succeeded=True,
+                task_id=task_id,
+                timestamp=ee.get('timestamp', ''),
+            )
+            edits.append(edit)
 
-                name = block.get('name', '')
-                inp = block.get('input', {})
-                tool_use_id = block.get('id', '')
-
-                if name == 'Edit':
-                    edit = EditEvent(
-                        index=msg_index,
-                        tool_use_id=tool_use_id,
-                        tool_name='Edit',
-                        file_path=inp.get('file_path', ''),
-                        old_string=inp.get('old_string', ''),
-                        new_string=inp.get('new_string', ''),
-                        replace_all=inp.get('replace_all', False),
-                        succeeded=False,  # set when we see the result
-                        task_id=current_task_id,
-                        timestamp=timestamp,
-                    )
-                    pending_edits[tool_use_id] = edit
-
-                elif name == 'Write':
-                    edit = EditEvent(
-                        index=msg_index,
-                        tool_use_id=tool_use_id,
-                        tool_name='Write',
-                        file_path=inp.get('file_path', ''),
-                        old_string='',
-                        new_string=inp.get('content', ''),
-                        replace_all=False,
-                        succeeded=False,
-                        task_id=current_task_id,
-                        timestamp=timestamp,
-                    )
-                    pending_edits[tool_use_id] = edit
-
-                elif name == 'Bash':
-                    cmd = inp.get('command', '')
-                    if re.search(r'\b(sed|tee|>>|>\s)\b', cmd):
-                        context.append({
-                            'type': 'bash_file_mod',
-                            'index': msg_index,
-                            'task_id': current_task_id,
-                            'command': cmd[:100],
-                        })
-
-                elif name == 'Task':
-                    context.append({
-                        'type': 'subagent',
-                        'index': msg_index,
-                        'task_id': current_task_id,
-                    })
-
-        msg_index += 1
+    # Sort edits by msg_index for correct ordering
+    edits.sort(key=lambda e: e.index)
 
     return edits, context
 
@@ -428,7 +308,7 @@ def classify_overlap(edit_a: EditEvent, edit_b: EditEvent,
             return 'error_recovery'
         return 'self_correction'
 
-    # Different tasks — check for user dissatisfaction between them
+    # Different tasks -- check for user dissatisfaction between them
     user_msgs_between = [
         c for c in context
         if c['type'] == 'user_message'
@@ -444,13 +324,16 @@ def classify_overlap(edit_a: EditEvent, edit_b: EditEvent,
     return 'iterative_refinement'
 
 
-def analyze_session(file_path: Path, model: str) -> tuple[list[Overlap], dict[str, TaskEditMetrics]]:
-    """Analyze a single session for edit overlaps.
+def analyze_session_from_tasks(tasks: list[dict]) -> tuple[list[Overlap], dict[str, TaskEditMetrics]]:
+    """Analyze a single session's canonical tasks for edit overlaps.
 
     Returns (overlaps, task_metrics_dict).
     """
-    edits, context = parse_session(file_path, model)
-    session_id = file_path.stem
+    if not tasks:
+        return [], {}
+
+    session_id = tasks[0]['session_id']
+    edits, context = build_session_data(tasks)
 
     if not edits:
         return [], {}
@@ -465,7 +348,7 @@ def analyze_session(file_path: Path, model: str) -> tuple[list[Overlap], dict[st
     task_metrics: dict[str, TaskEditMetrics] = {}
     overlaps = []
 
-    # Track Write→Write on same file within same task
+    # Track Write->Write on same file within same task
     task_file_writes: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
 
     # Track subagent tasks for flagging
@@ -549,22 +432,17 @@ def analyze_session(file_path: Path, model: str) -> tuple[list[Overlap], dict[st
             # Remove overwritten content, then add new
             tracker.remove_content(edit.old_string)
 
-        # For Write tool: check if this is a Write→Write on same file
+        # For Write tool: check if this is a Write->Write on same file
         elif edit.tool_name == 'Write':
-            # Check if a prior edit on this file had content we're overwriting
-            # (Write replaces entire file, so any prior content on this file is gone)
             prior_chunks = tracker.chunks[:]
             if prior_chunks:
-                # The Write overwrites everything — find the most significant prior edit
                 best_prior = max(prior_chunks, key=lambda c: len(c[0]))
                 prior_edit = best_prior[2]
 
-                # Only flag if both are in same task (Write→Write pattern)
                 if prior_edit.task_id == edit.task_id:
                     if prior_edit.tool_name == 'Write':
                         tm.write_write_same_file += 1
                     elif prior_edit.tool_name == 'Edit':
-                        # Edit→Write where Write doesn't contain Edit's new_string = undo
                         if prior_edit.new_string not in edit.new_string:
                             tm.edit_write_undo += 1
 
@@ -600,10 +478,28 @@ def analyze_session(file_path: Path, model: str) -> tuple[list[Overlap], dict[st
 # Model-level aggregation
 # ---------------------------------------------------------------------------
 
-def analyze_model(sessions_file: Path, model: str, analysis_dir: Path):
-    """Analyze all sessions for a model. Write per-overlap and per-task output."""
-    with open(sessions_file, 'r', encoding='utf-8') as f:
-        sessions = json.load(f)
+def analyze_model(data_dir: Path, model: str, analysis_dir: Path):
+    """Analyze all canonical tasks for a model. Write per-overlap and per-task output."""
+    canonical_path = data_dir / f'tasks-canonical-{model}.json'
+    if not canonical_path.exists():
+        print(f"Error: {canonical_path} not found")
+        return {}
+
+    with open(canonical_path, 'r', encoding='utf-8') as f:
+        all_tasks = json.load(f)
+
+    # Group tasks by session_id
+    sessions: dict[str, list[dict]] = defaultdict(list)
+    meta_skipped = 0
+    for task in all_tasks:
+        if task.get('is_meta', False):
+            meta_skipped += 1
+            continue
+        sessions[task['session_id']].append(task)
+
+    # Sort tasks within each session by msg_index_start
+    for sid in sessions:
+        sessions[sid].sort(key=lambda t: t.get('msg_index_start', 0))
 
     all_overlaps = []
     all_task_metrics = []
@@ -612,17 +508,8 @@ def analyze_model(sessions_file: Path, model: str, analysis_dir: Path):
     total_failed = 0
     sessions_processed = 0
 
-    meta_skipped = 0
-    for session in sessions:
-        if session.get('is_meta', False):
-            meta_skipped += 1
-            continue
-
-        file_path = Path(session['file_path'])
-        if not file_path.exists():
-            continue
-
-        overlaps, task_metrics = analyze_session(file_path, model)
+    for sid, session_tasks in sessions.items():
+        overlaps, task_metrics = analyze_session_from_tasks(session_tasks)
         sessions_processed += 1
 
         for o in overlaps:
@@ -825,7 +712,7 @@ def _compute_bin_rates(tasks: list) -> dict:
 def main():
     parser = argparse.ArgumentParser(description='Analyze edit timelines for self-correction detection')
     parser.add_argument('--data-dir', type=Path, default=Path('data'),
-                        help='Data directory with sessions-*.json files')
+                        help='Data directory with tasks-canonical-*.json files')
     parser.add_argument('--analysis-dir', type=Path, default=None,
                         help='Output directory for analysis results (default: data/../analysis)')
     args = parser.parse_args()
@@ -834,24 +721,21 @@ def main():
     analysis_dir = args.analysis_dir or data_dir.parent / 'analysis'
     analysis_dir.mkdir(parents=True, exist_ok=True)
 
-    # Discover models from session files
-    session_files = sorted(data_dir.glob('sessions-*.json'))
-    if not session_files:
-        print(f"Error: No sessions-*.json files found in {data_dir}")
+    # Discover models from canonical task files
+    models = discover_models(data_dir, prefix="tasks-canonical")
+    if not models:
+        # Fall back to session file discovery
+        models = discover_models(data_dir)
+    if not models:
+        print(f"Error: No tasks-canonical-*.json or sessions-*.json files found in {data_dir}")
         return
 
-    models = {}
-    for sf in session_files:
-        # sessions-opus-4-5.json -> opus-4-5
-        model_name = sf.stem.replace('sessions-', '')
-        models[model_name] = sf
-
-    print(f"Found {len(models)} model(s): {', '.join(models.keys())}")
+    print(f"Found {len(models)} model(s): {', '.join(models)}")
 
     summaries = {}
-    for model, sf in models.items():
+    for model in models:
         print(f"\nAnalyzing {model}...")
-        summaries[model] = analyze_model(sf, model, analysis_dir)
+        summaries[model] = analyze_model(data_dir, model, analysis_dir)
 
     # Compute complexity-binned accuracy
     for model in summaries:

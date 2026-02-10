@@ -20,6 +20,9 @@ from pathlib import Path
 import numpy as np
 from scipy import stats
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from models import discover_model_pair
+
 
 class NumpyEncoder(json.JSONEncoder):
     """JSON encoder that handles numpy types."""
@@ -36,7 +39,7 @@ class NumpyEncoder(json.JSONEncoder):
         return super().default(obj)
 
 
-MODELS = ["opus-4-5", "opus-4-6"]
+MODELS = ["opus-4-5", "opus-4-6"]  # set dynamically in main()
 COMPLEXITY_BINS = ["trivial", "simple", "moderate", "complex"]
 
 # Categorical fields from LLM analysis
@@ -76,12 +79,31 @@ CONTINUOUS_FIELDS = [
 
 
 def load_data(data_dir, analysis_dir):
-    """Load LLM analysis and classified task data for both models."""
+    """Load task data for both models.
+
+    Prefers tasks-annotated-{model}.json (output of annotate_tasks.py) which
+    already contains merged LLM analysis + classification + canonical signals.
+    Falls back to merging llm-analysis + tasks-classified if annotated files
+    don't exist.
+    """
     data = {}
     for model in MODELS:
+        annotated_path = Path(data_dir) / f"tasks-annotated-{model}.json"
+
+        if annotated_path.exists():
+            print(f"  Loading annotated tasks: {annotated_path}")
+            with open(annotated_path) as f:
+                records = json.load(f)
+            # Filter meta tasks
+            records = [r for r in records if not r.get('is_meta', False)]
+            data[model] = records
+            continue
+
+        # Fallback: merge llm-analysis + tasks-classified
         analysis_path = Path(analysis_dir) / f"llm-analysis-{model}.json"
         classified_path = Path(data_dir) / f"tasks-classified-{model}.json"
 
+        print(f"  Falling back to llm-analysis + tasks-classified for {model}")
         with open(analysis_path) as f:
             analysis = json.load(f)
         with open(classified_path) as f:
@@ -422,6 +444,7 @@ def format_summary(all_results, total_tests):
 
 
 def main():
+    global MODELS
     parser = argparse.ArgumentParser(description="Statistical significance tests for model comparison")
     parser.add_argument("--data-dir", default="data", help="Directory containing classified task JSONs")
     parser.add_argument("--analysis-dir", default="analysis", help="Directory containing LLM analysis JSONs")
@@ -429,6 +452,8 @@ def main():
     args = parser.parse_args()
 
     output_path = args.output or str(Path(args.analysis_dir) / "stat-tests.json")
+
+    MODELS = list(discover_model_pair(args.data_dir))
 
     print(f"Loading data from {args.data_dir}/ and {args.analysis_dir}/...")
     data = load_data(args.data_dir, args.analysis_dir)

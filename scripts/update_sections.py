@@ -20,33 +20,18 @@ import subprocess
 import sys
 from pathlib import Path
 
-# Add scripts dir to path for table_gen import
+# Add scripts dir to path for imports
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import table_gen
+from models import load_comparison_config
 
 
 def parse_comparison_dir(dir_path: Path) -> dict:
     """Derive model identifiers from comparison directory name.
 
-    E.g., "opus-4.5-vs-4.6" -> model_a="opus-4-5", model_b="opus-4-6",
-    display_a="4.5", display_b="4.6".
+    Delegates to models.load_comparison_config.
     """
-    name = dir_path.name
-    m = re.match(r'(\w+)-([\d.]+)-vs-([\d.]+)', name)
-    if not m:
-        print(f"Error: cannot parse model names from directory '{name}'", file=sys.stderr)
-        print("Expected format: <family>-<version>-vs-<version>", file=sys.stderr)
-        sys.exit(1)
-    family = m.group(1)
-    ver_a = m.group(2)
-    ver_b = m.group(3)
-    return {
-        "model_a": f"{family}-{ver_a.replace('.', '-')}",
-        "model_b": f"{family}-{ver_b.replace('.', '-')}",
-        "display_a": ver_a,
-        "display_b": ver_b,
-        "family": family,
-    }
+    return load_comparison_config(dir_path)
 
 
 def load_spec(spec_path: Path) -> dict:
@@ -1016,6 +1001,1076 @@ def generate_planning_complexity(spec: dict, data: dict, config: dict) -> str:
     return "\n".join(lines)
 
 
+# ── Inline template table generators ──────────────────────────────
+# These produce bare table HTML (no <!-- title: --> line) for use
+# inside report.html via named GENERATED-TABLE markers.
+
+
+def generate_thinking_calibration_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate the thinking calibration bar-pair table for the cost section."""
+    lines = [f"<!-- title: {spec.get('title', 'Thinking calibration')} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    tokens = data.get("tokens", {})
+    ta = tokens.get(ma, {}).get("by_complexity", {})
+    tb = tokens.get(mb, {}).get("by_complexity", {})
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Complexity</th><th>Distribution</th>'
+                 '<th class="right">4.5</th><th class="right">4.6</th>'
+                 '<th class="right">&Delta;</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    for cx in table_gen.COMPLEXITY_ORDER:
+        ra = ta.get(cx, {}).get("thinking_ratio", 0)
+        rb = tb.get(cx, {}).get("thinking_ratio", 0)
+        pct_a = ra * 100
+        pct_b = rb * 100
+        delta_pp = pct_b - pct_a
+        sign = "+" if delta_pp > 0 else "&minus;"
+        css = "v-blue" if delta_pp > 0 else ("v-orange" if delta_pp < 0 else "")
+        delta_str = f'{sign}{abs(delta_pp):.0f}pp'
+        if abs(delta_pp) < 5:
+            css = ""
+
+        bar = table_gen.generate_bar_pair(pct_a, pct_b)
+        label = table_gen._label_case(cx)
+        lines.append("        <tr>")
+        lines.append(f'            <td class="label-cell">{label} &mdash; thinking %</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
+        lines.append(f'            <td class="right mono">{pct_a:.0f}%</td>')
+        lines.append(f'            <td class="right mono">{pct_b:.0f}%</td>')
+        lines.append(f'            <td class="right mono {css}">{delta_str}</td>')
+        lines.append("        </tr>")
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
+def generate_verbosity_by_type_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate the output verbosity by task type table for the cost section."""
+    lines = [f"<!-- title: {spec.get('title', 'Output verbosity by task type')} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    tokens = data.get("tokens", {})
+    ta = tokens.get(ma, {}).get("by_type", {})
+    tb = tokens.get(mb, {}).get("by_type", {})
+
+    # Build list of types present in both models, sorted by ratio descending
+    type_ratios = []
+    for t in ta:
+        if t == "unknown" or t not in tb:
+            continue
+        avg_a = ta[t].get("avg_output_tokens", 0)
+        avg_b = tb[t].get("avg_output_tokens", 0)
+        if avg_a > 0 and avg_b > 0:
+            ratio = avg_b / avg_a
+            type_ratios.append((t, avg_a, avg_b, ratio))
+
+    type_ratios.sort(key=lambda x: x[3], reverse=True)
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Task Type</th><th class="right">4.5 avg output</th>'
+                 '<th class="right">4.6 avg output</th><th class="right">4.6/4.5</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    for t, avg_a, avg_b, ratio in type_ratios:
+        label = table_gen._label_case(t)
+        css = ' v-blue' if ratio >= 2.0 else ''
+        lines.append(f'        <tr><td class="label-cell">{label}</td>'
+                     f'<td class="right mono">{avg_a:,.0f}</td>'
+                     f'<td class="right mono">{avg_b:,.0f}</td>'
+                     f'<td class="right mono{css}">{ratio:.1f}&times;</td></tr>')
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
+def generate_cost_by_complexity_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate the cost by complexity table for the cost section."""
+    lines = [f"<!-- title: {spec.get('title', 'Cost by complexity')} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    tokens = data.get("tokens", {})
+    ta = tokens.get(ma, {}).get("by_complexity", {})
+    tb = tokens.get(mb, {}).get("by_complexity", {})
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Complexity</th><th class="right">4.5 avg cost</th>'
+                 '<th class="right">4.6 avg cost</th><th class="right">&Delta;</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    for cx in table_gen.COMPLEXITY_ORDER:
+        cost_a = ta.get(cx, {}).get("avg_cost_usd", 0)
+        cost_b = tb.get(cx, {}).get("avg_cost_usd", 0)
+        if cost_a > 0:
+            delta_pct = (cost_b - cost_a) / cost_a * 100
+            sign = "+" if delta_pct > 0 else "&minus;"
+            css = "v-green" if delta_pct < 0 else "v-orange"
+            delta_str = f'{sign}{abs(delta_pct):.0f}%'
+        else:
+            delta_str = "&mdash;"
+            css = ""
+
+        label = table_gen._label_case(cx)
+        lines.append(f'        <tr><td class="label-cell">{label}</td>'
+                     f'<td class="right mono">${cost_a:.2f}</td>'
+                     f'<td class="right mono">${cost_b:.2f}</td>'
+                     f'<td class="right mono {css}">{delta_str}</td></tr>')
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
+def generate_edit_overview_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate the inline edit overview bar-pair table for the edit-accuracy section."""
+    lines = [f"<!-- title: {spec.get('title', 'Edit overview')} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    ea = data.get("edits", {}).get(ma, {})
+    eb = data.get("edits", {}).get(mb, {})
+
+    overlaps_a = ea.get("total_overlaps", 0)
+    overlaps_b = eb.get("total_overlaps", 0)
+    by_class_a = ea.get("by_classification", {})
+    by_class_b = eb.get("by_classification", {})
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Metric</th><th>Distribution</th>'
+                 '<th class="right">4.5</th><th class="right">4.6</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    # Total edits analyzed row (no bars)
+    lines.append(f'        <tr><td class="label-cell">Total edits analyzed</td><td></td>'
+                 f'<td class="right mono">{overlaps_a:,}</td>'
+                 f'<td class="right mono">{overlaps_b:,}</td></tr>')
+
+    # Classification rows with bars
+    classifications = [
+        ("Self-corrections", "self_correction"),
+        ("Error recovery", "error_recovery"),
+        ("User-directed corrections", "user_directed"),
+        ("Iterative refinement", "iterative_refinement"),
+    ]
+    for label, key in classifications:
+        ca = by_class_a.get(key, 0)
+        cb = by_class_b.get(key, 0)
+        pct_a = ca / overlaps_a * 100 if overlaps_a else 0
+        pct_b = cb / overlaps_b * 100 if overlaps_b else 0
+        bar = table_gen.generate_bar_pair(pct_a, pct_b)
+        lines.append(f'        <tr><td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
+        lines.append(f'            <td class="right mono">{ca:,}</td>'
+                     f'<td class="right mono">{cb:,}</td></tr>')
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
+def generate_edit_iterative_by_complexity_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate iterative refinement by complexity inline table."""
+    lines = [f"<!-- title: {spec.get('title', 'Iterative refinement by complexity')} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    ea = data.get("edits", {}).get(ma, {}).get("complexity_bins", {}).get("by_complexity", {})
+    eb = data.get("edits", {}).get(mb, {}).get("complexity_bins", {}).get("by_complexity", {})
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Complexity</th><th>Iterative Refinement Rate</th>'
+                 '<th class="right">4.5 (n)</th><th class="right">4.6 (n)</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    for cx in table_gen.COMPLEXITY_PLUS_ORDER:
+        ra = ea.get(cx, {})
+        rb = eb.get(cx, {})
+        rate_a = ra.get("iterative_refinement_rate", 0) * 100
+        rate_b = rb.get("iterative_refinement_rate", 0) * 100
+        n_a = ra.get("n", 0)
+        n_b = rb.get("n", 0)
+        bar = table_gen.generate_bar_pair(rate_a, rate_b)
+        label = table_gen._label_case(cx)
+
+        lines.append(f'        <tr><td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
+        lines.append(f'            <td class="right mono">{n_a:,}</td>'
+                     f'<td class="right mono">{n_b:,}</td></tr>')
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
+def generate_edit_accuracy_by_complexity_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate self-correction rate by complexity inline table."""
+    lines = [f"<!-- title: {spec.get('title', 'Self-correction rate by complexity')} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    ea = data.get("edits", {}).get(ma, {}).get("complexity_bins", {}).get("by_complexity", {})
+    eb = data.get("edits", {}).get(mb, {}).get("complexity_bins", {}).get("by_complexity", {})
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Complexity</th><th>Self-Correction Rate</th>'
+                 '<th class="right">4.5 (n)</th><th class="right">4.6 (n)</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    for cx in table_gen.COMPLEXITY_PLUS_ORDER:
+        ra = ea.get(cx, {})
+        rb = eb.get(cx, {})
+        rate_a = ra.get("self_correction_rate", 0) * 100
+        rate_b = rb.get("self_correction_rate", 0) * 100
+        # Use edit counts instead of n for the 4.5/4.6 column
+        # The original table used different n values, let's check what they mean
+        # Looking at the original report: "48" and "92" for trivial — those look like
+        # edit counts from the complexity bin, not task counts
+        n_a = ra.get("n", 0)
+        n_b = rb.get("n", 0)
+        bar = table_gen.generate_bar_pair(rate_a, rate_b)
+        label = table_gen._label_case(cx)
+
+        lines.append(f'        <tr><td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
+        lines.append(f'            <td class="right mono">{n_a:,}</td>'
+                     f'<td class="right mono">{n_b:,}</td></tr>')
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
+def _find_chi_square(stats: dict, field: str) -> dict | None:
+    """Find a chi-square test by field name in stat-tests data."""
+    for section_key in ["overall"]:
+        section = stats.get(section_key, {})
+        for test in section.get("chi_square", []):
+            if test.get("field") == field:
+                return test
+    return None
+
+
+def _find_proportion(stats: dict, field: str) -> dict | None:
+    """Find a proportion test by field name in stat-tests data."""
+    for section_key in ["overall"]:
+        section = stats.get(section_key, {})
+        for test in section.get("proportions", []):
+            if test.get("field") == field:
+                return test
+    return None
+
+
+def generate_quality_sentiment_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate the sentiment distribution bar-pair table for the quality section."""
+    lines = [f"<!-- title: {spec.get('title', 'Sentiment distribution')} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    stats = data.get("stats", {})
+
+    # Get sentiment chi-square data
+    chi = _find_chi_square(stats, "normalized_user_sentiment")
+    if not chi:
+        return "<!-- title: Sentiment distribution -->\n<p>No sentiment data available.</p>"
+
+    counts_a = chi.get("counts", {}).get(ma, {})
+    counts_b = chi.get("counts", {}).get(mb, {})
+    n_a = chi.get("n", {}).get(ma, 1)
+    n_b = chi.get("n", {}).get(mb, 1)
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Sentiment</th><th>Distribution</th>'
+                 '<th class="right">4.5</th><th class="right">4.6</th>'
+                 '<th class="right">&Delta;</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    # We display: Satisfied, Neutral, Dissatisfied (skip ambiguous)
+    sentiment_rows = [
+        ("Satisfied", "satisfied"),
+        ("Neutral", "neutral"),
+        ("Dissatisfied", "dissatisfied"),
+    ]
+
+    for label, key in sentiment_rows:
+        ca = counts_a.get(key, 0)
+        cb = counts_b.get(key, 0)
+        pct_a = ca / n_a * 100
+        pct_b = cb / n_b * 100
+        delta_pp = pct_b - pct_a
+        bar = table_gen.generate_bar_pair(pct_a, pct_b)
+
+        if abs(delta_pp) < 3:
+            delta_str = '&asymp; Tie'
+            delta_css = 'color:var(--mid-gray)'
+        else:
+            if delta_pp > 0:
+                delta_str = f'B +{abs(delta_pp):.1f}pp'
+                delta_css = 'color:var(--blue)'
+            else:
+                delta_str = f'A +{abs(delta_pp):.1f}pp'
+                delta_css = 'color:var(--orange)'
+
+        lines.append("        <tr>")
+        lines.append(f'            <td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
+        lines.append(f'            <td class="right mono">{ca:,}</td>')
+        lines.append(f'            <td class="right mono">{cb:,}</td>')
+        lines.append(f'            <td class="right mono" style="{delta_css}">{delta_str}</td>')
+        lines.append("        </tr>")
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
+def generate_quality_completion_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate the completion distribution bar-pair table for the quality section."""
+    lines = [f"<!-- title: {spec.get('title', 'Completion distribution')} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    stats = data.get("stats", {})
+
+    # Get task_completion chi-square data
+    chi = _find_chi_square(stats, "task_completion")
+    if not chi:
+        return "<!-- title: Completion distribution -->\n<p>No completion data available.</p>"
+
+    counts_a = chi.get("counts", {}).get(ma, {})
+    counts_b = chi.get("counts", {}).get(mb, {})
+    n_a = chi.get("n", {}).get(ma, 1)
+    n_b = chi.get("n", {}).get(mb, 1)
+
+    # Aggregate partial variants into "partial"
+    def aggregate_partial(counts):
+        total = 0
+        for k, v in counts.items():
+            if k == "partial" or k.startswith("partial -"):
+                total += v
+        return total
+
+    agg_a = {
+        "complete": counts_a.get("complete", 0),
+        "partial": aggregate_partial(counts_a),
+        "interrupted": sum(v for k, v in counts_a.items()
+                          if k == "interrupted" or k.startswith("interrupted -")),
+        "failed": counts_a.get("failed", 0),
+    }
+    agg_b = {
+        "complete": counts_b.get("complete", 0),
+        "partial": aggregate_partial(counts_b),
+        "interrupted": sum(v for k, v in counts_b.items()
+                          if k == "interrupted" or k.startswith("interrupted -")),
+        "failed": counts_b.get("failed", 0),
+    }
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Outcome</th><th>Distribution</th>'
+                 '<th class="right">4.5</th><th class="right">4.6</th>'
+                 '<th class="right">&Delta;</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    completion_rows = [
+        ("Complete", "complete"),
+        ("Partial", "partial"),
+        ("Interrupted", "interrupted"),
+        ("Failed", "failed"),
+    ]
+
+    for label, key in completion_rows:
+        ca = agg_a.get(key, 0)
+        cb = agg_b.get(key, 0)
+        pct_a = ca / n_a * 100
+        pct_b = cb / n_b * 100
+        delta_pp = pct_b - pct_a
+        bar = table_gen.generate_bar_pair(pct_a, pct_b)
+
+        if abs(delta_pp) < 3:
+            delta_str = '&asymp; Tie'
+            delta_css = 'color:var(--mid-gray)'
+        else:
+            if delta_pp > 0:
+                delta_str = f'B +{abs(delta_pp):.1f}pp'
+                delta_css = 'color:var(--blue)'
+            else:
+                # For "Failed", B having lower is good (blue)
+                if key == "failed":
+                    delta_str = f'B &minus;{abs(delta_pp):.1f}pp'
+                    delta_css = 'color:var(--blue)'
+                else:
+                    delta_str = f'A +{abs(delta_pp):.1f}pp'
+                    delta_css = 'color:var(--orange)'
+
+        lines.append("        <tr>")
+        lines.append(f'            <td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
+        lines.append(f'            <td class="right mono">{ca:,}</td>')
+        lines.append(f'            <td class="right mono">{cb:,}</td>')
+        lines.append(f'            <td class="right mono" style="{delta_css}">{delta_str}</td>')
+        lines.append("        </tr>")
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
+# ── Behavioral section inline generators ──────────────────────────
+
+def generate_behavior_adoption_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate subagent & planning adoption bar-pair table."""
+    lines = [f"<!-- title: {spec.get('title', 'Subagent & Planning Adoption')} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    ba = data.get("behavior", {}).get(ma, {})
+    bb = data.get("behavior", {}).get(mb, {})
+
+    total_a = ba.get("total_tasks", 1)
+    total_b = bb.get("total_tasks", 1)
+
+    # Subagent usage rate
+    sub_a = ba.get("tasks_with_subagents", 0)
+    sub_b = bb.get("tasks_with_subagents", 0)
+    pct_sub_a = sub_a / total_a * 100
+    pct_sub_b = sub_b / total_b * 100
+
+    # Autonomous subagent rate
+    auto_a = ba.get("subagent_autonomous", 0)
+    auto_b = bb.get("subagent_autonomous", 0)
+    total_sub_a = ba.get("total_subagent_calls", 1) or 1
+    total_sub_b = bb.get("total_subagent_calls", 1) or 1
+    pct_auto_a = auto_a / total_sub_a * 100
+    pct_auto_b = auto_b / total_sub_b * 100
+
+    # Planning rate
+    plan_a = ba.get("tasks_with_planning", 0)
+    plan_b = bb.get("tasks_with_planning", 0)
+    pct_plan_a = plan_a / total_a * 100
+    pct_plan_b = plan_b / total_b * 100
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Metric</th><th>Distribution</th>'
+                 '<th class="right">4.5</th><th class="right">4.6</th>'
+                 '<th class="right">&Delta;</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    rows = [
+        ("Tasks using subagents", pct_sub_a, pct_sub_b, sub_a, sub_b),
+        ("Autonomous subagent calls", pct_auto_a, pct_auto_b, auto_a, auto_b),
+        ("Tasks using planning mode", pct_plan_a, pct_plan_b, plan_a, plan_b),
+    ]
+
+    for label, pa, pb, na, nb in rows:
+        bar = table_gen.generate_bar_pair(pa, pb)
+        delta_pp = pb - pa
+        if abs(delta_pp) < 3:
+            delta_str = '&asymp; Tie'
+            delta_css = 'color:var(--mid-gray)'
+        elif delta_pp > 0:
+            delta_str = f'B +{abs(delta_pp):.1f}pp'
+            delta_css = 'color:var(--blue)'
+        else:
+            delta_str = f'A +{abs(delta_pp):.1f}pp'
+            delta_css = 'color:var(--orange)'
+
+        lines.append("        <tr>")
+        lines.append(f'            <td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
+        lines.append(f'            <td class="right mono">{na:,}</td>')
+        lines.append(f'            <td class="right mono">{nb:,}</td>')
+        lines.append(f'            <td class="right mono" style="{delta_css}">{delta_str}</td>')
+        lines.append("        </tr>")
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
+def generate_behavior_subagent_types_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate subagent type distribution bar-pair table."""
+    lines = [f"<!-- title: {spec.get('title', 'Subagent Type Distribution')} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    ba = data.get("behavior", {}).get(ma, {})
+    bb = data.get("behavior", {}).get(mb, {})
+
+    total_sub_a = ba.get("total_subagent_calls", 1) or 1
+    total_sub_b = bb.get("total_subagent_calls", 1) or 1
+    types_a = ba.get("subagent_types", {})
+    types_b = bb.get("subagent_types", {})
+
+    # Aggregate into display categories
+    def aggregate_types(types):
+        explore = types.get("Explore", 0)
+        gp = types.get("general-purpose", 0)
+        bash = types.get("Bash", 0)
+        plan = types.get("Plan", 0)
+        return {"Explore": explore, "General-purpose": gp, "Bash": bash, "Plan": plan}
+
+    agg_a = aggregate_types(types_a)
+    agg_b = aggregate_types(types_b)
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Type</th><th>Distribution</th>'
+                 '<th class="right">4.5</th><th class="right">4.6</th>'
+                 '<th class="right">&Delta;</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    for type_name in ["Explore", "General-purpose", "Bash", "Plan"]:
+        ca = agg_a.get(type_name, 0)
+        cb = agg_b.get(type_name, 0)
+        pct_a = ca / total_sub_a * 100
+        pct_b = cb / total_sub_b * 100
+        bar = table_gen.generate_bar_pair(pct_a, pct_b)
+
+        delta_pp = pct_b - pct_a
+        if abs(delta_pp) < 3:
+            delta_str = '&asymp; Tie'
+            delta_css = 'color:var(--mid-gray)'
+        elif delta_pp > 0:
+            delta_str = f'B +{abs(delta_pp):.1f}pp'
+            delta_css = 'color:var(--blue)'
+        else:
+            delta_str = f'A +{abs(delta_pp):.1f}pp'
+            delta_css = 'color:var(--orange)'
+
+        lines.append("        <tr>")
+        lines.append(f'            <td class="label-cell">{type_name}</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
+        lines.append(f'            <td class="right mono">{ca:,}</td>')
+        lines.append(f'            <td class="right mono">{cb:,}</td>')
+        lines.append(f'            <td class="right mono" style="{delta_css}">{delta_str}</td>')
+        lines.append("        </tr>")
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
+# ── Complexity section inline generators ──────────────────────────
+
+def generate_complexity_distribution_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate task distribution by complexity bar-pair table."""
+    lines = [f"<!-- title: {spec.get('title', 'Task Distribution by Complexity')} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    stats = data.get("stats", {})
+
+    chi = _find_chi_square(stats, "complexity")
+    if not chi:
+        # Fallback to dataset overview
+        ov = data.get("dataset", {})
+        da = ov.get(ma, {}).get("complexity_distribution", {})
+        db = ov.get(mb, {}).get("complexity_distribution", {})
+        n_a = sum(da.values()) or 1
+        n_b = sum(db.values()) or 1
+
+        lines.append("<table>")
+        lines.append("    <thead>")
+        lines.append('        <tr><th>Complexity</th><th>Distribution</th>'
+                     '<th class="right">4.5 n</th><th class="right">4.6 n</th></tr>')
+        lines.append("    </thead>")
+        lines.append("    <tbody>")
+
+        for cx in table_gen.COMPLEXITY_ORDER:
+            ca = da.get(cx, 0)
+            cb = db.get(cx, 0)
+            pct_a = ca / n_a * 100
+            pct_b = cb / n_b * 100
+            bar = table_gen.generate_bar_pair(pct_a, pct_b)
+            label = table_gen._label_case(cx)
+
+            lines.append("        <tr>")
+            lines.append(f'            <td class="label-cell">{label}</td>')
+            lines.append(f'            <td class="bar-cell">{bar}</td>')
+            lines.append(f'            <td class="right mono">{ca:,}</td>')
+            lines.append(f'            <td class="right mono">{cb:,}</td>')
+            lines.append("        </tr>")
+
+        lines.append("    </tbody>")
+        lines.append("</table>")
+        return "\n".join(lines)
+
+    counts_a = chi.get("counts", {}).get(ma, {})
+    counts_b = chi.get("counts", {}).get(mb, {})
+    n_a = chi.get("n", {}).get(ma, 1)
+    n_b = chi.get("n", {}).get(mb, 1)
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Complexity</th><th>Distribution</th>'
+                 '<th class="right">4.5 n</th><th class="right">4.6 n</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    for cx in table_gen.COMPLEXITY_ORDER:
+        ca = counts_a.get(cx, 0)
+        cb = counts_b.get(cx, 0)
+        pct_a = ca / n_a * 100
+        pct_b = cb / n_b * 100
+        bar = table_gen.generate_bar_pair(pct_a, pct_b)
+        label = table_gen._label_case(cx)
+
+        lines.append("        <tr>")
+        lines.append(f'            <td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
+        lines.append(f'            <td class="right mono">{ca:,}</td>')
+        lines.append(f'            <td class="right mono">{cb:,}</td>')
+        lines.append("        </tr>")
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
+def generate_complexity_resources_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate resource usage bar-pair table for complexity section."""
+    lines = [f"<!-- title: {spec.get('title', 'Resource Usage')} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    ov = data.get("dataset", {})
+    a = ov.get(ma, {})
+    b = ov.get(mb, {})
+
+    tasks_a = a.get("tasks", 1) or 1
+    tasks_b = b.get("tasks", 1) or 1
+
+    # Compute per-task averages
+    tools_a = a.get("total_tool_calls", 0) / tasks_a
+    tools_b = b.get("total_tool_calls", 0) / tasks_b
+    files_a = a.get("total_files_touched", 0) / tasks_a
+    files_b = b.get("total_files_touched", 0) / tasks_b
+    lines_a = a.get("total_lines_added", 0) / tasks_a
+    lines_b = b.get("total_lines_added", 0) / tasks_b
+
+    lines_out = lines  # avoid name clash
+
+    lines_out.append("<table>")
+    lines_out.append("    <thead>")
+    lines_out.append('        <tr><th>Metric</th><th>Distribution</th>'
+                     '<th class="right">4.5</th><th class="right">4.6</th>'
+                     '<th class="right">&Delta;</th></tr>')
+    lines_out.append("    </thead>")
+    lines_out.append("    <tbody>")
+
+    resource_rows = [
+        ("Avg tools per task", tools_a, tools_b),
+        ("Avg files per task", files_a, files_b),
+        ("Avg lines added", lines_a, lines_b),
+    ]
+
+    for label, va, vb in resource_rows:
+        max_val = max(va, vb, 1)
+        pct_a = va / max_val * 100
+        pct_b = vb / max_val * 100
+        bar = table_gen.generate_bar_pair(pct_a, pct_b)
+
+        if va > 0:
+            delta_pct = (vb - va) / va * 100
+        else:
+            delta_pct = 0
+        if abs(delta_pct) < 5:
+            delta_str = '&asymp; Tie'
+            delta_css = 'color:var(--mid-gray)'
+        elif delta_pct > 0:
+            delta_str = f'B +{abs(delta_pct):.0f}%'
+            delta_css = 'color:var(--blue)'
+        else:
+            delta_str = f'A +{abs(delta_pct):.0f}%'
+            delta_css = 'color:var(--orange)'
+
+        # Show actual values in the bar labels
+        lines_out.append("        <tr>")
+        lines_out.append(f'            <td class="label-cell">{label}</td>')
+        # Override bar val labels with actual values
+        bar_html = (
+            f'<div class="bar-pair">\n'
+            f'                <div class="bar-row"><span class="bar-tag">A</span>'
+            f'<div class="bar-track"><div class="bar-fill a" style="width:{pct_a:.1f}%">'
+            f'</div></div><span class="bar-val">{va:.1f}</span></div>\n'
+            f'                <div class="bar-row"><span class="bar-tag">B</span>'
+            f'<div class="bar-track"><div class="bar-fill b" style="width:{pct_b:.1f}%">'
+            f'</div></div><span class="bar-val">{vb:.1f}</span></div>\n'
+            f'            </div>'
+        )
+        lines_out.append(f'            <td class="bar-cell">{bar_html}</td>')
+        lines_out.append(f'            <td class="right mono">{va:.1f}</td>')
+        lines_out.append(f'            <td class="right mono">{vb:.1f}</td>')
+        lines_out.append(f'            <td class="right mono" style="{delta_css}">{delta_str}</td>')
+        lines_out.append("        </tr>")
+
+    lines_out.append("    </tbody>")
+    lines_out.append("</table>")
+    return "\n".join(lines_out)
+
+
+# ── Planning section inline generators ────────────────────────────
+
+def generate_planning_adoption_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate planning adoption rate bar-pair table."""
+    lines = [f"<!-- title: {spec.get('title', 'Planning Adoption')} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    pa = data.get("planning", {}).get(ma, {})
+    pb = data.get("planning", {}).get(mb, {})
+
+    rate_a = pa.get("planning_rate_pct", 0)
+    rate_b = pb.get("planning_rate_pct", 0)
+    planned_a = pa.get("total_planned", 0)
+    planned_b = pb.get("total_planned", 0)
+
+    bar = table_gen.generate_bar_pair(rate_a, rate_b)
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Metric</th><th>Distribution</th>'
+                 '<th class="right">4.5</th><th class="right">4.6</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+    lines.append("        <tr>")
+    lines.append(f'            <td class="label-cell">Planning adoption rate</td>')
+    lines.append(f'            <td class="bar-cell">{bar}</td>')
+    lines.append(f'            <td class="right mono">{planned_a} tasks</td>')
+    lines.append(f'            <td class="right mono">{planned_b} tasks</td>')
+    lines.append("        </tr>")
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
+def generate_planning_by_complexity_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate planning rate by complexity bar-pair table."""
+    lines = [f"<!-- title: {spec.get('title', 'Planning by Complexity')} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    pa = data.get("planning", {}).get(ma, {}).get("by_complexity", {})
+    pb = data.get("planning", {}).get(mb, {}).get("by_complexity", {})
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Complexity</th><th>Distribution</th>'
+                 '<th class="right">4.5</th><th class="right">4.6</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    for cx in table_gen.COMPLEXITY_PLUS_ORDER:
+        ra = pa.get(cx, {})
+        rb = pb.get(cx, {})
+        rate_a = ra.get("planning_rate_pct", 0)
+        rate_b = rb.get("planning_rate_pct", 0)
+        planned_a = ra.get("planned", 0)
+        total_a = ra.get("n", 0)
+        planned_b = rb.get("planned", 0)
+        total_b = rb.get("n", 0)
+
+        bar = table_gen.generate_bar_pair(rate_a, rate_b)
+        label = table_gen._label_case(cx)
+
+        lines.append("        <tr>")
+        lines.append(f'            <td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
+        lines.append(f'            <td class="right mono">{planned_a}/{total_a}</td>')
+        lines.append(f'            <td class="right mono">{planned_b}/{total_b}</td>')
+        lines.append("        </tr>")
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
+# ── Compaction section inline generators ──────────────────────────
+
+def generate_compaction_overview_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate compaction overview table."""
+    lines = [f"<!-- title: {spec.get('title', 'Compaction Overview')} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    ca = data.get("compaction", {}).get(ma, {})
+    cb = data.get("compaction", {}).get(mb, {})
+
+    rate_a = ca.get("compaction_rate_pct", 0)
+    rate_b = cb.get("compaction_rate_pct", 0)
+    sess_a = ca.get("sessions_with_compaction", 0)
+    tot_sess_a = ca.get("total_sessions", 0)
+    sess_b = cb.get("sessions_with_compaction", 0)
+    tot_sess_b = cb.get("total_sessions", 0)
+    events_a = ca.get("total_events", 0)
+    events_b = cb.get("total_events", 0)
+    eps_a = ca.get("avg_events_per_compacting_session", 0)
+    eps_b = cb.get("avg_events_per_compacting_session", 0)
+    trig_a = ca.get("trigger_breakdown", {})
+    auto_a = trig_a.get("auto", 0)
+    total_trig_a = sum(trig_a.values()) or 1
+    auto_pct_a = auto_a / total_trig_a * 100
+    trig_b = cb.get("trigger_breakdown", {})
+    auto_b = trig_b.get("auto", 0)
+    total_trig_b = sum(trig_b.values()) or 1
+    auto_pct_b = auto_b / total_trig_b * 100
+    pre_tok_a = ca.get("avg_pre_tokens", 0)
+    pre_tok_b = cb.get("avg_pre_tokens", 0)
+    pos_a = ca.get("avg_position_pct", 0)
+    pos_b = cb.get("avg_position_pct", 0)
+
+    bar = table_gen.generate_bar_pair(rate_a, rate_b)
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Metric</th><th>Distribution</th>'
+                 '<th class="right">4.5</th><th class="right">4.6</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+    lines.append(f'        <tr><td class="label-cell">Sessions with compaction</td>')
+    lines.append(f'            <td class="bar-cell">{bar}</td>')
+    lines.append(f'            <td class="right mono">{sess_a} / {tot_sess_a}</td>'
+                 f'<td class="right mono">{sess_b} / {tot_sess_b}</td></tr>')
+    lines.append(f'        <tr><td class="label-cell">Total compaction events</td><td></td>'
+                 f'<td class="right mono">{events_a}</td><td class="right mono">{events_b}</td></tr>')
+    lines.append(f'        <tr><td class="label-cell">Events per compacting session</td><td></td>'
+                 f'<td class="right mono">{eps_a:.2f}</td><td class="right mono">{eps_b:.2f}</td></tr>')
+    lines.append(f'        <tr><td class="label-cell">Auto-triggered</td><td></td>'
+                 f'<td class="right mono">{auto_pct_a:.1f}%</td><td class="right mono">{auto_pct_b:.1f}%</td></tr>')
+    lines.append(f'        <tr><td class="label-cell">Avg pre-compaction tokens</td><td></td>'
+                 f'<td class="right mono">{pre_tok_a:,.0f}</td><td class="right mono">{pre_tok_b:,.0f}</td></tr>')
+    lines.append(f'        <tr><td class="label-cell">Avg position in session</td><td></td>'
+                 f'<td class="right mono">{pos_a:.1f}%</td><td class="right mono">{pos_b:.1f}%</td></tr>')
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
+def generate_compaction_impact_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate compaction outcome impact table for Opus 4.5."""
+    lines = [f"<!-- title: {spec.get('title', 'Compaction Outcome Impact')} -->"]
+
+    ma = config["model_a"]
+    ca = data.get("compaction", {}).get(ma, {})
+    oc = ca.get("outcome_correlation", {})
+    comp = oc.get("compacting", {})
+    ctrl = oc.get("control", {})
+    effect = oc.get("compaction_effect", {})
+
+    pre = comp.get("pre", {})
+    post = comp.get("post", {})
+    delta = comp.get("delta", {})
+    ctrl_delta = ctrl.get("delta", {})
+
+    metrics = [
+        ("Alignment score", "avg_alignment", "{:.2f}", ""),
+        ("Satisfaction rate", "satisfaction_rate", "pct1", "pp"),
+        ("Completion rate", "completion_rate", "pct1", "pp"),
+        ("User correction rate", "user_correction_rate", "pct1", "pp"),
+    ]
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append(f'        <tr><th>Metric (Opus {config["display_a"]})</th>'
+                 '<th class="right">Pre</th><th class="right">Post</th>'
+                 '<th class="right">Delta</th><th class="right">Control &Delta;</th>'
+                 '<th class="right">Compaction Effect</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    for label, key, fmt, delta_fmt in metrics:
+        pre_val = pre.get(key)
+        post_val = post.get(key)
+        d_val = delta.get(key)
+        cd_val = ctrl_delta.get(key)
+        e_val = effect.get(key)
+
+        if fmt == "pct1":
+            pre_str = f"{pre_val * 100:.1f}%" if pre_val is not None else "&mdash;"
+            post_str = f"{post_val * 100:.1f}%" if post_val is not None else "&mdash;"
+        else:
+            pre_str = f"{pre_val:.2f}" if pre_val is not None else "&mdash;"
+            post_str = f"{post_val:.2f}" if post_val is not None else "&mdash;"
+
+        def fmt_delta(v, unit):
+            if v is None:
+                return "&mdash;"
+            sign = "+" if v > 0 else "&minus;"
+            if unit == "pp":
+                return f"{sign}{abs(v * 100):.1f}pp"
+            return f"{sign}{abs(v):.2f}"
+
+        d_str = fmt_delta(d_val, delta_fmt)
+        cd_str = fmt_delta(cd_val, delta_fmt)
+        e_str = fmt_delta(e_val, delta_fmt)
+
+        lines.append(f'        <tr><td class="label-cell">{label}</td>'
+                     f'<td class="right mono">{pre_str}</td>'
+                     f'<td class="right mono">{post_str}</td>'
+                     f'<td class="right mono">{d_str}</td>'
+                     f'<td class="right mono">{cd_str}</td>'
+                     f'<td class="right mono">{e_str}</td></tr>')
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
+# ── Session section inline generators ─────────────────────────────
+
+def generate_session_warmup_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate warm-up effects table."""
+    lines = [f"<!-- title: {spec.get('title', 'Warm-up Effects')} -->"]
+
+    session = data.get("sessions", {})
+    warmup = session.get("warmup", [])
+
+    # Find each model's warmup data
+    wa = next((w for w in warmup if w.get("model") == config["model_a"]), {})
+    wb = next((w for w in warmup if w.get("model") == config["model_b"]), {})
+
+    ea = wa.get("early", {})
+    la = wa.get("later", {})
+    eb = wb.get("early", {})
+    lb = wb.get("later", {})
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Phase</th><th class="right">Alignment (4.5 / 4.6)</th>'
+                 '<th>Completion Rate</th><th class="right">Tools/File (4.5 / 4.6)</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    phases = [
+        ("Early (first 3 tasks)", ea, eb),
+        ("Later (task 4+)", la, lb),
+    ]
+
+    for label, da, db in phases:
+        align_a = da.get("avg_alignment_score", 0)
+        align_b = db.get("avg_alignment_score", 0)
+        comp_a = da.get("completion_rate", 0)
+        comp_b = db.get("completion_rate", 0)
+        tpf_a = da.get("avg_tools_per_file", 0)
+        tpf_b = db.get("avg_tools_per_file", 0)
+        bar = table_gen.generate_bar_pair(comp_a, comp_b)
+
+        lines.append("        <tr>")
+        lines.append(f'            <td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="right mono">{align_a:.2f} / {align_b:.2f}</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
+        lines.append(f'            <td class="right mono">{tpf_a:.2f} / {tpf_b:.2f}</td>')
+        lines.append("        </tr>")
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
+def generate_session_effort_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate effort distribution bar-pair table."""
+    lines = [f"<!-- title: {spec.get('title', 'Effort Distribution')} -->"]
+
+    session = data.get("sessions", {})
+    effort = session.get("effort_distribution", [])
+
+    ea = next((e for e in effort if e.get("model") == config["model_a"]), {})
+    eb = next((e for e in effort if e.get("model") == config["model_b"]), {})
+
+    rows = [
+        ("Research ratio", ea.get("avg_research_ratio", 0) * 100,
+         eb.get("avg_research_ratio", 0) * 100,
+         f'{ea.get("avg_research_ratio", 0):.3f}',
+         f'{eb.get("avg_research_ratio", 0):.3f}'),
+        ("Implementation ratio", ea.get("avg_impl_ratio", 0) * 100,
+         eb.get("avg_impl_ratio", 0) * 100,
+         f'{ea.get("avg_impl_ratio", 0):.3f}',
+         f'{eb.get("avg_impl_ratio", 0):.3f}'),
+        ("Front-load positive %", ea.get("frontload_positive_pct", 0),
+         eb.get("frontload_positive_pct", 0),
+         f'{ea.get("tasks_with_frontload_data", 0):,} tasks',
+         f'{eb.get("tasks_with_frontload_data", 0):,} tasks'),
+    ]
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Metric</th><th>Distribution</th>'
+                 '<th class="right">4.5</th><th class="right">4.6</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    for label, pct_a, pct_b, val_a, val_b in rows:
+        bar = table_gen.generate_bar_pair(pct_a, pct_b)
+
+        lines.append("        <tr>")
+        lines.append(f'            <td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
+        lines.append(f'            <td class="right mono">{val_a}</td>')
+        lines.append(f'            <td class="right mono">{val_b}</td>')
+        lines.append("        </tr>")
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
+def generate_session_length_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate session length effects table."""
+    lines = [f"<!-- title: {spec.get('title', 'Session Length Effects')} -->"]
+
+    session = data.get("sessions", {})
+    sl = session.get("session_length", [])
+
+    sa = next((s for s in sl if s.get("model") == config["model_a"]), {}).get("buckets", {})
+    sb = next((s for s in sl if s.get("model") == config["model_b"]), {}).get("buckets", {})
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Session Length</th>'
+                 '<th class="right">Alignment (4.5 / 4.6)</th>'
+                 '<th>Completion Rate</th>'
+                 '<th class="right">Sessions (4.5 / 4.6)</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    bucket_display = [
+        ("Short (1&ndash;3 tasks)", "short (1-3)"),
+        ("Medium (4&ndash;8 tasks)", "medium (4-8)"),
+        ("Long (9+ tasks)", "long (9+)"),
+    ]
+
+    for label, key in bucket_display:
+        ba = sa.get(key, {})
+        bb = sb.get(key, {})
+        align_a = ba.get("avg_alignment_score", 0)
+        align_b = bb.get("avg_alignment_score", 0)
+        comp_a = ba.get("completion_rate", 0)
+        comp_b = bb.get("completion_rate", 0)
+        sess_a = ba.get("sessions", 0)
+        sess_b = bb.get("sessions", 0)
+        bar = table_gen.generate_bar_pair(comp_a, comp_b)
+
+        lines.append(f'        <tr><td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="right mono">{align_a:.2f} / {align_b:.2f}</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
+        lines.append(f'            <td class="right mono">{sess_a} / {sess_b}</td></tr>')
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
 # ── Custom generator dispatch ─────────────────────────────────────
 
 CUSTOM_GENERATORS = {
@@ -1028,6 +2083,25 @@ CUSTOM_GENERATORS = {
     "satisfaction_stats": generate_satisfaction_stats,
     "compaction_outcomes": generate_compaction_outcomes,
     "planning_complexity": generate_planning_complexity,
+    "thinking_calibration_inline": generate_thinking_calibration_inline,
+    "verbosity_by_type_inline": generate_verbosity_by_type_inline,
+    "cost_by_complexity_inline": generate_cost_by_complexity_inline,
+    "edit_overview_inline": generate_edit_overview_inline,
+    "edit_iterative_by_complexity_inline": generate_edit_iterative_by_complexity_inline,
+    "edit_accuracy_by_complexity_inline": generate_edit_accuracy_by_complexity_inline,
+    "quality_sentiment_inline": generate_quality_sentiment_inline,
+    "quality_completion_inline": generate_quality_completion_inline,
+    "behavior_adoption_inline": generate_behavior_adoption_inline,
+    "behavior_subagent_types_inline": generate_behavior_subagent_types_inline,
+    "complexity_distribution_inline": generate_complexity_distribution_inline,
+    "complexity_resources_inline": generate_complexity_resources_inline,
+    "planning_adoption_inline": generate_planning_adoption_inline,
+    "planning_by_complexity_inline": generate_planning_by_complexity_inline,
+    "compaction_overview_inline": generate_compaction_overview_inline,
+    "compaction_impact_inline": generate_compaction_impact_inline,
+    "session_warmup_inline": generate_session_warmup_inline,
+    "session_effort_inline": generate_session_effort_inline,
+    "session_length_inline": generate_session_length_inline,
     "stat_tests": None,  # handled by table_gen._generate_stat_test_rows
 }
 
@@ -1346,6 +2420,140 @@ def collect_all_metrics(specs_loaded: list[tuple], config: dict) -> dict:
     return all_metrics
 
 
+def load_variables(report_dir: Path) -> dict:
+    """Load template variable definitions from variables.json.
+
+    Returns only the variable entries (excludes template_tables and other
+    non-variable keys).
+    """
+    var_path = report_dir / "variables.json"
+    if not var_path.exists():
+        return {}
+    with open(var_path) as f:
+        data = json.load(f)
+    # Filter to only variable definitions (dicts with "source" and "path")
+    return {k: v for k, v in data.items()
+            if isinstance(v, dict) and "source" in v and "path" in v}
+
+
+# Default mapping from source names to file paths relative to comparison dir
+DATA_SOURCE_PATHS = {
+    "dataset": "analysis/dataset-overview.json",
+    "tokens": "analysis/token-analysis.json",
+    "stats": "analysis/stat-tests.json",
+    "edits": "analysis/edit-analysis.json",
+    "planning": "analysis/planning-analysis.json",
+    "compaction": "analysis/compaction-analysis.json",
+    "behavior": "analysis/behavior-metrics.json",
+    "sessions": "analysis/session-analysis.json",
+    "scores": "analysis/scores-latest.json",
+}
+
+
+def _load_template_table_registry(report_dir: Path) -> dict:
+    """Load the template table registry from variables.json.
+
+    The registry maps template table IDs to their spec + table definitions.
+    Stored under the "template_tables" key in variables.json.
+    """
+    var_path = report_dir / "variables.json"
+    if not var_path.exists():
+        return {}
+    with open(var_path) as f:
+        data = json.load(f)
+    return data.get("template_tables", {})
+
+
+def load_variable_data_sources(variables: dict, comparison_dir: Path) -> dict:
+    """Load all data files referenced by template variables.
+
+    Returns a flat dict keyed by source name -> loaded JSON data.
+    """
+    # Collect unique source names
+    sources_needed = set()
+    for var_def in variables.values():
+        source = var_def.get("source")
+        if source:
+            sources_needed.add(source)
+
+    data = {}
+    for source in sources_needed:
+        if source in data:
+            continue
+        rel_path = DATA_SOURCE_PATHS.get(source)
+        if not rel_path:
+            print(f"  Warning: unknown data source '{source}' for variable", file=sys.stderr)
+            data[source] = {}
+            continue
+        full_path = comparison_dir / rel_path
+        if not full_path.exists():
+            print(f"  Warning: data file {full_path} not found", file=sys.stderr)
+            data[source] = {}
+            continue
+        with open(full_path) as f:
+            data[source] = json.load(f)
+    return data
+
+
+def resolve_template_variables(template_html: str, variables: dict,
+                                var_data: dict, config: dict) -> tuple[str, int]:
+    """Resolve {{section.metric}} patterns in template HTML.
+
+    Uses persistent sentinels so variables can be re-resolved on subsequent
+    runs. The flow is:
+    1. Un-resolve: replace <!-- var: name -->...<!-- /var --> back to {{name}}
+    2. Resolve: replace {{name}} with <!-- var: name -->value<!-- /var -->
+
+    This means the template always retains resolvable markers.
+
+    Args:
+        template_html: The report template with {{...}} or sentinel patterns.
+        variables: Variable definitions from variables.json.
+        var_data: Loaded data sources keyed by source name.
+        config: Model config from parse_comparison_dir.
+
+    Returns:
+        (modified_html, n_resolved) tuple.
+    """
+    # Step 1: Un-resolve any previously resolved variables
+    sentinel_pattern = re.compile(r'<!-- var: (\S+?) -->.*?<!-- /var -->')
+    template_html = sentinel_pattern.sub(lambda m: '{{' + m.group(1) + '}}', template_html)
+
+    # Step 2: Resolve {{...}} patterns
+    var_pattern = re.compile(r'\{\{(\S+?)\}\}')
+    n_resolved = 0
+    unresolved = []
+
+    def replace_var(m):
+        nonlocal n_resolved
+        var_name = m.group(1)
+        var_def = variables.get(var_name)
+        if not var_def:
+            unresolved.append(var_name)
+            return m.group(0)  # leave unresolved
+
+        source = var_def.get("source", "")
+        path = var_def.get("path", "")
+        fmt = var_def.get("format", "{}")
+
+        source_data = var_data.get(source, {})
+        val = table_gen.resolve_path(source_data, path, config)
+        if val is None:
+            unresolved.append(var_name)
+            return m.group(0)
+
+        formatted = table_gen.format_value(val, fmt)
+        n_resolved += 1
+        return f'<!-- var: {var_name} -->{formatted}<!-- /var -->'
+
+    result = var_pattern.sub(replace_var, template_html)
+
+    if unresolved:
+        print(f"  Warning: {len(unresolved)} unresolved variable(s): {', '.join(unresolved)}", file=sys.stderr)
+
+    return result, n_resolved
+
+
 def collect_guidance(specs_loaded: list[tuple]) -> str:
     """Build per-section guidance notes from all loaded specs."""
     lines = []
@@ -1484,6 +2692,73 @@ def main():
                 print(f"    Wrote: {expansion_path.name}")
             tables_generated += 1
 
+    # ── Phase 1b: Template variable resolution ────────────────
+
+    variables = load_variables(report_dir)
+    vars_resolved = 0
+    if variables:
+        var_data = load_variable_data_sources(variables, comparison_dir)
+        template_html, vars_resolved = resolve_template_variables(
+            template_html, variables, var_data, config)
+        if vars_resolved > 0:
+            if args.dry_run:
+                print(f"\n  Would resolve {vars_resolved} template variable(s)")
+            else:
+                template_path.write_text(template_html)
+                print(f"\n  Resolved {vars_resolved} template variable(s)")
+
+    # ── Phase 1c: Named GENERATED-TABLE in template ─────────
+
+    template_tables_updated = 0
+    template_table_registry = _load_template_table_registry(report_dir)
+    if template_table_registry:
+        for table_id, reg_entry in template_table_registry.items():
+            spec_id = reg_entry.get("spec")
+            table_name = reg_entry.get("table")
+            if not spec_id or not table_name:
+                continue
+
+            spec_path = specs_dir / f"{spec_id}.json"
+            if not spec_path.exists():
+                print(f"  Warning: spec {spec_id} not found for template table {table_id}", file=sys.stderr)
+                continue
+
+            spec = load_spec(spec_path)
+            t_data = load_data_sources(spec, comparison_dir)
+            table_spec = spec.get("tables", {}).get(table_name)
+            if not table_spec:
+                print(f"  Warning: table {table_name} not found in spec {spec_id}", file=sys.stderr)
+                continue
+
+            table_html = generate_expansion_html(table_name, table_spec, t_data, config)
+            # Strip the title line (not needed in template)
+            if table_html.startswith("<!-- title:"):
+                first_nl = table_html.index("\n")
+                table_html = table_html[first_nl + 1:]
+
+            # Replace in template
+            marker_pattern = re.compile(
+                rf'<!-- GENERATED-TABLE: {re.escape(table_id)} -->\n?'
+                r'(.*?)\n?'
+                rf'<!-- /GENERATED-TABLE: {re.escape(table_id)} -->',
+                re.DOTALL,
+            )
+            new_content = (f'<!-- GENERATED-TABLE: {table_id} -->\n'
+                           f'{table_html}\n'
+                           f'<!-- /GENERATED-TABLE: {table_id} -->')
+
+            if marker_pattern.search(template_html):
+                template_html = marker_pattern.sub(new_content, template_html)
+                template_tables_updated += 1
+                print(f"  Template table: {table_id}")
+
+        if template_tables_updated > 0:
+            if args.dry_run:
+                print(f"  Would update {template_tables_updated} template table(s)")
+            else:
+                template_path.write_text(template_html)
+                print(f"  Updated {template_tables_updated} template table(s)")
+
     # ── Phase 2: Whole-document prose check ───────────────────
 
     prose_checked = 0
@@ -1587,6 +2862,10 @@ def main():
     # Summary
     print(f"\n{'='*50}")
     print(f"  Tables generated: {tables_generated}")
+    if vars_resolved:
+        print(f"  Template variables resolved: {vars_resolved}")
+    if template_tables_updated:
+        print(f"  Template tables updated: {template_tables_updated}")
     if not args.tables_only:
         print(f"  Prose: {prose_checked} LLM call(s) (cached: {prose_cached}, updated: {prose_updated})")
     if direction_changes:

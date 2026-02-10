@@ -120,6 +120,84 @@ def generate_bar_pair(val_a: float, val_b: float, scale: float = 100.0) -> str:
     )
 
 
+def generate_bar_pair_cell(val_a: float, val_b: float, scale: float = 100.0) -> str:
+    """Generate a bar-pair table cell wrapping generate_bar_pair()."""
+    bar = generate_bar_pair(val_a, val_b, scale)
+    return f'<td class="bar-cell">{bar}</td>'
+
+
+def generate_delta_cell(val_a: float, val_b: float, mode: str = "pct_change") -> str:
+    """Generate a delta value with appropriate CSS class.
+
+    Modes:
+        pct_change: (b-a)/a * 100, formatted as +X.X%
+        absolute: b-a, formatted with sign
+        ratio: b/a, formatted as X.Xx
+    """
+    if val_a is None or val_b is None:
+        return "&mdash;"
+
+    if mode == "pct_change":
+        if val_a == 0:
+            return "&mdash;"
+        delta = (val_b - val_a) / val_a * 100
+        sign = "+" if delta > 0 else ("&minus;" if delta < 0 else "")
+        css = "v-green" if delta > 0 else ("v-orange" if delta < 0 else "")
+        return f'<span class="{css}">{sign}{abs(delta):.1f}%</span>'
+    elif mode == "absolute":
+        delta = val_b - val_a
+        sign = "+" if delta > 0 else ("&minus;" if delta < 0 else "")
+        css = "v-green" if delta > 0 else ("v-orange" if delta < 0 else "")
+        return f'<span class="{css}">{sign}{abs(delta):.2f}</span>'
+    elif mode == "ratio":
+        if val_a == 0:
+            return "&mdash;"
+        ratio = val_b / val_a
+        return f"{ratio:.2f}x"
+    return "&mdash;"
+
+
+def generate_stat_card(label: str, value: str, delta: str | None = None,
+                       note: str | None = None) -> str:
+    """Generate HTML for a stat card.
+
+    Args:
+        label: Card label text (uppercase header)
+        value: Main value to display
+        delta: Optional delta annotation (e.g. "+15%")
+        note: Optional detail text below the value
+    """
+    lines = ['<div class="stat-card">']
+    lines.append(f'    <div class="label">{label}</div>')
+    lines.append(f'    <div class="value v-dark">{value}</div>')
+    if delta:
+        lines.append(f'    <div class="detail">{delta}</div>')
+    if note:
+        lines.append(f'    <div class="detail">{note}</div>')
+    lines.append('</div>')
+    return "\n".join(lines)
+
+
+def generate_stat_note(test_name: str, p_value: float, significant: bool,
+                       threshold: float) -> str:
+    """Generate a significance note HTML snippet.
+
+    Args:
+        test_name: Name of the statistical test
+        p_value: The p-value
+        significant: Whether it passed the significance threshold
+        threshold: The threshold used (e.g. Bonferroni-corrected alpha)
+    """
+    if significant:
+        css = "v-green"
+        label = "significant"
+    else:
+        css = ""
+        label = "not significant"
+    return (f'<span class="{css}">{test_name}: p = {p_value:.4f} '
+            f'({label}, &alpha; = {threshold:.4f})</span>')
+
+
 def _label_case(key: str) -> str:
     """Capitalize a snake_case or lowercase key for display."""
     return key.replace("_", " ").replace("+", "+").title()
@@ -130,11 +208,36 @@ def _resolve_row_data(spec: dict, row_key: str, data: dict, config: dict) -> dic
     row = {}
     for col in spec["columns"]:
         header = col["header"].format(**config)
+        col_type = col.get("type")
         key = col.get("key")
         path = col.get("path")
         numerator = col.get("numerator")
         denominator = col.get("denominator")
-        if key == "_label":
+
+        if col_type == "bar_pair":
+            path_a = col["path_a"].replace("{row_key}", row_key)
+            path_b = col["path_b"].replace("{row_key}", row_key)
+            val_a = resolve_path(data, path_a, config) or 0
+            val_b = resolve_path(data, path_b, config) or 0
+            scale = col.get("scale", 100)
+            row[header] = generate_bar_pair(val_a, val_b, scale)
+        elif col_type == "delta":
+            path_a = col["path_a"].replace("{row_key}", row_key)
+            path_b = col["path_b"].replace("{row_key}", row_key)
+            val_a = resolve_path(data, path_a, config)
+            val_b = resolve_path(data, path_b, config)
+            mode = col.get("mode", "pct_change")
+            row[header] = generate_delta_cell(val_a, val_b, mode)
+        elif col_type == "composite":
+            value_path = col["value_path"].replace("{row_key}", row_key)
+            count_path = col["count_path"].replace("{row_key}", row_key)
+            val = resolve_path(data, value_path, config)
+            count = resolve_path(data, count_path, config)
+            fmt = col.get("format", "{:.2f}")
+            val_str = format_value(val, fmt)
+            count_str = f"{count:,}" if isinstance(count, (int, float)) else str(count or 0)
+            row[header] = f"{val_str} (n={count_str})"
+        elif key == "_label":
             row[header] = _label_case(row_key)
         elif key == "_key":
             row[header] = row_key
@@ -188,6 +291,12 @@ def generate_table(spec: dict, data: dict, config: dict) -> str:
     row_source = spec.get("row_source")
     row_order = spec.get("row_order", [])
     columns = spec["columns"]
+
+    # Dynamic row discovery: auto-discover keys from data
+    if spec.get("row_source_keys") and row_source and not row_order:
+        source_data = resolve_path(data, row_source, config)
+        if isinstance(source_data, dict):
+            row_order = list(source_data.keys())
 
     # Multi-header support (e.g., model-grouped columns)
     multi_header = spec.get("multi_header")
@@ -322,7 +431,7 @@ def _build_result_text(result: dict, test_type: str, config: dict) -> str:
         d = result["cohens_d"]
         if not result.get("significant_p05", False):
             return "No significant difference"
-        direction = "lower" if d < 0 else "higher"
+        direction = "higher" if d < 0 else "lower"
         model_label = f"Opus {config.get('display_b', '4.6')}"
         if bonf:
             return f"{model_label} {direction} (Bonferroni significant)"
@@ -332,7 +441,7 @@ def _build_result_text(result: dict, test_type: str, config: dict) -> str:
         h = result["cohens_h"]
         if not result.get("significant_p05", False):
             return "No significant difference"
-        direction = "lower" if h < 0 else "higher"
+        direction = "higher" if h < 0 else "lower"
         model_label = f"Opus {config.get('display_b', '4.6')}"
         if bonf:
             return f"{model_label} {direction} (Bonferroni significant)"

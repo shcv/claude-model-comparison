@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Compaction Analysis: Measure context window compaction rates and outcome impact.
 
-Parses compaction events (compact_boundary system messages) from session JSONL
-files and correlates with task-level outcomes. For sessions with compaction,
+Reads compaction events from canonical task files (tasks-canonical-{model}.json)
+and correlates with task-level outcomes. For sessions with compaction,
 splits tasks into pre/post groups based on the first compaction timestamp.
 A control group (non-compacting sessions) uses a synthetic split at the median
 compaction position to measure baseline position effects.
@@ -19,9 +19,13 @@ Usage:
 import argparse
 import json
 import statistics
+import sys
 from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from models import discover_models
 
 
 def parse_timestamp(ts: str) -> datetime | None:
@@ -32,39 +36,6 @@ def parse_timestamp(ts: str) -> datetime | None:
         return datetime.fromisoformat(ts.replace('Z', '+00:00'))
     except (ValueError, TypeError):
         return None
-
-
-def extract_compaction_events(file_path: Path) -> list[dict]:
-    """Extract compaction events from a session JSONL file.
-
-    Returns list of dicts with keys: timestamp, trigger, pre_tokens, msg_index, total_msgs.
-    """
-    events = []
-    msg_index = 0
-    total_msgs = 0
-
-    try:
-        with open(file_path, 'r', encoding='utf-8') as f:
-            lines = [line for line in f if line.strip()]
-        total_msgs = len(lines)
-
-        for i, line in enumerate(lines):
-            if 'compact_boundary' not in line:
-                continue
-            msg = json.loads(line)
-            if msg.get('type') == 'system' and msg.get('subtype') == 'compact_boundary':
-                meta = msg.get('compactMetadata', {})
-                events.append({
-                    'timestamp': msg.get('timestamp', ''),
-                    'trigger': meta.get('trigger', 'unknown'),
-                    'pre_tokens': meta.get('preTokens', 0),
-                    'msg_index': i,
-                    'total_msgs': total_msgs,
-                })
-    except Exception as e:
-        print(f"  Error reading {file_path}: {e}")
-
-    return events
 
 
 def compute_outcome_metrics(tasks: list[dict]) -> dict:
@@ -116,31 +87,32 @@ def compute_delta(pre: dict, post: dict) -> dict:
     return delta
 
 
-def analyze_model_compaction(sessions_file: Path, model: str, data_dir: Path,
-                             analysis_dir: Path) -> dict:
-    """Analyze compaction for a single model."""
-    with open(sessions_file) as f:
-        sessions = json.load(f)
+def analyze_model_compaction(data_dir: Path, model: str, analysis_dir: Path) -> dict:
+    """Analyze compaction for a single model using canonical task data."""
+    canonical_path = data_dir / f'tasks-canonical-{model}.json'
+    if not canonical_path.exists():
+        print(f"Error: {canonical_path} not found")
+        return {}
 
-    # Filter meta sessions
-    sessions = [s for s in sessions if not s.get('is_meta', False)]
+    with open(canonical_path) as f:
+        all_tasks = json.load(f)
 
-    # Load classified tasks + LLM analysis + edit metrics
-    classified_path = data_dir / f'tasks-classified-{model}.json'
+    # Filter meta tasks
+    all_tasks = [t for t in all_tasks if not t.get('is_meta', False)]
+
+    # Load LLM analysis + edit metrics for outcome correlation
     llm_path = analysis_dir / f'llm-analysis-{model}.json'
     edit_metrics_path = analysis_dir / f'edit-metrics-{model}.json'
 
-    task_data = {}  # task_id -> merged task info
-
-    if classified_path.exists():
-        with open(classified_path) as f:
-            for t in json.load(f):
-                task_data[t['task_id']] = {
-                    'task_id': t['task_id'],
-                    'session_id': t['session_id'],
-                    'start_time': t.get('start_time', ''),
-                    'duration_seconds': t.get('duration_seconds', 0),
-                }
+    # Build task_data for outcome correlation
+    task_data = {}
+    for t in all_tasks:
+        task_data[t['task_id']] = {
+            'task_id': t['task_id'],
+            'session_id': t['session_id'],
+            'start_time': t.get('start_time', ''),
+            'duration_seconds': t.get('duration_seconds', 0),
+        }
 
     if llm_path.exists():
         with open(llm_path) as f:
@@ -160,30 +132,45 @@ def analyze_model_compaction(sessions_file: Path, model: str, data_dir: Path,
                     task_data[tid]['write_count'] = m.get('write_count', 0)
                     task_data[tid]['user_corrections'] = m.get('user_corrections', 0)
 
-    # Parse compaction events for each session
+    # Group tasks by session, collect compaction events
+    sessions: dict[str, list[dict]] = defaultdict(list)
+    for t in all_tasks:
+        sessions[t['session_id']].append(t)
+
+    # Extract compaction events from canonical task data
     compacting_sessions = []
     non_compacting_sessions = []
     all_events = []
 
-    for s in sessions:
-        fp = Path(s['file_path'])
-        if not fp.exists():
-            continue
+    for sid, session_tasks in sessions.items():
+        # Collect all compaction events from all tasks in this session
+        session_events = []
+        for task in session_tasks:
+            for ce in task.get('compaction_events_before', []):
+                session_events.append(ce)
 
-        events = extract_compaction_events(fp)
-        sid = s['session_id']
+        # Estimate session duration from task spans
+        durations = [t.get('duration_seconds', 0) for t in session_tasks]
+        session_duration_mins = sum(durations) / 60
 
-        if events:
+        # Estimate total messages from last task's msg_index_end
+        total_msgs = max((t.get('msg_index_end', 0) for t in session_tasks), default=0)
+
+        if session_events:
+            # Add total_msgs to events for position calculation
+            for e in session_events:
+                e['total_msgs'] = total_msgs
+
             compacting_sessions.append({
                 'session_id': sid,
-                'events': events,
-                'duration_minutes': s.get('duration_minutes', 0),
+                'events': session_events,
+                'duration_minutes': session_duration_mins,
             })
-            all_events.extend(events)
+            all_events.extend(session_events)
         else:
             non_compacting_sessions.append({
                 'session_id': sid,
-                'duration_minutes': s.get('duration_minutes', 0),
+                'duration_minutes': session_duration_mins,
             })
 
     total_sessions = len(sessions)
@@ -195,11 +182,14 @@ def analyze_model_compaction(sessions_file: Path, model: str, data_dir: Path,
     pre_tokens_list = []
     positions = []
     for e in all_events:
-        triggers[e['trigger']] += 1
-        if e['pre_tokens'] > 0:
-            pre_tokens_list.append(e['pre_tokens'])
-        if e['total_msgs'] > 0:
-            positions.append(e['msg_index'] / e['total_msgs'] * 100)
+        triggers[e.get('trigger', 'unknown')] += 1
+        pt = e.get('pre_tokens', 0)
+        if pt > 0:
+            pre_tokens_list.append(pt)
+        total = e.get('total_msgs', 0)
+        mi = e.get('msg_index', 0)
+        if total > 0:
+            positions.append(mi / total * 100)
 
     # Events per hour across compacting sessions
     total_hours = sum(s['duration_minutes'] for s in compacting_sessions) / 60
@@ -226,7 +216,7 @@ def analyze_model_compaction(sessions_file: Path, model: str, data_dir: Path,
             sid = cs['session_id']
             # Use first compaction timestamp as split point
             first_event = cs['events'][0]
-            split_ts = parse_timestamp(first_event['timestamp'])
+            split_ts = parse_timestamp(first_event.get('timestamp', ''))
             if not split_ts:
                 continue
 
@@ -298,7 +288,7 @@ def analyze_model_compaction(sessions_file: Path, model: str, data_dir: Path,
 def main():
     parser = argparse.ArgumentParser(description='Analyze compaction events and their impact')
     parser.add_argument('--data-dir', type=Path, required=True,
-                        help='Data directory with sessions-*.json files')
+                        help='Data directory with tasks-canonical-*.json files')
     parser.add_argument('--analysis-dir', type=Path, default=None,
                         help='Output directory for analysis results (default: data/../analysis)')
     args = parser.parse_args()
@@ -307,29 +297,28 @@ def main():
     analysis_dir = (args.analysis_dir or data_dir.parent / 'analysis').resolve()
     analysis_dir.mkdir(parents=True, exist_ok=True)
 
-    session_files = sorted(data_dir.glob('sessions-*.json'))
-    if not session_files:
-        print(f"Error: No sessions-*.json files found in {data_dir}")
+    # Discover models from canonical task files
+    models = discover_models(data_dir, prefix="tasks-canonical")
+    if not models:
+        models = discover_models(data_dir)
+    if not models:
+        print(f"Error: No tasks-canonical-*.json or sessions-*.json files found in {data_dir}")
         return
 
-    models = {}
-    for sf in session_files:
-        model_name = sf.stem.replace('sessions-', '')
-        models[model_name] = sf
-
-    print(f"Found {len(models)} model(s): {', '.join(models.keys())}")
+    print(f"Found {len(models)} model(s): {', '.join(models)}")
 
     results = {}
-    for model, sf in models.items():
+    for model in models:
         print(f"\nAnalyzing compaction for {model}...")
-        results[model] = analyze_model_compaction(sf, model, data_dir, analysis_dir)
+        results[model] = analyze_model_compaction(data_dir, model, analysis_dir)
 
         r = results[model]
-        print(f"  Sessions: {r['sessions_with_compaction']}/{r['total_sessions']} ({r['compaction_rate_pct']}%)")
-        print(f"  Events: {r['total_events']}, triggers: {r['trigger_breakdown']}")
-        if r['avg_pre_tokens'] > 0:
-            print(f"  Avg preTokens: {r['avg_pre_tokens']:,}")
-        print(f"  Avg position: {r['avg_position_pct']}% through session")
+        if r:
+            print(f"  Sessions: {r['sessions_with_compaction']}/{r['total_sessions']} ({r['compaction_rate_pct']}%)")
+            print(f"  Events: {r['total_events']}, triggers: {r['trigger_breakdown']}")
+            if r['avg_pre_tokens'] > 0:
+                print(f"  Avg preTokens: {r['avg_pre_tokens']:,}")
+            print(f"  Avg position: {r['avg_position_pct']}% through session")
 
     output_path = analysis_dir / 'compaction-analysis.json'
     with open(output_path, 'w') as f:

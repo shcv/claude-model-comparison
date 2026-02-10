@@ -17,8 +17,11 @@ import sys
 from pathlib import Path
 from typing import Optional
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from models import discover_models
 
-# Model name mapping
+
+# Model name mapping (fallback display names)
 MODEL_NAMES = {
     'opus-4-5': 'Opus 4.5',
     'opus-4-6': 'Opus 4.6',
@@ -237,7 +240,7 @@ def main():
     print("LLM FIELD NORMALIZATION")
     print("=" * 60)
 
-    for model in ['opus-4-5', 'opus-4-6']:
+    for model in discover_models(args.analysis_dir, prefix="llm-analysis"):
         input_file = args.analysis_dir / f'llm-analysis-{model}.json'
         if not input_file.exists():
             print(f"\nSkipping {model}: {input_file} not found")

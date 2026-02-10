@@ -20,7 +20,7 @@ def load_tasks(model: str, data_dir: Path = Path('data'), classified: bool = Tru
             with open(tasks_file) as f:
                 return json.load(f)
 
-    tasks_file = data_dir / f'tasks-deep-{model}.json'
+    tasks_file = data_dir / f'tasks-canonical-{model}.json'
     if not tasks_file.exists():
         return []
     with open(tasks_file) as f:

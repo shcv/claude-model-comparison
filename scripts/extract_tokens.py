@@ -18,6 +18,12 @@ from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from typing import Optional
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from models import discover_models
+from session_utils import (
+    SKIP_PATTERNS, should_skip_message, extract_user_text, is_tool_result,
+)
+
 # Anthropic API pricing (per million tokens)
 # https://docs.anthropic.com/en/docs/about-claude/models
 PRICING = {
@@ -39,46 +45,6 @@ PRICING = {
 MODEL_ALIASES = {
     'claude-fudge-eap-cc': 'opus-4-6',
 }
-
-# Patterns indicating system-generated user messages (same as extract_tasks.py)
-import re
-SKIP_PATTERNS = [
-    r'^<local-command',
-    r'^<command-name>',
-    r'^<system-reminder>',
-    r'^<task-notification>',
-    r'^<teammate-message>',
-    r'^\s*$',
-]
-
-
-def should_skip_message(text: str) -> bool:
-    for pattern in SKIP_PATTERNS:
-        if re.match(pattern, text.strip()):
-            return True
-    return False
-
-
-def extract_user_text(content) -> str:
-    if isinstance(content, str):
-        return content
-    if isinstance(content, list):
-        texts = []
-        for block in content:
-            if isinstance(block, dict) and block.get('type') == 'text':
-                texts.append(block.get('text', ''))
-            elif isinstance(block, str):
-                texts.append(block)
-        return ' '.join(texts)
-    return ''
-
-
-def is_tool_result(content) -> bool:
-    if isinstance(content, list):
-        for block in content:
-            if isinstance(block, dict) and block.get('type') == 'tool_result':
-                return True
-    return False
 
 
 @dataclass
@@ -395,7 +361,7 @@ def main():
 
     all_results = {}
 
-    for model in ['opus-4-5', 'opus-4-6']:
+    for model in discover_models(data_dir):
         sessions_file = data_dir / f'sessions-{model}.json'
         classified_file = data_dir / f'tasks-classified-{model}.json'
 

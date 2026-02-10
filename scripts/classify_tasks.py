@@ -12,11 +12,15 @@ import hashlib
 import json
 import re
 import subprocess
+import sys
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from models import discover_models
 
 
 # Task type patterns (checked in order, first match wins for primary type)
@@ -273,7 +277,8 @@ Return JSON: {{"type": "...", "secondary_types": [...], "complexity": "...", "do
             ["claude", "-p", prompt, "--model", model, "--output-format", "text"],
             capture_output=True,
             text=True,
-            timeout=60
+            timeout=60,
+            cwd="/tmp"
         )
         if result.returncode != 0:
             return None
@@ -341,7 +346,8 @@ def classify_complexity_llm(task: dict, llm_model: str = "haiku",
             ["claude", "-p", full_prompt, "--model", llm_model, "--output-format", "text"],
             capture_output=True,
             text=True,
-            timeout=60
+            timeout=60,
+            cwd="/tmp",
         )
         if result.returncode != 0:
             return None
@@ -411,7 +417,7 @@ def reclassify_complexity_batch(tasks: list[dict], llm_model: str = "haiku",
 
 def load_and_classify(data_dir: Path, model: str, use_llm: bool = False) -> list[dict]:
     """Load tasks and add classifications."""
-    tasks_file = data_dir / f'tasks-deep-{model}.json'
+    tasks_file = data_dir / f'tasks-canonical-{model}.json'
     if not tasks_file.exists():
         return []
 
@@ -497,20 +503,21 @@ def main():
     parser = argparse.ArgumentParser(description='Classify tasks by type and complexity')
     parser.add_argument('--data-dir', type=Path, default=Path('data'))
     parser.add_argument('--use-llm', action='store_true', help='Use LLM for low-confidence cases')
-    parser.add_argument('--model', choices=['opus-4-5', 'opus-4-6', 'both'], default='both')
+    parser.add_argument('--model', default='both',
+                        help='Model to classify (or "both" for all discovered models)')
     parser.add_argument('--reclassify-complexity', action='store_true',
                         help='Add LLM-based conceptual complexity (llm_complexity field)')
     parser.add_argument('--llm-model', default='haiku',
                         help='LLM model for complexity reclassification (default: haiku)')
-    parser.add_argument('--workers', type=int, default=8,
-                        help='Parallel workers for LLM reclassification (default: 8)')
+    parser.add_argument('--workers', type=int, default=2,
+                        help='Parallel workers for LLM reclassification (default: 2)')
     args = parser.parse_args()
 
     print("=" * 60)
     print("TASK CLASSIFICATION")
     print("=" * 60)
 
-    models = ['opus-4-5', 'opus-4-6'] if args.model == 'both' else [args.model]
+    models = discover_models(args.data_dir, prefix="tasks-canonical") if args.model == 'both' else [args.model]
 
     for model in models:
         tasks = load_and_classify(args.data_dir, model, use_llm=args.use_llm)

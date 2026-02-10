@@ -349,16 +349,19 @@ def build(report_dir, output_path, check_only=False):
             manifest[name]["hash"] = hash_section(source_sections[section_id])
     save_manifest(report_dir, manifest)
 
-    # 2. Inject CSS for terms and expansions
+    # 2. Strip variable sentinels (keep resolved values, remove markers)
+    html = re.sub(r'<!-- var: \S+? -->(.*?)<!-- /var -->', r'\1', html)
+
+    # 3. Inject CSS for terms and expansions
     html = inject_css(html)
 
-    # 3. Insert expansion fragments
+    # 4. Insert expansion fragments
     html = insert_expansions(html, report_dir)
 
-    # 4. Wrap terms with tooltip markup
+    # 5. Wrap terms with tooltip markup
     html = apply_terms(html, terms)
 
-    # 5. Write output
+    # 6. Write output
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_path, "w") as f:
         f.write(html)
@@ -371,12 +374,23 @@ def build(report_dir, output_path, check_only=False):
     return True
 
 
+def check_stale_vars(html):
+    """Scan built report for unresolved {{...}} template variables.
+
+    Returns list of unresolved variable names.
+    """
+    pattern = re.compile(r'\{\{(\S+?)\}\}')
+    return pattern.findall(html)
+
+
 def main():
     parser = argparse.ArgumentParser(description="Build report from template")
     parser.add_argument("--dir", type=Path, required=True,
                         help="Comparison directory (e.g., comparisons/opus-4.5-vs-4.6)")
     parser.add_argument("--check-stale", action="store_true",
                         help="Only check for stale expansions, don't build")
+    parser.add_argument("--check-stale-vars", action="store_true",
+                        help="After building, check for unresolved template variables")
     args = parser.parse_args()
 
     comparison_dir = args.dir.resolve()
@@ -386,6 +400,17 @@ def main():
     success = build(report_dir, output_path, check_only=args.check_stale)
     if not success:
         sys.exit(1)
+
+    if args.check_stale_vars and output_path.exists():
+        built_html = output_path.read_text()
+        unresolved = check_stale_vars(built_html)
+        if unresolved:
+            print(f"\nUnresolved template variables ({len(unresolved)}):")
+            for var in sorted(set(unresolved)):
+                print(f"  {{{{{var}}}}}")
+            sys.exit(1)
+        else:
+            print("All template variables resolved.")
 
 
 if __name__ == "__main__":

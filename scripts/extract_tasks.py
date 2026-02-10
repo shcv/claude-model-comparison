@@ -7,14 +7,29 @@ Extracts comprehensive task data including:
 - Agent actions with file/line change metrics
 - User's NEXT message to determine actual outcome
 - Git-style stats: files read, written, lines changed
+
+Canonical mode (--canonical) adds:
+- Edit events with success tracking
+- Token usage and cost estimates
+- Behavioral signals (planning, subagents, parallelism)
+- Compaction events
+- Error context from tool results
 """
 
 import json
 import re
+import sys
 from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from models import discover_models
+from session_utils import (
+    SKIP_PATTERNS, SYSTEM_CONTENT_PATTERNS,
+    extract_user_text, should_skip_message, is_tool_result, is_system_generated,
+)
 
 
 @dataclass
@@ -68,6 +83,100 @@ class TaskData:
     task_summary: str = ""  # One-line summary for listing
 
 
+# ---------------------------------------------------------------------------
+# Canonical task: all signals in one record
+# ---------------------------------------------------------------------------
+
+# Anthropic API pricing (per million tokens)
+PRICING = {
+    'opus-4-5': {'input': 15.0, 'output': 75.0, 'cache_read': 1.875, 'cache_write': 18.75},
+    'opus-4-6': {'input': 15.0, 'output': 75.0, 'cache_read': 1.875, 'cache_write': 18.75},
+}
+
+# Error indicators in tool results (from analyze_edits.py)
+ERROR_PATTERNS = [
+    r'error', r'failed', r'FAIL', r'traceback', r'exception',
+    r'SyntaxError', r'TypeError', r'NameError', r'ImportError',
+    r'is_error.*true', r'tool_use_error', r'exit code [1-9]',
+    r'compilation failed', r'build failed',
+]
+
+
+@dataclass
+class CanonicalTask:
+    """Single canonical task record with all signals for downstream analysis."""
+    task_id: str
+    session_id: str
+    model: str
+
+    # User request
+    user_prompt: str
+    user_prompt_full: str
+
+    # Agent work (same as TaskData)
+    tool_calls: list = field(default_factory=list)
+    tool_sequence: str = ""
+    files_read: list = field(default_factory=list)
+    files_written: list = field(default_factory=list)
+    files_edited: list = field(default_factory=list)
+
+    # Scale metrics
+    total_files_touched: int = 0
+    total_lines_added: int = 0
+    total_lines_removed: int = 0
+    bash_commands: list = field(default_factory=list)
+
+    # Timing
+    start_time: str = ""
+    end_time: str = ""
+    duration_seconds: float = 0
+    msg_index_start: int = 0
+    msg_index_end: int = 0
+
+    # Outcome
+    next_user_message: str = ""
+    outcome_category: str = ""
+    outcome_evidence: str = ""
+
+    # Context
+    project_path: str = ""
+    is_meta: bool = False
+    task_summary: str = ""
+
+    # --- Edit events ---
+    edit_events: list = field(default_factory=list)
+    # Each: {tool_use_id, tool_name, file_path, old_string, new_string,
+    #         replace_all, succeeded, msg_index, timestamp}
+
+    # --- Token usage ---
+    input_tokens: int = 0
+    output_tokens: int = 0
+    cache_read_tokens: int = 0
+    cache_write_tokens: int = 0
+    thinking_chars: int = 0
+    thinking_blocks: int = 0
+    text_chars: int = 0
+    text_blocks: int = 0
+    estimated_cost: float = 0.0
+    request_count: int = 0
+
+    # --- Behavioral signals ---
+    used_planning: bool = False
+    used_subagents: bool = False
+    subagent_count: int = 0
+    subagent_types: list = field(default_factory=list)
+    parallel_tool_messages: int = 0
+    run_in_background_count: int = 0
+
+    # --- Compaction context ---
+    compaction_events_before: list = field(default_factory=list)
+    # Each: {trigger, pre_tokens, msg_index, timestamp}
+
+    # --- Error context ---
+    errors: list = field(default_factory=list)
+    # Each: {msg_index, text, is_tool_error}
+
+
 # Patterns for categorizing user responses
 SATISFACTION_PATTERNS = [
     (r'\bthanks?\b', 'thanks'),
@@ -105,65 +214,8 @@ CONTINUATION_PATTERNS = [
     (r'\bhmm\b', 'hmm'),
 ]
 
-SKIP_PATTERNS = [
-    r'^<local-command',
-    r'^<command-name>',
-    r'^<system-reminder>',
-    r'^<task-notification>',
-    r'^<teammate-message>',
-    r'^\s*$',
-]
-
-# Patterns indicating the "user message" is actually system-generated content
-SYSTEM_CONTENT_PATTERNS = [
-    r'^This session is being continued from a previous conversation',
-    r'^# Iteration workflow',
-    r'^Implement the following plan:',  # Plan templates - not sentiment
-    r'^\[Request interrupted',
-    r'^<summary>',
-    r'^Analysis:',  # Continuation summaries
-]
-
-
-def should_skip_message(text: str) -> bool:
-    """Check if message should be skipped."""
-    for pattern in SKIP_PATTERNS:
-        if re.match(pattern, text.strip()):
-            return True
-    return False
-
-
-def extract_user_text(content) -> str:
-    """Extract text from user message content."""
-    if isinstance(content, str):
-        return content
-    if isinstance(content, list):
-        texts = []
-        for block in content:
-            if isinstance(block, dict):
-                if block.get('type') == 'text':
-                    texts.append(block.get('text', ''))
-            elif isinstance(block, str):
-                texts.append(block)
-        return ' '.join(texts)
-    return ''
-
-
-def is_tool_result(content) -> bool:
-    """Check if user message is a tool result."""
-    if isinstance(content, list):
-        for block in content:
-            if isinstance(block, dict) and block.get('type') == 'tool_result':
-                return True
-    return False
-
-
-def is_system_generated(text: str) -> bool:
-    """Check if text is system-generated content, not actual user sentiment."""
-    for pattern in SYSTEM_CONTENT_PATTERNS:
-        if re.match(pattern, text.strip(), re.IGNORECASE):
-            return True
-    return False
+## SKIP_PATTERNS, SYSTEM_CONTENT_PATTERNS, extract_user_text, should_skip_message,
+## is_tool_result, is_system_generated are imported from session_utils above.
 
 
 def categorize_user_response(text: str) -> tuple[str, str]:
@@ -381,6 +433,414 @@ def extract_tasks_from_session(file_path: Path, model: str) -> list[TaskData]:
     return tasks
 
 
+def extract_canonical_from_session(file_path: Path, model: str) -> list[CanonicalTask]:
+    """Extract canonical tasks from a session JSONL, collecting all signals in one pass.
+
+    Combines logic from extract_tasks, analyze_edits, extract_tokens,
+    analyze_behavior, and analyze_compaction into a single traversal.
+    """
+    messages = []
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    messages.append(json.loads(line))
+                except json.JSONDecodeError:
+                    continue
+    except Exception as e:
+        print(f"Error reading {file_path}: {e}")
+        return []
+
+    session_id = file_path.stem
+    project_path = str(file_path.parent.name)
+
+    tasks = []
+    current_task: Optional[CanonicalTask] = None
+    task_counter = 0
+
+    # Token tracking: output_tokens is cumulative per request, track max per requestId
+    seen_request_ids: set[str] = set()
+    request_output_max: dict[str, int] = {}  # requestId -> max output_tokens
+
+    # Edit tracking: pending edits waiting for tool_result
+    pending_edits: dict[str, dict] = {}  # tool_use_id -> edit event dict
+
+    # Compaction events seen so far (assigned to the next task that starts after them)
+    pending_compactions: list[dict] = []
+
+    def finalize_task(next_user_text: str = "", is_session_end: bool = False):
+        nonlocal current_task, seen_request_ids, request_output_max
+        if current_task is None:
+            return
+
+        # Outcome categorization
+        if is_session_end:
+            current_task.outcome_category = 'session_end'
+            current_task.outcome_evidence = 'session terminated'
+        elif next_user_text:
+            current_task.next_user_message = next_user_text[:500]
+            category, evidence = categorize_user_response(next_user_text)
+            current_task.outcome_category = category
+            current_task.outcome_evidence = evidence
+
+        # File totals
+        current_task.total_files_touched = len(set(
+            current_task.files_read + current_task.files_written + current_task.files_edited
+        ))
+
+        # Tool sequence (deduped consecutive)
+        tool_names = [t['name'] for t in current_task.tool_calls]
+        deduped = []
+        for name in tool_names:
+            if not deduped or deduped[-1] != name:
+                deduped.append(name)
+        current_task.tool_sequence = '\u2192'.join(deduped[:10])
+
+        # Summary
+        prompt_preview = current_task.user_prompt[:60].replace('\n', ' ')
+        current_task.task_summary = (
+            f"{prompt_preview}... ({len(current_task.tool_calls)} tools, "
+            f"{current_task.total_files_touched} files)"
+        )
+
+        # Finalize output tokens from per-request maxima
+        current_task.output_tokens = sum(request_output_max.values())
+
+        # Cost estimate
+        pricing = PRICING.get(model, PRICING.get('opus-4-5', {}))
+        if pricing:
+            cost = 0.0
+            cost += (current_task.input_tokens / 1_000_000) * pricing['input']
+            cost += (current_task.output_tokens / 1_000_000) * pricing['output']
+            cost += (current_task.cache_read_tokens / 1_000_000) * pricing['cache_read']
+            cost += (current_task.cache_write_tokens / 1_000_000) * pricing['cache_write']
+            current_task.estimated_cost = round(cost, 4)
+
+        # Behavioral: dedupe subagent_types
+        current_task.used_subagents = current_task.subagent_count > 0
+
+        tasks.append(current_task)
+        current_task = None
+        seen_request_ids = set()
+        request_output_max = {}
+
+    for idx, msg in enumerate(messages):
+        msg_type = msg.get('type')
+        timestamp = msg.get('timestamp', '')
+
+        # --- Compaction events (system messages) ---
+        if msg_type == 'system' and msg.get('subtype') == 'compact_boundary':
+            meta = msg.get('compactMetadata', {})
+            event = {
+                'trigger': meta.get('trigger', 'unknown'),
+                'pre_tokens': meta.get('preTokens', 0),
+                'msg_index': idx,
+                'timestamp': timestamp,
+            }
+            if current_task is not None:
+                # Compaction happened during a task — attach to current task
+                current_task.compaction_events_before.append(event)
+            else:
+                # Compaction before any task starts — buffer for next task
+                pending_compactions.append(event)
+            continue
+
+        # --- User messages ---
+        if msg_type == 'user':
+            content = msg.get('message', {}).get('content', [])
+
+            # Process tool results (edit success/failure, errors)
+            if isinstance(content, list):
+                for block in content:
+                    if not isinstance(block, dict):
+                        continue
+                    if block.get('type') == 'tool_result':
+                        tool_use_id = block.get('tool_use_id', '')
+                        is_error = block.get('is_error', False)
+
+                        # Match pending edits
+                        if tool_use_id in pending_edits:
+                            edit_event = pending_edits.pop(tool_use_id)
+                            edit_event['succeeded'] = not is_error
+                            if current_task is not None:
+                                current_task.edit_events.append(edit_event)
+
+                        # Extract error context
+                        result_text = ''
+                        rc = block.get('content', '')
+                        if isinstance(rc, str):
+                            result_text = rc
+                        elif isinstance(rc, list):
+                            for rb in rc:
+                                if isinstance(rb, dict) and rb.get('type') == 'text':
+                                    result_text += rb.get('text', '')
+
+                        is_tool_error = bool(is_error)
+                        has_error_pattern = any(
+                            re.search(p, result_text, re.IGNORECASE)
+                            for p in ERROR_PATTERNS
+                        ) if result_text else False
+
+                        if (is_tool_error or has_error_pattern) and current_task is not None:
+                            current_task.errors.append({
+                                'msg_index': idx,
+                                'text': result_text[:200],
+                                'is_tool_error': is_tool_error,
+                            })
+
+            # Skip tool-result-only messages for task boundary detection
+            if is_tool_result(content):
+                continue
+
+            user_text = extract_user_text(content)
+            if should_skip_message(user_text):
+                continue
+
+            # This user message ends the previous task
+            if current_task is not None:
+                current_task.msg_index_end = idx - 1
+                finalize_task(next_user_text=user_text)
+
+            # Start new task
+            task_counter += 1
+            current_task = CanonicalTask(
+                task_id=f"{session_id}-task-{task_counter}",
+                session_id=session_id,
+                model=model,
+                user_prompt=user_text[:500],
+                user_prompt_full=user_text,
+                start_time=timestamp,
+                project_path=project_path,
+                msg_index_start=idx,
+            )
+
+            # Attach buffered compaction events
+            if pending_compactions:
+                current_task.compaction_events_before = pending_compactions[:]
+                pending_compactions.clear()
+
+        # --- Assistant messages ---
+        elif msg_type == 'assistant' and current_task is not None:
+            current_task.end_time = timestamp
+            current_task.msg_index_end = idx
+            message = msg.get('message', {})
+            content = message.get('content', [])
+            usage = message.get('usage', {})
+            request_id = msg.get('requestId', '')
+
+            # --- Token usage ---
+            if request_id and request_id not in seen_request_ids:
+                seen_request_ids.add(request_id)
+                current_task.request_count += 1
+
+                input_tokens = usage.get('input_tokens', 0) or 0
+                cache_read = usage.get('cache_read_input_tokens', 0) or 0
+                cache_write = usage.get('cache_creation_input_tokens', 0) or 0
+
+                # Nested cache fields
+                cache_creation = usage.get('cache_creation', {})
+                if isinstance(cache_creation, dict):
+                    cache_write += cache_creation.get('ephemeral_5m_input_tokens', 0) or 0
+                    cache_write += cache_creation.get('ephemeral_1h_input_tokens', 0) or 0
+
+                current_task.input_tokens += input_tokens
+                current_task.cache_read_tokens += cache_read
+                current_task.cache_write_tokens += cache_write
+
+            # Track max output_tokens per request (cumulative streaming counter)
+            if request_id:
+                output_tokens = usage.get('output_tokens', 0) or 0
+                request_output_max[request_id] = max(
+                    request_output_max.get(request_id, 0), output_tokens
+                )
+
+            # --- Content block analysis ---
+            if not isinstance(content, list):
+                continue
+
+            tool_uses_in_msg = []
+
+            for block in content:
+                if not isinstance(block, dict):
+                    continue
+                block_type = block.get('type', '')
+
+                # Thinking content
+                if block_type == 'thinking':
+                    thinking_text = block.get('thinking', '')
+                    current_task.thinking_chars += len(thinking_text)
+                    current_task.thinking_blocks += 1
+
+                # Text content
+                elif block_type == 'text':
+                    text = block.get('text', '')
+                    current_task.text_chars += len(text)
+                    current_task.text_blocks += 1
+
+                # Tool use
+                elif block_type == 'tool_use':
+                    tool_uses_in_msg.append(block)
+                    tool_info = extract_tool_info(block)
+                    current_task.tool_calls.append(tool_info)
+
+                    name = tool_info.get('name')
+                    file_path_str = tool_info.get('file', '')
+                    inp = block.get('input', {})
+                    tool_use_id = block.get('id', '')
+
+                    # File tracking (same as TaskData)
+                    if name == 'Read' and file_path_str:
+                        current_task.files_read.append(file_path_str)
+                    elif name == 'Write' and file_path_str:
+                        current_task.files_written.append(file_path_str)
+                        current_task.total_lines_added += tool_info.get('lines', 0)
+                        # Track as pending edit
+                        pending_edits[tool_use_id] = {
+                            'tool_use_id': tool_use_id,
+                            'tool_name': 'Write',
+                            'file_path': file_path_str,
+                            'old_string': '',
+                            'new_string': '',  # Don't store full content
+                            'replace_all': False,
+                            'succeeded': False,
+                            'msg_index': idx,
+                            'timestamp': timestamp,
+                        }
+                    elif name == 'Edit' and file_path_str:
+                        current_task.files_edited.append(file_path_str)
+                        current_task.total_lines_added += tool_info.get('lines_added', 0)
+                        current_task.total_lines_removed += tool_info.get('lines_removed', 0)
+                        # Track as pending edit
+                        pending_edits[tool_use_id] = {
+                            'tool_use_id': tool_use_id,
+                            'tool_name': 'Edit',
+                            'file_path': file_path_str,
+                            'old_string': inp.get('old_string', '')[:200],
+                            'new_string': inp.get('new_string', '')[:200],
+                            'replace_all': inp.get('replace_all', False),
+                            'succeeded': False,
+                            'msg_index': idx,
+                            'timestamp': timestamp,
+                        }
+                    elif name == 'Bash':
+                        cmd = tool_info.get('command', '')
+                        if cmd:
+                            current_task.bash_commands.append(cmd)
+                        if inp.get('run_in_background', False):
+                            current_task.run_in_background_count += 1
+
+                    # Behavioral: planning
+                    elif name == 'EnterPlanMode':
+                        current_task.used_planning = True
+
+                    # Behavioral: subagents
+                    elif name == 'Task':
+                        current_task.subagent_count += 1
+                        subagent_type = inp.get('subagent_type', 'unknown')
+                        current_task.subagent_types.append(subagent_type)
+                        if inp.get('run_in_background', False):
+                            current_task.run_in_background_count += 1
+
+            # Parallel tool messages
+            if len(tool_uses_in_msg) > 1:
+                current_task.parallel_tool_messages += 1
+
+    # Finalize last task
+    if current_task is not None:
+        current_task.msg_index_end = len(messages) - 1
+        finalize_task(is_session_end=True)
+
+    # Calculate durations
+    for task in tasks:
+        if task.start_time and task.end_time:
+            try:
+                start = datetime.fromisoformat(task.start_time.replace('Z', '+00:00'))
+                end = datetime.fromisoformat(task.end_time.replace('Z', '+00:00'))
+                task.duration_seconds = (end - start).total_seconds()
+            except ValueError:
+                pass
+
+    return tasks
+
+
+def extract_all_canonical(sessions_file: Path, model: str,
+                          include_meta: bool = True) -> list[CanonicalTask]:
+    """Extract canonical tasks from all sessions in a sessions JSON file."""
+    with open(sessions_file, 'r', encoding='utf-8') as f:
+        sessions = json.load(f)
+
+    all_tasks = []
+    meta_skipped = 0
+    for i, session in enumerate(sessions):
+        is_meta = session.get('is_meta', False)
+        if not include_meta and is_meta:
+            meta_skipped += 1
+            continue
+
+        fp = Path(session['file_path'])
+        if fp.exists():
+            tasks = extract_canonical_from_session(fp, model)
+            for task in tasks:
+                task.is_meta = is_meta
+                if not task.project_path and 'project_path' in session:
+                    task.project_path = session['project_path']
+            all_tasks.extend(tasks)
+
+        if (i + 1) % 50 == 0:
+            print(f"  [{i+1}/{len(sessions)}] {len(all_tasks)} tasks extracted")
+
+    if meta_skipped:
+        print(f"  Skipped {meta_skipped} meta sessions")
+
+    return all_tasks
+
+
+def print_canonical_summary(tasks: list[CanonicalTask], model: str):
+    """Print extraction summary for canonical tasks."""
+    if not tasks:
+        print(f"\n{model.upper()}: No tasks found")
+        return
+
+    n = len(tasks)
+    print(f"\n{model.upper()} Canonical Tasks: {n}")
+
+    # Outcome distribution
+    outcomes = {}
+    for t in tasks:
+        outcomes[t.outcome_category] = outcomes.get(t.outcome_category, 0) + 1
+    print(f"  Outcomes: {outcomes}")
+
+    # Token summary
+    total_cost = sum(t.estimated_cost for t in tasks)
+    avg_input = sum(t.input_tokens for t in tasks) / n if n else 0
+    avg_output = sum(t.output_tokens for t in tasks) / n if n else 0
+    print(f"  Avg input tokens: {avg_input:,.0f}, Avg output tokens: {avg_output:,.0f}")
+    print(f"  Total estimated cost: ${total_cost:.2f}")
+
+    # Edit events
+    total_edits = sum(len(t.edit_events) for t in tasks)
+    succeeded = sum(1 for t in tasks for e in t.edit_events if e.get('succeeded'))
+    print(f"  Edit events: {total_edits} ({succeeded} succeeded)")
+
+    # Behavioral
+    planning = sum(1 for t in tasks if t.used_planning)
+    subagents = sum(1 for t in tasks if t.used_subagents)
+    parallel = sum(1 for t in tasks if t.parallel_tool_messages > 0)
+    print(f"  Planning: {planning}, Subagents: {subagents}, Parallel: {parallel}")
+
+    # Compaction
+    compacted = sum(1 for t in tasks if t.compaction_events_before)
+    print(f"  Tasks with prior compaction: {compacted}")
+
+    # Errors
+    errored = sum(1 for t in tasks if t.errors)
+    total_errors = sum(len(t.errors) for t in tasks)
+    print(f"  Tasks with errors: {errored}, Total errors: {total_errors}")
+
+
 def extract_all_tasks(sessions_file: Path, model: str, include_meta: bool = True) -> list[TaskData]:
     """Extract tasks from all sessions in a sessions JSON file.
 
@@ -454,33 +914,64 @@ def main():
     parser = argparse.ArgumentParser(description='Extract comprehensive task data')
     parser.add_argument('--data-dir', type=Path, default=Path('data'),
                         help='Data directory (default: data)')
-    parser.add_argument('--include-meta', action='store_true',
-                        help='Include meta sessions (claude-investigations). Default: exclude')
+    parser.add_argument('--include-meta', action='store_true', default=True,
+                        help='Include meta sessions (claude-investigations). Default: include')
+    parser.add_argument('--exclude-meta', action='store_false', dest='include_meta',
+                        help='Exclude meta sessions (claude-investigations)')
+    parser.add_argument('--canonical', action='store_true',
+                        help='Produce canonical task files with all signals')
     args = parser.parse_args()
 
     print("=" * 60)
-    print("DEEP TASK EXTRACTION")
+    if args.canonical:
+        print("CANONICAL TASK EXTRACTION")
+    else:
+        print("DEEP TASK EXTRACTION")
     print("=" * 60)
     if not args.include_meta:
         print("(Excluding meta sessions. Use --include-meta to include.)")
+    else:
+        print("(Including meta sessions. Use --exclude-meta to exclude.)")
 
-    for model in ['opus-4-5', 'opus-4-6']:
+    models = discover_models(args.data_dir)
+    if not models:
+        print(f"No sessions-*.json files found in {args.data_dir}")
+        return
+
+    print(f"Found {len(models)} model(s): {', '.join(models)}")
+
+    for model in models:
         sessions_file = args.data_dir / f'sessions-{model}.json'
         if not sessions_file.exists():
             print(f"\nSkipping {model}: {sessions_file} not found")
             continue
 
-        tasks = extract_all_tasks(sessions_file, model, include_meta=args.include_meta)
+        if args.canonical:
+            tasks = extract_all_canonical(
+                sessions_file, model, include_meta=args.include_meta
+            )
 
-        # Report meta vs non-meta counts
-        meta_tasks = sum(1 for t in tasks if t.is_meta)
-        real_tasks = len(tasks) - meta_tasks
-        print(f"  {model}: {len(tasks)} total ({real_tasks} real, {meta_tasks} meta)")
+            meta_tasks = sum(1 for t in tasks if t.is_meta)
+            real_tasks = len(tasks) - meta_tasks
+            print(f"  {model}: {len(tasks)} total ({real_tasks} real, {meta_tasks} meta)")
 
-        print_summary(tasks, model)
+            print_canonical_summary(tasks, model)
 
-        output_file = args.data_dir / f'tasks-deep-{model}.json'
-        save_tasks(tasks, output_file)
+            output_file = args.data_dir / f'tasks-canonical-{model}.json'
+            save_tasks(tasks, output_file)
+        else:
+            tasks = extract_all_tasks(
+                sessions_file, model, include_meta=args.include_meta
+            )
+
+            meta_tasks = sum(1 for t in tasks if t.is_meta)
+            real_tasks = len(tasks) - meta_tasks
+            print(f"  {model}: {len(tasks)} total ({real_tasks} real, {meta_tasks} meta)")
+
+            print_summary(tasks, model)
+
+            output_file = args.data_dir / f'tasks-canonical-{model}.json'
+            save_tasks(tasks, output_file)
 
 
 if __name__ == '__main__':

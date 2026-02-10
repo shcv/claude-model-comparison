@@ -18,7 +18,7 @@ from typing import Optional
 def load_task(task_id: str, data_dir: Path = Path('data')) -> Optional[dict]:
     """Load a specific task by ID (partial match)."""
     for model in ['opus-4-5', 'opus-4-6']:
-        tasks_file = data_dir / f'tasks-deep-{model}.json'
+        tasks_file = data_dir / f'tasks-canonical-{model}.json'
         if not tasks_file.exists():
             continue
         with open(tasks_file) as f:
@@ -259,7 +259,7 @@ def main():
         run_replication(task, dry_run=True)
 
     elif args.command == 'batch':
-        tasks_file = args.data_dir / f'tasks-deep-{args.model}.json'
+        tasks_file = args.data_dir / f'tasks-canonical-{args.model}.json'
         if not tasks_file.exists():
             print(f"No tasks found for {args.model}")
             sys.exit(1)
@@ -269,7 +269,7 @@ def main():
         create_replication_batch(candidates, args.output / args.model, args.count)
 
     elif args.command == 'candidates':
-        tasks_file = args.data_dir / f'tasks-deep-{args.model}.json'
+        tasks_file = args.data_dir / f'tasks-canonical-{args.model}.json'
         if not tasks_file.exists():
             print(f"No tasks found for {args.model}")
             sys.exit(1)
