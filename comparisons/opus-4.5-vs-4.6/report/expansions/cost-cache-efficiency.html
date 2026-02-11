@@ -1,0 +1,61 @@
+<!-- title: Cache Efficiency by Complexity -->
+<!-- GENERATED-TABLE -->
+<table>
+    <thead>
+        <tr><th>Complexity</th><th class="right">4.5 cache write/task</th><th class="right">4.6 cache write/task</th><th class="right">4.5 read ratio</th><th class="right">4.6 read ratio</th><th class="right">&Delta; write</th></tr>
+    </thead>
+    <tbody>
+        <tr><td class="label-cell">Trivial</td>
+            <td class="right mono">35,969</td>
+            <td class="right mono">18,178</td>
+            <td class="right mono">72.6%</td>
+            <td class="right mono">85.6%</td>
+            <td class="right mono" style="color:var(--green)">0.51&times;</td></tr>
+        <tr><td class="label-cell">Simple</td>
+            <td class="right mono">73,134</td>
+            <td class="right mono">39,527</td>
+            <td class="right mono">85.8%</td>
+            <td class="right mono">91.3%</td>
+            <td class="right mono" style="color:var(--green)">0.54&times;</td></tr>
+        <tr><td class="label-cell">Moderate</td>
+            <td class="right mono">88,484</td>
+            <td class="right mono">64,206</td>
+            <td class="right mono">91.3%</td>
+            <td class="right mono">93.6%</td>
+            <td class="right mono" style="color:var(--green)">0.73&times;</td></tr>
+        <tr><td class="label-cell">Complex</td>
+            <td class="right mono">159,674</td>
+            <td class="right mono">125,809</td>
+            <td class="right mono">92.9%</td>
+            <td class="right mono">94.7%</td>
+            <td class="right mono" style="color:var(--green)">0.79&times;</td></tr>
+        <tr><td class="label-cell">Major</td>
+            <td class="right mono">232,921</td>
+            <td class="right mono">228,450</td>
+            <td class="right mono">94.5%</td>
+            <td class="right mono">96.1%</td>
+            <td class="right mono" style="color:var(--green)">0.98&times;</td></tr>
+        <tr style="font-weight:600"><td class="label-cell">Overall</td>
+            <td class="right mono">67,590</td>
+            <td class="right mono">51,122</td>
+            <td class="right mono">89.8%</td>
+            <td class="right mono">94.0%</td>
+            <td class="right mono" style="color:var(--green)">0.76&times;</td></tr>
+    </tbody>
+</table>
+
+<h3>Thinking vs Visible Text Output</h3>
+<p>Thinking tokens are billed as output but do not enter the conversation history or affect cache behavior. Visible text output accumulates in history and increases subsequent input size.</p>
+<table>
+    <thead>
+        <tr><th>Metric</th><th class="right">4.5</th><th class="right">4.6</th></tr>
+    </thead>
+    <tbody>
+        <tr><td class="label-cell">Avg output tokens/task</td><td class="right mono">953</td><td class="right mono">2,260</td></tr>
+        <tr><td class="label-cell">Thinking ratio (chars)</td><td class="right mono">75%</td><td class="right mono">59%</td></tr>
+        <tr><td class="label-cell">Avg thinking chars (when used)</td><td class="right mono">2,635</td><td class="right mono">4,149</td></tr>
+        <tr><td class="label-cell">Avg visible text chars</td><td class="right mono">1,254</td><td class="right mono">1,755</td></tr>
+        <tr><td class="label-cell">Requests per task</td><td class="right mono">7.5</td><td class="right mono">9.8</td></tr>
+    </tbody>
+</table>
+<!-- /GENERATED-TABLE -->

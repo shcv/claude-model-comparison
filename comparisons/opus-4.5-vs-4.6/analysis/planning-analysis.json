@@ -1,6 +1,6 @@
 {
   "opus-4-5": {
-    "total_tasks": 1728,
+    "total_tasks": 1729,
     "total_planned": 29,
     "planning_rate_pct": 1.7,
     "by_complexity": {
@@ -38,81 +38,92 @@
         "n_scored_unplanned": 359
       },
       "complex+": {
-        "n": 208,
+        "n": 209,
         "planned": 20,
-        "unplanned": 188,
+        "unplanned": 189,
         "planning_rate_pct": 9.6,
         "alignment_planned": 3.3,
-        "alignment_unplanned": 3.383,
-        "alignment_delta": -0.083,
+        "alignment_unplanned": 3.3757,
+        "alignment_delta": -0.0757,
         "n_scored_planned": 20,
-        "n_scored_unplanned": 188
+        "n_scored_unplanned": 189
       }
     },
     "overall_alignment_planned": 3.4483,
-    "overall_alignment_unplanned": 2.9918,
-    "overall_alignment_delta": 0.4565,
+    "overall_alignment_unplanned": 2.9912,
+    "overall_alignment_delta": 0.4571,
     "coverage": {
-      "tasks_with_alignment": 1728,
+      "tasks_with_alignment": 1729,
       "pct": 100.0
     }
   },
   "opus-4-6": {
-    "total_tasks": 279,
-    "total_planned": 19,
-    "planning_rate_pct": 6.8,
+    "total_tasks": 573,
+    "total_planned": 81,
+    "planning_rate_pct": 14.1,
     "by_complexity": {
       "trivial": {
-        "n": 114,
+        "n": 207,
         "planned": 0,
-        "unplanned": 114,
+        "unplanned": 207,
         "planning_rate_pct": 0.0,
         "alignment_planned": null,
-        "alignment_unplanned": 3.307,
+        "alignment_unplanned": 3.1401,
         "alignment_delta": null,
         "n_scored_planned": 0,
-        "n_scored_unplanned": 114
+        "n_scored_unplanned": 207
       },
       "simple": {
-        "n": 52,
-        "planned": 1,
-        "unplanned": 51,
-        "planning_rate_pct": 1.9,
-        "alignment_planned": 3.0,
-        "alignment_unplanned": 3.0784,
-        "alignment_delta": -0.0784,
-        "n_scored_planned": 1,
-        "n_scored_unplanned": 51
+        "n": 123,
+        "planned": 4,
+        "unplanned": 119,
+        "planning_rate_pct": 3.3,
+        "alignment_planned": 3.25,
+        "alignment_unplanned": 3.1933,
+        "alignment_delta": 0.0567,
+        "n_scored_planned": 4,
+        "n_scored_unplanned": 119
       },
       "moderate": {
-        "n": 74,
-        "planned": 7,
-        "unplanned": 67,
-        "planning_rate_pct": 9.5,
-        "alignment_planned": 3.1429,
-        "alignment_unplanned": 3.3582,
-        "alignment_delta": -0.2154,
-        "n_scored_planned": 7,
-        "n_scored_unplanned": 67
+        "n": 153,
+        "planned": 27,
+        "unplanned": 126,
+        "planning_rate_pct": 17.6,
+        "alignment_planned": 3.5185,
+        "alignment_unplanned": 3.5159,
+        "alignment_delta": 0.0026,
+        "n_scored_planned": 27,
+        "n_scored_unplanned": 126
       },
-      "complex+": {
-        "n": 32,
-        "planned": 11,
-        "unplanned": 21,
-        "planning_rate_pct": 34.4,
-        "alignment_planned": 3.1818,
-        "alignment_unplanned": 3.2381,
-        "alignment_delta": -0.0563,
-        "n_scored_planned": 11,
-        "n_scored_unplanned": 21
+      "complex": {
+        "n": 72,
+        "planned": 37,
+        "unplanned": 35,
+        "planning_rate_pct": 51.4,
+        "alignment_planned": 3.4054,
+        "alignment_unplanned": 3.4857,
+        "alignment_delta": -0.0803,
+        "n_scored_planned": 37,
+        "n_scored_unplanned": 35
+      },
+      "major": {
+        "n": 18,
+        "planned": 13,
+        "unplanned": 5,
+        "planning_rate_pct": 72.2,
+        "alignment_planned": 3.4615,
+        "alignment_unplanned": 4.2,
+        "alignment_delta": -0.7385,
+        "n_scored_planned": 13,
+        "n_scored_unplanned": 5
       }
     },
-    "overall_alignment_planned": 3.1579,
-    "overall_alignment_unplanned": 3.2688,
-    "overall_alignment_delta": -0.1109,
+    "overall_alignment_planned": 3.4444,
+    "overall_alignment_unplanned": 3.2846,
+    "overall_alignment_delta": 0.1598,
     "coverage": {
-      "tasks_with_alignment": 272,
-      "pct": 97.5
+      "tasks_with_alignment": 573,
+      "pct": 100.0
     }
   }
 }

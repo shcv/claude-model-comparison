@@ -2,7 +2,8 @@
   "section_id": "sessions",
   "data_sources": {
     "sessions": "analysis/session-analysis.json",
-    "overview": "analysis/dataset-overview.json"
+    "overview": "analysis/dataset-overview.json",
+    "timing": "analysis/timing-analysis.json"
   },
   "tables": {
     "session-warmup": {
@@ -24,6 +25,11 @@
       "title": "Task Duration Distribution (inline)",
       "data_source": "overview",
       "row_gen": "duration_distribution_inline"
+    },
+    "idle-sensitivity": {
+      "title": "Active-Time Cost by Idle Threshold",
+      "data_source": "timing",
+      "row_gen": "idle_sensitivity_inline"
     }
   },
   "prose": {

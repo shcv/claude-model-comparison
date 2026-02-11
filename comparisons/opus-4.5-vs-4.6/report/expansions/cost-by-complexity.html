@@ -17,51 +17,51 @@
         <tr>
             <td class="label-cell">Trivial</td>
             <td class="right mono">97</td>
-            <td class="right mono">101</td>
+            <td class="right mono">176</td>
             <td class="right mono">14</td>
-            <td class="right mono">12</td>
+            <td class="right mono">16</td>
             <td class="right mono">1.6</td>
-            <td class="right mono">1.8</td>
+            <td class="right mono">1.7</td>
         </tr>
         <tr>
             <td class="label-cell">Simple</td>
             <td class="right mono">514</td>
-            <td class="right mono">488</td>
+            <td class="right mono">755</td>
             <td class="right mono">137</td>
-            <td class="right mono">32</td>
+            <td class="right mono">166</td>
             <td class="right mono">5.7</td>
-            <td class="right mono">5.3</td>
+            <td class="right mono">5.4</td>
         </tr>
         <tr>
             <td class="label-cell">Moderate</td>
             <td class="right mono">1,506</td>
-            <td class="right mono">1,745</td>
+            <td class="right mono">2,567</td>
             <td class="right mono">601</td>
-            <td class="right mono">134</td>
+            <td class="right mono">249</td>
             <td class="right mono">11.4</td>
-            <td class="right mono">11.3</td>
+            <td class="right mono">11.8</td>
         </tr>
         <tr>
             <td class="label-cell">Complex</td>
             <td class="right mono">3,903</td>
-            <td class="right mono">7,558</td>
+            <td class="right mono">9,262</td>
             <td class="right mono">1,484</td>
-            <td class="right mono">32</td>
+            <td class="right mono">502</td>
             <td class="right mono">26.3</td>
-            <td class="right mono">28.5</td>
+            <td class="right mono">29.9</td>
         </tr>
         <tr>
             <td class="label-cell">Major</td>
-            <td class="right mono">8,872</td>
-            <td class="right mono">10,919</td>
-            <td class="right mono">2,133</td>
-            <td class="right mono">79</td>
-            <td class="right mono">52.0</td>
-            <td class="right mono">76.2</td>
+            <td class="right mono">8,465</td>
+            <td class="right mono">15,971</td>
+            <td class="right mono">2,020</td>
+            <td class="right mono">477</td>
+            <td class="right mono">52.4</td>
+            <td class="right mono">66.3</td>
         </tr>
     </tbody>
 </table>
 <!-- /GENERATED-TABLE -->
-<p>At complex tasks, Opus 4.6 uses <em>dramatically fewer</em> fresh input tokens per task (33 vs 1,479) while producing 9% more output (4,350 vs 3,990). Despite using similar request counts per task at the complex level (28.2 vs 26.5), Opus 4.6 achieves much more effective cache utilization. Combined with more effective cache utilization, the output cost premium is more than offset by input savings.</p>
+<p>At complex tasks, Opus 4.6 uses fewer fresh input tokens per task (502 vs 1,484) while producing 137% more output (9,262 vs 3,903). Despite using similar request counts per task at the complex level (29.9 vs 26.3), Opus 4.6 achieves much more effective cache utilization, and the output cost premium is offset by input savings.</p>
 
 <p><strong>Caveat:</strong> These averages come from organic sessions with different task mixes per model. Some of the per-complexity gap may reflect session-level factors (e.g., caching benefits accumulate within longer sessions).</p>

@@ -233,7 +233,7 @@ def analyze_request_timing(tasks: list[dict]) -> dict:
 # c) Active-time cost
 # ---------------------------------------------------------------------------
 
-def analyze_active_time_cost(tasks: list[dict], gap_thresholds_min=(2, 5, 10)) -> dict:
+def analyze_active_time_cost(tasks: list[dict], gap_thresholds_min=(2, 5, 10, 20, 30, 60)) -> dict:
     """Compute cost per active hour by grouping tasks into sessions.
 
     Active time = sum of task durations + inter-task gaps below threshold.

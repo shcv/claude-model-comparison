@@ -56,6 +56,11 @@
       "title": "Cost by complexity (inline)",
       "data_source": "tokens",
       "row_gen": "cost_by_complexity_inline"
+    },
+    "cost-cache-efficiency": {
+      "title": "Cache Efficiency by Complexity",
+      "data_source": "tokens",
+      "row_gen": "cache_efficiency_inline"
     }
   },
   "prose": {

@@ -10,7 +10,7 @@ import json
 import os
 from collections import defaultdict
 from dataclasses import dataclass, asdict
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
@@ -23,9 +23,9 @@ MODEL_IDS = {
     'opus-4-5': 'claude-opus-4-5-20251101',
     'opus-4-6': 'claude-opus-4-6',
 }
-# EAP codenames that map to the same model
+# EAP codenames that map to the same canonical model ID
 MODEL_ALIASES = {
-    'claude-fudge-eap-cc': 'opus-4-6',
+    'claude-fudge-eap-cc': 'claude-opus-4-6',
 }
 
 
@@ -153,11 +153,10 @@ def parse_session_file(file_path: Path) -> Optional[SessionMetadata]:
         return None
 
 
-def collect_sessions(days_back: int = 7, exclude_projects: list[str] = None) -> dict:
-    """Collect sessions from the last N days, grouped by model family.
+def collect_sessions(exclude_projects: list[str] = None) -> dict:
+    """Collect all sessions, grouped by model family.
 
     Args:
-        days_back: How many days back to scan
         exclude_projects: List of substrings to exclude from project paths
                          (default: ["model-comparison"] to exclude this analysis)
     """
@@ -165,7 +164,6 @@ def collect_sessions(days_back: int = 7, exclude_projects: list[str] = None) -> 
         exclude_projects = ['model-comparison']
 
     claude_dir = Path.home() / '.claude' / 'projects'
-    cutoff = datetime.now() - timedelta(days=days_back)
 
     sessions = defaultdict(list)
     excluded_count = 0
@@ -175,8 +173,9 @@ def collect_sessions(days_back: int = 7, exclude_projects: list[str] = None) -> 
     model_id_to_key = {}
     for key, model_id in MODEL_IDS.items():
         model_id_to_key[model_id] = key
-    for alias, key in MODEL_ALIASES.items():
-        model_id_to_key[alias] = key
+    # Aliases map to model IDs; resolve to canonical keys
+    for alias, model_id in MODEL_ALIASES.items():
+        model_id_to_key[alias] = model_id_to_key.get(model_id, model_id)
 
     # Walk through all project directories
     for project_dir in claude_dir.iterdir():
@@ -194,11 +193,6 @@ def collect_sessions(days_back: int = 7, exclude_projects: list[str] = None) -> 
         for session_file in project_dir.glob('*.jsonl'):
             # Skip agent subagent files
             if session_file.name.startswith('agent-'):
-                continue
-
-            # Check file modification time
-            mtime = datetime.fromtimestamp(session_file.stat().st_mtime)
-            if mtime < cutoff:
                 continue
 
             metadata = parse_session_file(session_file)
@@ -282,17 +276,16 @@ def save_results(sessions: dict, output_dir: Path):
 def main():
     import argparse
     parser = argparse.ArgumentParser(description='Collect Claude Code sessions by model')
-    parser.add_argument('--days', type=int, default=90, help='Days back to scan (default: 90)')
     parser.add_argument('--data-dir', type=Path, default=Path('data'),
                         help='Output directory for session files (default: data)')
     parser.add_argument('--exclude-projects', nargs='*', default=['model-comparison'],
                         help='Exclude projects containing these substrings (default: model-comparison)')
     args = parser.parse_args()
 
-    print(f"Scanning sessions from the last {args.days} days...")
+    print("Scanning all sessions...")
     if args.exclude_projects:
         print(f"Excluding projects matching: {', '.join(args.exclude_projects)}")
-    sessions = collect_sessions(days_back=args.days, exclude_projects=args.exclude_projects)
+    sessions = collect_sessions(exclude_projects=args.exclude_projects)
 
     print_summary(sessions)
     save_results(sessions, args.data_dir)

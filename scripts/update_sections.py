@@ -1166,6 +1166,176 @@ def generate_cost_by_complexity_inline(spec: dict, data: dict, config: dict) -> 
     return "\n".join(lines)
 
 
+def generate_cache_efficiency_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate cache read/write efficiency table by complexity."""
+    lines = [f"<!-- title: {spec.get('title', 'Cache Efficiency by Complexity')} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    tokens = data.get("tokens", {})
+    ta = tokens.get(ma, {}).get("by_complexity", {})
+    tb = tokens.get(mb, {}).get("by_complexity", {})
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Complexity</th>'
+                 '<th class="right">4.5 cache write/task</th>'
+                 '<th class="right">4.6 cache write/task</th>'
+                 '<th class="right">4.5 read ratio</th>'
+                 '<th class="right">4.6 read ratio</th>'
+                 '<th class="right">&Delta; write</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    for cx in table_gen.COMPLEXITY_ORDER:
+        da = ta.get(cx, {})
+        db = tb.get(cx, {})
+        n_a = da.get("count", 1) or 1
+        n_b = db.get("count", 1) or 1
+        cw_a = da.get("cache_write_tokens", 0) / n_a
+        cw_b = db.get("cache_write_tokens", 0) / n_b
+        cr_a = da.get("cache_read_tokens", 0)
+        cr_b = db.get("cache_read_tokens", 0)
+        total_cache_a = cr_a + da.get("cache_write_tokens", 0)
+        total_cache_b = cr_b + db.get("cache_write_tokens", 0)
+        ratio_a = cr_a / total_cache_a * 100 if total_cache_a > 0 else 0
+        ratio_b = cr_b / total_cache_b * 100 if total_cache_b > 0 else 0
+
+        if cw_a > 0:
+            delta = cw_b / cw_a
+            delta_str = f'{delta:.2f}&times;'
+            css = 'color:var(--green)' if delta < 1 else 'color:var(--orange)'
+        else:
+            delta_str = '&mdash;'
+            css = ''
+
+        label = table_gen._label_case(cx)
+        lines.append(f'        <tr><td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="right mono">{cw_a:,.0f}</td>')
+        lines.append(f'            <td class="right mono">{cw_b:,.0f}</td>')
+        lines.append(f'            <td class="right mono">{ratio_a:.1f}%</td>')
+        lines.append(f'            <td class="right mono">{ratio_b:.1f}%</td>')
+        lines.append(f'            <td class="right mono" style="{css}">{delta_str}</td></tr>')
+
+    # Add overall row
+    oa = tokens.get(ma, {}).get("overall", {})
+    ob = tokens.get(mb, {}).get("overall", {})
+    n_a = oa.get("count", 1) or 1
+    n_b = ob.get("count", 1) or 1
+    cw_a = oa.get("cache_write_tokens", 0) / n_a
+    cw_b = ob.get("cache_write_tokens", 0) / n_b
+    cr_a = oa.get("cache_read_tokens", 0)
+    cr_b = ob.get("cache_read_tokens", 0)
+    total_cache_a = cr_a + oa.get("cache_write_tokens", 0)
+    total_cache_b = cr_b + ob.get("cache_write_tokens", 0)
+    ratio_a = cr_a / total_cache_a * 100 if total_cache_a > 0 else 0
+    ratio_b = cr_b / total_cache_b * 100 if total_cache_b > 0 else 0
+    delta = cw_b / cw_a if cw_a > 0 else 0
+    delta_str = f'{delta:.2f}&times;'
+    css = 'color:var(--green)' if delta < 1 else 'color:var(--orange)'
+    lines.append(f'        <tr style="font-weight:600"><td class="label-cell">Overall</td>')
+    lines.append(f'            <td class="right mono">{cw_a:,.0f}</td>')
+    lines.append(f'            <td class="right mono">{cw_b:,.0f}</td>')
+    lines.append(f'            <td class="right mono">{ratio_a:.1f}%</td>')
+    lines.append(f'            <td class="right mono">{ratio_b:.1f}%</td>')
+    lines.append(f'            <td class="right mono" style="{css}">{delta_str}</td></tr>')
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+
+    # Add thinking vs text breakdown
+    lines.append("")
+    lines.append("<h3>Thinking vs Visible Text Output</h3>")
+    lines.append("<p>Thinking tokens are billed as output but do not enter the conversation history "
+                 "or affect cache behavior. Visible text output accumulates in history and increases "
+                 "subsequent input size.</p>")
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Metric</th>'
+                 '<th class="right">4.5</th>'
+                 '<th class="right">4.6</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    think_a = oa.get("avg_thinking_chars_when_used", 0)
+    think_b = ob.get("avg_thinking_chars_when_used", 0)
+    text_a = oa.get("avg_text_chars", 0)
+    text_b = ob.get("avg_text_chars", 0)
+    tr_a = oa.get("thinking_ratio", 0)
+    tr_b = ob.get("thinking_ratio", 0)
+    out_a = oa.get("avg_output_tokens", 0)
+    out_b = ob.get("avg_output_tokens", 0)
+
+    lines.append(f'        <tr><td class="label-cell">Avg output tokens/task</td>'
+                 f'<td class="right mono">{out_a:,.0f}</td>'
+                 f'<td class="right mono">{out_b:,.0f}</td></tr>')
+    lines.append(f'        <tr><td class="label-cell">Thinking ratio (chars)</td>'
+                 f'<td class="right mono">{tr_a*100:.0f}%</td>'
+                 f'<td class="right mono">{tr_b*100:.0f}%</td></tr>')
+    lines.append(f'        <tr><td class="label-cell">Avg thinking chars (when used)</td>'
+                 f'<td class="right mono">{think_a:,.0f}</td>'
+                 f'<td class="right mono">{think_b:,.0f}</td></tr>')
+    lines.append(f'        <tr><td class="label-cell">Avg visible text chars</td>'
+                 f'<td class="right mono">{text_a:,.0f}</td>'
+                 f'<td class="right mono">{text_b:,.0f}</td></tr>')
+    lines.append(f'        <tr><td class="label-cell">Requests per task</td>'
+                 f'<td class="right mono">{oa.get("avg_requests_per_task", 0):.1f}</td>'
+                 f'<td class="right mono">{ob.get("avg_requests_per_task", 0):.1f}</td></tr>')
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
+def generate_idle_sensitivity_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate active-time cost sensitivity table across idle thresholds."""
+    lines = [f"<!-- title: {spec.get('title', 'Active-Time Cost by Idle Threshold')} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    timing = data.get("timing", {})
+    ta = timing.get(ma, {}).get("active_time_cost", {}).get("by_threshold", {})
+    tb = timing.get(mb, {}).get("active_time_cost", {}).get("by_threshold", {})
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Idle threshold</th>'
+                 '<th class="right">4.5 active hrs</th>'
+                 '<th class="right">4.6 active hrs</th>'
+                 '<th class="right">4.5 $/hr</th>'
+                 '<th class="right">4.6 $/hr</th>'
+                 '<th class="right">&Delta; $/hr</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    thresholds = sorted(ta.keys(), key=lambda k: int(k.replace("min", "")))
+    for key in thresholds:
+        da = ta.get(key, {})
+        db = tb.get(key, {})
+        hrs_a = da.get("total_active_hours", 0)
+        hrs_b = db.get("total_active_hours", 0)
+        rate_a = da.get("cost_per_active_hour", 0)
+        rate_b = db.get("cost_per_active_hour", 0)
+        if rate_a > 0:
+            delta_pct = (rate_b - rate_a) / rate_a * 100
+            sign = "+" if delta_pct > 0 else "&minus;"
+            css = 'color:var(--orange)' if delta_pct > 0 else 'color:var(--green)'
+            delta_str = f'{sign}{abs(delta_pct):.0f}%'
+        else:
+            delta_str = '&mdash;'
+            css = ''
+
+        label = key.replace("min", " min")
+        lines.append(f'        <tr><td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="right mono">{hrs_a:.1f}</td>')
+        lines.append(f'            <td class="right mono">{hrs_b:.1f}</td>')
+        lines.append(f'            <td class="right mono">${rate_a:.2f}</td>')
+        lines.append(f'            <td class="right mono">${rate_b:.2f}</td>')
+        lines.append(f'            <td class="right mono" style="{css}">{delta_str}</td></tr>')
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
 def generate_edit_overview_inline(spec: dict, data: dict, config: dict) -> str:
     """Generate the inline edit overview bar-pair table for the edit-accuracy section."""
     lines = [f"<!-- title: {spec.get('title', 'Edit overview')} -->"]
@@ -1541,13 +1711,18 @@ def generate_behavior_adoption_inline(spec: dict, data: dict, config: dict) -> s
     lines.append("    <tbody>")
 
     rows = [
-        ("Tasks using subagents", pct_sub_a, pct_sub_b, sub_a, sub_b),
-        ("Autonomous subagent calls", pct_auto_a, pct_auto_b, auto_a, auto_b),
-        ("Tasks using planning mode", pct_plan_a, pct_plan_b, plan_a, plan_b),
+        ("Tasks using planning mode", pct_plan_a, pct_plan_b, plan_a, plan_b,
+         total_a, total_b),
+        ("Tasks using subagents", pct_sub_a, pct_sub_b, sub_a, sub_b,
+         total_a, total_b),
+        ("Autonomous subagent calls", pct_auto_a, pct_auto_b, auto_a, auto_b,
+         total_sub_a, total_sub_b),
     ]
 
-    for label, pa, pb, na, nb in rows:
-        bar = table_gen.generate_bar_pair(pa, pb)
+    for label, pa, pb, na, nb, denom_a, denom_b in rows:
+        ci_a = tuple(v * 100 for v in table_gen.wilson_ci(na, denom_a))
+        ci_b = tuple(v * 100 for v in table_gen.wilson_ci(nb, denom_b))
+        bar = table_gen.generate_bar_pair(pa, pb, ci_a=ci_a, ci_b=ci_b)
         delta_pp = pb - pa
         if abs(delta_pp) < 3:
             delta_str = '&asymp; Tie'
@@ -1604,12 +1779,18 @@ def generate_behavior_subagent_types_inline(spec: dict, data: dict, config: dict
     lines.append("    </thead>")
     lines.append("    <tbody>")
 
-    for type_name in ["Explore", "General-purpose", "Bash", "Plan"]:
+    # Sort by total frequency (sum of both models) descending
+    all_types = list(set(list(agg_a.keys()) + list(agg_b.keys())))
+    all_types.sort(key=lambda t: agg_a.get(t, 0) + agg_b.get(t, 0), reverse=True)
+
+    for type_name in all_types:
         ca = agg_a.get(type_name, 0)
         cb = agg_b.get(type_name, 0)
         pct_a = ca / total_sub_a * 100
         pct_b = cb / total_sub_b * 100
-        bar = table_gen.generate_bar_pair(pct_a, pct_b)
+        ci_a = tuple(v * 100 for v in table_gen.wilson_ci(ca, total_sub_a))
+        ci_b = tuple(v * 100 for v in table_gen.wilson_ci(cb, total_sub_b))
+        bar = table_gen.generate_bar_pair(pct_a, pct_b, ci_a=ci_a, ci_b=ci_b)
 
         delta_pp = pct_b - pct_a
         if abs(delta_pp) < 3:
@@ -1665,7 +1846,9 @@ def generate_complexity_distribution_inline(spec: dict, data: dict, config: dict
             cb = db.get(cx, 0)
             pct_a = ca / n_a * 100
             pct_b = cb / n_b * 100
-            bar = table_gen.generate_bar_pair(pct_a, pct_b)
+            ci_a = tuple(v * 100 for v in table_gen.wilson_ci(ca, n_a))
+            ci_b = tuple(v * 100 for v in table_gen.wilson_ci(cb, n_b))
+            bar = table_gen.generate_bar_pair(pct_a, pct_b, ci_a=ci_a, ci_b=ci_b)
             label = table_gen._label_case(cx)
 
             lines.append("        <tr>")
@@ -1696,7 +1879,9 @@ def generate_complexity_distribution_inline(spec: dict, data: dict, config: dict
         cb = counts_b.get(cx, 0)
         pct_a = ca / n_a * 100
         pct_b = cb / n_b * 100
-        bar = table_gen.generate_bar_pair(pct_a, pct_b)
+        ci_a = tuple(v * 100 for v in table_gen.wilson_ci(ca, n_a))
+        ci_b = tuple(v * 100 for v in table_gen.wilson_ci(cb, n_b))
+        bar = table_gen.generate_bar_pair(pct_a, pct_b, ci_a=ci_a, ci_b=ci_b)
         label = table_gen._label_case(cx)
 
         lines.append("        <tr>")
@@ -2252,6 +2437,8 @@ CUSTOM_GENERATORS = {
     "session_effort_inline": generate_session_effort_inline,
     "session_length_inline": generate_session_length_inline,
     "duration_distribution_inline": generate_duration_distribution_inline,
+    "cache_efficiency_inline": generate_cache_efficiency_inline,
+    "idle_sensitivity_inline": generate_idle_sensitivity_inline,
     "stat_tests": None,  # handled by table_gen._generate_stat_test_rows
 }
 
