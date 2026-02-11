@@ -157,6 +157,12 @@ class CanonicalTask:
     thinking_blocks: int = 0
     text_chars: int = 0
     text_blocks: int = 0
+    tool_use_chars: int = 0
+    edit_content_chars: int = 0
+    write_content_chars: int = 0
+    bash_command_chars: int = 0
+    agent_prompt_chars: int = 0
+    search_chars: int = 0
     estimated_cost: float = 0.0
     request_count: int = 0
 
@@ -737,6 +743,21 @@ def extract_canonical_from_session(file_path: Path, model: str) -> list[Canonica
                     name = tool_info.get('name')
                     file_path_str = tool_info.get('file', '')
                     inp = block.get('input', {})
+
+                    # Tool input char breakdown
+                    if isinstance(inp, dict):
+                        inp_chars = sum(len(str(v)) for v in inp.values())
+                        current_task.tool_use_chars += inp_chars
+                        if name == 'Edit':
+                            current_task.edit_content_chars += len(inp.get('old_string', '')) + len(inp.get('new_string', ''))
+                        elif name in ('Write', 'NotebookEdit'):
+                            current_task.write_content_chars += len(inp.get('content', '') or inp.get('new_source', ''))
+                        elif name == 'Bash':
+                            current_task.bash_command_chars += len(inp.get('command', ''))
+                        elif name == 'Task':
+                            current_task.agent_prompt_chars += len(inp.get('prompt', ''))
+                        elif name in ('Grep', 'Glob'):
+                            current_task.search_chars += len(inp.get('pattern', '')) + len(inp.get('path', ''))
                     tool_use_id = block.get('id', '')
 
                     # File tracking (same as TaskData)
@@ -923,6 +944,12 @@ def _merge_task_into(target: CanonicalTask, source: CanonicalTask) -> None:
     target.thinking_blocks += source.thinking_blocks
     target.text_chars += source.text_chars
     target.text_blocks += source.text_blocks
+    target.tool_use_chars += source.tool_use_chars
+    target.edit_content_chars += source.edit_content_chars
+    target.write_content_chars += source.write_content_chars
+    target.bash_command_chars += source.bash_command_chars
+    target.agent_prompt_chars += source.agent_prompt_chars
+    target.search_chars += source.search_chars
     target.estimated_cost += round(source.estimated_cost, 4)
     target.request_count += source.request_count
     target.subagent_count += source.subagent_count

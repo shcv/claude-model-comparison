@@ -68,6 +68,14 @@ class TaskTokens:
     text_blocks: int = 0
     tool_use_blocks: int = 0
 
+    # Tool input character breakdown
+    tool_use_chars: int = 0            # total chars of all tool_use inputs (JSON serialized)
+    edit_content_chars: int = 0        # Edit: old_string + new_string
+    write_content_chars: int = 0       # Write: content
+    bash_command_chars: int = 0        # Bash: command
+    agent_prompt_chars: int = 0        # Task: prompt
+    search_chars: int = 0             # Grep/Glob: pattern + path
+
     # Estimated token breakdown
     estimated_thinking_tokens: int = 0  # thinking_chars / 3
     estimated_text_tokens: int = 0  # text_chars / 3.5
@@ -207,6 +215,21 @@ def extract_tokens_from_session(file_path: Path, model: str) -> list[TaskTokens]
 
                     elif block_type == 'tool_use':
                         current_task.tool_use_blocks += 1
+                        inp = block.get('input', {})
+                        if isinstance(inp, dict):
+                            inp_chars = sum(len(str(v)) for v in inp.values())
+                            current_task.tool_use_chars += inp_chars
+                            name = block.get('name', '')
+                            if name == 'Edit':
+                                current_task.edit_content_chars += len(inp.get('old_string', '')) + len(inp.get('new_string', ''))
+                            elif name in ('Write', 'NotebookEdit'):
+                                current_task.write_content_chars += len(inp.get('content', '') or inp.get('new_source', ''))
+                            elif name == 'Bash':
+                                current_task.bash_command_chars += len(inp.get('command', ''))
+                            elif name == 'Task':
+                                current_task.agent_prompt_chars += len(inp.get('prompt', ''))
+                            elif name in ('Grep', 'Glob'):
+                                current_task.search_chars += len(inp.get('pattern', '')) + len(inp.get('path', ''))
 
     # Finalize last task
     if current_task is not None:
@@ -300,6 +323,17 @@ def compute_aggregates(tasks: list[TaskTokens], classifications: dict) -> dict:
             hi = means[int(n_boot * (1 - alpha / 2))]
             return (round(float(lo), 4), round(float(hi), 4))
 
+        # Per-request metrics
+        total_requests = sum(t.request_count for t in group)
+        per_request_outputs = np.array([
+            t.total_output_tokens / t.request_count if t.request_count else 0
+            for t in group
+        ])
+        per_request_text = np.array([
+            t.text_chars / t.request_count if t.request_count else 0
+            for t in group
+        ])
+
         return {
             'count': n,
             'total_input_tokens': total_input,
@@ -323,6 +357,18 @@ def compute_aggregates(tasks: list[TaskTokens], classifications: dict) -> dict:
             'avg_requests_per_task': round(sum(t.request_count for t in group) / n, 1),
             'cache_read_tokens': sum(t.cache_read_tokens for t in group),
             'cache_write_tokens': sum(t.cache_write_tokens for t in group),
+            # Per-request averages
+            'avg_output_per_request': round(total_output / total_requests) if total_requests else 0,
+            'output_per_request_ci95': bootstrap_ci(per_request_outputs),
+            'avg_text_chars_per_request': round(total_text_chars / total_requests) if total_requests else 0,
+            'text_chars_per_request_ci95': bootstrap_ci(per_request_text),
+            # Tool input char breakdown (per-task averages)
+            'avg_tool_use_chars': round(sum(t.tool_use_chars for t in group) / n),
+            'avg_edit_content_chars': round(sum(t.edit_content_chars for t in group) / n),
+            'avg_write_content_chars': round(sum(t.write_content_chars for t in group) / n),
+            'avg_bash_command_chars': round(sum(t.bash_command_chars for t in group) / n),
+            'avg_agent_prompt_chars': round(sum(t.agent_prompt_chars for t in group) / n),
+            'avg_search_chars': round(sum(t.search_chars for t in group) / n),
         }
 
     # Overall

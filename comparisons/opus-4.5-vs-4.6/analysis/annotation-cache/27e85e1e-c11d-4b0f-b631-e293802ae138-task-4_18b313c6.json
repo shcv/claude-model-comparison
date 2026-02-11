@@ -1,0 +1,18 @@
+{
+  "user_sentiment": "negative",
+  "sentiment_confidence": "high",
+  "execution_quality": "User identified model ID configuration error; provided clear diagnostic and suggested fix.",
+  "work_category": "User identified an API error in experiment script output and diagnosed the likely root cause.",
+  "scope_management": "focused",
+  "communication_quality": "clear",
+  "error_recovery": "struggled",
+  "iteration_required": "minor",
+  "task_completion": "failed",
+  "alignment_score": 2,
+  "summary": "Script execution produced API errors due to incorrect model ID configuration. User diagnosed the issue and provided a clear fix (use 'haiku' instead of full model name), but the agent failed to prevent or handle this configuration error before execution.",
+  "follow_up_pattern": "User expects the agent or system to correct the model ID from full name to short 'haiku' name.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "investigation",
+  "normalized_user_sentiment": "dissatisfied"
+}

@@ -86,9 +86,9 @@
     }
   },
   "opus-4-6": {
-    "total_sessions": 132,
+    "total_sessions": 136,
     "sessions_with_compaction": 17,
-    "compaction_rate_pct": 12.9,
+    "compaction_rate_pct": 12.5,
     "total_events": 27,
     "trigger_breakdown": {
       "auto": 21,
@@ -132,40 +132,40 @@
       },
       "control": {
         "pre": {
-          "n": 256,
-          "avg_alignment": 3.211,
+          "n": 266,
+          "avg_alignment": 3.222,
           "median_alignment": 3.0,
-          "satisfaction_rate": 0.2695,
-          "dissatisfaction_rate": 0.1211,
-          "completion_rate": 0.3633,
+          "satisfaction_rate": 0.2744,
+          "dissatisfaction_rate": 0.1241,
+          "completion_rate": 0.3647,
           "user_correction_rate": 0.0017,
-          "total_edits": 580,
+          "total_edits": 603,
           "total_user_corrections": 1
         },
         "post": {
-          "n": 184,
-          "avg_alignment": 3.549,
+          "n": 192,
+          "avg_alignment": 3.521,
           "median_alignment": 4.0,
-          "satisfaction_rate": 0.3913,
-          "dissatisfaction_rate": 0.0978,
-          "completion_rate": 0.5109,
+          "satisfaction_rate": 0.3854,
+          "dissatisfaction_rate": 0.099,
+          "completion_rate": 0.5052,
           "user_correction_rate": 0.0,
-          "total_edits": 226,
+          "total_edits": 227,
           "total_user_corrections": 0
         },
         "delta": {
-          "avg_alignment": 0.338,
-          "satisfaction_rate": 0.1218,
-          "dissatisfaction_rate": -0.0233,
-          "completion_rate": 0.1476,
+          "avg_alignment": 0.299,
+          "satisfaction_rate": 0.111,
+          "dissatisfaction_rate": -0.0251,
+          "completion_rate": 0.1405,
           "user_correction_rate": -0.0017
         }
       },
       "compaction_effect": {
-        "avg_alignment": -0.266,
-        "satisfaction_rate": -0.0742,
-        "dissatisfaction_rate": -0.0589,
-        "completion_rate": -0.095,
+        "avg_alignment": -0.227,
+        "satisfaction_rate": -0.0634,
+        "dissatisfaction_rate": -0.0571,
+        "completion_rate": -0.0879,
         "user_correction_rate": 0.0017
       },
       "median_split_position_pct": 64.4

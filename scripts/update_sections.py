@@ -1084,7 +1084,7 @@ def generate_verbosity_by_type_inline(spec: dict, data: dict, config: dict) -> s
             ratio = avg_b / avg_a
             type_ratios.append((t, avg_a, avg_b, ratio, ci_a, ci_b))
 
-    type_ratios.sort(key=lambda x: x[3], reverse=True)
+    type_ratios.sort(key=lambda x: x[5][0] if x[5] else x[2], reverse=True)  # sort by model B CI lower bound
 
     # Find max output for bar scaling (use upper CI bound if available)
     all_vals = []
