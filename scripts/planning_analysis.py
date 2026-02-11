@@ -70,9 +70,6 @@ def analyze_model(data_dir, analysis_dir, model):
     tasks = load_tasks(data_dir, model)
     llm = load_llm_analysis(analysis_dir, model)
 
-    # Filter meta tasks
-    tasks = [t for t in tasks if not t.get('is_meta', False)]
-
     # For canonical tasks, load classified data for complexity info
     classified_by_id = {}
     classified_path = data_dir / f"tasks-classified-{model}.json"
@@ -262,7 +259,6 @@ def main():
 
         for model in models:
             tasks = load_tasks(data_dir, model)
-            tasks = [t for t in tasks if not t.get('is_meta', False)]
 
             # Load classified for complexity
             classified_by_id = {}

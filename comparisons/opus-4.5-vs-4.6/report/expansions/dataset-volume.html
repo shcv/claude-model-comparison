@@ -15,32 +15,32 @@
         <tr>
             <td class="label-cell">Output tokens</td>
             <td class="right mono">2.1M</td>
-            <td class="right mono">364,918</td>
-            <td class="right mono">2.5M</td>
+            <td class="right mono">635,564</td>
+            <td class="right mono">2.7M</td>
         </tr>
         <tr>
             <td class="label-cell">Input tokens (fresh)</td>
-            <td class="right mono">678,383</td>
-            <td class="right mono">13,742</td>
-            <td class="right mono">692,125</td>
+            <td class="right mono">676,987</td>
+            <td class="right mono">16,766</td>
+            <td class="right mono">693,753</td>
         </tr>
         <tr>
             <td class="label-cell">Cache read tokens</td>
             <td class="right mono">1.28B</td>
-            <td class="right mono">256.6M</td>
-            <td class="right mono">1.54B</td>
+            <td class="right mono">329.8M</td>
+            <td class="right mono">1.61B</td>
         </tr>
         <tr>
             <td class="label-cell">Cache write tokens</td>
-            <td class="right mono">147.2M</td>
-            <td class="right mono">14.5M</td>
-            <td class="right mono">161.7M</td>
+            <td class="right mono">145.5M</td>
+            <td class="right mono">17.7M</td>
+            <td class="right mono">163.1M</td>
         </tr>
         <tr>
             <td class="label-cell">Total API cost</td>
-            <td class="right mono">$5,327.21</td>
-            <td class="right mono">$781.35</td>
-            <td class="right mono">$6,108.56</td>
+            <td class="right mono">$5,284.64</td>
+            <td class="right mono">$997.78</td>
+            <td class="right mono">$6,282.42</td>
         </tr>
     </tbody>
 </table>
@@ -59,23 +59,23 @@
     <tbody>
         <tr>
             <td class="label-cell">Est. thinking tokens</td>
-            <td class="right mono">1,431,583</td>
-            <td class="right mono">216,699</td>
+            <td class="right mono">1,419,559</td>
+            <td class="right mono">285,489</td>
         </tr>
         <tr>
             <td class="label-cell">Est. text tokens</td>
-            <td class="right mono">675,583</td>
-            <td class="right mono">160,923</td>
+            <td class="right mono">673,089</td>
+            <td class="right mono">196,833</td>
         </tr>
         <tr>
             <td class="label-cell">Thinking ratio (tasks using thinking)</td>
-            <td class="right mono">75.5%</td>
-            <td class="right mono">59.4%</td>
+            <td class="right mono">75.1%</td>
+            <td class="right mono">58.8%</td>
         </tr>
         <tr>
             <td class="label-cell">Avg requests / task</td>
             <td class="right mono">7.4</td>
-            <td class="right mono">10.3</td>
+            <td class="right mono">9.4</td>
         </tr>
     </tbody>
 </table>
@@ -93,24 +93,24 @@
     <tbody>
         <tr>
             <td class="label-cell">Files touched</td>
-            <td class="right mono">2,915</td>
-            <td class="right mono">425</td>
-            <td class="right mono">3,340</td>
+            <td class="right mono">2,930</td>
+            <td class="right mono">538</td>
+            <td class="right mono">3,468</td>
         </tr>
         <tr>
             <td class="label-cell">Lines added</td>
-            <td class="right mono">179,590</td>
-            <td class="right mono">13,576</td>
-            <td class="right mono">193,166</td>
+            <td class="right mono">180,123</td>
+            <td class="right mono">19,194</td>
+            <td class="right mono">199,317</td>
         </tr>
         <tr>
             <td class="label-cell">Lines removed</td>
-            <td class="right mono">37,786</td>
-            <td class="right mono">3,097</td>
-            <td class="right mono">40,883</td>
+            <td class="right mono">37,940</td>
+            <td class="right mono">4,625</td>
+            <td class="right mono">42,565</td>
         </tr>
     </tbody>
 </table>
 
-<p>Cache reads dominate the token budget: 90% of all tokens processed were served from cache rather than freshly encoded. This reflects Claude Code's prompt architecture, where the system prompt and conversation history are re-sent with each API call but largely hit the prompt cache.</p>
+<p>Cache reads dominate the token budget: 91% of all tokens processed were served from cache rather than freshly encoded. This reflects Claude Code's prompt architecture, where the system prompt and conversation history are re-sent with each API call but largely hit the prompt cache.</p>
 <!-- /GENERATED-TABLE -->

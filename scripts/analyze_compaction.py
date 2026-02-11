@@ -88,22 +88,30 @@ def compute_delta(pre: dict, post: dict) -> dict:
 
 
 def analyze_model_compaction(data_dir: Path, model: str, analysis_dir: Path) -> dict:
-    """Analyze compaction for a single model using canonical task data."""
-    all_tasks = load_canonical_tasks(data_dir, model)
+    """Analyze compaction for a single model using canonical task data.
+
+    Loads ALL tasks (including excluded ones like system_continuation) for
+    compaction event detection, since compaction events are almost always
+    attached to continuation tasks. Uses only non-excluded tasks for outcome
+    correlation.
+    """
+    # Load all tasks including excluded ones — compaction events live on
+    # system_continuation tasks which are excluded from primary analysis
+    all_tasks = load_canonical_tasks(data_dir, model, include_excluded=True)
     if not all_tasks:
         print(f"Error: no tasks found for {model}")
         return {}
 
-    # Filter meta tasks
-    all_tasks = [t for t in all_tasks if not t.get('is_meta', False)]
+    # Non-excluded tasks for outcome correlation
+    analysis_tasks = [t for t in all_tasks if not t.get('exclude_reason')]
 
     # Load LLM analysis + edit metrics for outcome correlation
     llm_path = analysis_dir / f'llm-analysis-{model}.json'
     edit_metrics_path = analysis_dir / f'edit-metrics-{model}.json'
 
-    # Build task_data for outcome correlation
+    # Build task_data for outcome correlation (from non-excluded tasks only)
     task_data = {}
-    for t in all_tasks:
+    for t in analysis_tasks:
         task_data[t['task_id']] = {
             'task_id': t['task_id'],
             'session_id': t['session_id'],
@@ -129,7 +137,7 @@ def analyze_model_compaction(data_dir: Path, model: str, analysis_dir: Path) -> 
                     task_data[tid]['write_count'] = m.get('write_count', 0)
                     task_data[tid]['user_corrections'] = m.get('user_corrections', 0)
 
-    # Group tasks by session, collect compaction events
+    # Group ALL tasks by session for compaction event detection
     sessions: dict[str, list[dict]] = defaultdict(list)
     for t in all_tasks:
         sessions[t['session_id']].append(t)

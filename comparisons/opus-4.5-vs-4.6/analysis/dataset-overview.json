@@ -1,8 +1,8 @@
 {
   "opus-4-5": {
     "sessions": 327,
-    "tasks": 1742,
-    "tasks_per_session": 5.3,
+    "tasks": 1751,
+    "tasks_per_session": 5.4,
     "projects": 31,
     "project_names": [
       "-home-shcv",
@@ -41,42 +41,42 @@
       "start": "2025-12-05",
       "end": "2026-02-10"
     },
-    "total_user_messages": 20537,
-    "total_assistant_messages": 38611,
-    "total_tool_calls": 17987,
-    "total_session_hours": 417.9,
+    "total_user_messages": 20617,
+    "total_assistant_messages": 38722,
+    "total_tool_calls": 18055,
+    "total_session_hours": 415.1,
     "median_session_minutes": 1.8,
-    "total_files_touched": 2915,
-    "total_lines_added": 179590,
-    "total_lines_removed": 37786,
-    "avg_task_duration_sec": 397.7,
-    "median_task_duration_sec": 42.1,
+    "total_files_touched": 2930,
+    "total_lines_added": 180123,
+    "total_lines_removed": 37940,
+    "avg_task_duration_sec": 396.3,
+    "median_task_duration_sec": 42.2,
     "duration_distribution": {
-      "tasks_with_duration": 1697,
-      "mean_seconds": 397.7,
+      "tasks_with_duration": 1704,
+      "mean_seconds": 396.3,
       "percentiles": {
         "p10": 8.2,
-        "p25": 15.2,
-        "p50": 42.1,
-        "p75": 116.0,
+        "p25": 15.3,
+        "p50": 42.2,
+        "p75": 115.8,
         "p90": 267.1
       },
       "buckets": {
         "under_30s": {
-          "count": 719,
-          "pct": 42.4
+          "count": 721,
+          "pct": 42.3
         },
         "30s_to_2m": {
-          "count": 560,
-          "pct": 33.0
+          "count": 564,
+          "pct": 33.1
         },
         "2m_to_10m": {
-          "count": 363,
+          "count": 364,
           "pct": 21.4
         },
         "10m_to_1h": {
           "count": 45,
-          "pct": 2.7
+          "pct": 2.6
         },
         "over_1h": {
           "count": 10,
@@ -84,20 +84,20 @@
         }
       }
     },
-    "total_cost_usd": 5327.21,
-    "total_input_tokens": 678383,
-    "total_output_tokens": 2087846,
-    "cache_read_tokens": 1280308935,
-    "cache_write_tokens": 147193058,
-    "estimated_thinking_tokens": 1431583,
-    "estimated_text_tokens": 675583,
-    "thinking_ratio": 0.755,
+    "total_cost_usd": 5284.64,
+    "total_input_tokens": 676987,
+    "total_output_tokens": 2051731,
+    "cache_read_tokens": 1276408608,
+    "cache_write_tokens": 145457878,
+    "estimated_thinking_tokens": 1419559,
+    "estimated_text_tokens": 673089,
+    "thinking_ratio": 0.751,
     "avg_requests_per_task": 7.4,
     "task_types": {
-      "unknown": 579,
-      "investigation": 418,
-      "feature": 143,
-      "sysadmin": 141,
+      "unknown": 580,
+      "investigation": 421,
+      "feature": 146,
+      "sysadmin": 143,
       "greenfield": 121,
       "bugfix": 113,
       "refactor": 71,
@@ -107,21 +107,21 @@
       "simple": 32
     },
     "complexity_distribution": {
-      "trivial": 813,
-      "simple": 350,
-      "moderate": 370,
+      "trivial": 817,
+      "simple": 351,
+      "moderate": 374,
       "complex": 191,
       "major": 18
     },
     "tool_usage": {
-      "Bash": 5300,
-      "Read": 3329,
-      "Edit": 3031,
-      "Grep": 2512,
-      "Write": 1043,
+      "Bash": 5324,
+      "Read": 3347,
+      "Edit": 3050,
+      "Grep": 2514,
+      "Write": 1046,
       "TodoWrite": 591,
-      "Task": 465,
-      "Glob": 417,
+      "Task": 466,
+      "Glob": 418,
       "TaskList": 377,
       "TaskUpdate": 216,
       "WebSearch": 137,
@@ -131,10 +131,10 @@
       "SendMessage": 47
     },
     "data_cleaning": {
-      "total_extracted": 2154,
-      "included": 1742,
+      "total_extracted": 2140,
+      "included": 1728,
       "excluded": 412,
-      "exclusion_rate": 0.1913,
+      "exclusion_rate": 0.1925,
       "exclusion_reasons": {
         "system_continuation": 389,
         "slash_command": 21,
@@ -148,13 +148,17 @@
     }
   },
   "opus-4-6": {
-    "sessions": 41,
-    "tasks": 202,
-    "tasks_per_session": 4.9,
-    "projects": 4,
+    "sessions": 58,
+    "tasks": 272,
+    "tasks_per_session": 4.7,
+    "projects": 8,
     "project_names": [
       "-home-shcv",
+      "-home-shcv-projects-cc-mas",
+      "-home-shcv-projects-cc-summarize",
+      "-home-shcv-projects-claude-coach",
       "-home-shcv-projects-claude-investigations",
+      "-home-shcv-projects-emux",
       "-home-shcv-work-invent-src-grocery-list",
       "-home-shcv-work-masr-src-strabo-main"
     ],
@@ -162,143 +166,143 @@
       "start": "2026-02-05",
       "end": "2026-02-10"
     },
-    "total_user_messages": 3871,
-    "total_assistant_messages": 6125,
-    "total_tool_calls": 3504,
-    "total_session_hours": 104.0,
-    "median_session_minutes": 2.9,
-    "total_files_touched": 425,
-    "total_lines_added": 13576,
-    "total_lines_removed": 3097,
-    "avg_task_duration_sec": 189.9,
-    "median_task_duration_sec": 62.6,
+    "total_user_messages": 4695,
+    "total_assistant_messages": 7401,
+    "total_tool_calls": 4228,
+    "total_session_hours": 115.2,
+    "median_session_minutes": 1.9,
+    "total_files_touched": 538,
+    "total_lines_added": 19194,
+    "total_lines_removed": 4625,
+    "avg_task_duration_sec": 171.9,
+    "median_task_duration_sec": 55.8,
     "duration_distribution": {
-      "tasks_with_duration": 195,
-      "mean_seconds": 189.9,
+      "tasks_with_duration": 261,
+      "mean_seconds": 171.9,
       "percentiles": {
-        "p10": 9.5,
-        "p25": 18.6,
-        "p50": 62.6,
-        "p75": 191.8,
-        "p90": 441.0
+        "p10": 8.7,
+        "p25": 17.7,
+        "p50": 55.8,
+        "p75": 186.7,
+        "p90": 424.0
       },
       "buckets": {
         "under_30s": {
-          "count": 66,
-          "pct": 33.8
+          "count": 99,
+          "pct": 37.9
         },
         "30s_to_2m": {
-          "count": 68,
-          "pct": 34.9
+          "count": 84,
+          "pct": 32.2
         },
         "2m_to_10m": {
-          "count": 51,
-          "pct": 26.2
+          "count": 66,
+          "pct": 25.3
         },
         "10m_to_1h": {
-          "count": 9,
-          "pct": 4.6
+          "count": 11,
+          "pct": 4.2
         },
         "over_1h": {
           "count": 1,
-          "pct": 0.5
+          "pct": 0.4
         }
       }
     },
-    "total_cost_usd": 781.35,
-    "total_input_tokens": 13742,
-    "total_output_tokens": 364918,
-    "cache_read_tokens": 256626399,
-    "cache_write_tokens": 14538794,
-    "estimated_thinking_tokens": 216699,
-    "estimated_text_tokens": 160923,
-    "thinking_ratio": 0.594,
-    "avg_requests_per_task": 10.3,
+    "total_cost_usd": 997.78,
+    "total_input_tokens": 16766,
+    "total_output_tokens": 635564,
+    "cache_read_tokens": 329809036,
+    "cache_write_tokens": 17678305,
+    "estimated_thinking_tokens": 285489,
+    "estimated_text_tokens": 196833,
+    "thinking_ratio": 0.588,
+    "avg_requests_per_task": 9.4,
     "task_types": {
-      "unknown": 66,
-      "investigation": 47,
-      "sysadmin": 18,
-      "feature": 14,
-      "bugfix": 13,
-      "refactor": 12,
+      "unknown": 95,
+      "investigation": 68,
+      "sysadmin": 23,
+      "feature": 18,
+      "bugfix": 18,
+      "refactor": 14,
+      "greenfield": 11,
       "continuation": 9,
-      "greenfield": 8,
-      "port": 7,
+      "port": 8,
       "docs": 5,
       "simple": 3
     },
     "complexity_distribution": {
-      "trivial": 78,
-      "simple": 43,
-      "moderate": 58,
-      "complex": 18,
+      "trivial": 114,
+      "simple": 52,
+      "moderate": 74,
+      "complex": 27,
       "major": 5
     },
     "tool_usage": {
-      "Bash": 1375,
-      "Read": 796,
-      "Grep": 367,
-      "Edit": 364,
-      "TaskUpdate": 99,
-      "Write": 84,
-      "Glob": 78,
-      "Task": 76,
-      "TaskCreate": 65,
-      "TaskOutput": 42,
+      "Bash": 1601,
+      "Read": 1002,
+      "Edit": 523,
+      "Grep": 411,
+      "Write": 108,
+      "TaskUpdate": 103,
+      "Task": 95,
+      "Glob": 87,
+      "TaskCreate": 70,
+      "TaskOutput": 43,
       "WebSearch": 39,
       "WebFetch": 32,
-      "SendMessage": 13,
-      "EnterPlanMode": 9,
-      "ExitPlanMode": 9
+      "SendMessage": 28,
+      "EnterPlanMode": 11,
+      "ExitPlanMode": 11
     },
     "data_cleaning": {
-      "total_extracted": 267,
-      "included": 202,
-      "excluded": 65,
-      "exclusion_rate": 0.2434,
+      "total_extracted": 363,
+      "included": 279,
+      "excluded": 84,
+      "exclusion_rate": 0.2314,
       "exclusion_reasons": {
-        "system_continuation": 63,
-        "no_response_interrupt": 1,
-        "slash_command": 1
+        "system_continuation": 81,
+        "slash_command": 2,
+        "no_response_interrupt": 1
       },
       "flag_counts": {
-        "meta": 94,
-        "no_project": 35
+        "meta": 110,
+        "no_project": 63
       }
     }
   },
   "combined": {
-    "projects": 31,
-    "sessions": 368,
-    "tasks": 1944,
-    "total_cost_usd": 6108.56,
-    "total_user_messages": 24408,
-    "total_assistant_messages": 44736,
-    "total_tool_calls": 21491,
-    "total_input_tokens": 692125,
-    "total_output_tokens": 2452764,
-    "cache_read_tokens": 1536935334,
-    "cache_write_tokens": 161731852,
-    "total_files_touched": 3340,
-    "total_lines_added": 193166,
-    "total_lines_removed": 40883,
+    "projects": 32,
+    "sessions": 385,
+    "tasks": 2023,
+    "total_cost_usd": 6282.42,
+    "total_user_messages": 25312,
+    "total_assistant_messages": 46123,
+    "total_tool_calls": 22283,
+    "total_input_tokens": 693753,
+    "total_output_tokens": 2687295,
+    "cache_read_tokens": 1606217644,
+    "cache_write_tokens": 163136183,
+    "total_files_touched": 3468,
+    "total_lines_added": 199317,
+    "total_lines_removed": 42565,
     "date_range": {
       "start": "2025-12-05",
       "end": "2026-02-10"
     },
     "data_cleaning": {
-      "total_extracted": 2421,
-      "included": 1944,
-      "excluded": 477,
-      "exclusion_rate": 0.197,
+      "total_extracted": 2503,
+      "included": 2007,
+      "excluded": 496,
+      "exclusion_rate": 0.1982,
       "exclusion_reasons": {
-        "system_continuation": 452,
-        "slash_command": 22,
+        "system_continuation": 470,
+        "slash_command": 23,
         "no_response_interrupt": 3
       },
       "flag_counts": {
-        "no_project": 508,
-        "meta": 304,
+        "no_project": 536,
+        "meta": 320,
         "interrupted": 1
       }
     }

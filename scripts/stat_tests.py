@@ -96,8 +96,6 @@ def load_data(data_dir, analysis_dir):
             print(f"  Loading annotated tasks: {annotated_path}")
             with open(annotated_path) as f:
                 records = json.load(f)
-            # Filter meta tasks
-            records = [r for r in records if not r.get('is_meta', False)]
             # Enrich with project_path from canonical tasks
             canonical = load_canonical_tasks(data_dir, model)
             canonical_by_id = {t['task_id']: t for t in canonical}

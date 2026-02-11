@@ -487,11 +487,7 @@ def analyze_model(data_dir: Path, model: str, analysis_dir: Path):
 
     # Group tasks by session_id
     sessions: dict[str, list[dict]] = defaultdict(list)
-    meta_skipped = 0
     for task in all_tasks:
-        if task.get('is_meta', False):
-            meta_skipped += 1
-            continue
         sessions[task['session_id']].append(task)
 
     # Sort tasks within each session by msg_index_start
@@ -563,8 +559,6 @@ def analyze_model(data_dir: Path, model: str, analysis_dir: Path):
         )[:10],
     }
 
-    if meta_skipped:
-        print(f"  Skipped {meta_skipped} meta sessions")
     print(f"\n  {model} summary:")
     print(f"    Edits: {total_edits}, Writes: {total_writes}")
     print(f"    Overlaps: {len(all_overlaps)} ({summary['rewrite_rate']:.1%} rewrite rate)")

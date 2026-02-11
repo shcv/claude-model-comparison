@@ -228,9 +228,6 @@ def analyze_canonical_tasks(tasks: list[dict], metrics: BehaviorMetrics):
     session_ids = set()
 
     for task in tasks:
-        if task.get('is_meta', False):
-            continue
-
         metrics.total_tasks += 1
         session_ids.add(task['session_id'])
 
