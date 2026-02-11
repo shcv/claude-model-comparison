@@ -281,6 +281,25 @@ def compute_aggregates(tasks: list[TaskTokens], classifications: dict) -> dict:
         total_cost = sum(t.estimated_cost for t in group)
         tasks_with_thinking = sum(1 for t in group if t.thinking_blocks > 0)
 
+        # Per-task cost and output arrays for CI computation
+        costs = sorted(t.estimated_cost for t in group)
+        outputs = sorted(t.total_output_tokens for t in group)
+        import numpy as np
+        cost_arr = np.array(costs)
+        out_arr = np.array(outputs)
+
+        def bootstrap_ci(arr, n_boot=2000, alpha=0.05):
+            """Bootstrap 95% CI for the mean."""
+            if len(arr) < 3:
+                return (float(arr.mean()), float(arr.mean()))
+            rng = np.random.default_rng(42)
+            means = [rng.choice(arr, size=len(arr), replace=True).mean()
+                     for _ in range(n_boot)]
+            means.sort()
+            lo = means[int(n_boot * alpha / 2)]
+            hi = means[int(n_boot * (1 - alpha / 2))]
+            return (round(float(lo), 4), round(float(hi), 4))
+
         return {
             'count': n,
             'total_input_tokens': total_input,
@@ -289,6 +308,10 @@ def compute_aggregates(tasks: list[TaskTokens], classifications: dict) -> dict:
             'avg_input_tokens': round(total_input / n),
             'avg_output_tokens': round(total_output / n),
             'avg_cost_usd': round(total_cost / n, 4),
+            'cost_ci95': bootstrap_ci(cost_arr),
+            'output_ci95': bootstrap_ci(out_arr),
+            'median_cost_usd': round(float(np.median(cost_arr)), 4),
+            'median_output_tokens': int(np.median(out_arr)),
             'avg_thinking_chars': round(total_thinking_chars / n),
             'avg_text_chars': round(total_text_chars / n),
             'thinking_ratio': round(tasks_with_thinking / n, 3),

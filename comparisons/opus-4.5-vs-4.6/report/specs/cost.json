@@ -13,13 +13,15 @@
         {"header": "Complexity", "key": "_label", "cell_class": "label-cell"},
         {"header": "{display_a} output/task", "path": "tokens.{model_a}.by_complexity.{row_key}.avg_output_tokens", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
         {"header": "{display_b} output/task", "path": "tokens.{model_b}.by_complexity.{row_key}.avg_output_tokens", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
+        {"header": "{display_a} thinking chars", "path": "tokens.{model_a}.by_complexity.{row_key}.avg_thinking_chars_when_used", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
+        {"header": "{display_b} thinking chars", "path": "tokens.{model_b}.by_complexity.{row_key}.avg_thinking_chars_when_used", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
         {"header": "{display_a} input/task", "path": "tokens.{model_a}.by_complexity.{row_key}.avg_input_tokens", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
         {"header": "{display_b} input/task", "path": "tokens.{model_b}.by_complexity.{row_key}.avg_input_tokens", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
         {"header": "{display_a} requests", "path": "tokens.{model_a}.by_complexity.{row_key}.avg_requests_per_task", "format": "{:.1f}", "class": "right", "cell_class": "right mono"},
         {"header": "{display_b} requests", "path": "tokens.{model_b}.by_complexity.{row_key}.avg_requests_per_task", "format": "{:.1f}", "class": "right", "cell_class": "right mono"}
       ],
       "prose": {
-        "guidance": "Explain token breakdown patterns: output volume differences, input savings from caching, request batching efficiency. Note caveats about organic session differences."
+        "guidance": "Explain token breakdown patterns: output volume differences, thinking depth, input savings from caching, request batching efficiency."
       }
     },
     "thinking-calibration-details": {
@@ -29,8 +31,6 @@
       "row_order": ["trivial", "simple", "moderate", "complex", "major"],
       "columns": [
         {"header": "Complexity", "key": "_label", "cell_class": "label-cell"},
-        {"header": "{display_a} Thinking Ratio", "path": "tokens.{model_a}.by_complexity.{row_key}.thinking_ratio", "format": "pct", "class": "right", "cell_class": "right mono"},
-        {"header": "{display_b} Thinking Ratio", "path": "tokens.{model_b}.by_complexity.{row_key}.thinking_ratio", "format": "pct", "class": "right", "cell_class": "right mono"},
         {"header": "{display_a} Thinking Chars (when used)", "path": "tokens.{model_a}.by_complexity.{row_key}.avg_thinking_chars_when_used", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
         {"header": "{display_b} Thinking Chars (when used)", "path": "tokens.{model_b}.by_complexity.{row_key}.avg_thinking_chars_when_used", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
         {"header": "{display_a} Text Chars", "path": "tokens.{model_a}.by_complexity.{row_key}.avg_text_chars", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},

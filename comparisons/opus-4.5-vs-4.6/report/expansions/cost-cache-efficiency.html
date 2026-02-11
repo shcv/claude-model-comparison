@@ -1,61 +1,59 @@
 <!-- title: Cache Efficiency by Complexity -->
 <!-- GENERATED-TABLE -->
+<p>Thinking tokens are billed as output but do not enter the conversation history or affect cache behavior. Visible text output accumulates in history and increases subsequent input size. Cache writes ($18.75/MTok) are 12.5&times; more expensive than cache reads ($1.50/MTok).</p>
 <table>
     <thead>
-        <tr><th>Complexity</th><th class="right">4.5 cache write/task</th><th class="right">4.6 cache write/task</th><th class="right">4.5 read ratio</th><th class="right">4.6 read ratio</th><th class="right">&Delta; write</th></tr>
+        <tr><th>Complexity</th><th>Cache Write/Task</th><th class="right">4.5 read %</th><th class="right">4.6 read %</th><th class="right">&Delta; write</th></tr>
     </thead>
     <tbody>
         <tr><td class="label-cell">Trivial</td>
-            <td class="right mono">35,969</td>
-            <td class="right mono">18,178</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:15.4%"></div></div><span class="bar-val">35,969</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:7.8%"></div></div><span class="bar-val">18,178</span></div>
+            </div></td>
             <td class="right mono">72.6%</td>
             <td class="right mono">85.6%</td>
             <td class="right mono" style="color:var(--green)">0.51&times;</td></tr>
         <tr><td class="label-cell">Simple</td>
-            <td class="right mono">73,134</td>
-            <td class="right mono">39,527</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:31.4%"></div></div><span class="bar-val">73,134</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:17.0%"></div></div><span class="bar-val">39,527</span></div>
+            </div></td>
             <td class="right mono">85.8%</td>
             <td class="right mono">91.3%</td>
             <td class="right mono" style="color:var(--green)">0.54&times;</td></tr>
         <tr><td class="label-cell">Moderate</td>
-            <td class="right mono">88,484</td>
-            <td class="right mono">64,206</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:38.0%"></div></div><span class="bar-val">88,484</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:27.6%"></div></div><span class="bar-val">64,206</span></div>
+            </div></td>
             <td class="right mono">91.3%</td>
             <td class="right mono">93.6%</td>
             <td class="right mono" style="color:var(--green)">0.73&times;</td></tr>
         <tr><td class="label-cell">Complex</td>
-            <td class="right mono">159,674</td>
-            <td class="right mono">125,809</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:68.6%"></div></div><span class="bar-val">159,674</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:54.0%"></div></div><span class="bar-val">125,809</span></div>
+            </div></td>
             <td class="right mono">92.9%</td>
             <td class="right mono">94.7%</td>
             <td class="right mono" style="color:var(--green)">0.79&times;</td></tr>
         <tr><td class="label-cell">Major</td>
-            <td class="right mono">232,921</td>
-            <td class="right mono">228,450</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:100.0%"></div></div><span class="bar-val">232,921</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:98.1%"></div></div><span class="bar-val">228,450</span></div>
+            </div></td>
             <td class="right mono">94.5%</td>
             <td class="right mono">96.1%</td>
             <td class="right mono" style="color:var(--green)">0.98&times;</td></tr>
         <tr style="font-weight:600"><td class="label-cell">Overall</td>
-            <td class="right mono">67,590</td>
-            <td class="right mono">51,122</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:29.0%"></div></div><span class="bar-val">67,590</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:21.8%"></div></div><span class="bar-val">50,712</span></div>
+            </div></td>
             <td class="right mono">89.8%</td>
             <td class="right mono">94.0%</td>
-            <td class="right mono" style="color:var(--green)">0.76&times;</td></tr>
-    </tbody>
-</table>
-
-<h3>Thinking vs Visible Text Output</h3>
-<p>Thinking tokens are billed as output but do not enter the conversation history or affect cache behavior. Visible text output accumulates in history and increases subsequent input size.</p>
-<table>
-    <thead>
-        <tr><th>Metric</th><th class="right">4.5</th><th class="right">4.6</th></tr>
-    </thead>
-    <tbody>
-        <tr><td class="label-cell">Avg output tokens/task</td><td class="right mono">953</td><td class="right mono">2,260</td></tr>
-        <tr><td class="label-cell">Thinking ratio (chars)</td><td class="right mono">75%</td><td class="right mono">59%</td></tr>
-        <tr><td class="label-cell">Avg thinking chars (when used)</td><td class="right mono">2,635</td><td class="right mono">4,149</td></tr>
-        <tr><td class="label-cell">Avg visible text chars</td><td class="right mono">1,254</td><td class="right mono">1,755</td></tr>
-        <tr><td class="label-cell">Requests per task</td><td class="right mono">7.5</td><td class="right mono">9.8</td></tr>
+            <td class="right mono" style="color:var(--green)">0.75&times;</td></tr>
     </tbody>
 </table>
 <!-- /GENERATED-TABLE -->

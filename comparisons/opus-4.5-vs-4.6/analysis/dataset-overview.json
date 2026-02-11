@@ -129,6 +129,58 @@
       "TaskOutput": 90,
       "SendMessage": 47
     },
+    "scope_by_complexity": {
+      "trivial": {
+        "count": 808,
+        "avg_files_touched": 0.13,
+        "avg_lines_added": 0.4,
+        "avg_lines_removed": 0.3,
+        "avg_tool_calls": 0.0,
+        "total_files_touched": 105,
+        "total_lines_added": 360,
+        "total_lines_removed": 270
+      },
+      "simple": {
+        "count": 345,
+        "avg_files_touched": 1.04,
+        "avg_lines_added": 14.1,
+        "avg_lines_removed": 7.9,
+        "avg_tool_calls": 0.0,
+        "total_files_touched": 359,
+        "total_lines_added": 4850,
+        "total_lines_removed": 2710
+      },
+      "moderate": {
+        "count": 367,
+        "avg_files_touched": 2.78,
+        "avg_lines_added": 111.3,
+        "avg_lines_removed": 37.4,
+        "avg_tool_calls": 0.0,
+        "total_files_touched": 1020,
+        "total_lines_added": 40830,
+        "total_lines_removed": 13723
+      },
+      "complex": {
+        "count": 190,
+        "avg_files_touched": 5.61,
+        "avg_lines_added": 463.0,
+        "avg_lines_removed": 97.8,
+        "avg_tool_calls": 0.0,
+        "total_files_touched": 1065,
+        "total_lines_added": 87966,
+        "total_lines_removed": 18573
+      },
+      "major": {
+        "count": 19,
+        "avg_files_touched": 18.11,
+        "avg_lines_added": 2357.3,
+        "avg_lines_removed": 116.7,
+        "avg_tool_calls": 0.0,
+        "total_files_touched": 344,
+        "total_lines_added": 44788,
+        "total_lines_removed": 2217
+      }
+    },
     "data_cleaning": {
       "total_extracted": 2141,
       "included": 1729,
@@ -214,15 +266,15 @@
         }
       }
     },
-    "total_cost_usd": 2054.91,
-    "total_input_tokens": 114033,
-    "total_output_tokens": 1758564,
-    "cache_read_tokens": 626965880,
-    "cache_write_tokens": 39772971,
-    "estimated_thinking_tokens": 633185,
-    "estimated_text_tokens": 341131,
-    "thinking_ratio": 0.589,
-    "avg_requests_per_task": 9.8,
+    "total_cost_usd": 2074.07,
+    "total_input_tokens": 114113,
+    "total_output_tokens": 1767846,
+    "cache_read_tokens": 632906417,
+    "cache_write_tokens": 40163813,
+    "estimated_thinking_tokens": 637794,
+    "estimated_text_tokens": 342595,
+    "thinking_ratio": 0.587,
+    "avg_requests_per_task": 9.7,
     "task_types": {
       "unknown": 177,
       "investigation": 125,
@@ -260,6 +312,58 @@
       "EnterPlanMode": 49,
       "SendMessage": 28
     },
+    "scope_by_complexity": {
+      "trivial": {
+        "count": 207,
+        "avg_files_touched": 0.12,
+        "avg_lines_added": 0.4,
+        "avg_lines_removed": 0.2,
+        "avg_tool_calls": 0.0,
+        "total_files_touched": 24,
+        "total_lines_added": 77,
+        "total_lines_removed": 33
+      },
+      "simple": {
+        "count": 123,
+        "avg_files_touched": 0.73,
+        "avg_lines_added": 10.8,
+        "avg_lines_removed": 4.0,
+        "avg_tool_calls": 0.0,
+        "total_files_touched": 90,
+        "total_lines_added": 1327,
+        "total_lines_removed": 488
+      },
+      "moderate": {
+        "count": 153,
+        "avg_files_touched": 3.16,
+        "avg_lines_added": 86.2,
+        "avg_lines_removed": 27.2,
+        "avg_tool_calls": 0.0,
+        "total_files_touched": 483,
+        "total_lines_added": 13196,
+        "total_lines_removed": 4168
+      },
+      "complex": {
+        "count": 72,
+        "avg_files_touched": 7.6,
+        "avg_lines_added": 429.8,
+        "avg_lines_removed": 104.8,
+        "avg_tool_calls": 0.0,
+        "total_files_touched": 547,
+        "total_lines_added": 30945,
+        "total_lines_removed": 7546
+      },
+      "major": {
+        "count": 18,
+        "avg_files_touched": 20.89,
+        "avg_lines_added": 1019.6,
+        "avg_lines_removed": 257.9,
+        "avg_tool_calls": 0.0,
+        "total_files_touched": 376,
+        "total_lines_added": 18353,
+        "total_lines_removed": 4642
+      }
+    },
     "data_cleaning": {
       "total_extracted": 735,
       "included": 573,
@@ -280,14 +384,14 @@
     "projects": 35,
     "sessions": 459,
     "tasks": 2302,
-    "total_cost_usd": 7346.92,
+    "total_cost_usd": 7366.08,
     "total_user_messages": 30964,
     "total_assistant_messages": 54402,
     "total_tool_calls": 27413,
-    "total_input_tokens": 791021,
-    "total_output_tokens": 3811426,
-    "cache_read_tokens": 1905957933,
-    "cache_write_tokens": 185360971,
+    "total_input_tokens": 791101,
+    "total_output_tokens": 3820708,
+    "cache_read_tokens": 1911898470,
+    "cache_write_tokens": 185751813,
     "total_files_touched": 4413,
     "total_lines_added": 242692,
     "total_lines_removed": 54370,

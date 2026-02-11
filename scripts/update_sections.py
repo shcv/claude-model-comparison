@@ -1078,15 +1078,20 @@ def generate_verbosity_by_type_inline(spec: dict, data: dict, config: dict) -> s
             continue
         avg_a = ta[t].get("avg_output_tokens", 0)
         avg_b = tb[t].get("avg_output_tokens", 0)
+        ci_a = tuple(ta[t]["output_ci95"]) if "output_ci95" in ta[t] else None
+        ci_b = tuple(tb[t]["output_ci95"]) if "output_ci95" in tb[t] else None
         if avg_a > 0 and avg_b > 0:
             ratio = avg_b / avg_a
-            type_ratios.append((t, avg_a, avg_b, ratio))
+            type_ratios.append((t, avg_a, avg_b, ratio, ci_a, ci_b))
 
     type_ratios.sort(key=lambda x: x[3], reverse=True)
 
-    # Find max output for bar scaling
-    all_outputs = [avg_a for _, avg_a, _, _ in type_ratios] + [avg_b for _, _, avg_b, _ in type_ratios]
-    max_output = max(all_outputs) if all_outputs else 1
+    # Find max output for bar scaling (use upper CI bound if available)
+    all_vals = []
+    for _, avg_a, avg_b, _, ci_a, ci_b in type_ratios:
+        all_vals.append(ci_a[1] if ci_a else avg_a)
+        all_vals.append(ci_b[1] if ci_b else avg_b)
+    max_output = max(all_vals) if all_vals else 1
 
     tok_fmt = lambda v: f"{v:,.0f}"
 
@@ -1098,10 +1103,11 @@ def generate_verbosity_by_type_inline(spec: dict, data: dict, config: dict) -> s
     lines.append("    </thead>")
     lines.append("    <tbody>")
 
-    for t, avg_a, avg_b, ratio in type_ratios:
+    for t, avg_a, avg_b, ratio, ci_a, ci_b in type_ratios:
         label = table_gen._label_case(t)
         css = ' v-blue' if ratio >= 2.0 else ''
-        bar = table_gen.generate_bar_pair(avg_a, avg_b, scale=max_output, format_fn=tok_fmt)
+        bar = table_gen.generate_bar_pair(avg_a, avg_b, scale=max_output, format_fn=tok_fmt,
+                                          ci_a=ci_a, ci_b=ci_b)
         lines.append(f'        <tr><td class="label-cell">{label}</td>')
         lines.append(f'            <td class="bar-cell">{bar}</td>')
         lines.append(f'            <td class="right mono">{avg_a:,.0f}</td>'
@@ -1122,11 +1128,13 @@ def generate_cost_by_complexity_inline(spec: dict, data: dict, config: dict) -> 
     ta = tokens.get(ma, {}).get("by_complexity", {})
     tb = tokens.get(mb, {}).get("by_complexity", {})
 
-    # Compute max cost for bar scaling
+    # Compute max cost for bar scaling (use upper CI bound if available)
     all_costs = []
     for cx in table_gen.COMPLEXITY_ORDER:
-        all_costs.append(ta.get(cx, {}).get("avg_cost_usd", 0))
-        all_costs.append(tb.get(cx, {}).get("avg_cost_usd", 0))
+        ci_a = ta.get(cx, {}).get("cost_ci95")
+        ci_b = tb.get(cx, {}).get("cost_ci95")
+        all_costs.append(ci_a[1] if ci_a else ta.get(cx, {}).get("avg_cost_usd", 0))
+        all_costs.append(ci_b[1] if ci_b else tb.get(cx, {}).get("avg_cost_usd", 0))
     max_cost = max(all_costs) if all_costs else 1
 
     cost_fmt = lambda v: f"${v:.2f}"
@@ -1140,8 +1148,12 @@ def generate_cost_by_complexity_inline(spec: dict, data: dict, config: dict) -> 
     lines.append("    <tbody>")
 
     for cx in table_gen.COMPLEXITY_ORDER:
-        cost_a = ta.get(cx, {}).get("avg_cost_usd", 0)
-        cost_b = tb.get(cx, {}).get("avg_cost_usd", 0)
+        da = ta.get(cx, {})
+        db = tb.get(cx, {})
+        cost_a = da.get("avg_cost_usd", 0)
+        cost_b = db.get("avg_cost_usd", 0)
+        ci_a = tuple(da["cost_ci95"]) if "cost_ci95" in da else None
+        ci_b = tuple(db["cost_ci95"]) if "cost_ci95" in db else None
         if cost_a > 0:
             delta_pct = (cost_b - cost_a) / cost_a * 100
             sign = "+" if delta_pct > 0 else "&minus;"
@@ -1152,7 +1164,8 @@ def generate_cost_by_complexity_inline(spec: dict, data: dict, config: dict) -> 
             css = ""
 
         bar_html = table_gen.generate_bar_pair(
-            cost_a, cost_b, scale=max_cost, format_fn=cost_fmt
+            cost_a, cost_b, scale=max_cost, format_fn=cost_fmt,
+            ci_a=ci_a, ci_b=ci_b
         )
         label = table_gen._label_case(cx)
         lines.append(f'        <tr><td class="label-cell">{label}</td>')
@@ -1167,38 +1180,58 @@ def generate_cost_by_complexity_inline(spec: dict, data: dict, config: dict) -> 
 
 
 def generate_cache_efficiency_inline(spec: dict, data: dict, config: dict) -> str:
-    """Generate cache read/write efficiency table by complexity."""
+    """Generate cache read/write efficiency table by complexity with bars."""
     lines = [f"<!-- title: {spec.get('title', 'Cache Efficiency by Complexity')} -->"]
+    lines.append("<p>Thinking tokens are billed as output but do not enter the conversation history "
+                 "or affect cache behavior. Visible text output accumulates in history and increases "
+                 "subsequent input size. Cache writes ($18.75/MTok) are 12.5&times; more expensive "
+                 "than cache reads ($1.50/MTok).</p>")
 
     ma, mb = config["model_a"], config["model_b"]
     tokens = data.get("tokens", {})
     ta = tokens.get(ma, {}).get("by_complexity", {})
     tb = tokens.get(mb, {}).get("by_complexity", {})
+    oa = tokens.get(ma, {}).get("overall", {})
+    ob = tokens.get(mb, {}).get("overall", {})
+
+    # Collect all cache write/task values for bar scaling
+    cw_values = []
+    for cx in table_gen.COMPLEXITY_ORDER:
+        da = ta.get(cx, {})
+        db = tb.get(cx, {})
+        n_a = da.get("count", 1) or 1
+        n_b = db.get("count", 1) or 1
+        cw_values.append(da.get("cache_write_tokens", 0) / n_a)
+        cw_values.append(db.get("cache_write_tokens", 0) / n_b)
+    # Include overall
+    n_oa = oa.get("count", 1) or 1
+    n_ob = ob.get("count", 1) or 1
+    cw_values.append(oa.get("cache_write_tokens", 0) / n_oa)
+    cw_values.append(ob.get("cache_write_tokens", 0) / n_ob)
+    max_cw = max(cw_values) if cw_values else 1
+    tok_fmt = lambda v: f"{v:,.0f}"
 
     lines.append("<table>")
     lines.append("    <thead>")
     lines.append('        <tr><th>Complexity</th>'
-                 '<th class="right">4.5 cache write/task</th>'
-                 '<th class="right">4.6 cache write/task</th>'
-                 '<th class="right">4.5 read ratio</th>'
-                 '<th class="right">4.6 read ratio</th>'
+                 '<th>Cache Write/Task</th>'
+                 '<th class="right">4.5 read %</th>'
+                 '<th class="right">4.6 read %</th>'
                  '<th class="right">&Delta; write</th></tr>')
     lines.append("    </thead>")
     lines.append("    <tbody>")
 
-    for cx in table_gen.COMPLEXITY_ORDER:
-        da = ta.get(cx, {})
-        db = tb.get(cx, {})
+    def _cache_row(label, da, db, bold=False):
         n_a = da.get("count", 1) or 1
         n_b = db.get("count", 1) or 1
         cw_a = da.get("cache_write_tokens", 0) / n_a
         cw_b = db.get("cache_write_tokens", 0) / n_b
         cr_a = da.get("cache_read_tokens", 0)
         cr_b = db.get("cache_read_tokens", 0)
-        total_cache_a = cr_a + da.get("cache_write_tokens", 0)
-        total_cache_b = cr_b + db.get("cache_write_tokens", 0)
-        ratio_a = cr_a / total_cache_a * 100 if total_cache_a > 0 else 0
-        ratio_b = cr_b / total_cache_b * 100 if total_cache_b > 0 else 0
+        total_a = cr_a + da.get("cache_write_tokens", 0)
+        total_b = cr_b + db.get("cache_write_tokens", 0)
+        ratio_a = cr_a / total_a * 100 if total_a > 0 else 0
+        ratio_b = cr_b / total_b * 100 if total_b > 0 else 0
 
         if cw_a > 0:
             delta = cw_b / cw_a
@@ -1208,78 +1241,17 @@ def generate_cache_efficiency_inline(spec: dict, data: dict, config: dict) -> st
             delta_str = '&mdash;'
             css = ''
 
-        label = table_gen._label_case(cx)
-        lines.append(f'        <tr><td class="label-cell">{label}</td>')
-        lines.append(f'            <td class="right mono">{cw_a:,.0f}</td>')
-        lines.append(f'            <td class="right mono">{cw_b:,.0f}</td>')
+        bar = table_gen.generate_bar_pair(cw_a, cw_b, scale=max_cw, format_fn=tok_fmt)
+        style = ' style="font-weight:600"' if bold else ''
+        lines.append(f'        <tr{style}><td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
         lines.append(f'            <td class="right mono">{ratio_a:.1f}%</td>')
         lines.append(f'            <td class="right mono">{ratio_b:.1f}%</td>')
         lines.append(f'            <td class="right mono" style="{css}">{delta_str}</td></tr>')
 
-    # Add overall row
-    oa = tokens.get(ma, {}).get("overall", {})
-    ob = tokens.get(mb, {}).get("overall", {})
-    n_a = oa.get("count", 1) or 1
-    n_b = ob.get("count", 1) or 1
-    cw_a = oa.get("cache_write_tokens", 0) / n_a
-    cw_b = ob.get("cache_write_tokens", 0) / n_b
-    cr_a = oa.get("cache_read_tokens", 0)
-    cr_b = ob.get("cache_read_tokens", 0)
-    total_cache_a = cr_a + oa.get("cache_write_tokens", 0)
-    total_cache_b = cr_b + ob.get("cache_write_tokens", 0)
-    ratio_a = cr_a / total_cache_a * 100 if total_cache_a > 0 else 0
-    ratio_b = cr_b / total_cache_b * 100 if total_cache_b > 0 else 0
-    delta = cw_b / cw_a if cw_a > 0 else 0
-    delta_str = f'{delta:.2f}&times;'
-    css = 'color:var(--green)' if delta < 1 else 'color:var(--orange)'
-    lines.append(f'        <tr style="font-weight:600"><td class="label-cell">Overall</td>')
-    lines.append(f'            <td class="right mono">{cw_a:,.0f}</td>')
-    lines.append(f'            <td class="right mono">{cw_b:,.0f}</td>')
-    lines.append(f'            <td class="right mono">{ratio_a:.1f}%</td>')
-    lines.append(f'            <td class="right mono">{ratio_b:.1f}%</td>')
-    lines.append(f'            <td class="right mono" style="{css}">{delta_str}</td></tr>')
-
-    lines.append("    </tbody>")
-    lines.append("</table>")
-
-    # Add thinking vs text breakdown
-    lines.append("")
-    lines.append("<h3>Thinking vs Visible Text Output</h3>")
-    lines.append("<p>Thinking tokens are billed as output but do not enter the conversation history "
-                 "or affect cache behavior. Visible text output accumulates in history and increases "
-                 "subsequent input size.</p>")
-    lines.append("<table>")
-    lines.append("    <thead>")
-    lines.append('        <tr><th>Metric</th>'
-                 '<th class="right">4.5</th>'
-                 '<th class="right">4.6</th></tr>')
-    lines.append("    </thead>")
-    lines.append("    <tbody>")
-
-    think_a = oa.get("avg_thinking_chars_when_used", 0)
-    think_b = ob.get("avg_thinking_chars_when_used", 0)
-    text_a = oa.get("avg_text_chars", 0)
-    text_b = ob.get("avg_text_chars", 0)
-    tr_a = oa.get("thinking_ratio", 0)
-    tr_b = ob.get("thinking_ratio", 0)
-    out_a = oa.get("avg_output_tokens", 0)
-    out_b = ob.get("avg_output_tokens", 0)
-
-    lines.append(f'        <tr><td class="label-cell">Avg output tokens/task</td>'
-                 f'<td class="right mono">{out_a:,.0f}</td>'
-                 f'<td class="right mono">{out_b:,.0f}</td></tr>')
-    lines.append(f'        <tr><td class="label-cell">Thinking ratio (chars)</td>'
-                 f'<td class="right mono">{tr_a*100:.0f}%</td>'
-                 f'<td class="right mono">{tr_b*100:.0f}%</td></tr>')
-    lines.append(f'        <tr><td class="label-cell">Avg thinking chars (when used)</td>'
-                 f'<td class="right mono">{think_a:,.0f}</td>'
-                 f'<td class="right mono">{think_b:,.0f}</td></tr>')
-    lines.append(f'        <tr><td class="label-cell">Avg visible text chars</td>'
-                 f'<td class="right mono">{text_a:,.0f}</td>'
-                 f'<td class="right mono">{text_b:,.0f}</td></tr>')
-    lines.append(f'        <tr><td class="label-cell">Requests per task</td>'
-                 f'<td class="right mono">{oa.get("avg_requests_per_task", 0):.1f}</td>'
-                 f'<td class="right mono">{ob.get("avg_requests_per_task", 0):.1f}</td></tr>')
+    for cx in table_gen.COMPLEXITY_ORDER:
+        _cache_row(table_gen._label_case(cx), ta.get(cx, {}), tb.get(cx, {}))
+    _cache_row("Overall", oa, ob, bold=True)
 
     lines.append("    </tbody>")
     lines.append("</table>")
@@ -1977,6 +1949,54 @@ def generate_complexity_resources_inline(spec: dict, data: dict, config: dict) -
     return "\n".join(lines_out)
 
 
+def generate_complexity_scope_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate task scope breakdown by complexity (files, lines per task)."""
+    lines = [f"<!-- title: {spec.get('title', 'Task Scope by Complexity')} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    ov = data.get("dataset", {})
+    sa = ov.get(ma, {}).get("scope_by_complexity", {})
+    sb = ov.get(mb, {}).get("scope_by_complexity", {})
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Complexity</th>'
+                 '<th class="right">4.5 tasks</th><th class="right">4.6 tasks</th>'
+                 '<th class="right">4.5 files/task</th><th class="right">4.6 files/task</th>'
+                 '<th class="right">4.5 lines+/task</th><th class="right">4.6 lines+/task</th>'
+                 '<th class="right">4.5 lines&minus;/task</th><th class="right">4.6 lines&minus;/task</th>'
+                 '</tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    for cx in table_gen.COMPLEXITY_ORDER:
+        da = sa.get(cx, {})
+        db = sb.get(cx, {})
+        n_a = da.get("count", 0)
+        n_b = db.get("count", 0)
+        fa = da.get("avg_files_touched", 0)
+        fb = db.get("avg_files_touched", 0)
+        la = da.get("avg_lines_added", 0)
+        lb = db.get("avg_lines_added", 0)
+        ra = da.get("avg_lines_removed", 0)
+        rb = db.get("avg_lines_removed", 0)
+
+        label = table_gen._label_case(cx)
+        lines.append(f'        <tr><td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="right mono">{n_a:,}</td>')
+        lines.append(f'            <td class="right mono">{n_b:,}</td>')
+        lines.append(f'            <td class="right mono">{fa:.1f}</td>')
+        lines.append(f'            <td class="right mono">{fb:.1f}</td>')
+        lines.append(f'            <td class="right mono">{la:.0f}</td>')
+        lines.append(f'            <td class="right mono">{lb:.0f}</td>')
+        lines.append(f'            <td class="right mono">{ra:.0f}</td>')
+        lines.append(f'            <td class="right mono">{rb:.0f}</td></tr>')
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
 # ── Planning section inline generators ────────────────────────────
 
 def generate_planning_adoption_inline(spec: dict, data: dict, config: dict) -> str:
@@ -2439,6 +2459,7 @@ CUSTOM_GENERATORS = {
     "duration_distribution_inline": generate_duration_distribution_inline,
     "cache_efficiency_inline": generate_cache_efficiency_inline,
     "idle_sensitivity_inline": generate_idle_sensitivity_inline,
+    "complexity_scope_inline": generate_complexity_scope_inline,
     "stat_tests": None,  # handled by table_gen._generate_stat_test_rows
 }
 

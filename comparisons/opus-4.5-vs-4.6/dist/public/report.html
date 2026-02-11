@@ -94,7 +94,7 @@
             margin: 1.4rem 0 0.6rem;
         }
 
-        p { margin-bottom: 0.8rem; max-width: 680px; }
+        p { margin-bottom: 0.8rem; }
 
         /* -- Stat Cards -- */
         .stat-row {
@@ -541,7 +541,7 @@
                     <div class="stat-card">
                         <div class="label">Output Token Ratio</div>
                         <div class="value v-blue">2.4&times;</div>
-                        <div class="detail">4.6: 2,260 avg vs 4.5: 953 avg</div>
+                        <div class="detail">4.6: 2,232 avg vs 4.5: 953 avg</div>
                     </div>
                     <div class="stat-card">
                         <div class="label"><span class="term" data-def="Individual function invocations by Claude Code: Read, Edit, Write, Grep, Glob, Bash, etc.">Tool Calls</span> / Task</div>
@@ -568,7 +568,7 @@
             <nav class="toc">
                 <div class="toc-title">Contents &amp; Key Findings</div>
                 <ol>
-                    <li><a href="#dataset">Dataset at a Glance</a><span class="finding">459 sessions, 2,302 tasks, 35 projects, $7,347 total cost</span></li>
+                    <li><a href="#dataset">Dataset at a Glance</a><span class="finding">459 sessions, 2,302 tasks, 35 projects, $7,366 total cost</span></li>
                     <li><a href="#cost">Token Economy &amp; Cost</a><span class="finding">4.6 appears 10&ndash;35% cheaper at trivial through moderate despite 2.4&times; more output tokens</span></li>
                     <li><a href="#behavior">Behavioral Patterns</a><span class="finding">4.6 plans 8&times; more often; 74% of subagents are read-only Explore agents</span></li>
                     <li><a href="#quality">Quality &amp; Satisfaction</a><span class="finding">Alignment score and failed rate survive Bonferroni; 4.6 fails less often (8.2% vs 14.1%)</span></li>
@@ -602,8 +602,8 @@
                     </div>
                     <div class="stat-card">
                         <div class="label">Total API Cost</div>
-                        <div class="value v-dark">$7,347</div>
-                        <div class="detail">$5,292 (4.5) + $2,055 (4.6)</div>
+                        <div class="value v-dark">$7,366</div>
+                        <div class="detail">$5,292 (4.5) + $2,074 (4.6)</div>
                     </div>
                 </div>
 
@@ -897,26 +897,26 @@
         <tr>
             <td class="label-cell"><span class="term" data-def="Tokens sent to the model per API request, including conversation history, system prompt, and tool results.">Input tokens</span> (fresh)</td>
             <td class="right mono">676,988</td>
-            <td class="right mono">114,033</td>
-            <td class="right mono">791,021</td>
+            <td class="right mono">114,113</td>
+            <td class="right mono">791,101</td>
         </tr>
         <tr>
             <td class="label-cell">Cache read tokens</td>
             <td class="right mono">1.28B</td>
-            <td class="right mono">627.0M</td>
+            <td class="right mono">632.9M</td>
             <td class="right mono">1.91B</td>
         </tr>
         <tr>
             <td class="label-cell">Cache write tokens</td>
             <td class="right mono">145.6M</td>
-            <td class="right mono">39.8M</td>
-            <td class="right mono">185.4M</td>
+            <td class="right mono">40.2M</td>
+            <td class="right mono">185.8M</td>
         </tr>
         <tr>
             <td class="label-cell">Total API cost</td>
             <td class="right mono">$5,292.01</td>
-            <td class="right mono">$2,054.91</td>
-            <td class="right mono">$7,346.92</td>
+            <td class="right mono">$2,074.07</td>
+            <td class="right mono">$7,366.08</td>
         </tr>
     </tbody>
 </table></div>
@@ -936,22 +936,22 @@
         <tr>
             <td class="label-cell">Est. thinking tokens</td>
             <td class="right mono">1,419,559</td>
-            <td class="right mono">633,185</td>
+            <td class="right mono">637,794</td>
         </tr>
         <tr>
             <td class="label-cell">Est. text tokens</td>
             <td class="right mono">674,821</td>
-            <td class="right mono">341,131</td>
+            <td class="right mono">342,595</td>
         </tr>
         <tr>
             <td class="label-cell">Thinking ratio (tasks using thinking)</td>
             <td class="right mono">75.1%</td>
-            <td class="right mono">58.9%</td>
+            <td class="right mono">58.7%</td>
         </tr>
         <tr>
             <td class="label-cell">Avg requests / task</td>
             <td class="right mono">7.5</td>
-            <td class="right mono">9.8</td>
+            <td class="right mono">9.7</td>
         </tr>
     </tbody>
 </table></div>
@@ -1005,17 +1005,17 @@
                     <div class="stat-card">
                         <div class="label">Per-Task Cost</div>
                         <div class="value v-green">~$2.55</div>
-                        <div class="detail">$2.46 (4.5) vs $2.64 (4.6)</div>
+                        <div class="detail">$2.46 (4.5) vs $2.62 (4.6)</div>
                     </div>
                     <div class="stat-card">
                         <div class="label">Output Token Ratio</div>
                         <div class="value v-blue">2.4&times;</div>
-                        <div class="detail">4.6 produces 2,260 vs 953 avg tokens</div>
+                        <div class="detail">4.6 produces 2,232 vs 953 avg tokens</div>
                     </div>
                     <div class="stat-card">
                         <div class="label">Thinking Depth Gap</div>
                         <div class="value v-blue">+57%</div>
-                        <div class="detail">4,149 vs 2,635 chars when thinking</div>
+                        <div class="detail">4,116 vs 2,635 chars when thinking</div>
                     </div>
                 </div>
 
@@ -1100,8 +1100,6 @@
     <thead>
         <tr>
             <th>Complexity</th>
-            <th class="right">4.5 Thinking Ratio</th>
-            <th class="right">4.6 Thinking Ratio</th>
             <th class="right">4.5 Thinking Chars (when used)</th>
             <th class="right">4.6 Thinking Chars (when used)</th>
             <th class="right">4.5 Text Chars</th>
@@ -1113,8 +1111,6 @@
     <tbody>
         <tr>
             <td class="label-cell">Trivial</td>
-            <td class="right mono">77%</td>
-            <td class="right mono">42%</td>
             <td class="right mono">864</td>
             <td class="right mono">773</td>
             <td class="right mono">923</td>
@@ -1124,8 +1120,6 @@
         </tr>
         <tr>
             <td class="label-cell">Simple</td>
-            <td class="right mono">91%</td>
-            <td class="right mono">58%</td>
             <td class="right mono">1,717</td>
             <td class="right mono">1,449</td>
             <td class="right mono">1,046</td>
@@ -1135,8 +1129,6 @@
         </tr>
         <tr>
             <td class="label-cell">Moderate</td>
-            <td class="right mono">89%</td>
-            <td class="right mono">91%</td>
             <td class="right mono">3,775</td>
             <td class="right mono">4,045</td>
             <td class="right mono">1,677</td>
@@ -1146,8 +1138,6 @@
         </tr>
         <tr>
             <td class="label-cell">Complex</td>
-            <td class="right mono">76%</td>
-            <td class="right mono">93%</td>
             <td class="right mono">7,257</td>
             <td class="right mono">8,735</td>
             <td class="right mono">3,366</td>
@@ -1157,8 +1147,6 @@
         </tr>
         <tr>
             <td class="label-cell">Major</td>
-            <td class="right mono">74%</td>
-            <td class="right mono">78%</td>
             <td class="right mono">11,747</td>
             <td class="right mono">7,199</td>
             <td class="right mono">4,066</td>
@@ -1183,62 +1171,62 @@
     <tbody>
         <tr><td class="label-cell">Bugfix</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:11.8%"></div></div><span class="bar-val">825</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:61.0%"></div></div><span class="bar-val">4,267</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:8.3%"></div><div class="bar-ci" style="left:4.4%;width:9.2%" title="95% CI: [439.3, 1353.5]"></div></div><span class="bar-val">825</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:43.0%"></div><div class="bar-ci" style="left:22.3%;width:48.2%" title="95% CI: [2211.2, 6987.1]"></div></div><span class="bar-val">4,267</span></div>
             </div></td>
             <td class="right mono">825</td><td class="right mono">4,267</td><td class="right mono v-blue">5.2&times;</td></tr>
         <tr><td class="label-cell">Refactor</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:18.7%"></div></div><span class="bar-val">1,310</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:81.1%"></div></div><span class="bar-val">5,670</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:13.2%"></div><div class="bar-ci" style="left:7.2%;width:13.4%" title="95% CI: [713.7, 2038.3]"></div></div><span class="bar-val">1,310</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:57.2%"></div><div class="bar-ci" style="left:33.1%;width:51.8%" title="95% CI: [3284.5, 8417.1]"></div></div><span class="bar-val">5,670</span></div>
             </div></td>
             <td class="right mono">1,310</td><td class="right mono">5,670</td><td class="right mono v-blue">4.3&times;</td></tr>
         <tr><td class="label-cell">Greenfield</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:26.3%"></div></div><span class="bar-val">1,839</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100.0%"></div></div><span class="bar-val">6,990</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:18.5%"></div><div class="bar-ci" style="left:9.8%;width:19.6%" title="95% CI: [974.8, 2915.9]"></div></div><span class="bar-val">1,839</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:70.5%"></div><div class="bar-ci" style="left:43.4%;width:56.6%" title="95% CI: [4302.5, 9917.8]"></div></div><span class="bar-val">6,990</span></div>
             </div></td>
             <td class="right mono">1,839</td><td class="right mono">6,990</td><td class="right mono v-blue">3.8&times;</td></tr>
         <tr><td class="label-cell">Simple</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:17.2%"></div></div><span class="bar-val">1,202</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:47.7%"></div></div><span class="bar-val">3,335</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:12.1%"></div><div class="bar-ci" style="left:3.8%;width:18.2%" title="95% CI: [373.2, 2176.1]"></div></div><span class="bar-val">1,202</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:33.6%"></div><div class="bar-ci" style="left:5.5%;width:60.9%" title="95% CI: [547.4, 6584.9]"></div></div><span class="bar-val">3,335</span></div>
             </div></td>
             <td class="right mono">1,202</td><td class="right mono">3,335</td><td class="right mono v-blue">2.8&times;</td></tr>
         <tr><td class="label-cell">Investigation</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:14.6%"></div></div><span class="bar-val">1,024</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:35.4%"></div></div><span class="bar-val">2,473</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:10.3%"></div><div class="bar-ci" style="left:7.8%;width:5.3%" title="95% CI: [776.1, 1298.4]"></div></div><span class="bar-val">1,024</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:24.9%"></div><div class="bar-ci" style="left:18.2%;width:14.9%" title="95% CI: [1810.0, 3289.0]"></div></div><span class="bar-val">2,473</span></div>
             </div></td>
             <td class="right mono">1,024</td><td class="right mono">2,473</td><td class="right mono v-blue">2.4&times;</td></tr>
         <tr><td class="label-cell">Docs</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:4.7%"></div></div><span class="bar-val">331</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:9.4%"></div></div><span class="bar-val">659</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:3.3%"></div><div class="bar-ci" style="left:2.2%;width:2.4%" title="95% CI: [218.3, 460.5]"></div></div><span class="bar-val">331</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:6.6%"></div><div class="bar-ci" style="left:2.6%;width:9.0%" title="95% CI: [253.6, 1142.2]"></div></div><span class="bar-val">659</span></div>
             </div></td>
             <td class="right mono">331</td><td class="right mono">659</td><td class="right mono">2.0&times;</td></tr>
         <tr><td class="label-cell">Feature</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:23.8%"></div></div><span class="bar-val">1,664</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:45.6%"></div></div><span class="bar-val">3,184</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:16.8%"></div><div class="bar-ci" style="left:9.9%;width:15.4%" title="95% CI: [983.4, 2510.1]"></div></div><span class="bar-val">1,664</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:32.1%"></div><div class="bar-ci" style="left:19.0%;width:29.5%" title="95% CI: [1883.8, 4805.3]"></div></div><span class="bar-val">3,184</span></div>
             </div></td>
             <td class="right mono">1,664</td><td class="right mono">3,184</td><td class="right mono">1.9&times;</td></tr>
         <tr><td class="label-cell">Continuation</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:18.2%"></div></div><span class="bar-val">1,272</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:33.3%"></div></div><span class="bar-val">2,330</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:12.8%"></div><div class="bar-ci" style="left:4.0%;width:20.3%" title="95% CI: [394.1, 2406.4]"></div></div><span class="bar-val">1,272</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:23.5%"></div><div class="bar-ci" style="left:10.0%;width:32.5%" title="95% CI: [996.2, 4216.9]"></div></div><span class="bar-val">2,330</span></div>
             </div></td>
             <td class="right mono">1,272</td><td class="right mono">2,330</td><td class="right mono">1.8&times;</td></tr>
         <tr><td class="label-cell">Sysadmin</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:8.5%"></div></div><span class="bar-val">595</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:12.2%"></div></div><span class="bar-val">851</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:6.0%"></div><div class="bar-ci" style="left:3.3%;width:6.2%" title="95% CI: [330.4, 947.6]"></div></div><span class="bar-val">595</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:8.6%"></div><div class="bar-ci" style="left:5.1%;width:8.1%" title="95% CI: [504.1, 1312.3]"></div></div><span class="bar-val">851</span></div>
             </div></td>
             <td class="right mono">595</td><td class="right mono">851</td><td class="right mono">1.4&times;</td></tr>
         <tr><td class="label-cell">Port</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:35.2%"></div></div><span class="bar-val">2,460</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:49.3%"></div></div><span class="bar-val">3,443</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:24.8%"></div><div class="bar-ci" style="left:7.3%;width:40.2%" title="95% CI: [726.1, 4712.9]"></div></div><span class="bar-val">2,460</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:34.7%"></div><div class="bar-ci" style="left:13.0%;width:46.5%" title="95% CI: [1284.5, 5892.9]"></div></div><span class="bar-val">3,443</span></div>
             </div></td>
             <td class="right mono">2,460</td><td class="right mono">3,443</td><td class="right mono">1.4&times;</td></tr>
     </tbody>
@@ -1257,32 +1245,32 @@
     <tbody>
         <tr><td class="label-cell">Trivial</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:5.3%"></div></div><span class="bar-val">$0.86</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:3.4%"></div></div><span class="bar-val">$0.56</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:4.3%"></div><div class="bar-ci" style="left:3.9%;width:0.9%" title="95% CI: [0.8, 1.0]"></div></div><span class="bar-val">$0.86</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:2.8%"></div><div class="bar-ci" style="left:2.2%;width:1.2%" title="95% CI: [0.4, 0.7]"></div></div><span class="bar-val">$0.56</span></div>
             </div></td>
             <td class="right mono">$0.86</td><td class="right mono">$0.56</td><td class="right mono v-green">&minus;35%</td></tr>
         <tr><td class="label-cell">Simple</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:13.8%"></div></div><span class="bar-val">$2.24</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:9.8%"></div></div><span class="bar-val">$1.58</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:11.3%"></div><div class="bar-ci" style="left:10.2%;width:2.1%" title="95% CI: [2.0, 2.4]"></div></div><span class="bar-val">$2.24</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:8.0%"></div><div class="bar-ci" style="left:6.7%;width:2.7%" title="95% CI: [1.3, 1.9]"></div></div><span class="bar-val">$1.58</span></div>
             </div></td>
             <td class="right mono">$2.24</td><td class="right mono">$1.58</td><td class="right mono v-green">&minus;29%</td></tr>
         <tr><td class="label-cell">Moderate</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:21.8%"></div></div><span class="bar-val">$3.52</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:19.6%"></div></div><span class="bar-val">$3.17</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:17.7%"></div><div class="bar-ci" style="left:16.5%;width:2.5%" title="95% CI: [3.3, 3.8]"></div></div><span class="bar-val">$3.52</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:16.0%"></div><div class="bar-ci" style="left:14.5%;width:3.1%" title="95% CI: [2.9, 3.5]"></div></div><span class="bar-val">$3.17</span></div>
             </div></td>
             <td class="right mono">$3.52</td><td class="right mono">$3.17</td><td class="right mono v-green">&minus;10%</td></tr>
         <tr><td class="label-cell">Complex</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:44.8%"></div></div><span class="bar-val">$7.25</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:45.0%"></div></div><span class="bar-val">$7.28</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:36.5%"></div><div class="bar-ci" style="left:33.7%;width:5.7%" title="95% CI: [6.7, 7.8]"></div></div><span class="bar-val">$7.25</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:36.7%"></div><div class="bar-ci" style="left:32.7%;width:8.2%" title="95% CI: [6.5, 8.1]"></div></div><span class="bar-val">$7.28</span></div>
             </div></td>
             <td class="right mono">$7.25</td><td class="right mono">$7.28</td><td class="right mono v-orange">+0%</td></tr>
         <tr><td class="label-cell">Major</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:77.3%"></div></div><span class="bar-val">$12.51</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100.0%"></div></div><span class="bar-val">$16.18</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:63.0%"></div><div class="bar-ci" style="left:46.6%;width:36.9%" title="95% CI: [9.3, 16.6]"></div></div><span class="bar-val">$12.51</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:81.5%"></div><div class="bar-ci" style="left:63.1%;width:36.9%" title="95% CI: [12.5, 19.8]"></div></div><span class="bar-val">$16.18</span></div>
             </div></td>
             <td class="right mono">$12.51</td><td class="right mono">$16.18</td><td class="right mono v-orange">+29%</td></tr>
     </tbody>
@@ -1299,62 +1287,60 @@
     <summary>Cache Efficiency by Complexity</summary>
     <div class="expansion-body">
         <!-- GENERATED-TABLE -->
+<p>Thinking tokens are billed as output but do not enter the conversation history or affect cache behavior. Visible text output accumulates in history and increases subsequent input size. Cache writes ($18.75/MTok) are 12.5&times; more expensive than cache reads ($1.50/MTok).</p>
 <div class="table-scroll"><table>
     <thead>
-        <tr><th>Complexity</th><th class="right">4.5 cache write/task</th><th class="right">4.6 cache write/task</th><th class="right">4.5 read ratio</th><th class="right">4.6 read ratio</th><th class="right">&Delta; write</th></tr>
+        <tr><th>Complexity</th><th>Cache Write/Task</th><th class="right">4.5 read %</th><th class="right">4.6 read %</th><th class="right">&Delta; write</th></tr>
     </thead>
     <tbody>
         <tr><td class="label-cell">Trivial</td>
-            <td class="right mono">35,969</td>
-            <td class="right mono">18,178</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:15.4%"></div></div><span class="bar-val">35,969</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:7.8%"></div></div><span class="bar-val">18,178</span></div>
+            </div></td>
             <td class="right mono">72.6%</td>
             <td class="right mono">85.6%</td>
             <td class="right mono" style="color:var(--green)">0.51&times;</td></tr>
         <tr><td class="label-cell">Simple</td>
-            <td class="right mono">73,134</td>
-            <td class="right mono">39,527</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:31.4%"></div></div><span class="bar-val">73,134</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:17.0%"></div></div><span class="bar-val">39,527</span></div>
+            </div></td>
             <td class="right mono">85.8%</td>
             <td class="right mono">91.3%</td>
             <td class="right mono" style="color:var(--green)">0.54&times;</td></tr>
         <tr><td class="label-cell">Moderate</td>
-            <td class="right mono">88,484</td>
-            <td class="right mono">64,206</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:38.0%"></div></div><span class="bar-val">88,484</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:27.6%"></div></div><span class="bar-val">64,206</span></div>
+            </div></td>
             <td class="right mono">91.3%</td>
             <td class="right mono">93.6%</td>
             <td class="right mono" style="color:var(--green)">0.73&times;</td></tr>
         <tr><td class="label-cell">Complex</td>
-            <td class="right mono">159,674</td>
-            <td class="right mono">125,809</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:68.6%"></div></div><span class="bar-val">159,674</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:54.0%"></div></div><span class="bar-val">125,809</span></div>
+            </div></td>
             <td class="right mono">92.9%</td>
             <td class="right mono">94.7%</td>
             <td class="right mono" style="color:var(--green)">0.79&times;</td></tr>
         <tr><td class="label-cell">Major</td>
-            <td class="right mono">232,921</td>
-            <td class="right mono">228,450</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:100.0%"></div></div><span class="bar-val">232,921</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:98.1%"></div></div><span class="bar-val">228,450</span></div>
+            </div></td>
             <td class="right mono">94.5%</td>
             <td class="right mono">96.1%</td>
             <td class="right mono" style="color:var(--green)">0.98&times;</td></tr>
         <tr style="font-weight:600"><td class="label-cell">Overall</td>
-            <td class="right mono">67,590</td>
-            <td class="right mono">51,122</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:29.0%"></div></div><span class="bar-val">67,590</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:21.8%"></div></div><span class="bar-val">50,712</span></div>
+            </div></td>
             <td class="right mono">89.8%</td>
             <td class="right mono">94.0%</td>
-            <td class="right mono" style="color:var(--green)">0.76&times;</td></tr>
-    </tbody>
-</table></div>
-
-<h3>Thinking vs Visible Text Output</h3>
-<p>Thinking tokens are billed as output but do not enter the conversation history or affect cache behavior. Visible text output accumulates in history and increases subsequent input size.</p>
-<div class="table-scroll"><table>
-    <thead>
-        <tr><th>Metric</th><th class="right">4.5</th><th class="right">4.6</th></tr>
-    </thead>
-    <tbody>
-        <tr><td class="label-cell">Avg output tokens/task</td><td class="right mono">953</td><td class="right mono">2,260</td></tr>
-        <tr><td class="label-cell">Thinking ratio (chars)</td><td class="right mono">75%</td><td class="right mono">59%</td></tr>
-        <tr><td class="label-cell">Avg thinking chars (when used)</td><td class="right mono">2,635</td><td class="right mono">4,149</td></tr>
-        <tr><td class="label-cell">Avg visible text chars</td><td class="right mono">1,254</td><td class="right mono">1,755</td></tr>
-        <tr><td class="label-cell">Requests per task</td><td class="right mono">7.5</td><td class="right mono">9.8</td></tr>
+            <td class="right mono" style="color:var(--green)">0.75&times;</td></tr>
     </tbody>
 </table></div>
 <!-- /GENERATED-TABLE -->
@@ -1373,6 +1359,8 @@
             <th>Complexity</th>
             <th class="right">4.5 output/task</th>
             <th class="right">4.6 output/task</th>
+            <th class="right">4.5 thinking chars</th>
+            <th class="right">4.6 thinking chars</th>
             <th class="right">4.5 input/task</th>
             <th class="right">4.6 input/task</th>
             <th class="right">4.5 requests</th>
@@ -1384,6 +1372,8 @@
             <td class="label-cell">Trivial</td>
             <td class="right mono">97</td>
             <td class="right mono">176</td>
+            <td class="right mono">864</td>
+            <td class="right mono">773</td>
             <td class="right mono">14</td>
             <td class="right mono">16</td>
             <td class="right mono">1.6</td>
@@ -1393,6 +1383,8 @@
             <td class="label-cell">Simple</td>
             <td class="right mono">514</td>
             <td class="right mono">755</td>
+            <td class="right mono">1,717</td>
+            <td class="right mono">1,449</td>
             <td class="right mono">137</td>
             <td class="right mono">166</td>
             <td class="right mono">5.7</td>
@@ -1402,6 +1394,8 @@
             <td class="label-cell">Moderate</td>
             <td class="right mono">1,506</td>
             <td class="right mono">2,567</td>
+            <td class="right mono">3,775</td>
+            <td class="right mono">4,045</td>
             <td class="right mono">601</td>
             <td class="right mono">249</td>
             <td class="right mono">11.4</td>
@@ -1411,6 +1405,8 @@
             <td class="label-cell">Complex</td>
             <td class="right mono">3,903</td>
             <td class="right mono">9,262</td>
+            <td class="right mono">7,257</td>
+            <td class="right mono">8,735</td>
             <td class="right mono">1,484</td>
             <td class="right mono">502</td>
             <td class="right mono">26.3</td>
@@ -1420,6 +1416,8 @@
             <td class="label-cell">Major</td>
             <td class="right mono">8,465</td>
             <td class="right mono">15,971</td>
+            <td class="right mono">11,747</td>
+            <td class="right mono">7,199</td>
             <td class="right mono">2,020</td>
             <td class="right mono">477</td>
             <td class="right mono">52.4</td>
@@ -2120,6 +2118,67 @@
                 <div class="callout blue">
                     <strong>The exploration&ndash;output tradeoff:</strong> Opus 4.6 uses 58% more tool calls per task yet produces only 8% more lines of code per task. The extra activity is predominantly research, not proportional output growth. Alignment scores are significantly higher for 4.6 (d=&minus;0.24, p=0.000001), surviving Bonferroni correction, though this may partly reflect the different task mix.
                 </div>
+
+                <details class="expansion">
+    <summary>Task Scope by Complexity</summary>
+    <div class="expansion-body">
+        <!-- GENERATED-TABLE -->
+<div class="table-scroll"><table>
+    <thead>
+        <tr><th>Complexity</th><th class="right">4.5 tasks</th><th class="right">4.6 tasks</th><th class="right">4.5 files/task</th><th class="right">4.6 files/task</th><th class="right">4.5 lines+/task</th><th class="right">4.6 lines+/task</th><th class="right">4.5 lines&minus;/task</th><th class="right">4.6 lines&minus;/task</th></tr>
+    </thead>
+    <tbody>
+        <tr><td class="label-cell">Trivial</td>
+            <td class="right mono">808</td>
+            <td class="right mono">207</td>
+            <td class="right mono">0.1</td>
+            <td class="right mono">0.1</td>
+            <td class="right mono">0</td>
+            <td class="right mono">0</td>
+            <td class="right mono">0</td>
+            <td class="right mono">0</td></tr>
+        <tr><td class="label-cell">Simple</td>
+            <td class="right mono">345</td>
+            <td class="right mono">123</td>
+            <td class="right mono">1.0</td>
+            <td class="right mono">0.7</td>
+            <td class="right mono">14</td>
+            <td class="right mono">11</td>
+            <td class="right mono">8</td>
+            <td class="right mono">4</td></tr>
+        <tr><td class="label-cell">Moderate</td>
+            <td class="right mono">367</td>
+            <td class="right mono">153</td>
+            <td class="right mono">2.8</td>
+            <td class="right mono">3.2</td>
+            <td class="right mono">111</td>
+            <td class="right mono">86</td>
+            <td class="right mono">37</td>
+            <td class="right mono">27</td></tr>
+        <tr><td class="label-cell">Complex</td>
+            <td class="right mono">190</td>
+            <td class="right mono">72</td>
+            <td class="right mono">5.6</td>
+            <td class="right mono">7.6</td>
+            <td class="right mono">463</td>
+            <td class="right mono">430</td>
+            <td class="right mono">98</td>
+            <td class="right mono">105</td></tr>
+        <tr><td class="label-cell">Major</td>
+            <td class="right mono">19</td>
+            <td class="right mono">18</td>
+            <td class="right mono">18.1</td>
+            <td class="right mono">20.9</td>
+            <td class="right mono">2357</td>
+            <td class="right mono">1020</td>
+            <td class="right mono">117</td>
+            <td class="right mono">258</td></tr>
+    </tbody>
+</table></div>
+<!-- /GENERATED-TABLE -->
+
+    </div>
+</details>
             </section>
 
             <!-- ===== 7. MODEL PROFILES ===== -->

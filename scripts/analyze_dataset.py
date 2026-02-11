@@ -140,6 +140,28 @@ def analyze_model(data_dir: Path, analysis_dir: Path, model: str) -> dict:
     total_lines_add = sum(t.get("total_lines_added", 0) for t in tasks)
     total_lines_rm = sum(t.get("total_lines_removed", 0) for t in tasks)
 
+    # Scope by complexity
+    scope_by_complexity = {}
+    for cx in complexity_order:
+        cx_tasks = [t for t in tasks if t["classification"]["complexity"] == cx]
+        n_cx = len(cx_tasks)
+        if n_cx == 0:
+            continue
+        files = [t.get("total_files_touched", 0) for t in cx_tasks]
+        lines_a = [t.get("total_lines_added", 0) for t in cx_tasks]
+        lines_r = [t.get("total_lines_removed", 0) for t in cx_tasks]
+        tools = [t.get("total_tool_calls", 0) for t in cx_tasks]
+        scope_by_complexity[cx] = {
+            "count": n_cx,
+            "avg_files_touched": round(sum(files) / n_cx, 2),
+            "avg_lines_added": round(sum(lines_a) / n_cx, 1),
+            "avg_lines_removed": round(sum(lines_r) / n_cx, 1),
+            "avg_tool_calls": round(sum(tools) / n_cx, 1),
+            "total_files_touched": sum(files),
+            "total_lines_added": sum(lines_a),
+            "total_lines_removed": sum(lines_r),
+        }
+
     # Task durations
     task_durations = sorted(
         t["duration_seconds"]
@@ -201,6 +223,7 @@ def analyze_model(data_dir: Path, analysis_dir: Path, model: str) -> dict:
             k: complexities[k] for k in complexity_order if k in complexities
         },
         "tool_usage": dict(tool_totals.most_common(15)),
+        "scope_by_complexity": scope_by_complexity,
     }
 
 
