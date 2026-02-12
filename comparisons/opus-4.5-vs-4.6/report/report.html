@@ -1119,7 +1119,42 @@
 
                 <p>Effort distribution shows Opus 4.6 allocates more tool calls to research (35.1% vs 28.3%) and fewer to implementation (17.5% vs 27.0%), consistent with the research-first approach visible in subagent type preferences.</p>
 
-                <!-- expand: session-effort -->
+<!-- GENERATED-TABLE: session-effort -->
+<table>
+    <thead>
+        <tr><th>Metric</th><th>Distribution</th><th class="right">4.5</th><th class="right">4.6</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="label-cell">Research ratio</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:28.3%"></div></div><span class="bar-val">28.3%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:35.1%"></div></div><span class="bar-val">35.1%</span></div>
+            </div></td>
+            <td class="right mono">0.283</td>
+            <td class="right mono">0.351</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Implementation ratio</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:27.0%"></div></div><span class="bar-val">27.0%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:17.5%"></div></div><span class="bar-val">17.5%</span></div>
+            </div></td>
+            <td class="right mono">0.270</td>
+            <td class="right mono">0.175</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Front-load positive %</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:54.3%"></div></div><span class="bar-val">54.3%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:59.3%"></div></div><span class="bar-val">59.3%</span></div>
+            </div></td>
+            <td class="right mono">868 tasks</td>
+            <td class="right mono">194 tasks</td>
+        </tr>
+    </tbody>
+</table>
+<!-- /GENERATED-TABLE: session-effort -->
 
                 <h3>Cross-Cut Detail</h3>
                 <!-- expand: findings-behavior -->
@@ -1498,6 +1533,52 @@
                 <p>Task duration survives Bonferroni correction (p=0.000001), though the effect size is negligible (d=0.005)&mdash;a case of statistical significance without practical significance, driven by sample size. Opus 4.6 takes longer per task (median 129.6s vs 94.0s from timing analysis). The explore phase runs 2.2&times; longer at median (<!-- var: sessions.explore_median_b -->68.7<!-- /var -->s vs <!-- var: sessions.explore_median_a -->31.3<!-- /var -->s). Effort distribution shows 4.6 allocates more tool calls to research (35.1% vs 28.3%) and fewer to implementation (17.5% vs 27.0%). Active-time cost is $25.09/hour for 4.6 vs $20.96/hour for 4.5 (5-min idle threshold).</p>
 
                 <h3>Task Duration</h3>
+
+<!-- GENERATED-TABLE: duration-percentiles -->
+<table>
+    <thead>
+        <tr><th>Percentile</th><th>Comparison</th><th class="right">4.5</th><th class="right">4.6</th></tr>
+    </thead>
+    <tbody>
+        <tr><td class="label-cell">p10</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:1.7%"></div></div><span class="bar-val">8s</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:2.1%"></div></div><span class="bar-val">10s</span></div>
+            </div></td>
+            <td class="right mono">8s</td>
+            <td class="right mono">10s</td></tr>
+        <tr><td class="label-cell">p25</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:3.2%"></div></div><span class="bar-val">15s</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:4.3%"></div></div><span class="bar-val">21s</span></div>
+            </div></td>
+            <td class="right mono">15s</td>
+            <td class="right mono">21s</td></tr>
+        <tr><td class="label-cell">Median</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:8.9%"></div></div><span class="bar-val">42s</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:14.1%"></div></div><span class="bar-val">1.1m</span></div>
+            </div></td>
+            <td class="right mono">42s</td>
+            <td class="right mono">1.1m</td></tr>
+        <tr><td class="label-cell">p75</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:25.0%"></div></div><span class="bar-val">2.0m</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:43.4%"></div></div><span class="bar-val">3.5m</span></div>
+            </div></td>
+            <td class="right mono">2.0m</td>
+            <td class="right mono">3.5m</td></tr>
+        <tr><td class="label-cell">p90</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:56.8%"></div></div><span class="bar-val">4.5m</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100.0%"></div></div><span class="bar-val">7.9m</span></div>
+            </div></td>
+            <td class="right mono">4.5m</td>
+            <td class="right mono">7.9m</td></tr>
+    </tbody>
+</table>
+<!-- /GENERATED-TABLE: duration-percentiles -->
+
                 <!-- expand: duration-distribution -->
 
                 <h3>Session Length &amp; Warmup</h3>
@@ -1505,7 +1586,52 @@
                 <!-- expand: session-warmup -->
 
                 <h3>Active-Time Cost</h3>
-                <!-- expand: idle-sensitivity -->
+
+<!-- GENERATED-TABLE: idle-sensitivity -->
+<table>
+    <thead>
+        <tr><th>Idle threshold</th><th class="right">4.5 active hrs</th><th class="right">4.6 active hrs</th><th class="right">4.5 $/hr</th><th class="right">4.6 $/hr</th><th class="right">&Delta; $/hr</th></tr>
+    </thead>
+    <tbody>
+        <tr><td class="label-cell">2 min</td>
+            <td class="right mono">195.7</td>
+            <td class="right mono">62.5</td>
+            <td class="right mono">$22.35</td>
+            <td class="right mono">$26.57</td>
+            <td class="right mono" style="color:var(--orange)">+19%</td></tr>
+        <tr><td class="label-cell">5 min</td>
+            <td class="right mono">208.6</td>
+            <td class="right mono">66.2</td>
+            <td class="right mono">$20.96</td>
+            <td class="right mono">$25.09</td>
+            <td class="right mono" style="color:var(--orange)">+20%</td></tr>
+        <tr><td class="label-cell">10 min</td>
+            <td class="right mono">224.6</td>
+            <td class="right mono">71.6</td>
+            <td class="right mono">$19.48</td>
+            <td class="right mono">$23.20</td>
+            <td class="right mono" style="color:var(--orange)">+19%</td></tr>
+        <tr><td class="label-cell">20 min</td>
+            <td class="right mono">245.2</td>
+            <td class="right mono">77.3</td>
+            <td class="right mono">$17.84</td>
+            <td class="right mono">$21.50</td>
+            <td class="right mono" style="color:var(--orange)">+21%</td></tr>
+        <tr><td class="label-cell">30 min</td>
+            <td class="right mono">260.3</td>
+            <td class="right mono">84.3</td>
+            <td class="right mono">$16.81</td>
+            <td class="right mono">$19.71</td>
+            <td class="right mono" style="color:var(--orange)">+17%</td></tr>
+        <tr><td class="label-cell">60 min</td>
+            <td class="right mono">295.5</td>
+            <td class="right mono">97.3</td>
+            <td class="right mono">$14.80</td>
+            <td class="right mono">$17.07</td>
+            <td class="right mono" style="color:var(--orange)">+15%</td></tr>
+    </tbody>
+</table>
+<!-- /GENERATED-TABLE: idle-sensitivity -->
 
                 <div class="stat-note">
                     <strong>Complication:</strong> Session overlap analysis (1,765 overlapping pairs, max concurrency 11) complicates per-session cost attribution. Active-time cost varies with idle threshold (see sensitivity table above), but the directional relationship is stable across all thresholds tested.
@@ -1647,7 +1773,238 @@
 
                 <h3>Ranked Findings</h3>
 
-                <!-- expand: findings-summary -->
+<!-- GENERATED-TABLE: findings-summary -->
+<table>
+    <thead>
+        <tr><th>#</th><th>Measurement</th><th>Theme</th><th>Direction</th><th class="right">Effect</th><th class="right">p<sub>adj</sub></th><th>Sig</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="right mono">1</td>
+            <td class="label-cell">Thinking Fraction</td>
+            <td>Thinking</td>
+            <td>opus-4-5 higher</td>
+            <td class="right mono">0.674 medium <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:100%"></div></div></div></td>
+            <td class="right mono">0.0000</td>
+            <td><span class="v-green">Bonf</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">2</td>
+            <td class="label-cell">Total Output Tokens</td>
+            <td>Cost</td>
+            <td>opus-4-6 higher</td>
+            <td class="right mono">0.424 small <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:85%"></div></div></div></td>
+            <td class="right mono">0.0000</td>
+            <td><span class="v-green">Bonf</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">3</td>
+            <td class="label-cell">Output Per Request</td>
+            <td>Cost</td>
+            <td>opus-4-6 higher</td>
+            <td class="right mono">0.329 small <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:66%"></div></div></div></td>
+            <td class="right mono">0.0000</td>
+            <td><span class="v-green">Bonf</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">4</td>
+            <td class="label-cell">Tool Calls</td>
+            <td>Behavior</td>
+            <td>opus-4-6 higher</td>
+            <td class="right mono">0.286 small <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:57%"></div></div></div></td>
+            <td class="right mono">0.0000</td>
+            <td><span class="v-green">Bonf</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">5</td>
+            <td class="label-cell">Request Count</td>
+            <td>Cost</td>
+            <td>opus-4-6 higher</td>
+            <td class="right mono">0.241 small <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:48%"></div></div></div></td>
+            <td class="right mono">0.0000</td>
+            <td><span class="v-green">Bonf</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">6</td>
+            <td class="label-cell">Files Touched</td>
+            <td>Behavior</td>
+            <td>equal</td>
+            <td class="right mono">0.233 small <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:47%"></div></div></div></td>
+            <td class="right mono">0.0213</td>
+            <td><span class="v-blue">FDR</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">7</td>
+            <td class="label-cell">Alignment Score</td>
+            <td>Quality</td>
+            <td>equal</td>
+            <td class="right mono">0.206 small <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:41%"></div></div></div></td>
+            <td class="right mono">0.0001</td>
+            <td><span class="v-green">Bonf</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">8</td>
+            <td class="label-cell">Cost Per Minute</td>
+            <td>Cost</td>
+            <td>opus-4-5 higher</td>
+            <td class="right mono">0.192 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:38%"></div></div></div></td>
+            <td class="right mono">0.0000</td>
+            <td><span class="v-green">Bonf</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">9</td>
+            <td class="label-cell">Task Completion</td>
+            <td>Quality</td>
+            <td>distributions differ</td>
+            <td class="right mono">0.159 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:32%"></div></div></div></td>
+            <td class="right mono">0.0001</td>
+            <td><span class="v-green">Bonf</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">10</td>
+            <td class="label-cell">Communication Quality</td>
+            <td>Behavior</td>
+            <td>distributions differ</td>
+            <td class="right mono">0.157 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:31%"></div></div></div></td>
+            <td class="right mono">0.0000</td>
+            <td><span class="v-green">Bonf</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">11</td>
+            <td class="label-cell">Failed Rate</td>
+            <td>Quality</td>
+            <td>opus-4-5 higher</td>
+            <td class="right mono">0.155 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:31%"></div></div></div></td>
+            <td class="right mono">0.0086</td>
+            <td><span class="v-blue">FDR</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">12</td>
+            <td class="label-cell">Cache Hit Rate</td>
+            <td>Cost</td>
+            <td>equal</td>
+            <td class="right mono">0.154 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:31%"></div></div></div></td>
+            <td class="right mono">0.0000</td>
+            <td><span class="v-green">Bonf</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">13</td>
+            <td class="label-cell">Autonomy Level</td>
+            <td>Behavior</td>
+            <td>distributions differ</td>
+            <td class="right mono">0.151 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:30%"></div></div></div></td>
+            <td class="right mono">0.0000</td>
+            <td><span class="v-green">Bonf</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">14</td>
+            <td class="label-cell">Scope Management</td>
+            <td>Behavior</td>
+            <td>distributions differ</td>
+            <td class="right mono">0.140 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:28%"></div></div></div></td>
+            <td class="right mono">0.0017</td>
+            <td><span class="v-blue">FDR</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">15</td>
+            <td class="label-cell">Scope Expanded Rate</td>
+            <td>Behavior</td>
+            <td>opus-4-5 higher</td>
+            <td class="right mono">0.139 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:28%"></div></div></div></td>
+            <td class="right mono">0.0455</td>
+            <td><span class="v-blue">FDR</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">16</td>
+            <td class="label-cell">Error Recovery</td>
+            <td></td>
+            <td>distributions differ</td>
+            <td class="right mono">0.135 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:27%"></div></div></div></td>
+            <td class="right mono">0.0282</td>
+            <td><span class="v-blue">FDR</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">17</td>
+            <td class="label-cell">Iteration Required</td>
+            <td>Behavior</td>
+            <td>distributions differ</td>
+            <td class="right mono">0.126 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:25%"></div></div></div></td>
+            <td class="right mono">0.0034</td>
+            <td><span class="v-blue">FDR</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">18</td>
+            <td class="label-cell">Satisfaction Rate</td>
+            <td>Quality</td>
+            <td>opus-4-6 higher</td>
+            <td class="right mono">0.118 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:24%"></div></div></div></td>
+            <td class="right mono">0.0387</td>
+            <td><span class="v-blue">FDR</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">19</td>
+            <td class="label-cell">Thinking Chars</td>
+            <td>Thinking</td>
+            <td>opus-4-5 higher</td>
+            <td class="right mono">0.115 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:23%"></div></div></div></td>
+            <td class="right mono">0.0000</td>
+            <td><span class="v-green">Bonf</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">20</td>
+            <td class="label-cell">Total Input Tokens</td>
+            <td>Cost</td>
+            <td>opus-4-5 higher</td>
+            <td class="right mono">0.112 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:22%"></div></div></div></td>
+            <td class="right mono">0.0000</td>
+            <td><span class="v-green">Bonf</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">21</td>
+            <td class="label-cell">Tools Per File</td>
+            <td>Behavior</td>
+            <td>opus-4-6 higher</td>
+            <td class="right mono">0.096 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:19%"></div></div></div></td>
+            <td class="right mono">0.0000</td>
+            <td><span class="v-green">Bonf</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">22</td>
+            <td class="label-cell">Duration Seconds</td>
+            <td>Behavior</td>
+            <td>opus-4-6 higher</td>
+            <td class="right mono">0.005 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:1%"></div></div></div></td>
+            <td class="right mono">0.0000</td>
+            <td><span class="v-green">Bonf</span></td>
+        </tr>
+    </tbody>
+</table>
+<details><summary>16 non-significant overall results</summary>
+<table>
+    <thead>
+        <tr><th>Measurement</th><th>Theme</th><th class="right">Effect</th><th class="right">p<sub>adj</sub></th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Triage Score</td><td>Editing</td><td class="right mono">0.133</td><td class="right mono">0.1371</td></tr>
+        <tr><td>Rewrite Rate</td><td>Editing</td><td class="right mono">0.131</td><td class="right mono">0.1264</td></tr>
+        <tr><td>Max Chain Depth</td><td>Editing</td><td class="right mono">0.121</td><td class="right mono">0.1448</td></tr>
+        <tr><td>Lines Removed</td><td>Editing</td><td class="right mono">0.119</td><td class="right mono">0.7336</td></tr>
+        <tr><td>Complete Rate</td><td>Quality</td><td class="right mono">0.106</td><td class="right mono">0.0752</td></tr>
+        <tr><td>Lines Per Minute</td><td>Behavior</td><td class="right mono">0.095</td><td class="right mono">0.8500</td></tr>
+        <tr><td>Has Overlaps Rate</td><td>Editing</td><td class="right mono">0.087</td><td class="right mono">0.1762</td></tr>
+        <tr><td>Estimated Cost</td><td>Cost</td><td class="right mono">0.082</td><td class="right mono">0.4445</td></tr>
+        <tr><td>Normalized Execution Quality</td><td>Quality</td><td class="right mono">0.053</td><td class="right mono">0.3130</td></tr>
+        <tr><td>Normalized User Sentiment</td><td>Quality</td><td class="right mono">0.052</td><td class="right mono">0.2127</td></tr>
+        <tr><td>Has Edits Rate</td><td>Editing</td><td class="right mono">0.048</td><td class="right mono">0.4684</td></tr>
+        <tr><td>Overlap Count</td><td>Editing</td><td class="right mono">0.037</td><td class="right mono">0.1792</td></tr>
+        <tr><td>Good Execution Rate</td><td>Quality</td><td class="right mono">0.022</td><td class="right mono">0.7336</td></tr>
+        <tr><td>Dissatisfaction Rate</td><td>Quality</td><td class="right mono">0.022</td><td class="right mono">0.7472</td></tr>
+        <tr><td>One Shot Rate</td><td>Behavior</td><td class="right mono">0.019</td><td class="right mono">0.7782</td></tr>
+        <tr><td>Lines Added</td><td>Editing</td><td class="right mono">0.015</td><td class="right mono">0.3646</td></tr>
+    </tbody>
+</table>
+</details>
+<!-- /GENERATED-TABLE: findings-summary -->
 
                 <h3>Development Process</h3>
 

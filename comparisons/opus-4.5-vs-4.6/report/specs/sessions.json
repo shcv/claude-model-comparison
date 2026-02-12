@@ -21,6 +21,11 @@
       "data_source": "sessions",
       "row_gen": "session_length"
     },
+    "duration-percentiles": {
+      "title": "Task Duration Percentiles",
+      "data_source": "overview",
+      "row_gen": "duration_percentiles"
+    },
     "duration-distribution": {
       "title": "Task Duration Distribution",
       "data_source": "overview",

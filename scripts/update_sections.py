@@ -2351,6 +2351,46 @@ def generate_session_length_inline(spec: dict, data: dict, config: dict) -> str:
     return "\n".join(lines)
 
 
+def _duration_fmt(s):
+    """Format seconds as human-readable duration."""
+    if s >= 60:
+        return f"{s / 60:.1f}m"
+    return f"{s:.0f}s"
+
+
+def generate_duration_percentiles(spec: dict, data: dict, config: dict) -> str:
+    """Generate compact duration percentile comparison table (for inline use)."""
+    lines = [f"<!-- title: {spec.get('title', 'Task Duration Percentiles')} -->"]
+
+    overview = data.get("overview", {})
+    da = overview.get(config["model_a"], {}).get("duration_distribution", {})
+    db = overview.get(config["model_b"], {}).get("duration_distribution", {})
+    pa = da.get("percentiles", {})
+    pb = db.get("percentiles", {})
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Percentile</th><th>Comparison</th>'
+                 '<th class="right">4.5</th><th class="right">4.6</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    max_p90 = max(pa.get("p90", 1), pb.get("p90", 1))
+    for label, key in [("p10", "p10"), ("p25", "p25"), ("Median", "p50"),
+                       ("p75", "p75"), ("p90", "p90")]:
+        va = pa.get(key, 0)
+        vb = pb.get(key, 0)
+        bar = table_gen.generate_bar_pair(va, vb, scale=max_p90, format_fn=_duration_fmt)
+        lines.append(f'        <tr><td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
+        lines.append(f'            <td class="right mono">{_duration_fmt(va)}</td>')
+        lines.append(f'            <td class="right mono">{_duration_fmt(vb)}</td></tr>')
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
 def generate_duration_distribution_inline(spec: dict, data: dict, config: dict) -> str:
     """Generate task duration distribution table with percentile + bucket comparisons."""
     lines = [f"<!-- title: {spec.get('title', 'Task Duration Distribution')} -->"]
@@ -2364,10 +2404,7 @@ def generate_duration_distribution_inline(spec: dict, data: dict, config: dict) 
     ba = da.get("buckets", {})
     bb = db.get("buckets", {})
 
-    def fmt_dur(s):
-        if s >= 60:
-            return f"{s / 60:.1f}m"
-        return f"{s:.0f}s"
+    fmt_dur = _duration_fmt
 
     # Percentile comparison
     lines.append("<h3>Percentiles</h3>")
@@ -2858,6 +2895,7 @@ CUSTOM_GENERATORS = {
     "session_effort": generate_session_effort_inline,
     "session_length": generate_session_length_inline,
     "duration_distribution": generate_duration_distribution_inline,
+    "duration_percentiles": generate_duration_percentiles,
     "cache_efficiency": generate_cache_efficiency_inline,
     "idle_sensitivity": generate_idle_sensitivity_inline,
     "complexity_scope": generate_complexity_scope_inline,

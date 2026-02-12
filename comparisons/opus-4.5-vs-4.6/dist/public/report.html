@@ -2677,11 +2677,8 @@
 
                 <p>Effort distribution shows Opus 4.6 allocates more tool calls to research (35.1% vs 28.3%) and fewer to implementation (17.5% vs 27.0%), consistent with the research-first approach visible in subagent type preferences.</p>
 
-                <details class="expansion">
-    <summary>Effort Distribution</summary>
-    <div class="expansion-body">
-        <!-- GENERATED-TABLE -->
-<div class="table-scroll"><table>
+<!-- GENERATED-TABLE: session-effort -->
+<table>
     <thead>
         <tr><th>Metric</th><th>Distribution</th><th class="right">4.5</th><th class="right">4.6</th></tr>
     </thead>
@@ -2714,11 +2711,8 @@
             <td class="right mono">194 tasks</td>
         </tr>
     </tbody>
-</table></div>
-<!-- /GENERATED-TABLE -->
-
-    </div>
-</details>
+</table>
+<!-- /GENERATED-TABLE: session-effort -->
 
                 <h3>Cross-Cut Detail</h3>
                 <details class="expansion">
@@ -4226,6 +4220,52 @@
                 <p>Task duration survives Bonferroni correction (p=0.000001), though the effect size is negligible (d=0.005)&mdash;a case of statistical significance without practical significance, driven by sample size. Opus 4.6 takes longer per task (median 129.6s vs 94.0s from timing analysis). The explore phase runs 2.2&times; longer at median (68.7s vs 31.3s). Effort distribution shows 4.6 allocates more tool calls to research (35.1% vs 28.3%) and fewer to implementation (17.5% vs 27.0%). Active-time cost is $25.09/hour for 4.6 vs $20.96/hour for 4.5 (5-min idle threshold).</p>
 
                 <h3>Task Duration</h3>
+
+<!-- GENERATED-TABLE: duration-percentiles -->
+<table>
+    <thead>
+        <tr><th>Percentile</th><th>Comparison</th><th class="right">4.5</th><th class="right">4.6</th></tr>
+    </thead>
+    <tbody>
+        <tr><td class="label-cell">p10</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:1.7%"></div></div><span class="bar-val">8s</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:2.1%"></div></div><span class="bar-val">10s</span></div>
+            </div></td>
+            <td class="right mono">8s</td>
+            <td class="right mono">10s</td></tr>
+        <tr><td class="label-cell">p25</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:3.2%"></div></div><span class="bar-val">15s</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:4.3%"></div></div><span class="bar-val">21s</span></div>
+            </div></td>
+            <td class="right mono">15s</td>
+            <td class="right mono">21s</td></tr>
+        <tr><td class="label-cell">Median</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:8.9%"></div></div><span class="bar-val">42s</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:14.1%"></div></div><span class="bar-val">1.1m</span></div>
+            </div></td>
+            <td class="right mono">42s</td>
+            <td class="right mono">1.1m</td></tr>
+        <tr><td class="label-cell">p75</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:25.0%"></div></div><span class="bar-val">2.0m</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:43.4%"></div></div><span class="bar-val">3.5m</span></div>
+            </div></td>
+            <td class="right mono">2.0m</td>
+            <td class="right mono">3.5m</td></tr>
+        <tr><td class="label-cell">p90</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:56.8%"></div></div><span class="bar-val">4.5m</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100.0%"></div></div><span class="bar-val">7.9m</span></div>
+            </div></td>
+            <td class="right mono">4.5m</td>
+            <td class="right mono">7.9m</td></tr>
+    </tbody>
+</table>
+<!-- /GENERATED-TABLE: duration-percentiles -->
+
                 <details class="expansion">
     <summary>Task Duration Distribution</summary>
     <div class="expansion-body">
@@ -4399,11 +4439,9 @@
 </details>
 
                 <h3>Active-Time Cost</h3>
-                <details class="expansion">
-    <summary>Active-Time Cost by Idle Threshold</summary>
-    <div class="expansion-body">
-        <!-- GENERATED-TABLE -->
-<div class="table-scroll"><table>
+
+<!-- GENERATED-TABLE: idle-sensitivity -->
+<table>
     <thead>
         <tr><th>Idle threshold</th><th class="right">4.5 active hrs</th><th class="right">4.6 active hrs</th><th class="right">4.5 $/hr</th><th class="right">4.6 $/hr</th><th class="right">&Delta; $/hr</th></tr>
     </thead>
@@ -4445,11 +4483,8 @@
             <td class="right mono">$17.07</td>
             <td class="right mono" style="color:var(--orange)">+15%</td></tr>
     </tbody>
-</table></div>
-<!-- /GENERATED-TABLE -->
-
-    </div>
-</details>
+</table>
+<!-- /GENERATED-TABLE: idle-sensitivity -->
 
                 <div class="stat-note">
                     <strong>Complication:</strong> Session overlap analysis (1,765 overlapping pairs, max concurrency 11) complicates per-session cost attribution. Active-time cost varies with idle threshold (see sensitivity table above), but the directional relationship is stable across all thresholds tested.
@@ -4898,11 +4933,8 @@
 
                 <h3>Ranked Findings</h3>
 
-                <details class="expansion">
-    <summary>Key Findings Summary</summary>
-    <div class="expansion-body">
-        <!-- GENERATED-TABLE -->
-<div class="table-scroll"><table>
+<!-- GENERATED-TABLE: findings-summary -->
+<table>
     <thead>
         <tr><th>#</th><th>Measurement</th><th>Theme</th><th>Direction</th><th class="right">Effect</th><th class="right">p<sub>adj</sub></th><th>Sig</th></tr>
     </thead>
@@ -5106,9 +5138,9 @@
             <td><span class="v-green">Bonf</span></td>
         </tr>
     </tbody>
-</table></div>
+</table>
 <details><summary>16 non-significant overall results</summary>
-<div class="table-scroll"><table>
+<table>
     <thead>
         <tr><th>Measurement</th><th>Theme</th><th class="right">Effect</th><th class="right">p<sub>adj</sub></th></tr>
     </thead>
@@ -5130,12 +5162,9 @@
         <tr><td>One Shot Rate</td><td>Behavior</td><td class="right mono">0.019</td><td class="right mono">0.7782</td></tr>
         <tr><td>Lines Added</td><td>Editing</td><td class="right mono">0.015</td><td class="right mono">0.3646</td></tr>
     </tbody>
-</table></div>
+</table>
 </details>
-<!-- /GENERATED-TABLE -->
-
-    </div>
-</details>
+<!-- /GENERATED-TABLE: findings-summary -->
 
                 <h3>Development Process</h3>
 
