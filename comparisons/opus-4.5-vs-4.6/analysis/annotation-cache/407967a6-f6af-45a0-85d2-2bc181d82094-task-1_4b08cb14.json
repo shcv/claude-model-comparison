@@ -1,0 +1,20 @@
+{
+  "task_type": "continuation",
+  "task_type_confidence": "high",
+  "user_sentiment": "neutral",
+  "sentiment_confidence": "high",
+  "execution_quality": "No execution occurred; the agent received a cut-off prompt and had no opportunity to respond or request clarification before the session ended.",
+  "work_category": "Incomplete task prompt received with truncated request, session terminated before any work could begin or be clarified.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "significant",
+  "task_completion": "failed",
+  "alignment_score": 1,
+  "summary": "The session received a truncated email categorization prompt that cut off mid-sentence without providing complete instructions or email content. No agent work was performed and the session terminated without clarification or follow-up, making task completion impossible.",
+  "follow_up_pattern": "Session ended abruptly; no follow-up expected without user re-engagement with a complete prompt.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "directed_impl",
+  "normalized_user_sentiment": "neutral"
+}

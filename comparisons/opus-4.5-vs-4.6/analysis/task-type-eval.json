@@ -1,0 +1,312 @@
+{
+  "unknown_results": [
+    {
+      "task_id": "25e16569-da87-4d69-b104-810a3a0bd9b1-task-2",
+      "regex_type": "unknown",
+      "llm_type": "continuation",
+      "confidence": "high",
+      "prompt": "yes, go ahead"
+    },
+    {
+      "task_id": "30b44fca-e1bd-4c65-bf18-acc851bf5265-task-2",
+      "regex_type": "unknown",
+      "llm_type": "sysadmin",
+      "confidence": "high",
+      "prompt": "I tried reconfiguring the system and rebooting, but there still seem to be issues"
+    },
+    {
+      "task_id": "60612c52-ae92-4a3d-af30-9f65e3f3c6c2-task-1",
+      "regex_type": "unknown",
+      "llm_type": "continuation",
+      "confidence": "high",
+      "prompt": "hi"
+    },
+    {
+      "task_id": "1c1b14a7-5feb-40cd-b00e-7615f674c5f4-task-17",
+      "regex_type": "unknown",
+      "llm_type": "continuation",
+      "confidence": "high",
+      "prompt": "dne"
+    },
+    {
+      "task_id": "ad860a90-153e-4802-9ca6-0b452729907f-task-97",
+      "regex_type": "unknown",
+      "llm_type": "continuation",
+      "confidence": "high",
+      "prompt": "Pre-fetching credentials for shcv@sdf.org...\nSending queued mail first...\nDecrypting /home/shcv/.password-store/mail/shcv@sdf.org.gpg...done\nDecrypting /home/shcv/.password-store/shcv@sdf.org.gpg...do"
+    },
+    {
+      "task_id": "ad860a90-153e-4802-9ca6-0b452729907f-task-48",
+      "regex_type": "unknown",
+      "llm_type": "sysadmin",
+      "confidence": "high",
+      "prompt": "let's set it up with gpg and whatever a standard is (does that risk hitting rate limits?)"
+    },
+    {
+      "task_id": "e3e937fa-3af7-48d2-9ddd-7a0b8bbc3a23-task-9",
+      "regex_type": "unknown",
+      "llm_type": "continuation",
+      "confidence": "high",
+      "prompt": "both asc files? what was the second one?"
+    },
+    {
+      "task_id": "f302c88c-ce99-4618-9686-cf46576ee90d-task-7",
+      "regex_type": "unknown",
+      "llm_type": "feature",
+      "confidence": "high",
+      "prompt": "can we get claude-coder to launch the cool-retro-term?"
+    },
+    {
+      "task_id": "d17b7411-7bbd-4df9-bbdd-da92dc201847-task-14",
+      "regex_type": "unknown",
+      "llm_type": "sysadmin",
+      "confidence": "high",
+      "prompt": "I did the reconfigure after interrupting. notify-send used dunst (though the theme is a bit ugly), but for some reason ssh isn't using my yubikey, just falling back to my old ssh key"
+    },
+    {
+      "task_id": "8c8b2e94-2137-45d6-b00e-9b5d30269083-task-14",
+      "regex_type": "unknown",
+      "llm_type": "investigation",
+      "confidence": "high",
+      "prompt": "that's what I meant; but I'm also curious why Guix's blender is so out of date"
+    },
+    {
+      "task_id": "ff310be8-104b-486c-a93a-1a78976512a8-task-15",
+      "regex_type": "unknown",
+      "llm_type": "feature",
+      "confidence": "high",
+      "prompt": "turns out that unsplash has switched to a full API; read the docs, store an org-mode summary in refs/, and then set it up so that we can securely use the app ID, access key, and secret key that I've c"
+    },
+    {
+      "task_id": "3c40e0e6-5fa8-45fe-b4f3-879558f23e70-task-18",
+      "regex_type": "unknown",
+      "llm_type": "continuation",
+      "confidence": "high",
+      "prompt": "no, that's fine"
+    },
+    {
+      "task_id": "8329ee3b-897b-4bd6-806b-5b3bd906aec4-task-12",
+      "regex_type": "unknown",
+      "llm_type": "bugfix",
+      "confidence": "high",
+      "prompt": "it says no route"
+    },
+    {
+      "task_id": "def28793-5246-4986-bf44-bf6190fb5ed8-task-7",
+      "regex_type": "unknown",
+      "llm_type": "continuation",
+      "confidence": "high",
+      "prompt": "done with 3"
+    },
+    {
+      "task_id": "571ee415-70bc-4d68-9401-32038dd2bb78-task-24",
+      "regex_type": "unknown",
+      "llm_type": "bugfix",
+      "confidence": "high",
+      "prompt": "Session ended.\nTraceback (most recent call last):\n  File \"/home/shcv/projects/eris/.venv/bin/eris\", line 8, in <module>\n    sys.exit(main())\n             ^^^^^^\n  File \"/home/shcv/projects/eris/src/er"
+    },
+    {
+      "task_id": "571ee415-70bc-4d68-9401-32038dd2bb78-task-9",
+      "regex_type": "unknown",
+      "llm_type": "investigation",
+      "confidence": "medium",
+      "prompt": "I'm not sure that's right - maybe we should show indicators for volume and wakeword detection?"
+    },
+    {
+      "task_id": "3c40e0e6-5fa8-45fe-b4f3-879558f23e70-task-32",
+      "regex_type": "unknown",
+      "llm_type": "continuation",
+      "confidence": "high",
+      "prompt": "hmm; I don't have fwupdmgr"
+    },
+    {
+      "task_id": "ad860a90-153e-4802-9ca6-0b452729907f-task-32",
+      "regex_type": "unknown",
+      "llm_type": "bugfix",
+      "confidence": "high",
+      "prompt": "it doesn't recognize that keyword; search?"
+    },
+    {
+      "task_id": "ad860a90-153e-4802-9ca6-0b452729907f-task-71",
+      "regex_type": "unknown",
+      "llm_type": "sysadmin",
+      "confidence": "high",
+      "prompt": "hmm; I had to subscribe to them from scratch, and now they aren't sorted in the right group?\n[ Gnus -- 1908 ]\n  [ Inbox -- 0 ]\n  [ Archive -- 0 ]\n  [ Junk -- 0 ]\n  [ Trash -- 0 ]\n  [ Drafts -- 1908 ]\n"
+    },
+    {
+      "task_id": "0e9b046a-382e-4a5f-baf5-6815732a07d2-task-4",
+      "regex_type": "unknown",
+      "llm_type": "continuation",
+      "confidence": "high",
+      "prompt": "<teammate-message teammate_id=\"prompts-dev\" color=\"yellow\">\n{\"type\":\"idle_notification\",\"from\":\"prompts-dev\",\"timestamp\":\"2026-01-30T16:33:49.015Z\"}\n</teammate-message>"
+    }
+  ],
+  "classified_results": [
+    {
+      "task_id": "674b0c5e-cd72-42f1-922d-44530740a82c-task-3",
+      "regex_type": "sysadmin",
+      "llm_type": "sysadmin",
+      "confidence": "high",
+      "agree": true,
+      "prompt": "run the full conformance suite against all implementations"
+    },
+    {
+      "task_id": "0d3b2f37-9939-4e07-b887-cadd1ccfb9a2-task-51",
+      "regex_type": "investigation",
+      "llm_type": "investigation",
+      "confidence": "high",
+      "agree": true,
+      "prompt": "is there a way to pip install all of the tags?"
+    },
+    {
+      "task_id": "a8f6d6aa-c312-4a19-8def-d767be60d355-task-3",
+      "regex_type": "investigation",
+      "llm_type": "investigation",
+      "confidence": "high",
+      "agree": true,
+      "prompt": "next, check that my publication history is up to date against my dblp page (https://dblp.uni-trier.de/pid/155/7907.html) and my advisor's publications page (https://www.csc2.ncsu.edu/faculty/mpsingh/p"
+    },
+    {
+      "task_id": "ad860a90-153e-4802-9ca6-0b452729907f-task-40",
+      "regex_type": "simple",
+      "llm_type": "sysadmin",
+      "confidence": "high",
+      "agree": false,
+      "prompt": "ok, let's do the incremental sync, and change the autoexpunge settings, assuming mbsync handles that correctly"
+    },
+    {
+      "task_id": "97e09cd8-a657-47f6-bcc4-ce4784246fc2-task-3",
+      "regex_type": "sysadmin",
+      "llm_type": "investigation",
+      "confidence": "high",
+      "agree": false,
+      "prompt": "<teammate-message teammate_id=\"changelog-comparator\" color=\"purple\" summary=\"v2.1.33 comparison: 75% miss rate, 13 unique finds\">\n## Changelog v2.1.33 Comparison: Our Generated vs Official\n\n### File M"
+    },
+    {
+      "task_id": "d8ad8b03-fc5d-485d-9681-2849865ce736-task-3",
+      "regex_type": "feature",
+      "llm_type": "feature",
+      "confidence": "high",
+      "agree": true,
+      "prompt": "the location view should be the same, with shared toggle state. In fact, let's replace the magnifying glass icon at the very top with the visibility toggle, so it can be a global state across all view"
+    },
+    {
+      "task_id": "2944a5e9-d9b2-45f7-a2f6-fcdae3e9fa94-task-2",
+      "regex_type": "investigation",
+      "llm_type": "investigation",
+      "confidence": "high",
+      "agree": true,
+      "prompt": "ok, first investigate the current fudge-comparison project - skim, set tasks for deeper analysis, use teammates - then plan some improvements for building a really solid report"
+    },
+    {
+      "task_id": "ff310be8-104b-486c-a93a-1a78976512a8-task-9",
+      "regex_type": "bugfix",
+      "llm_type": "bugfix",
+      "confidence": "high",
+      "agree": true,
+      "prompt": "Error 1 retrieving device properties for CPH2451:\nadb: device 'adb-b81bd2c9-cJF2vX' not found\n"
+    },
+    {
+      "task_id": "9b775410-bcd2-4ac8-adbe-eb19dd80552d-task-7",
+      "regex_type": "simple",
+      "llm_type": "feature",
+      "confidence": "high",
+      "agree": false,
+      "prompt": "ok; but can you get size estimates for those tasks as well, to figure out how many tools they needed to make a certain size change? I suspect that a lot of the fudge tasks were larger"
+    },
+    {
+      "task_id": "72465ca0-a202-4f3c-9a81-69d9133ff153-task-3",
+      "regex_type": "continuation",
+      "llm_type": "continuation",
+      "confidence": "high",
+      "agree": true,
+      "prompt": "continue"
+    },
+    {
+      "task_id": "91133340-ebcd-473e-a8ea-70f107979ce7-task-12",
+      "regex_type": "sysadmin",
+      "llm_type": "feature",
+      "confidence": "high",
+      "agree": false,
+      "prompt": "or we could just make the instant server a kind of batched server that finalizes instantly, so there is a separate notification it just isn't delayed long"
+    },
+    {
+      "task_id": "35b2c56a-48ba-455b-9a89-a91695da95f9-task-7",
+      "regex_type": "feature",
+      "llm_type": "feature",
+      "confidence": "high",
+      "agree": true,
+      "prompt": "ok; in theory we just simplified the simple/full agent implementations (they should just be peach agents with type-checking middleware, otherwise only aware of the langshaw version of the UCP).\nNow, I"
+    },
+    {
+      "task_id": "7947e9cd-f74c-4803-b34f-26c9832f6261-task-56",
+      "regex_type": "greenfield",
+      "llm_type": "investigation",
+      "confidence": "high",
+      "agree": false,
+      "prompt": "also, I'm concerned that the container pull takes ~2:23, but the previous version that just installed the tools only took ~1m to setup. Maybe our choice of ubuntu as the container base is too heavy? W"
+    },
+    {
+      "task_id": "285dda93-2e77-45a8-96fd-ddea1331e3e6-task-5",
+      "regex_type": "refactor",
+      "llm_type": "refactor",
+      "confidence": "high",
+      "agree": true,
+      "prompt": "1. let's reorganize and simplify a little bit further. First, let's cut down to just the proxy, simple, and full versions of both merchant and buyer. Then make it so the demo run script can select whi"
+    },
+    {
+      "task_id": "5c64b045-0ba8-444b-ac39-fe2de8f4c022-task-2",
+      "regex_type": "bugfix",
+      "llm_type": "feature",
+      "confidence": "high",
+      "agree": false,
+      "prompt": "Implement the following plan:\n\n# Plan: Config Persistence + Fix CRT Relaunch\n\n## Problems\n\n1. **Settings don't persist** \u2014 all in-game config changes (mode, speed, keys,\n   volume, effects, etc.) are "
+    },
+    {
+      "task_id": "e3e937fa-3af7-48d2-9ddd-7a0b8bbc3a23-task-94",
+      "regex_type": "continuation",
+      "llm_type": "feature",
+      "confidence": "high",
+      "agree": false,
+      "prompt": "yep; sounds good. write the package, test it, and then we'll work on deployment - I feel like there has to be a better way to remotely manage the other guix servers than ssh-ing to them and running sh"
+    },
+    {
+      "task_id": "2f649308-8fe9-4328-9e1f-8509765d2f80-task-16",
+      "regex_type": "simple",
+      "llm_type": "feature",
+      "confidence": "high",
+      "agree": false,
+      "prompt": "let's update the executive summary to highlight the most important findings"
+    },
+    {
+      "task_id": "fc731841-ac88-49d8-8fd9-5836ee15663f-task-5",
+      "regex_type": "feature",
+      "llm_type": "feature",
+      "confidence": "high",
+      "agree": true,
+      "prompt": "- add more dimensions, if there are things that the current analysis ignored\n- run the full data set\n- generate a nice report in org-mode"
+    },
+    {
+      "task_id": "c98c28da-011e-4006-adc3-458aa6cece12-task-27",
+      "regex_type": "greenfield",
+      "llm_type": "investigation",
+      "confidence": "high",
+      "agree": false,
+      "prompt": "hmm. We forgot to bump the version and build count. How can we update our processes to ensure that 1) the build number increments with every build (maybe a flutter op? won't work in CI without generat"
+    },
+    {
+      "task_id": "e3e937fa-3af7-48d2-9ddd-7a0b8bbc3a23-task-79",
+      "regex_type": "sysadmin",
+      "llm_type": "sysadmin",
+      "confidence": "high",
+      "agree": true,
+      "prompt": "ykman doesn't seem to be taking my pin; I wanted to turn touch back on"
+    }
+  ],
+  "summary": {
+    "unknown_sampled": 20,
+    "classified_sampled": 20,
+    "agreement_rate": 0.55,
+    "unknown_resolution_rate": 1.0
+  }
+}

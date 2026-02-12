@@ -1,0 +1,20 @@
+{
+  "task_type": "investigation",
+  "task_type_confidence": "high",
+  "user_sentiment": "neutral",
+  "sentiment_confidence": "low",
+  "execution_quality": "The agent provided no response or tool usage within 7 seconds, failing to engage with the question substantively.",
+  "work_category": "User asked a technical question about Emacs debugging workflow, seeking advice on disabling compiled file loading.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "one_shot",
+  "task_completion": "failed",
+  "alignment_score": 1,
+  "summary": "User asked a specific technical question about Emacs configuration, but the agent provided no response or investigation. The session terminated immediately, indicating complete misalignment with user intent.",
+  "follow_up_pattern": "Session ended without further user input, suggesting the user may have found the answer elsewhere or abandoned the inquiry.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "investigation",
+  "normalized_user_sentiment": "neutral"
+}

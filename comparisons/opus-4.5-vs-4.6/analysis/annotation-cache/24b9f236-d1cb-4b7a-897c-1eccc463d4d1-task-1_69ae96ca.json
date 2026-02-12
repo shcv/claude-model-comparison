@@ -1,0 +1,20 @@
+{
+  "task_type": "investigation",
+  "task_type_confidence": "high",
+  "user_sentiment": "neutral",
+  "sentiment_confidence": "high",
+  "execution_quality": "Task was interrupted before execution; agent received a complex multi-part prompt with interests in programming languages, distributed systems, and other areas but did not complete analysis before session ended.",
+  "work_category": "User requested a scoring analysis of academic papers based on detailed research interest criteria across multiple technical domains.",
+  "scope_management": "appropriate",
+  "communication_quality": "clear",
+  "error_recovery": "none_needed",
+  "iteration_required": "one_shot",
+  "task_completion": "failed",
+  "alignment_score": 1,
+  "summary": "User provided detailed paper scoring criteria with extensive interest taxonomy but the session terminated before agent could begin analysis. The incomplete prompt and immediate session end indicate the task was not completed.",
+  "follow_up_pattern": "Session ended immediately after request with no follow-up, suggesting either accidental termination or user decided to approach the task differently.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "failed",
+  "normalized_work_category": "investigation",
+  "normalized_user_sentiment": "neutral"
+}

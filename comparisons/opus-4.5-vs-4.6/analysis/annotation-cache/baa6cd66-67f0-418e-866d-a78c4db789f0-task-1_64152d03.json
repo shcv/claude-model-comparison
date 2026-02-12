@@ -1,0 +1,20 @@
+{
+  "task_type": "continuation",
+  "task_type_confidence": "high",
+  "user_sentiment": "neutral",
+  "sentiment_confidence": "low",
+  "execution_quality": "No work was performed; the agent received an incomplete prompt that was truncated mid-sentence before tool execution could begin.",
+  "work_category": "Incomplete email categorization request that was cut off mid-task definition, with no work performed.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "one_shot",
+  "task_completion": "failed",
+  "alignment_score": 1,
+  "summary": "Task request was incomplete and truncated mid-sentence, preventing the agent from understanding requirements or taking action. Session ended without clarification or retry, indicating the prompt was likely submitted prematurely or accidentally.",
+  "follow_up_pattern": "Session ended without any response or follow-up, suggesting either accidental submission or user navigating away.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "directed_impl",
+  "normalized_user_sentiment": "neutral"
+}

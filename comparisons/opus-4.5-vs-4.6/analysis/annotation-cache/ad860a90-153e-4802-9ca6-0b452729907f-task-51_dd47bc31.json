@@ -1,0 +1,20 @@
+{
+  "task_type": "sysadmin",
+  "task_type_confidence": "high",
+  "user_sentiment": "neutral",
+  "sentiment_confidence": "low",
+  "execution_quality": "Command executed with no output or errors; no indication of success or failure.",
+  "work_category": "User executed a bash command to authorize Microsoft account via oama CLI.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "one_shot",
+  "task_completion": "partial",
+  "alignment_score": 2,
+  "summary": "User executed a device authorization command for a Microsoft account but received no output or error messages, leaving status unclear.",
+  "follow_up_pattern": "Empty stdout/stderr suggests either silent success or the agent received no response from user.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "failed",
+  "normalized_work_category": "directed_impl",
+  "normalized_user_sentiment": "neutral"
+}

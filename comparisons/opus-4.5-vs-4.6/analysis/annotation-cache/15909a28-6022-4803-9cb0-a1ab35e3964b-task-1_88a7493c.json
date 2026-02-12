@@ -1,0 +1,20 @@
+{
+  "task_type": "bugfix",
+  "task_type_confidence": "high",
+  "user_sentiment": "frustrated",
+  "sentiment_confidence": "high",
+  "execution_quality": "Poor execution\u2014agent did not engage with the technical problem, made no tool calls, and provided no analysis or debugging steps.",
+  "work_category": "Debugging a Lisp error in emacs magit configuration. User provided partial source code and error traceback seeking assistance.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "significant",
+  "task_completion": "failed",
+  "alignment_score": 1,
+  "summary": "Agent received a clear Emacs Lisp debugging request with error traces and configuration context but produced no meaningful work\u2014zero tool calls or diagnostic steps. The non-response led user to provide clarifying information in the next message, indicating complete misalignment with the debugging task.",
+  "follow_up_pattern": "User provided additional error context and configuration details, indicating the original response was insufficient.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "poor",
+  "normalized_work_category": "investigation",
+  "normalized_user_sentiment": "dissatisfied"
+}

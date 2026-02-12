@@ -1,0 +1,20 @@
+{
+  "task_type": "sysadmin",
+  "task_type_confidence": "medium",
+  "user_sentiment": "confused or clarifying",
+  "sentiment_confidence": "low",
+  "execution_quality": "Quick search executed, though the minimal request context makes assessment difficult. Agent performed a bash search as requested.",
+  "work_category": "System search operation to locate or verify existence of a configuration or resource.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "significant",
+  "task_completion": "partial",
+  "alignment_score": 2,
+  "summary": "Very brief request for a search task was executed, but the follow-up question about reset codes suggests the user either didn't find what they needed or had a follow-up concern. The minimal context and immediate pivot indicate potential misalignment.",
+  "follow_up_pattern": "User immediately asked a different question about reset codes, suggesting either the search didn't answer their underlying need or they moved to a related concern.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "investigation",
+  "normalized_user_sentiment": "neutral"
+}

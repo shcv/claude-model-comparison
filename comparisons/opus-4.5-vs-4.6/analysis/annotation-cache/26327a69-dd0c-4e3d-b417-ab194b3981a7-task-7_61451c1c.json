@@ -1,0 +1,20 @@
+{
+  "task_type": "continuation",
+  "task_type_confidence": "high",
+  "user_sentiment": "unknown",
+  "sentiment_confidence": "low",
+  "execution_quality": "No meaningful work performed; agent received empty bash output with no task context.",
+  "work_category": "Empty bash output/stderr with no actionable content; likely residual system state or incomplete communication.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "one_shot",
+  "task_completion": "failed",
+  "alignment_score": 1,
+  "summary": "Task consisted of empty bash output with no actual instructions or context. The extended duration (212 seconds) suggests the agent may have waited for meaningful input or the user became unavailable, resulting in no productive work.",
+  "follow_up_pattern": "Session ended after prolonged idle period (212 seconds), suggesting waiting for completion or user absence.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "directed_impl",
+  "normalized_user_sentiment": "neutral"
+}

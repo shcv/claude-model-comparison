@@ -1,0 +1,20 @@
+{
+  "task_type": "investigation",
+  "task_type_confidence": "high",
+  "user_sentiment": "impatient/directive",
+  "sentiment_confidence": "high",
+  "execution_quality": "Agent responded in 6 seconds without tools. User's follow-up asking for search indicates agent did not perform web search.",
+  "work_category": "User asking agent to search for ykman package availability, as it doesn't exist locally.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "failed",
+  "iteration_required": "significant",
+  "task_completion": "partial",
+  "alignment_score": 2,
+  "summary": "User reported that ykman doesn't exist locally and asked agent to search for it. Agent did not perform the requested search action, requiring explicit clarification and escalation in subsequent interactions.",
+  "follow_up_pattern": "User explicitly requested search (implied web search) after agent's local guidance failed.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "investigation",
+  "normalized_user_sentiment": "neutral"
+}

@@ -1,0 +1,20 @@
+{
+  "task_type": "continuation",
+  "task_type_confidence": "high",
+  "user_sentiment": "neutral",
+  "sentiment_confidence": "low",
+  "execution_quality": "No work was performed; the agent maintained passive stance while user provided diagnostic information.",
+  "work_category": "User shared SSH debug output showing authentication failures, continuing to provide diagnostic context.",
+  "scope_management": "focused",
+  "communication_quality": "unclear",
+  "error_recovery": "none_needed",
+  "iteration_required": "one_shot",
+  "task_completion": "complete",
+  "alignment_score": 4,
+  "summary": "User provided SSH authentication debug logs showing failures without explicit problem statement. Agent appropriately awaited clarification rather than making assumptions about what help was needed.",
+  "follow_up_pattern": "User consolidated the scattered context into explicit problem statement in subsequent message.",
+  "autonomy_level": "low",
+  "normalized_execution_quality": "adequate",
+  "normalized_work_category": "investigation",
+  "normalized_user_sentiment": "neutral"
+}
