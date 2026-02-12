@@ -7,29 +7,29 @@
   },
   "tables": {
     "session-warmup": {
-      "title": "Warm-up Effects (inline)",
+      "title": "Warm-up Effects",
       "data_source": "sessions",
-      "row_gen": "session_warmup_inline"
+      "row_gen": "session_warmup"
     },
     "session-effort": {
-      "title": "Effort Distribution (inline)",
+      "title": "Effort Distribution",
       "data_source": "sessions",
-      "row_gen": "session_effort_inline"
+      "row_gen": "session_effort"
     },
     "session-length": {
-      "title": "Session Length Effects (inline)",
+      "title": "Session Length Effects",
       "data_source": "sessions",
-      "row_gen": "session_length_inline"
+      "row_gen": "session_length"
     },
     "duration-distribution": {
-      "title": "Task Duration Distribution (inline)",
+      "title": "Task Duration Distribution",
       "data_source": "overview",
-      "row_gen": "duration_distribution_inline"
+      "row_gen": "duration_distribution"
     },
     "idle-sensitivity": {
       "title": "Active-Time Cost by Idle Threshold",
       "data_source": "timing",
-      "row_gen": "idle_sensitivity_inline"
+      "row_gen": "idle_sensitivity"
     }
   },
   "prose": {

@@ -2,26 +2,43 @@
 <!-- GENERATED-TABLE -->
 <table>
     <thead>
-        <tr><th>Metric</th><th class="right">Opus 4.5</th><th class="right">Opus 4.6</th></tr>
+        <tr><th>Metric</th><th>Distribution</th><th class="right">4.5</th><th class="right">4.6</th></tr>
     </thead>
     <tbody>
-        <tr><td class="label-cell">Total edits + writes</td><td class="right mono">2,453 + 817</td><td class="right mono">1,166 + 363</td></tr>
-        <tr><td class="label-cell">Overlapping edits</td><td class="right mono">407 (16.6%)</td><td class="right mono">120 (10.3%)</td></tr>
-        <tr><td class="label-cell">&mdash; Exact match</td><td class="right mono">269 (66.1%)</td><td class="right mono">58 (48.3%)</td></tr>
-        <tr><td class="label-cell">&mdash; Containment</td><td class="right mono">51 (12.5%)</td><td class="right mono">14 (11.7%)</td></tr>
-        <tr><td class="label-cell">&mdash; Line overlap</td><td class="right mono">87 (21.4%)</td><td class="right mono">48 (40.0%)</td></tr>
-    </tbody>
-</table>
-<p>Classification of what drove the rework:</p>
-<table>
-    <thead>
-        <tr><th>Cause</th><th class="right">Opus 4.5</th><th class="right">Opus 4.6</th></tr>
-    </thead>
-    <tbody>
-        <tr><td class="label-cell">Self-correction</td><td class="right mono">47 (11.5%)</td><td class="right mono">38 (31.7%)</td></tr>
-        <tr><td class="label-cell">Error recovery</td><td class="right mono">64 (15.7%)</td><td class="right mono">18 (15.0%)</td></tr>
-        <tr><td class="label-cell">User-directed</td><td class="right mono">40 (9.8%)</td><td class="right mono">1 (0.8%)</td></tr>
-        <tr><td class="label-cell">Iterative refinement</td><td class="right mono">256 (62.9%)</td><td class="right mono">63 (52.5%)</td></tr>
+        <tr><td class="label-cell">Tasks with edits</td><td></td><td class="right mono">700</td><td class="right mono">246</td></tr>
+        <tr><td class="label-cell">Edit calls (rewrite rate denom.)</td><td></td><td class="right mono">2,453</td><td class="right mono">1,166</td></tr>
+        <tr><td class="label-cell">Rewrite rate</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:16.6%"></div><div class="bar-ci" style="left:15.2%;width:2.9%" title="95% CI: [15.2, 18.1]"></div></div><span class="bar-val">16.6%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:10.3%"></div><div class="bar-ci" style="left:8.7%;width:3.5%" title="95% CI: [8.7, 12.2]"></div></div><span class="bar-val">10.3%</span></div>
+            </div></td>
+            <td class="right mono">16.6%</td>
+            <td class="right mono">10.3%</td></tr>
+        <tr><td class="label-cell">Total overlapping edits</td><td></td><td class="right mono">407</td><td class="right mono">120</td></tr>
+        <tr><td class="label-cell">Self-corrections</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:11.5%"></div></div><span class="bar-val">11.5%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:31.7%"></div></div><span class="bar-val">31.7%</span></div>
+            </div></td>
+            <td class="right mono">47</td><td class="right mono">38</td></tr>
+        <tr><td class="label-cell">Error recovery</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:15.7%"></div></div><span class="bar-val">15.7%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:15.0%"></div></div><span class="bar-val">15.0%</span></div>
+            </div></td>
+            <td class="right mono">64</td><td class="right mono">18</td></tr>
+        <tr><td class="label-cell">User-directed corrections</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:9.8%"></div></div><span class="bar-val">9.8%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:0.8%"></div></div><span class="bar-val">0.8%</span></div>
+            </div></td>
+            <td class="right mono">40</td><td class="right mono">1</td></tr>
+        <tr><td class="label-cell">Iterative refinement</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:62.9%"></div></div><span class="bar-val">62.9%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:52.5%"></div></div><span class="bar-val">52.5%</span></div>
+            </div></td>
+            <td class="right mono">256</td><td class="right mono">63</td></tr>
     </tbody>
 </table>
 <!-- /GENERATED-TABLE -->

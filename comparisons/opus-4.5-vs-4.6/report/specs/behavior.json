@@ -7,24 +7,24 @@
   },
   "tables": {
     "behavior-adoption": {
-      "title": "Subagent & Planning Adoption (inline)",
+      "title": "Subagent & Planning Adoption",
       "data_source": "behavior",
-      "row_gen": "behavior_adoption_inline"
+      "row_gen": "behavior_adoption"
     },
     "behavior-subagent-types": {
-      "title": "Subagent Type Distribution (inline)",
+      "title": "Subagent Type Distribution",
       "data_source": "behavior",
-      "row_gen": "behavior_subagent_types_inline"
+      "row_gen": "behavior_subagent_types"
     },
     "planning-adoption": {
-      "title": "Planning Adoption (inline)",
+      "title": "Planning Adoption",
       "data_source": "planning",
-      "row_gen": "planning_adoption_inline"
+      "row_gen": "planning_adoption"
     },
     "planning-by-complexity": {
-      "title": "Planning by Complexity (inline)",
+      "title": "Planning by Complexity",
       "data_source": "planning",
-      "row_gen": "planning_by_complexity_inline"
+      "row_gen": "planning_by_complexity"
     }
   },
   "prose": {

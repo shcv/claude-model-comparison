@@ -14,14 +14,14 @@
       }
     },
     "quality-sentiment": {
-      "title": "Sentiment distribution (inline)",
+      "title": "Sentiment distribution",
       "data_source": "stats",
-      "row_gen": "quality_sentiment_inline"
+      "row_gen": "quality_sentiment"
     },
     "quality-completion": {
-      "title": "Completion distribution (inline)",
+      "title": "Completion distribution",
       "data_source": "stats",
-      "row_gen": "quality_completion_inline"
+      "row_gen": "quality_completion"
     }
   },
   "prose": {

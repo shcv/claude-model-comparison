@@ -190,6 +190,8 @@ LLM_PROMPT_TEMPLATE = """You are analyzing a Claude Code task interaction to pro
 Return a JSON object with exactly these fields:
 
 {{
+  "task_type": "investigation|bugfix|feature|greenfield|refactor|sysadmin|docs|continuation|port",
+  "task_type_confidence": "high|medium|low",
   "work_category": "1-2 sentence characterization of what kind of work this really was",
   "execution_quality": "1-2 sentence assessment of how well the task was executed",
   "user_sentiment": "inferred user sentiment based on next_user_message and outcome",
@@ -205,11 +207,23 @@ Return a JSON object with exactly these fields:
   "summary": "2-3 sentence overall summary combining all aspects"
 }}
 
+Task type definitions:
+- investigation: Research, exploration, understanding, reviewing code, "what is", "how does"
+- bugfix: Fixing errors, debugging, troubleshooting, "doesn't work", resolving issues
+- feature: Adding capability to existing code, enhancing, extending, integrating
+- greenfield: Creating something new from scratch, scaffolding, bootstrapping new projects
+- refactor: Restructuring existing code without changing behavior, cleanup, renaming
+- sysadmin: System administration, deployment, git operations, configuration, running tests
+- docs: Documentation, READMEs, comments, changelogs
+- continuation: Minimal response (ok, yes, go ahead), session handoff, approvals, not a real task
+- port: Migrating between technologies, converting formats
+
 Consider:
 - Empty next_user_message with session_end often indicates satisfaction for simple tasks
 - "sounds good" type messages indicate approval of prior work
 - Technical corrections may be refinement, not dissatisfaction
 - Questions in follow-up may indicate confusion or normal iteration
+- Very short prompts (<5 words) that aren't actionable should be "continuation"
 - scope_management: "focused"=minimal, "appropriate"=matched request, "expanded"=added useful extras, "over_engineered"=unnecessary complexity
 - alignment_score: 5=exactly what user wanted, 4=minor misalignment, 3=partially aligned, 2=significant gap, 1=missed intent
 
@@ -376,6 +390,47 @@ def get_prompt_hash(prompt):
     return hashlib.sha256(content.encode()).hexdigest()
 
 
+VALID_TASK_TYPES = {
+    "investigation", "bugfix", "feature", "greenfield", "refactor",
+    "sysadmin", "docs", "continuation", "port",
+}
+
+TASK_TYPE_PROMPT = """Classify this Claude Code task by its primary purpose. Choose exactly ONE from:
+- investigation: Research, exploration, understanding, "what is", "how does", reviewing code
+- bugfix: Fixing errors, debugging, resolving issues, "doesn't work", troubleshooting
+- feature: Adding capability to existing code, enhancing, extending, integrating
+- greenfield: Creating something new from scratch, scaffolding, bootstrapping
+- refactor: Restructuring existing code without changing behavior, renaming, cleanup
+- sysadmin: Git operations, deployment, configuration, running commands, testing
+- docs: Documentation, READMEs, comments, changelogs
+- continuation: Minimal response (ok, yes, go ahead), session handoff, not a real task
+- port: Migrating between technologies, converting formats
+
+Very short prompts (<5 words) that aren't actionable should be "continuation".
+
+**User prompt:** "{user_prompt}"
+**Tools used:** {tool_count}
+**Files touched:** {files_touched}
+
+Return ONLY a JSON object: {{"task_type": "<type>", "confidence": "high|medium|low"}}"""
+
+
+def classify_task_type_llm(task, llm_model="haiku"):
+    """Lightweight LLM call to classify task type only."""
+    prompt = TASK_TYPE_PROMPT.format(
+        user_prompt=task.get('user_prompt', '')[:500],
+        tool_count=len(task.get('tool_calls', [])),
+        files_touched=task.get('total_files_touched', 0),
+    )
+    result = call_llm(prompt, llm_model)
+    if result:
+        task_type = result.get('task_type', '').lower().strip()
+        confidence = result.get('confidence', 'medium')
+        if task_type in VALID_TASK_TYPES:
+            return task_type, confidence
+    return None, None
+
+
 def call_llm(prompt, llm_model="haiku"):
     """Call Claude via SDK and return parsed JSON dict, or None on failure."""
     try:
@@ -425,31 +480,8 @@ def normalize_llm_fields(llm_data):
     }
 
 
-def compute_llm_signals(task, cache_dir, llm_model, force):
-    """Get LLM signals for a task, using cache when available.
-
-    Returns dict with all LLM fields + normalized versions, or None on failure.
-    """
-    prompt = build_llm_prompt(task)
-    prompt_hash = get_prompt_hash(prompt)
-    task_id = task.get('task_id', 'unknown')
-
-    # Check cache
-    if cache_dir and not force:
-        cache_path = cache_dir / f"{task_id}_{prompt_hash[:8]}.json"
-        if cache_path.exists():
-            try:
-                with open(cache_path) as f:
-                    return json.load(f)
-            except Exception:
-                pass
-
-    # Call LLM
-    raw = call_llm(prompt, llm_model)
-    if raw is None:
-        return None
-
-    # Parse alignment_score as int
+def _extract_llm_signals(raw):
+    """Extract structured signals from raw LLM response dict."""
     alignment = raw.get('alignment_score', 3)
     if isinstance(alignment, str):
         try:
@@ -457,7 +489,15 @@ def compute_llm_signals(task, cache_dir, llm_model, force):
         except ValueError:
             alignment = 3
 
+    # Validate task_type
+    task_type = raw.get('task_type', '').lower().strip()
+    if task_type not in VALID_TASK_TYPES:
+        task_type = ''
+    task_type_confidence = raw.get('task_type_confidence', 'medium')
+
     llm_signals = {
+        'task_type': task_type,
+        'task_type_confidence': task_type_confidence,
         'user_sentiment': raw.get('user_sentiment', ''),
         'sentiment_confidence': raw.get('sentiment_confidence', 'low'),
         'execution_quality': raw.get('execution_quality', ''),
@@ -473,8 +513,57 @@ def compute_llm_signals(task, cache_dir, llm_model, force):
         'autonomy_level': raw.get('autonomy_level', 'medium'),
     }
 
-    # Add normalized fields
     llm_signals.update(normalize_llm_fields(llm_signals))
+    return llm_signals
+
+
+def compute_llm_signals(task, cache_dir, llm_model, force):
+    """Get LLM signals for a task, using cache when available.
+
+    Returns dict with all LLM fields + normalized versions, or None on failure.
+    If a cached result is missing task_type, a supplementary LLM call backfills it.
+    """
+    prompt = build_llm_prompt(task)
+    prompt_hash = get_prompt_hash(prompt)
+    task_id = task.get('task_id', 'unknown')
+
+    # Check cache — try exact hash match first, then any file for this task_id
+    if cache_dir and not force:
+        cache_path = cache_dir / f"{task_id}_{prompt_hash[:8]}.json"
+        if not cache_path.exists():
+            # Fall back to any cache file for this task_id (handles prompt changes)
+            candidates = list(cache_dir.glob(f"{task_id}_*.json"))
+            if candidates:
+                cache_path = candidates[0]
+        if cache_path.exists():
+            try:
+                with open(cache_path) as f:
+                    cached = json.load(f)
+                # Backfill task_type if missing from older cache entries
+                if not cached.get('task_type'):
+                    tt, ttc = classify_task_type_llm(task, llm_model)
+                    if tt:
+                        cached['task_type'] = tt
+                        cached['task_type_confidence'] = ttc
+                        with open(cache_path, 'w') as f:
+                            json.dump(cached, f, indent=2)
+                return cached
+            except Exception:
+                pass
+
+    # Call LLM (prompt now includes task_type in schema)
+    raw = call_llm(prompt, llm_model)
+    if raw is None:
+        return None
+
+    llm_signals = _extract_llm_signals(raw)
+
+    # If the LLM didn't return a valid task_type, try supplementary call
+    if not llm_signals.get('task_type'):
+        tt, ttc = classify_task_type_llm(task, llm_model)
+        if tt:
+            llm_signals['task_type'] = tt
+            llm_signals['task_type_confidence'] = ttc
 
     # Cache
     if cache_dir:
@@ -553,6 +642,8 @@ def aggregate_signals(task, keyword_signals, edit_signals, llm_signals, complexi
         result['sentiment_confidence'] = 'low'
         result['execution_quality'] = ''
         result['work_category'] = ''
+        result['task_type'] = ''
+        result['task_type_confidence'] = 'low'
 
     # --- Aggregation adjustments ---
 
@@ -612,6 +703,8 @@ Return a JSON array with one object per task, in the same order as presented. Ea
 
 {{
   "task_id": "the task ID",
+  "task_type": "investigation|bugfix|feature|greenfield|refactor|sysadmin|docs|continuation|port",
+  "task_type_confidence": "high|medium|low",
   "work_category": "1-2 sentence characterization",
   "execution_quality": "1-2 sentence assessment",
   "user_sentiment": "inferred sentiment",
@@ -626,6 +719,8 @@ Return a JSON array with one object per task, in the same order as presented. Ea
   "alignment_score": "1-5 integer",
   "summary": "2-3 sentence overall summary"
 }}
+
+Task type: investigation=research/exploration, bugfix=fixing errors, feature=adding capability, greenfield=new from scratch, refactor=restructuring, sysadmin=config/deployment/git, docs=documentation, continuation=minimal response/approval, port=migration.
 
 {tasks_block}
 
@@ -654,10 +749,22 @@ def call_llm_batch(tasks, cache_dir, llm_model, force):
         cached_result = None
         if cache_dir and not force:
             cache_path = cache_dir / f"{task_id}_{prompt_hash[:8]}.json"
+            if not cache_path.exists():
+                candidates = list(cache_dir.glob(f"{task_id}_*.json"))
+                if candidates:
+                    cache_path = candidates[0]
             if cache_path.exists():
                 try:
                     with open(cache_path) as f:
                         cached_result = json.load(f)
+                    # Backfill task_type if missing from older cache entries
+                    if cached_result and not cached_result.get('task_type'):
+                        tt, ttc = classify_task_type_llm(task, llm_model)
+                        if tt:
+                            cached_result['task_type'] = tt
+                            cached_result['task_type_confidence'] = ttc
+                            with open(cache_path, 'w') as f:
+                                json.dump(cached_result, f, indent=2)
                 except Exception:
                     pass
         all_cached.append(cached_result)
@@ -699,29 +806,7 @@ def call_llm_batch(tasks, cache_dir, llm_model, force):
         for j, i in enumerate(uncached_indices):
             if j < len(parsed):
                 raw = parsed[j]
-                alignment = raw.get('alignment_score', 3)
-                if isinstance(alignment, str):
-                    try:
-                        alignment = int(alignment)
-                    except ValueError:
-                        alignment = 3
-
-                llm_signals = {
-                    'user_sentiment': raw.get('user_sentiment', ''),
-                    'sentiment_confidence': raw.get('sentiment_confidence', 'low'),
-                    'execution_quality': raw.get('execution_quality', ''),
-                    'work_category': raw.get('work_category', ''),
-                    'scope_management': raw.get('scope_management', 'appropriate'),
-                    'communication_quality': raw.get('communication_quality', 'adequate'),
-                    'error_recovery': raw.get('error_recovery', 'none_needed'),
-                    'iteration_required': raw.get('iteration_required', 'one_shot'),
-                    'task_completion': raw.get('task_completion', 'complete'),
-                    'alignment_score': alignment,
-                    'summary': raw.get('summary', ''),
-                    'follow_up_pattern': raw.get('follow_up_pattern', ''),
-                    'autonomy_level': raw.get('autonomy_level', 'medium'),
-                }
-                llm_signals.update(normalize_llm_fields(llm_signals))
+                llm_signals = _extract_llm_signals(raw)
 
                 # Cache individual result
                 if cache_dir:
@@ -802,6 +887,8 @@ def to_llm_analysis_compat(annotated):
         'normalized_execution_quality': annotated.get('normalized_execution_quality', 'adequate'),
         'normalized_work_category': annotated.get('normalized_work_category', 'directed_impl'),
         'normalized_user_sentiment': annotated.get('normalized_user_sentiment', 'neutral'),
+        'task_type': annotated.get('task_type', ''),
+        'task_type_confidence': annotated.get('task_type_confidence', ''),
     }
 
 
@@ -831,6 +918,8 @@ def print_summary(annotated_tasks, model):
             bar = '#' * int(pct / 2)
             print(f"    {key:<20} {count:3d} ({pct:5.1f}%) {bar}")
 
+    dist('task_type', ['investigation', 'bugfix', 'feature', 'greenfield', 'refactor',
+                       'sysadmin', 'docs', 'continuation', 'port'])
     dist('normalized_user_sentiment', ['satisfied', 'neutral', 'dissatisfied', 'ambiguous'])
     dist('normalized_execution_quality', ['excellent', 'good', 'adequate', 'poor', 'failed'])
     dist('task_completion', ['complete', 'partial', 'interrupted', 'failed'])
@@ -1009,6 +1098,27 @@ def main():
         print(f"Wrote backward-compatible {compat_file}")
 
         print_summary(annotated, model)
+
+        # Reconcile: update classified tasks with LLM task_type
+        if classified_file.exists():
+            annotated_types = {t['task_id']: t for t in annotated if t.get('task_type')}
+            with open(classified_file) as f:
+                classified_tasks = json.load(f)
+            updated = 0
+            for ct in classified_tasks:
+                tid = ct.get('task_id')
+                ann = annotated_types.get(tid)
+                if ann and ann.get('task_type'):
+                    cls = ct.setdefault('classification', {})
+                    cls['llm_type'] = ann['task_type']
+                    cls['llm_type_confidence'] = ann.get('task_type_confidence', '')
+                    # Override regex type with LLM type for medium/high confidence
+                    if ann.get('task_type_confidence') in ('medium', 'high'):
+                        cls['type'] = ann['task_type']
+                    updated += 1
+            with open(classified_file, 'w') as f:
+                json.dump(classified_tasks, f, indent=2)
+            print(f"Reconciled {updated}/{len(classified_tasks)} classified tasks with LLM task_type")
 
     print(f"\n{'='*60}")
     print("Annotation complete.")

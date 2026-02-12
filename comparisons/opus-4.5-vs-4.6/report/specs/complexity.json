@@ -6,19 +6,19 @@
   },
   "tables": {
     "complexity-distribution": {
-      "title": "Task Distribution by Complexity (inline)",
+      "title": "Task Distribution by Complexity",
       "data_source": "stats",
-      "row_gen": "complexity_distribution_inline"
+      "row_gen": "complexity_distribution"
     },
     "complexity-resources": {
-      "title": "Resource Usage (inline)",
+      "title": "Resource Usage",
       "data_source": "dataset",
-      "row_gen": "complexity_resources_inline"
+      "row_gen": "complexity_resources"
     },
     "complexity-scope": {
       "title": "Task Scope by Complexity",
       "data_source": "dataset",
-      "row_gen": "complexity_scope_inline"
+      "row_gen": "complexity_scope"
     }
   },
   "prose": {

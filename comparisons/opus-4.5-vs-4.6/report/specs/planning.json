@@ -5,38 +5,94 @@
   },
   "tables": {
     "planning-adoption": {
-      "title": "Planning Adoption (inline)",
+      "title": "Planning Adoption",
       "data_source": "planning",
-      "row_gen": "planning_adoption_inline"
+      "row_gen": "planning_adoption"
     },
     "planning-by-complexity": {
-      "title": "Planning by Complexity (inline)",
+      "title": "Planning by Complexity",
       "data_source": "planning",
-      "row_gen": "planning_by_complexity_inline"
+      "row_gen": "planning_by_complexity"
     },
     "planning-complexity-detail": {
       "title": "Planning alignment by complexity bin",
       "data_source": "planning",
       "row_gen": "planning_complexity",
       "row_source": "by_complexity",
-      "row_order": ["trivial", "simple", "moderate", "complex+"],
+      "row_order": [
+        "trivial",
+        "simple",
+        "moderate",
+        "complex+"
+      ],
       "multi_header": [
-        {"header": "", "colspan": 1},
-        {"header": "Opus {display_a}", "colspan": 3, "class": "right"},
-        {"header": "Opus {display_b}", "colspan": 3, "class": "right"}
+        {
+          "header": "",
+          "colspan": 1
+        },
+        {
+          "header": "Opus {display_a}",
+          "colspan": 3,
+          "class": "right"
+        },
+        {
+          "header": "Opus {display_b}",
+          "colspan": 3,
+          "class": "right"
+        }
       ],
       "columns": [
-        {"header": "Complexity", "key": "_label", "cell_class": "label-cell"},
-        {"header": "Planned", "path": "planning.{model_a}.by_complexity.{row_key}.alignment_planned", "format": "dash_if_none", "class": "right", "cell_class": "right mono",
-         "_with_n": "planning.{model_a}.by_complexity.{row_key}.n_scored_planned"},
-        {"header": "Unplanned", "path": "planning.{model_a}.by_complexity.{row_key}.alignment_unplanned", "format": "{:.2f}", "class": "right", "cell_class": "right mono",
-         "_with_n": "planning.{model_a}.by_complexity.{row_key}.n_scored_unplanned"},
-        {"header": "&Delta;", "path": "planning.{model_a}.by_complexity.{row_key}.alignment_delta", "format": "delta", "class": "right", "cell_class": "right mono"},
-        {"header": "Planned", "path": "planning.{model_b}.by_complexity.{row_key}.alignment_planned", "format": "dash_if_none", "class": "right", "cell_class": "right mono",
-         "_with_n": "planning.{model_b}.by_complexity.{row_key}.n_scored_planned"},
-        {"header": "Unplanned", "path": "planning.{model_b}.by_complexity.{row_key}.alignment_unplanned", "format": "{:.2f}", "class": "right", "cell_class": "right mono",
-         "_with_n": "planning.{model_b}.by_complexity.{row_key}.n_scored_unplanned"},
-        {"header": "&Delta;", "path": "planning.{model_b}.by_complexity.{row_key}.alignment_delta", "format": "delta", "class": "right", "cell_class": "right mono"}
+        {
+          "header": "Complexity",
+          "key": "_label",
+          "cell_class": "label-cell"
+        },
+        {
+          "header": "Planned",
+          "path": "planning.{model_a}.by_complexity.{row_key}.alignment_planned",
+          "format": "dash_if_none",
+          "class": "right",
+          "cell_class": "right mono",
+          "_with_n": "planning.{model_a}.by_complexity.{row_key}.n_scored_planned"
+        },
+        {
+          "header": "Unplanned",
+          "path": "planning.{model_a}.by_complexity.{row_key}.alignment_unplanned",
+          "format": "{:.2f}",
+          "class": "right",
+          "cell_class": "right mono",
+          "_with_n": "planning.{model_a}.by_complexity.{row_key}.n_scored_unplanned"
+        },
+        {
+          "header": "&Delta;",
+          "path": "planning.{model_a}.by_complexity.{row_key}.alignment_delta",
+          "format": "delta",
+          "class": "right",
+          "cell_class": "right mono"
+        },
+        {
+          "header": "Planned",
+          "path": "planning.{model_b}.by_complexity.{row_key}.alignment_planned",
+          "format": "dash_if_none",
+          "class": "right",
+          "cell_class": "right mono",
+          "_with_n": "planning.{model_b}.by_complexity.{row_key}.n_scored_planned"
+        },
+        {
+          "header": "Unplanned",
+          "path": "planning.{model_b}.by_complexity.{row_key}.alignment_unplanned",
+          "format": "{:.2f}",
+          "class": "right",
+          "cell_class": "right mono",
+          "_with_n": "planning.{model_b}.by_complexity.{row_key}.n_scored_unplanned"
+        },
+        {
+          "header": "&Delta;",
+          "path": "planning.{model_b}.by_complexity.{row_key}.alignment_delta",
+          "format": "delta",
+          "class": "right",
+          "cell_class": "right mono"
+        }
       ],
       "prose": {
         "guidance": "Discuss planning alignment by complexity. Note very small sample sizes for planned tasks. The moderate bin is the most reliable indicator. Opus 4.6 shows consistently positive deltas."

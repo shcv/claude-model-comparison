@@ -3,7 +3,7 @@
 Task Classification for Model Comparison
 
 Categorizes tasks by:
-1. Purpose/Type: sysadmin, simple, bugfix, feature, greenfield, port, refactor, investigation, docs
+1. Purpose/Type: investigation, bugfix, feature, greenfield, refactor, sysadmin, docs, continuation, port
 2. Complexity: trivial, simple, moderate, complex, major
 3. Domain: frontend, backend, devops, data, mixed
 """
@@ -84,10 +84,6 @@ TYPE_PATTERNS = {
     'docs': [
         r'\b(document|readme|comment|docstring|jsdoc|explain in|write up|changelog)\b',
         r'\b(update docs|add documentation)\b',
-    ],
-    'simple': [
-        r'\b(quick|small|minor|tweak|adjust|change|update|modify)\b',
-        r'^(just|can you just|please)\b',
     ],
 }
 
@@ -266,7 +262,7 @@ Lines added/removed: {task.get('total_lines_added', 0)}/{task.get('total_lines_r
 Duration: {task.get('duration_seconds', 0):.0f}s
 
 Categories:
-- Type: investigation, bugfix, refactor, port, greenfield, feature, sysadmin, docs, simple
+- Type: investigation, bugfix, refactor, port, greenfield, feature, sysadmin, docs, continuation
 - Complexity: trivial, simple, moderate, complex, major
 - Domain: frontend, backend, devops, data, docs, mixed, unknown
 

@@ -8,17 +8,75 @@
       "title": "Token breakdown by complexity level",
       "data_source": "tokens",
       "row_source": "by_complexity",
-      "row_order": ["trivial", "simple", "moderate", "complex", "major"],
+      "row_order": [
+        "trivial",
+        "simple",
+        "moderate",
+        "complex",
+        "major"
+      ],
       "columns": [
-        {"header": "Complexity", "key": "_label", "cell_class": "label-cell"},
-        {"header": "{display_a} output/task", "path": "tokens.{model_a}.by_complexity.{row_key}.avg_output_tokens", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
-        {"header": "{display_b} output/task", "path": "tokens.{model_b}.by_complexity.{row_key}.avg_output_tokens", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
-        {"header": "{display_a} thinking chars", "path": "tokens.{model_a}.by_complexity.{row_key}.avg_thinking_chars_when_used", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
-        {"header": "{display_b} thinking chars", "path": "tokens.{model_b}.by_complexity.{row_key}.avg_thinking_chars_when_used", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
-        {"header": "{display_a} input/task", "path": "tokens.{model_a}.by_complexity.{row_key}.avg_input_tokens", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
-        {"header": "{display_b} input/task", "path": "tokens.{model_b}.by_complexity.{row_key}.avg_input_tokens", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
-        {"header": "{display_a} requests", "path": "tokens.{model_a}.by_complexity.{row_key}.avg_requests_per_task", "format": "{:.1f}", "class": "right", "cell_class": "right mono"},
-        {"header": "{display_b} requests", "path": "tokens.{model_b}.by_complexity.{row_key}.avg_requests_per_task", "format": "{:.1f}", "class": "right", "cell_class": "right mono"}
+        {
+          "header": "Complexity",
+          "key": "_label",
+          "cell_class": "label-cell"
+        },
+        {
+          "header": "{display_a} output/task",
+          "path": "tokens.{model_a}.by_complexity.{row_key}.avg_output_tokens",
+          "format": "{:,.0f}",
+          "class": "right",
+          "cell_class": "right mono"
+        },
+        {
+          "header": "{display_b} output/task",
+          "path": "tokens.{model_b}.by_complexity.{row_key}.avg_output_tokens",
+          "format": "{:,.0f}",
+          "class": "right",
+          "cell_class": "right mono"
+        },
+        {
+          "header": "{display_a} thinking chars",
+          "path": "tokens.{model_a}.by_complexity.{row_key}.avg_thinking_chars_when_used",
+          "format": "{:,.0f}",
+          "class": "right",
+          "cell_class": "right mono"
+        },
+        {
+          "header": "{display_b} thinking chars",
+          "path": "tokens.{model_b}.by_complexity.{row_key}.avg_thinking_chars_when_used",
+          "format": "{:,.0f}",
+          "class": "right",
+          "cell_class": "right mono"
+        },
+        {
+          "header": "{display_a} input/task",
+          "path": "tokens.{model_a}.by_complexity.{row_key}.avg_input_tokens",
+          "format": "{:,.0f}",
+          "class": "right",
+          "cell_class": "right mono"
+        },
+        {
+          "header": "{display_b} input/task",
+          "path": "tokens.{model_b}.by_complexity.{row_key}.avg_input_tokens",
+          "format": "{:,.0f}",
+          "class": "right",
+          "cell_class": "right mono"
+        },
+        {
+          "header": "{display_a} requests",
+          "path": "tokens.{model_a}.by_complexity.{row_key}.avg_requests_per_task",
+          "format": "{:.1f}",
+          "class": "right",
+          "cell_class": "right mono"
+        },
+        {
+          "header": "{display_b} requests",
+          "path": "tokens.{model_b}.by_complexity.{row_key}.avg_requests_per_task",
+          "format": "{:.1f}",
+          "class": "right",
+          "cell_class": "right mono"
+        }
       ],
       "prose": {
         "guidance": "Explain token breakdown patterns: output volume differences, thinking depth, input savings from caching, request batching efficiency."
@@ -28,39 +86,87 @@
       "title": "Thinking depth by complexity",
       "data_source": "tokens",
       "row_source": "by_complexity",
-      "row_order": ["trivial", "simple", "moderate", "complex", "major"],
+      "row_order": [
+        "trivial",
+        "simple",
+        "moderate",
+        "complex",
+        "major"
+      ],
       "columns": [
-        {"header": "Complexity", "key": "_label", "cell_class": "label-cell"},
-        {"header": "{display_a} Thinking Chars (when used)", "path": "tokens.{model_a}.by_complexity.{row_key}.avg_thinking_chars_when_used", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
-        {"header": "{display_b} Thinking Chars (when used)", "path": "tokens.{model_b}.by_complexity.{row_key}.avg_thinking_chars_when_used", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
-        {"header": "{display_a} Text Chars", "path": "tokens.{model_a}.by_complexity.{row_key}.avg_text_chars", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
-        {"header": "{display_b} Text Chars", "path": "tokens.{model_b}.by_complexity.{row_key}.avg_text_chars", "format": "{:,.0f}", "class": "right", "cell_class": "right mono"},
-        {"header": "{display_a} Think/Text", "numerator": "tokens.{model_a}.by_complexity.{row_key}.avg_thinking_chars_when_used", "denominator": "tokens.{model_a}.by_complexity.{row_key}.avg_text_chars", "format": "{:.2f}", "class": "right", "cell_class": "right mono"},
-        {"header": "{display_b} Think/Text", "numerator": "tokens.{model_b}.by_complexity.{row_key}.avg_thinking_chars_when_used", "denominator": "tokens.{model_b}.by_complexity.{row_key}.avg_text_chars", "format": "{:.2f}", "class": "right", "cell_class": "right mono"}
+        {
+          "header": "Complexity",
+          "key": "_label",
+          "cell_class": "label-cell"
+        },
+        {
+          "header": "{display_a} Thinking Chars (when used)",
+          "path": "tokens.{model_a}.by_complexity.{row_key}.avg_thinking_chars_when_used",
+          "format": "{:,.0f}",
+          "class": "right",
+          "cell_class": "right mono"
+        },
+        {
+          "header": "{display_b} Thinking Chars (when used)",
+          "path": "tokens.{model_b}.by_complexity.{row_key}.avg_thinking_chars_when_used",
+          "format": "{:,.0f}",
+          "class": "right",
+          "cell_class": "right mono"
+        },
+        {
+          "header": "{display_a} Text Chars",
+          "path": "tokens.{model_a}.by_complexity.{row_key}.avg_text_chars",
+          "format": "{:,.0f}",
+          "class": "right",
+          "cell_class": "right mono"
+        },
+        {
+          "header": "{display_b} Text Chars",
+          "path": "tokens.{model_b}.by_complexity.{row_key}.avg_text_chars",
+          "format": "{:,.0f}",
+          "class": "right",
+          "cell_class": "right mono"
+        },
+        {
+          "header": "{display_a} Think/Text",
+          "numerator": "tokens.{model_a}.by_complexity.{row_key}.avg_thinking_chars_when_used",
+          "denominator": "tokens.{model_a}.by_complexity.{row_key}.avg_text_chars",
+          "format": "{:.2f}",
+          "class": "right",
+          "cell_class": "right mono"
+        },
+        {
+          "header": "{display_b} Think/Text",
+          "numerator": "tokens.{model_b}.by_complexity.{row_key}.avg_thinking_chars_when_used",
+          "denominator": "tokens.{model_b}.by_complexity.{row_key}.avg_text_chars",
+          "format": "{:.2f}",
+          "class": "right",
+          "cell_class": "right mono"
+        }
       ],
       "prose": {
         "guidance": "Explain thinking calibration differences: how 4.6 reserves thinking for complex tasks while being more concise on trivial ones. Note the steeper gradient in thinking allocation."
       }
     },
     "per-request-output": {
-      "title": "Per-request output by complexity (inline)",
+      "title": "Per-request output by complexity",
       "data_source": "tokens",
-      "row_gen": "per_request_output_inline"
+      "row_gen": "per_request_output"
     },
     "cost-verbosity-by-type": {
-      "title": "Output verbosity by task type (inline)",
+      "title": "Output verbosity by task type",
       "data_source": "tokens",
-      "row_gen": "verbosity_by_type_inline"
+      "row_gen": "verbosity_by_type"
     },
     "cost-by-complexity-inline": {
-      "title": "Cost by complexity (inline)",
+      "title": "Cost by complexity",
       "data_source": "tokens",
-      "row_gen": "cost_by_complexity_inline"
+      "row_gen": "cost_by_complexity"
     },
     "cost-cache-efficiency": {
       "title": "Cache Efficiency by Complexity",
       "data_source": "tokens",
-      "row_gen": "cache_efficiency_inline"
+      "row_gen": "cache_efficiency"
     }
   },
   "prose": {

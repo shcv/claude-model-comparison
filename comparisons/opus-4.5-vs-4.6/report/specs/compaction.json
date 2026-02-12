@@ -5,14 +5,14 @@
   },
   "tables": {
     "compaction-overview": {
-      "title": "Compaction Overview (inline)",
+      "title": "Compaction Overview",
       "data_source": "compaction",
-      "row_gen": "compaction_overview_inline"
+      "row_gen": "compaction_overview"
     },
     "compaction-impact": {
-      "title": "Compaction Outcome Impact (inline)",
+      "title": "Compaction Outcome Impact",
       "data_source": "compaction",
-      "row_gen": "compaction_impact_inline"
+      "row_gen": "compaction_impact"
     },
     "compaction-outcomes": {
       "title": "Pre/post compaction outcome data",

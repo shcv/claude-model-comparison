@@ -446,6 +446,10 @@
                 <div class="meta">Samuel H. Christie V &middot; February 2026 &middot; Claude Code Early Access Program</div>
             </header>
 
+            <div class="callout" style="border-left:3px solid var(--orange); margin-bottom:1.5rem;">
+                <strong>AI-assisted analysis:</strong> This report was generated with substantial assistance from Claude (Opus 4.6). All statistical computations, table generation, and report assembly are automated, but prose was drafted and reviewed with LLM assistance. Numbers are computed from data; interpretive claims may contain inaccuracies. Additionally, all data comes from a single user&rsquo;s workflow over a limited time period&mdash;treat all findings as anecdotal observations, not generalizable conclusions.
+            </div>
+
             <!-- ===== EXECUTIVE SUMMARY ===== -->
             <section>
                 <h2>Executive Summary</h2>
@@ -453,13 +457,13 @@
                 <div class="stat-row">
                     <div class="stat-card">
                         <div class="label">Per-Task Cost</div>
-                        <div class="value v-dark"><!-- var: cost.avg_cost_a -->$2.46<!-- /var --> vs <!-- var: cost.avg_cost_b -->$2.63<!-- /var --></div>
+                        <div class="value v-dark"><!-- var: cost.avg_cost_a -->$2.46<!-- /var --> vs <!-- var: cost.avg_cost_b -->$2.62<!-- /var --></div>
                         <div class="detail">4.6 saves 10&ndash;35% at trivial-moderate; +29% at major (&sect;2)</div>
                     </div>
                     <div class="stat-card">
                         <div class="label">Output Token Ratio</div>
                         <div class="value v-blue">2.4&times;</div>
-                        <div class="detail">4.6: <!-- var: cost.avg_output_b -->2,243<!-- /var --> avg vs 4.5: <!-- var: cost.avg_output_a -->953<!-- /var --> avg</div>
+                        <div class="detail">4.6: <!-- var: cost.avg_output_b -->2,240<!-- /var --> avg vs 4.5: <!-- var: cost.avg_output_a -->953<!-- /var --> avg</div>
                     </div>
                     <div class="stat-card">
                         <div class="label">Tool Calls / Task</div>
@@ -468,8 +472,8 @@
                     </div>
                     <div class="stat-card">
                         <div class="label">Bonferroni Survivors</div>
-                        <div class="value v-dark">103 / 529</div>
-                        <div class="detail">103 tests survive across overall and per-complexity strata (including tool calls, tools/file, alignment, duration, completion, communication, autonomy)</div>
+                        <div class="value v-dark">93 / 529</div>
+                        <div class="detail">93 tests survive across overall and per-complexity strata (including tool calls, tools/file, alignment, duration, completion, communication, autonomy)</div>
                     </div>
                 </div>
 
@@ -477,7 +481,7 @@
                     <strong>Study design note:</strong> This is a single-user observational study with non-random task assignment. Opus 4.5 data spans 2 months across 30 projects (<!-- var: dataset.tasks_a -->1,729<!-- /var --> tasks); Opus 4.6 spans 8 days across 14 projects (<!-- var: dataset.tasks_b -->591<!-- /var --> tasks). Differences may reflect the user, project mix, or time period rather than model capabilities. All findings should be treated as hypotheses for future testing.
                 </div>
 
-                <p>Observed patterns suggest the two models work differently at comparable success rates. Opus 4.6 uses more tool calls, deploys subagents that are 74% read-only Explore agents, and plans 8&times; more often. The single largest effect is thinking fraction (d=<!-- var: thinking.effect_d -->0.67<!-- /var -->, &sect;3): 4.6 thinks less often but more deeply, reserving thinking for moderate+ complexity. Of <!-- var: findings.total_tests -->529<!-- /var --> statistical tests with Bonferroni correction, <!-- var: findings.bonferroni_significant -->103<!-- /var --> survive&mdash;mostly about <em>how</em> each model works (tool usage, distributions), not <em>whether</em> they succeed. The data is consistent with a tentative characterization: Opus 4.5 acts first and adjusts, while Opus 4.6 investigates first and implements in concentrated bursts. The confounded study design means this framing is a hypothesis, not a conclusion. The analysis was iterative&mdash;several initial findings were revised or reversed when more direct signals became available (<a href="#methodology">&sect;10</a>).</p>
+                <p>Observed patterns suggest the two models work differently at comparable success rates. Opus 4.6 uses more tool calls, deploys subagents that are 74% read-only Explore agents, and plans 8&times; more often. The single largest effect is thinking fraction (d=<!-- var: thinking.effect_d -->0.67<!-- /var -->, &sect;3): 4.6 thinks less often but more deeply, reserving thinking for moderate+ complexity. Of <!-- var: findings.total_tests -->529<!-- /var --> statistical tests with Bonferroni correction, <!-- var: findings.bonferroni_significant -->93<!-- /var --> survive&mdash;mostly about <em>how</em> each model works (tool usage, distributions), not <em>whether</em> they succeed. The data is consistent with a tentative characterization: Opus 4.5 acts first and adjusts, while Opus 4.6 investigates first and implements in concentrated bursts. The confounded study design means this framing is a hypothesis, not a conclusion. The analysis was iterative&mdash;several initial findings were revised or reversed when more direct signals became available (<a href="#methodology">&sect;10</a>).</p>
 
                 <p>The report is organized in ten sections: token economics (&sect;2), thinking calibration (&sect;3), behavioral patterns (&sect;4), quality implications (&sect;5&ndash;6), resource scaling (&sect;7), session dynamics (&sect;8), model profiles (&sect;9), and methodology (&sect;10).</p>
             </section>
@@ -490,7 +494,7 @@
                     <li><a href="#cost">Token Economy &amp; Cost</a><span class="finding">4.6 10&ndash;35% cheaper trivial&ndash;moderate despite 2.4&times; output</span></li>
                     <li><a href="#thinking">Thinking &amp; Calibration</a><span class="finding">d=<!-- var: thinking.effect_d -->0.67<!-- /var --> LARGE effect, #1 of <!-- var: findings.total_tests -->529<!-- /var --> tests</span></li>
                     <li><a href="#behavior">Behavioral Patterns</a><span class="finding">8&times; planning; 74% read-only Explore; effort front-loading</span></li>
-                    <li><a href="#quality">Quality &amp; Satisfaction</a><span class="finding">Alignment survives Bonferroni; 4.6 fails less (8.5% vs 14.1%)</span></li>
+                    <li><a href="#quality">Quality &amp; Satisfaction</a><span class="finding">Alignment survives Bonferroni; 4.6 fails less (8.5% vs 13.2%)</span></li>
                     <li><a href="#edits">Edit Accuracy</a><span class="finding">4.6 rewrites 10.3% vs 16.6%</span></li>
                     <li><a href="#complexity">Complexity &amp; Resource Usage</a><span class="finding">Tool calls strongest signal (p&lt;0.000003)</span></li>
                     <li><a href="#sessions">Session Dynamics</a><span class="finding">2.2&times; explore phase; compaction preserves not degrades</span></li>
@@ -540,18 +544,18 @@
 <!-- ===== 2. TOKEN ECONOMY &amp; COST ===== -->
             <section id="cost"><h2>2. Token Economy &amp; Cost</h2>
 
-                <p>Opus 4.6 costs 7% more per task on average (<!-- var: cost.avg_cost_b -->$2.63<!-- /var --> vs <!-- var: cost.avg_cost_a -->$2.46<!-- /var -->), despite producing 2.4&times; more output tokens and making more API round-trips (9.6 vs 7.5 requests/task). But this aggregate masks a complexity-dependent pattern: at trivial through moderate levels, 4.6 is 10&ndash;35% <em>cheaper</em>, likely because its session structure yields better within-session prompt caching (cache TTL is 5 minutes). The cost advantage reverses at complex and major tiers, where 4.6&rsquo;s heavier tool usage outweighs caching gains.</p>
+                <p>Opus 4.6 costs 7% more per task on average (<!-- var: cost.avg_cost_b -->$2.62<!-- /var --> vs <!-- var: cost.avg_cost_a -->$2.46<!-- /var -->), despite producing 2.4&times; more output tokens and making more API round-trips (9.6 vs 7.5 requests/task). But this aggregate masks a complexity-dependent pattern: at trivial through moderate levels, 4.6 is 10&ndash;35% <em>cheaper</em>, likely because its session structure yields better within-session prompt caching (cache TTL is 5 minutes). The cost advantage reverses at complex and major tiers, where 4.6&rsquo;s heavier tool usage outweighs caching gains.</p>
 
                 <div class="stat-row">
                     <div class="stat-card">
                         <div class="label">Per-Task Cost</div>
-                        <div class="value v-dark"><!-- var: cost.avg_cost_a -->$2.46<!-- /var --> vs <!-- var: cost.avg_cost_b -->$2.63<!-- /var --></div>
+                        <div class="value v-dark"><!-- var: cost.avg_cost_a -->$2.46<!-- /var --> vs <!-- var: cost.avg_cost_b -->$2.62<!-- /var --></div>
                         <div class="detail">4.6 is 7% more expensive overall; cheaper at trivial&ndash;moderate</div>
                     </div>
                     <div class="stat-card">
                         <div class="label">Output Token Ratio</div>
                         <div class="value v-blue">2.4&times;</div>
-                        <div class="detail">4.6 produces <!-- var: cost.avg_output_b -->2,243<!-- /var --> vs <!-- var: cost.avg_output_a -->953<!-- /var --> avg tokens</div>
+                        <div class="detail">4.6 produces <!-- var: cost.avg_output_b -->2,240<!-- /var --> vs <!-- var: cost.avg_output_a -->953<!-- /var --> avg tokens</div>
                     </div>
                     <div class="stat-card">
                         <div class="label">Per-Request Output</div>
@@ -568,71 +572,59 @@
         <tr><th>Task Type</th><th>Output Comparison</th><th class="right">4.5 avg</th><th class="right">4.6 avg</th><th class="right">4.6/4.5</th></tr>
     </thead>
     <tbody>
-        <tr><td class="label-cell">Greenfield</td>
-            <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:17.5%"></div><div class="bar-ci" style="left:9.3%;width:18.5%" title="95% CI: [974.8, 2915.9]"></div></div><span class="bar-val">1,839</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:70.3%"></div><div class="bar-ci" style="left:43.5%;width:56.5%" title="95% CI: [4566.0, 10506.5]"></div></div><span class="bar-val">7,389</span></div>
-            </div></td>
-            <td class="right mono">1,839</td><td class="right mono">7,389</td><td class="right mono v-blue">4.0&times;</td></tr>
-        <tr><td class="label-cell">Refactor</td>
-            <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:12.5%"></div><div class="bar-ci" style="left:6.8%;width:12.6%" title="95% CI: [713.7, 2038.3]"></div></div><span class="bar-val">1,310</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:54.0%"></div><div class="bar-ci" style="left:31.3%;width:48.9%" title="95% CI: [3284.5, 8417.1]"></div></div><span class="bar-val">5,670</span></div>
-            </div></td>
-            <td class="right mono">1,310</td><td class="right mono">5,670</td><td class="right mono v-blue">4.3&times;</td></tr>
-        <tr><td class="label-cell">Bugfix</td>
-            <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:7.9%"></div><div class="bar-ci" style="left:4.2%;width:8.7%" title="95% CI: [439.3, 1353.5]"></div></div><span class="bar-val">825</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:41.0%"></div><div class="bar-ci" style="left:22.1%;width:43.8%" title="95% CI: [2320.8, 6922.5]"></div></div><span class="bar-val">4,311</span></div>
-            </div></td>
-            <td class="right mono">825</td><td class="right mono">4,311</td><td class="right mono v-blue">5.2&times;</td></tr>
         <tr><td class="label-cell">Feature</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:15.8%"></div><div class="bar-ci" style="left:9.4%;width:14.5%" title="95% CI: [983.4, 2510.1]"></div></div><span class="bar-val">1,664</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:30.3%"></div><div class="bar-ci" style="left:17.9%;width:27.8%" title="95% CI: [1883.8, 4805.3]"></div></div><span class="bar-val">3,184</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:17.6%"></div><div class="bar-ci" style="left:13.0%;width:10.0%" title="95% CI: [2115.3, 3744.1]"></div></div><span class="bar-val">2,876</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:41.7%"></div><div class="bar-ci" style="left:31.7%;width:21.9%" title="95% CI: [5170.6, 8754.1]"></div></div><span class="bar-val">6,817</span></div>
             </div></td>
-            <td class="right mono">1,664</td><td class="right mono">3,184</td><td class="right mono">1.9&times;</td></tr>
+            <td class="right mono">2,876</td><td class="right mono">6,817</td><td class="right mono v-blue">2.4&times;</td></tr>
+        <tr><td class="label-cell">Refactor</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:18.0%"></div><div class="bar-ci" style="left:7.4%;width:24.0%" title="95% CI: [1201.2, 5123.9]"></div></div><span class="bar-val">2,936</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:48.4%"></div><div class="bar-ci" style="left:31.4%;width:34.6%" title="95% CI: [5134.0, 10778.5]"></div></div><span class="bar-val">7,908</span></div>
+            </div></td>
+            <td class="right mono">2,936</td><td class="right mono">7,908</td><td class="right mono v-blue">2.7&times;</td></tr>
+        <tr><td class="label-cell">Greenfield</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:22.7%"></div><div class="bar-ci" style="left:4.3%;width:40.1%" title="95% CI: [697.8, 7242.8]"></div></div><span class="bar-val">3,703</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:63.4%"></div><div class="bar-ci" style="left:29.4%;width:70.6%" title="95% CI: [4805.5, 16331.5]"></div></div><span class="bar-val">10,359</span></div>
+            </div></td>
+            <td class="right mono">3,703</td><td class="right mono">10,359</td><td class="right mono v-blue">2.8&times;</td></tr>
+        <tr><td class="label-cell">Bugfix</td>
+            <td class="bar-cell"><div class="bar-pair">
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:7.6%"></div><div class="bar-ci" style="left:5.7%;width:4.2%" title="95% CI: [924.3, 1609.0]"></div></div><span class="bar-val">1,245</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:22.4%"></div><div class="bar-ci" style="left:14.0%;width:17.8%" title="95% CI: [2288.0, 5187.4]"></div></div><span class="bar-val">3,665</span></div>
+            </div></td>
+            <td class="right mono">1,245</td><td class="right mono">3,665</td><td class="right mono v-blue">2.9&times;</td></tr>
         <tr><td class="label-cell">Investigation</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:9.7%"></div><div class="bar-ci" style="left:7.4%;width:5.0%" title="95% CI: [776.1, 1298.4]"></div></div><span class="bar-val">1,024</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:23.0%"></div><div class="bar-ci" style="left:16.8%;width:13.7%" title="95% CI: [1766.3, 3208.5]"></div></div><span class="bar-val">2,415</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:3.8%"></div><div class="bar-ci" style="left:2.7%;width:2.3%" title="95% CI: [440.9, 823.8]"></div></div><span class="bar-val">621</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:8.8%"></div><div class="bar-ci" style="left:5.8%;width:6.9%" title="95% CI: [944.3, 2070.1]"></div></div><span class="bar-val">1,439</span></div>
             </div></td>
-            <td class="right mono">1,024</td><td class="right mono">2,415</td><td class="right mono v-blue">2.4&times;</td></tr>
-        <tr><td class="label-cell">Port</td>
-            <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:23.4%"></div><div class="bar-ci" style="left:6.9%;width:37.9%" title="95% CI: [726.1, 4712.9]"></div></div><span class="bar-val">2,460</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:32.8%"></div><div class="bar-ci" style="left:12.2%;width:43.9%" title="95% CI: [1284.5, 5892.9]"></div></div><span class="bar-val">3,443</span></div>
-            </div></td>
-            <td class="right mono">2,460</td><td class="right mono">3,443</td><td class="right mono">1.4&times;</td></tr>
+            <td class="right mono">621</td><td class="right mono">1,439</td><td class="right mono v-blue">2.3&times;</td></tr>
         <tr><td class="label-cell">Continuation</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:12.1%"></div><div class="bar-ci" style="left:3.8%;width:19.2%" title="95% CI: [394.1, 2406.4]"></div></div><span class="bar-val">1,272</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:22.2%"></div><div class="bar-ci" style="left:9.8%;width:29.8%" title="95% CI: [1030.9, 4165.1]"></div></div><span class="bar-val">2,329</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:3.2%"></div><div class="bar-ci" style="left:2.3%;width:1.8%" title="95% CI: [375.5, 677.5]"></div></div><span class="bar-val">521</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:7.0%"></div><div class="bar-ci" style="left:4.9%;width:4.8%" title="95% CI: [801.8, 1578.1]"></div></div><span class="bar-val">1,150</span></div>
             </div></td>
-            <td class="right mono">1,272</td><td class="right mono">2,329</td><td class="right mono">1.8&times;</td></tr>
-        <tr><td class="label-cell">Simple</td>
-            <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:11.4%"></div><div class="bar-ci" style="left:3.6%;width:17.2%" title="95% CI: [373.2, 2176.1]"></div></div><span class="bar-val">1,202</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:31.7%"></div><div class="bar-ci" style="left:5.2%;width:57.5%" title="95% CI: [547.4, 6584.9]"></div></div><span class="bar-val">3,335</span></div>
-            </div></td>
-            <td class="right mono">1,202</td><td class="right mono">3,335</td><td class="right mono v-blue">2.8&times;</td></tr>
+            <td class="right mono">521</td><td class="right mono">1,150</td><td class="right mono v-blue">2.2&times;</td></tr>
         <tr><td class="label-cell">Sysadmin</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:5.7%"></div><div class="bar-ci" style="left:3.1%;width:5.9%" title="95% CI: [330.4, 947.6]"></div></div><span class="bar-val">595</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:8.1%"></div><div class="bar-ci" style="left:5.0%;width:7.3%" title="95% CI: [520.6, 1288.9]"></div></div><span class="bar-val">852</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:2.6%"></div><div class="bar-ci" style="left:1.7%;width:1.8%" title="95% CI: [284.3, 580.4]"></div></div><span class="bar-val">418</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:5.8%"></div><div class="bar-ci" style="left:3.8%;width:4.7%" title="95% CI: [617.6, 1382.9]"></div></div><span class="bar-val">945</span></div>
             </div></td>
-            <td class="right mono">595</td><td class="right mono">852</td><td class="right mono">1.4&times;</td></tr>
+            <td class="right mono">418</td><td class="right mono">945</td><td class="right mono v-blue">2.3&times;</td></tr>
         <tr><td class="label-cell">Docs</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:3.2%"></div><div class="bar-ci" style="left:2.1%;width:2.3%" title="95% CI: [218.3, 460.5]"></div></div><span class="bar-val">331</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:6.3%"></div><div class="bar-ci" style="left:2.4%;width:8.5%" title="95% CI: [253.6, 1142.2]"></div></div><span class="bar-val">659</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:5.1%"></div><div class="bar-ci" style="left:3.3%;width:4.0%" title="95% CI: [540.8, 1201.0]"></div></div><span class="bar-val">832</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:4.1%"></div><div class="bar-ci" style="left:1.5%;width:5.4%" title="95% CI: [248.9, 1131.4]"></div></div><span class="bar-val">665</span></div>
             </div></td>
-            <td class="right mono">331</td><td class="right mono">659</td><td class="right mono">2.0&times;</td></tr>
+            <td class="right mono">832</td><td class="right mono">665</td><td class="right mono">0.8&times;</td></tr>
     </tbody>
 </table>
 <!-- /GENERATED-TABLE: cost-verbosity-by-type -->
 
-                <p>The 4.3&times; ratio for refactoring is notable: Opus 4.6 produces substantially more output tokens for refactoring tasks, suggesting more thorough changes. For continuation tasks (follow-ups within a session), Opus 4.6 produces 1.8&times; the output volume of Opus 4.5.</p>
+                <p>The 2.7&times; ratio for refactoring is notable: Opus 4.6 produces substantially more output tokens for refactoring tasks, suggesting more thorough changes. For continuation tasks (follow-ups within a session), Opus 4.6 produces 2.2&times; the output volume of Opus 4.5.</p>
 
                 <h3>Cost by Complexity</h3>
 
@@ -844,64 +836,52 @@
     <tbody>
         <tr><td class="label-cell">Greenfield</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:40.7%"></div></div><span class="bar-val">3,068</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100.0%"></div></div><span class="bar-val">7,536</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:31.5%"></div></div><span class="bar-val">2,857</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:98.1%"></div></div><span class="bar-val">8,888</span></div>
             </div></td>
-            <td class="right mono">3,068</td><td class="right mono">7,536</td><td class="right mono v-blue">2.5&times;</td></tr>
+            <td class="right mono">2,857</td><td class="right mono">8,888</td><td class="right mono v-blue">3.1&times;</td></tr>
         <tr><td class="label-cell">Refactor</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:45.0%"></div></div><span class="bar-val">3,390</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:74.6%"></div></div><span class="bar-val">5,620</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:52.9%"></div></div><span class="bar-val">4,789</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:100.0%"></div></div><span class="bar-val">9,061</span></div>
             </div></td>
-            <td class="right mono">3,390</td><td class="right mono">5,620</td><td class="right mono v-blue">1.7&times;</td></tr>
+            <td class="right mono">4,789</td><td class="right mono">9,061</td><td class="right mono v-blue">1.9&times;</td></tr>
         <tr><td class="label-cell">Bugfix</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:37.5%"></div></div><span class="bar-val">2,829</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:90.3%"></div></div><span class="bar-val">6,805</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:35.7%"></div></div><span class="bar-val">3,238</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:46.2%"></div></div><span class="bar-val">4,188</span></div>
             </div></td>
-            <td class="right mono">2,829</td><td class="right mono">6,805</td><td class="right mono v-blue">2.4&times;</td></tr>
+            <td class="right mono">3,238</td><td class="right mono">4,188</td><td class="right mono">1.3&times;</td></tr>
         <tr><td class="label-cell">Feature</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:37.7%"></div></div><span class="bar-val">2,840</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:67.6%"></div></div><span class="bar-val">5,093</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:46.9%"></div></div><span class="bar-val">4,254</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:71.6%"></div></div><span class="bar-val">6,487</span></div>
             </div></td>
-            <td class="right mono">2,840</td><td class="right mono">5,093</td><td class="right mono v-blue">1.8&times;</td></tr>
+            <td class="right mono">4,254</td><td class="right mono">6,487</td><td class="right mono v-blue">1.5&times;</td></tr>
         <tr><td class="label-cell">Investigation</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:36.4%"></div></div><span class="bar-val">2,741</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:32.1%"></div></div><span class="bar-val">2,416</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:26.8%"></div></div><span class="bar-val">2,432</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:28.5%"></div></div><span class="bar-val">2,578</span></div>
             </div></td>
-            <td class="right mono">2,741</td><td class="right mono">2,416</td><td class="right mono">0.9&times;</td></tr>
+            <td class="right mono">2,432</td><td class="right mono">2,578</td><td class="right mono">1.1&times;</td></tr>
         <tr><td class="label-cell">Sysadmin</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:20.8%"></div></div><span class="bar-val">1,567</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:27.4%"></div></div><span class="bar-val">2,065</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:16.2%"></div></div><span class="bar-val">1,466</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:23.6%"></div></div><span class="bar-val">2,137</span></div>
             </div></td>
-            <td class="right mono">1,567</td><td class="right mono">2,065</td><td class="right mono">1.3&times;</td></tr>
+            <td class="right mono">1,466</td><td class="right mono">2,137</td><td class="right mono">1.5&times;</td></tr>
         <tr><td class="label-cell">Continuation</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:23.4%"></div></div><span class="bar-val">1,763</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:32.0%"></div></div><span class="bar-val">2,411</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:18.0%"></div></div><span class="bar-val">1,635</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:20.7%"></div></div><span class="bar-val">1,872</span></div>
             </div></td>
-            <td class="right mono">1,763</td><td class="right mono">2,411</td><td class="right mono">1.4&times;</td></tr>
+            <td class="right mono">1,635</td><td class="right mono">1,872</td><td class="right mono">1.1&times;</td></tr>
         <tr><td class="label-cell">Docs</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:22.2%"></div></div><span class="bar-val">1,674</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:85.7%"></div></div><span class="bar-val">6,459</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:21.5%"></div></div><span class="bar-val">1,949</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:56.4%"></div></div><span class="bar-val">5,110</span></div>
             </div></td>
-            <td class="right mono">1,674</td><td class="right mono">6,459</td><td class="right mono v-blue">3.9&times;</td></tr>
-        <tr><td class="label-cell">Port</td>
-            <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:43.9%"></div></div><span class="bar-val">3,307</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:92.5%"></div></div><span class="bar-val">6,974</span></div>
-            </div></td>
-            <td class="right mono">3,307</td><td class="right mono">6,974</td><td class="right mono v-blue">2.1&times;</td></tr>
-        <tr><td class="label-cell">Simple</td>
-            <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:20.5%"></div></div><span class="bar-val">1,547</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:59.8%"></div></div><span class="bar-val">4,506</span></div>
-            </div></td>
-            <td class="right mono">1,547</td><td class="right mono">4,506</td><td class="right mono v-blue">2.9&times;</td></tr>
+            <td class="right mono">1,949</td><td class="right mono">5,110</td><td class="right mono v-blue">2.6&times;</td></tr>
     </tbody>
 </table>
 <!-- /GENERATED-TABLE: thinking-depth-by-type -->
@@ -920,7 +900,25 @@
             <section id="behavior">
                 <h2>4. Behavioral Patterns</h2>
 
-                <p>Beyond token economics, the models differ in <em>how</em> they approach tasks. Opus 4.6 plans more often (13.9% vs 1.7% of tasks), deploys more subagents, and favors read-only exploration over general-purpose workers. These behavioral differences are among the most visible in the dataset, though the Claude Code platform itself evolved between the two collection periods&mdash;some of the shift may reflect SDK changes rather than model decisions.</p>
+                <div class="stat-row">
+                    <div class="stat-card">
+                        <div class="label">Planning Adoption</div>
+                        <div class="value v-blue">8&times;</div>
+                        <div class="detail"><!-- var: planning.rate_b -->13.9<!-- /var -->% vs <!-- var: planning.rate_a -->1.7<!-- /var -->% of tasks</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Explore Subagents</div>
+                        <div class="value v-dark">74% vs 47%</div>
+                        <div class="detail">4.6 favors read-only exploration</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Autonomy Level</div>
+                        <div class="value v-green">Bonferroni</div>
+                        <div class="detail">Distribution survives correction (V=0.15)</div>
+                    </div>
+                </div>
+
+                <p>Beyond token economics, the models differ in <em>how</em> they approach tasks. Opus 4.6 plans more often (<!-- var: planning.rate_b -->13.9<!-- /var -->% vs <!-- var: planning.rate_a -->1.7<!-- /var -->% of tasks), deploys more subagents, and favors read-only exploration over general-purpose workers. These behavioral differences are among the most visible in the dataset, though the Claude Code platform itself evolved between the two collection periods&mdash;some of the shift may reflect SDK changes rather than model decisions.</p>
 
                 <div class="legend">
                     <span><span class="dot dot-a"></span> Opus 4.5</span>
@@ -1136,13 +1134,13 @@
                 <div class="stat-row">
                     <div class="stat-card">
                         <div class="label">Failed Rate</div>
-                        <div class="value v-green">8.5% vs 14.1%</div>
-                        <div class="detail">4.6 fails less often (p&lt;0.001)</div>
+                        <div class="value v-green">8.5% vs 13.2%</div>
+                        <div class="detail">4.6 fails less often (p=0.002)</div>
                     </div>
                     <div class="stat-card">
                         <div class="label">Alignment Score</div>
-                        <div class="value v-blue">d=<!-- var: quality.alignment_d -->-0.24<!-- /var --></div>
-                        <div class="detail">4.6 higher (p=<!-- var: quality.alignment_p -->0.000001<!-- /var -->, Bonferroni)</div>
+                        <div class="value v-blue">d=<!-- var: quality.alignment_d -->-0.21<!-- /var --></div>
+                        <div class="detail">4.6 higher (p=<!-- var: quality.alignment_p -->0.000023<!-- /var -->, Bonferroni)</div>
                     </div>
                     <div class="stat-card">
                         <div class="label">Quality Survivors</div>
@@ -1151,9 +1149,9 @@
                     </div>
                 </div>
 
-                <p>LLM-annotated alignment scores (1&ndash;5 scale) show Opus 4.6 scoring higher on average, an effect that survives Bonferroni correction (p=<!-- var: quality.alignment_p -->0.000001<!-- /var -->, d=<!-- var: quality.alignment_d -->-0.24<!-- /var -->). The failed rate difference is also notable: 8.5% of 4.6 tasks fail vs 14.1% for 4.5 (p&lt;0.001, marginal after Bonferroni correction). Both alignment and failure rate are LLM-classified&mdash;a Claude Haiku model reads each session transcript and assigns scores. The &ldquo;LLM quality judgement&rdquo; approach was abandoned as unreliable (see <a href="#methodology">&sect;10</a>), but alignment scoring proved more robust because it rates user-goal correspondence from observable signals rather than attempting to judge code quality directly.</p>
+                <p>LLM-annotated alignment scores (1&ndash;5 scale) show Opus 4.6 scoring higher on average, an effect that survives Bonferroni correction (p=<!-- var: quality.alignment_p -->0.000023<!-- /var -->, d=<!-- var: quality.alignment_d -->-0.21<!-- /var -->). The failed rate difference is also notable: 8.5% of 4.6 tasks fail vs 13.2% for 4.5 (p=0.002, marginal after Bonferroni correction). Both alignment and failure rate are LLM-classified&mdash;a Claude Haiku model reads each session transcript and assigns scores. The &ldquo;LLM quality judgement&rdquo; approach was abandoned as unreliable (see <a href="#methodology">&sect;10</a>), but alignment scoring proved more robust because it rates user-goal correspondence from observable signals rather than attempting to judge code quality directly.</p>
 
-                <p>Two categorical distributions&mdash;task completion and communication quality&mdash;also survive Bonferroni as chi-square tests, indicating the models differ in <em>how</em> they reach outcomes, not just in outcome rates. Note that the completion <em>distribution</em> test (p&lt;0.000003) survives, while the individual completion <em>rate</em> proportion test (p=0.0046) is marginal. All chi-square tests carry a low-expected-cell-count warning due to rare categories in the 20-status taxonomy.</p>
+                <p>Two categorical distributions&mdash;task completion and communication quality&mdash;also survive Bonferroni as chi-square tests, indicating the models differ in <em>how</em> they reach outcomes, not just in outcome rates. Note that the completion <em>distribution</em> test (p=0.000012) survives, while the individual completion <em>rate</em> proportion test (p=0.025) is marginal. All chi-square tests carry a low-expected-cell-count warning due to rare categories in the 20-status taxonomy.</p>
 
                 <h3>Completion Distribution</h3>
 <!-- GENERATED-TABLE: quality-completion -->
@@ -1244,7 +1242,7 @@
                 <h3>Cross-Cut Detail</h3>
                 <!-- expand: findings-quality -->
 
-                <p>Quality metrics paint a consistent-but-modest picture: 4.6 fails less and scores higher on alignment, but effect sizes are small (d=0.24) and the LLM-classification methodology adds a layer of uncertainty. The next section asks whether these quality differences manifest in the editing process itself.</p>
+                <p>Quality metrics paint a consistent-but-modest picture: 4.6 fails less and scores higher on alignment, but effect sizes are small (d=0.21) and the LLM-classification methodology adds a layer of uncertainty. The next section asks whether these quality differences manifest in the editing process itself.</p>
             </section>
 
             <!-- ===== 6. EDIT ACCURACY ===== -->
@@ -1334,6 +1332,24 @@
             <!-- ===== 7. COMPLEXITY &amp; RESOURCE USAGE ===== -->
             <section id="complexity">
                 <h2>7. Complexity &amp; Resource Usage</h2>
+
+                <div class="stat-row">
+                    <div class="stat-card">
+                        <div class="label">Tool Calls / Task</div>
+                        <div class="value v-blue">16.3 vs 10.4</div>
+                        <div class="detail">Strongest signal (p&lt;0.000001, d=0.29)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Complexity Mix</div>
+                        <div class="value v-dark">42% vs 33%</div>
+                        <div class="detail">4.6 has more moderate-and-above tasks</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Lines Added</div>
+                        <div class="value v-dark">109 vs 103</div>
+                        <div class="detail">Only +6% despite 57% more tool calls</div>
+                    </div>
+                </div>
 
                 <div class="legend">
                     <span><span class="dot dot-a"></span> Opus 4.5</span>
@@ -1528,7 +1544,7 @@
                         <p><strong>Subagents:</strong> 47% Explore, 37% general-purpose (implementation workers). Primarily autonomous (54%).</p>
                         <p><strong>Planning:</strong> Rarely uses planning mode (1.7%). Distributes research evenly through the task (&sect;4).</p>
                         <p><strong>Observed strengths:</strong> Lower tool overhead (mean 8.8 calls/task). 28&ndash;35% cheaper at trivial-simple (&sect;2). Stable performance across session lengths (&sect;8).</p>
-                        <p><strong>Observed weaknesses:</strong> Higher rewrite rate (16.6%, &sect;6). Higher failure rate (14.1% vs 8.5%, &sect;5).</p>
+                        <p><strong>Observed weaknesses:</strong> Higher rewrite rate (16.6%, &sect;6). Higher failure rate (13.2% vs 8.5%, &sect;5).</p>
                     </div>
                     <div class="profile-card" style="border-left:3px solid var(--blue);">
                         <div class="label" style="color:var(--blue); font-family:'Poppins',sans-serif; font-size:0.65rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em;">Opus 4.6 &mdash; Observed Pattern</div>
@@ -1549,7 +1565,7 @@
                     <tbody>
                         <tr><td class="label-cell">Trivial / simple tasks</td><td>Similar completion rates</td><td>4.6 appears 28&ndash;35% cheaper (&sect;2); n=808/213 and 345/129</td></tr>
                         <tr><td class="label-cell">Complex / major tasks</td><td>4.6 showed higher alignment</td><td>n=74+18 for 4.6 vs 190+19 for 4.5; confounded by project differences</td></tr>
-                        <tr><td class="label-cell">Refactoring</td><td>4.6 produced 4.3&times; output tokens</td><td>5,670 vs 1,310 avg output (&sect;2); lower rewrite rate (&sect;6)</td></tr>
+                        <tr><td class="label-cell">Refactoring</td><td>4.6 produced 2.7&times; output tokens</td><td>7,908 vs 2,936 avg output (&sect;2); lower rewrite rate (&sect;6)</td></tr>
                         <tr><td class="label-cell">Investigation / research</td><td>4.6 used more Explore agents</td><td>74% read-only subagents (&sect;4); 2.2&times; longer explore phase (&sect;8)</td></tr>
                         <tr><td class="label-cell">Long sessions (9+ tasks)</td><td>Both show some degradation</td><td>Small sample for late-session tasks; 4.6 may degrade faster</td></tr>
                         <tr><td class="label-cell">Parallel execution</td><td>4.6 backgrounded more tasks</td><td>4.5 spawned more agents but ran them sequentially</td></tr>
@@ -1600,8 +1616,8 @@
                         </tr>
                         <tr>
                             <td class="label-cell">Task type</td>
-                            <td><strong>investigation</strong>, <strong>bugfix</strong>, <strong>feature</strong>, <strong>greenfield</strong>, <strong>refactor</strong>, <strong>sysadmin</strong></td>
-                            <td>Regex pattern matching on the user&rsquo;s initial request. First match wins from an ordered pattern list. Default: &ldquo;unknown&rdquo;.</td>
+                            <td><strong>investigation</strong>, <strong>bugfix</strong>, <strong>feature</strong>, <strong>greenfield</strong>, <strong>refactor</strong>, <strong>sysadmin</strong>, <strong>docs</strong>, <strong>continuation</strong>, <strong>port</strong></td>
+                            <td>LLM-classified (Haiku) from user prompt, tool usage, and work summary. Regex pattern matching provides initial signal; LLM classification overrides at medium/high confidence, resolving previously &ldquo;unknown&rdquo; tasks (32.6% of dataset). Eval: 100% unknown resolution, LLM agrees with regex on 55% of classified tasks (LLM typically more accurate on context-dependent prompts).</td>
                         </tr>
                         <tr>
                             <td class="label-cell">Iteration</td>
@@ -1619,7 +1635,7 @@
 
                 <p>Compaction analysis found 79 <code>compact_boundary</code> system messages across 50 compacting sessions, extracting trigger type, pre-compaction token count, and position. Outcome impact was measured by splitting tasks into pre/post groups at the first compaction timestamp, with a control group of non-compacting sessions split at the median compaction position to isolate position effects.</p>
 
-                <p><strong>Statistical testing:</strong> <!-- var: findings.total_tests -->529<!-- /var --> tests were conducted: chi-square (categorical), Mann-Whitney U (continuous), proportion tests (rates). Bonferroni correction was chosen over less conservative alternatives (e.g., Benjamini-Hochberg FDR) to minimize false positives given the observational design; the tradeoff is higher false-negative risk. Corrected threshold: p&lt;0.0000945. Across all <!-- var: findings.total_tests -->529<!-- /var --> tests (overall and per-complexity strata), <!-- var: findings.bonferroni_significant -->103<!-- /var --> findings survive Bonferroni and <!-- var: findings.fdr_significant -->168<!-- /var --> survive FDR correction. At the overall level, seven survive Bonferroni: alignment score (p=0.000001), duration (p=0.000001, though d=0.005&mdash;negligible practical effect), tool calls/task (p&lt;0.000001, d=&minus;0.29), tools/file (p&lt;0.000001, d=&minus;0.10), and three categorical distributions (task completion, communication quality, autonomy level). All three chi-square survivors have low-expected-cell-count warnings, which may inflate test statistics. Significance notes appear inline in each section.</p>
+                <p><strong>Statistical testing:</strong> <!-- var: findings.total_tests -->529<!-- /var --> tests were conducted: chi-square (categorical), Mann-Whitney U (continuous), proportion tests (rates). Bonferroni correction was chosen over less conservative alternatives (e.g., Benjamini-Hochberg FDR) to minimize false positives given the observational design; the tradeoff is higher false-negative risk. Corrected threshold: p&lt;0.0000945. Across all <!-- var: findings.total_tests -->529<!-- /var --> tests (overall and per-complexity strata), <!-- var: findings.bonferroni_significant -->93<!-- /var --> findings survive Bonferroni and <!-- var: findings.fdr_significant -->169<!-- /var --> survive FDR correction. At the overall level, seven survive Bonferroni: alignment score (p=0.000001), duration (p=0.000001, though d=0.005&mdash;negligible practical effect), tool calls/task (p&lt;0.000001, d=&minus;0.29), tools/file (p&lt;0.000001, d=&minus;0.10), and three categorical distributions (task completion, communication quality, autonomy level). All three chi-square survivors have low-expected-cell-count warnings, which may inflate test statistics. Significance notes appear inline in each section.</p>
 
                 <!-- expand: stat-test-full-results -->
 

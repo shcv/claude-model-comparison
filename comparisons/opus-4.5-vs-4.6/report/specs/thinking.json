@@ -7,14 +7,14 @@
   },
   "tables": {
     "cost-thinking-calibration": {
-      "title": "Thinking calibration by complexity (inline)",
+      "title": "Thinking calibration by complexity",
       "data_source": "tokens",
-      "row_gen": "thinking_calibration_inline"
+      "row_gen": "thinking_calibration"
     },
     "thinking-depth-by-type": {
-      "title": "Thinking depth by task type (inline)",
+      "title": "Thinking depth by task type",
       "data_source": "tokens",
-      "row_gen": "thinking_depth_by_type_inline"
+      "row_gen": "thinking_depth_by_type"
     },
     "thinking-cross-cuts": {
       "title": "Thinking Fraction: Cross-Cut Effect Sizes",
