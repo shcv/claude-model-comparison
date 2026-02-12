@@ -1402,7 +1402,7 @@ def generate_edit_iterative_by_complexity_inline(spec: dict, data: dict, config:
     lines.append("    </thead>")
     lines.append("    <tbody>")
 
-    for cx in table_gen.COMPLEXITY_PLUS_ORDER:
+    for cx in table_gen.COMPLEXITY_ORDER:
         ra = ea.get(cx, {})
         rb = eb.get(cx, {})
         rate_a = ra.get("iterative_refinement_rate", 0) * 100
@@ -1437,7 +1437,7 @@ def generate_edit_accuracy_by_complexity_inline(spec: dict, data: dict, config: 
     lines.append("    </thead>")
     lines.append("    <tbody>")
 
-    for cx in table_gen.COMPLEXITY_PLUS_ORDER:
+    for cx in table_gen.COMPLEXITY_ORDER:
         ra = ea.get(cx, {})
         rb = eb.get(cx, {})
         rate_a = ra.get("self_correction_rate", 0) * 100
@@ -2046,7 +2046,7 @@ def generate_planning_by_complexity_inline(spec: dict, data: dict, config: dict)
     lines.append("    </thead>")
     lines.append("    <tbody>")
 
-    for cx in table_gen.COMPLEXITY_PLUS_ORDER:
+    for cx in table_gen.COMPLEXITY_ORDER:
         ra = pa.get(cx, {})
         rb = pb.get(cx, {})
         rate_a = ra.get("planning_rate_pct", 0)
@@ -2425,6 +2425,407 @@ def generate_duration_distribution_inline(spec: dict, data: dict, config: dict) 
     return "\n".join(lines)
 
 
+# ── Findings table generators ──────────────────────────────────────
+
+
+def _findings_effect_bar(es: float, significant: bool) -> str:
+    """Generate a small effect size bar."""
+    width = min(es / 0.5 * 100, 100) if es else 0
+    color = "green" if significant else "a"
+    return (f'<div class="bar-single">'
+            f'<div class="bar-track" style="width:60px">'
+            f'<div class="bar-fill {color}" style="width:{width:.0f}%"></div>'
+            f'</div></div>')
+
+
+def _findings_sig_badge(finding: dict) -> str:
+    """Generate significance badge HTML."""
+    if finding.get("bonferroni_significant"):
+        return '<span class="v-green">Bonf</span>'
+    elif finding.get("fdr_significant"):
+        return '<span class="v-blue">FDR</span>'
+    return ''
+
+
+def generate_findings_summary(spec: dict, data: dict, config: dict) -> str:
+    """Generate a top-level findings summary table showing all significant results."""
+    findings_data = data.get("findings", {})
+    findings = findings_data.get("findings", [])
+    title = spec.get("title", "Key Findings Summary")
+
+    lines = [f"<!-- title: {title} -->"]
+
+    # Filter to overall cross-cut, FDR-significant only
+    sig_findings = [f for f in findings
+                    if f.get("fdr_significant") and f.get("cross_cut") == "overall"]
+
+    if not sig_findings:
+        lines.append("<p>No statistically significant findings after FDR correction.</p>")
+        return "\n".join(lines)
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append("        <tr>"
+                 "<th>#</th>"
+                 "<th>Measurement</th>"
+                 "<th>Theme</th>"
+                 "<th>Direction</th>"
+                 '<th class="right">Effect</th>'
+                 '<th class="right">p<sub>adj</sub></th>'
+                 "<th>Sig</th>"
+                 "</tr>")
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    for i, f in enumerate(sig_findings, 1):
+        field = f.get("field", "")
+        field_display = field.replace("_", " ").title()
+        theme = (f.get("theme") or "").title()
+        direction = f.get("direction") or ""
+        es = f.get("effect_size") or 0
+        p_adj = f.get("p_adjusted")
+        p_str = f"{p_adj:.4f}" if p_adj is not None else "&mdash;"
+        label = f.get("effect_label", "")
+        bar = _findings_effect_bar(es, True)
+        sig = _findings_sig_badge(f)
+
+        lines.append("        <tr>")
+        lines.append(f'            <td class="right mono">{i}</td>')
+        lines.append(f'            <td class="label-cell">{field_display}</td>')
+        lines.append(f'            <td>{theme}</td>')
+        lines.append(f'            <td>{direction}</td>')
+        lines.append(f'            <td class="right mono">{es:.3f} {label} {bar}</td>')
+        lines.append(f'            <td class="right mono">{p_str}</td>')
+        lines.append(f'            <td>{sig}</td>')
+        lines.append("        </tr>")
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+
+    # Non-significant summary in details block
+    ns_findings = [f for f in findings
+                   if not f.get("fdr_significant") and f.get("cross_cut") == "overall"]
+    if ns_findings:
+        lines.append(f"<details><summary>{len(ns_findings)} non-significant overall results</summary>")
+        lines.append("<table>")
+        lines.append("    <thead>")
+        lines.append("        <tr><th>Measurement</th><th>Theme</th>"
+                     '<th class="right">Effect</th>'
+                     '<th class="right">p<sub>adj</sub></th></tr>')
+        lines.append("    </thead>")
+        lines.append("    <tbody>")
+        for f in ns_findings[:30]:  # cap at 30 rows
+            field = f.get("field", "").replace("_", " ").title()
+            theme = (f.get("theme") or "").title()
+            es = f.get("effect_size") or 0
+            p_adj = f.get("p_adjusted")
+            p_str = f"{p_adj:.4f}" if p_adj is not None else "&mdash;"
+            lines.append(f'        <tr><td>{field}</td><td>{theme}</td>'
+                         f'<td class="right mono">{es:.3f}</td>'
+                         f'<td class="right mono">{p_str}</td></tr>')
+        lines.append("    </tbody>")
+        lines.append("</table>")
+        lines.append("</details>")
+
+    return "\n".join(lines)
+
+
+def generate_findings_by_theme(spec: dict, data: dict, config: dict) -> str:
+    """Generate a findings table filtered to a specific theme."""
+    findings_data = data.get("findings", {})
+    by_theme = findings_data.get("by_theme", {})
+    theme = spec.get("theme", "")
+    title = spec.get("title", f"{theme.title()} Findings")
+
+    lines = [f"<!-- title: {title} -->"]
+
+    theme_data = by_theme.get(theme, {})
+    sig = theme_data.get("significant", [])
+    ns = theme_data.get("non_significant", [])
+
+    if not sig and not ns:
+        lines.append(f"<p>No {theme} findings.</p>")
+        return "\n".join(lines)
+
+    if sig:
+        lines.append("<table>")
+        lines.append("    <thead>")
+        lines.append("        <tr>"
+                     "<th>Measurement</th>"
+                     "<th>Slice</th>"
+                     "<th>Direction</th>"
+                     '<th class="right">Effect</th>'
+                     '<th class="right">p<sub>adj</sub></th>'
+                     "<th>Sig</th>"
+                     "</tr>")
+        lines.append("    </thead>")
+        lines.append("    <tbody>")
+
+        for f in sig:
+            field = f.get("field", "").replace("_", " ").title()
+            cc = f.get("cross_cut", "overall")
+            direction = f.get("direction") or ""
+            es = f.get("effect_size") or 0
+            p_adj = f.get("p_adjusted")
+            p_str = f"{p_adj:.4f}" if p_adj is not None else "&mdash;"
+            bar = _findings_effect_bar(es, True)
+            sig_badge = _findings_sig_badge(f)
+
+            lines.append("        <tr>")
+            lines.append(f'            <td class="label-cell">{field}</td>')
+            lines.append(f'            <td>{cc}</td>')
+            lines.append(f'            <td>{direction}</td>')
+            lines.append(f'            <td class="right mono">{es:.3f} {bar}</td>')
+            lines.append(f'            <td class="right mono">{p_str}</td>')
+            lines.append(f'            <td>{sig_badge}</td>')
+            lines.append("        </tr>")
+
+        lines.append("    </tbody>")
+        lines.append("</table>")
+
+    if ns:
+        lines.append(f"<details><summary>{len(ns)} non-significant {theme} results</summary>")
+        lines.append("<table>")
+        lines.append("    <thead>")
+        lines.append("        <tr><th>Measurement</th><th>Slice</th>"
+                     '<th class="right">Effect</th>'
+                     '<th class="right">p<sub>adj</sub></th></tr>')
+        lines.append("    </thead>")
+        lines.append("    <tbody>")
+        for f in ns[:30]:
+            field = f.get("field", "").replace("_", " ").title()
+            cc = f.get("cross_cut", "overall")
+            es = f.get("effect_size") or 0
+            p_adj = f.get("p_adjusted")
+            p_str = f"{p_adj:.4f}" if p_adj is not None else "&mdash;"
+            lines.append(f'        <tr><td>{field}</td><td>{cc}</td>'
+                         f'<td class="right mono">{es:.3f}</td>'
+                         f'<td class="right mono">{p_str}</td></tr>')
+        lines.append("    </tbody>")
+        lines.append("</table>")
+        lines.append("</details>")
+
+    return "\n".join(lines)
+
+
+def generate_thinking_depth_by_type_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate thinking chars (when used) by task type bar-pair table."""
+    lines = [f"<!-- title: {spec.get('title', 'Thinking depth by task type')} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    tokens = data.get("tokens", {})
+    ta = tokens.get(ma, {}).get("by_type", {})
+    tb = tokens.get(mb, {}).get("by_type", {})
+
+    # Preferred order, then any remaining types
+    preferred = ["greenfield", "refactor", "bugfix", "feature", "investigation", "sysadmin"]
+    type_data = []
+    for t in preferred:
+        if t in ta and t in tb:
+            avg_a = ta[t].get("avg_thinking_chars_when_used", 0)
+            avg_b = tb[t].get("avg_thinking_chars_when_used", 0)
+            if avg_a > 0 and avg_b > 0:
+                ratio = avg_b / avg_a
+                type_data.append((t, avg_a, avg_b, ratio))
+
+    # Add remaining types not in preferred order
+    for t in ta:
+        if t == "unknown" or t in [x[0] for x in type_data] or t not in tb:
+            continue
+        avg_a = ta[t].get("avg_thinking_chars_when_used", 0)
+        avg_b = tb[t].get("avg_thinking_chars_when_used", 0)
+        if avg_a > 0 and avg_b > 0:
+            ratio = avg_b / avg_a
+            type_data.append((t, avg_a, avg_b, ratio))
+
+    # Find max for bar scaling
+    all_vals = []
+    for _, avg_a, avg_b, _ in type_data:
+        all_vals.append(avg_a)
+        all_vals.append(avg_b)
+    max_val = max(all_vals) if all_vals else 1
+
+    char_fmt = lambda v: f"{v:,.0f}"
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Task Type</th><th>Thinking Depth</th>'
+                 '<th class="right">4.5 chars</th>'
+                 '<th class="right">4.6 chars</th><th class="right">Ratio</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    for t, avg_a, avg_b, ratio in type_data:
+        label = table_gen._label_case(t)
+        css = ' v-blue' if ratio >= 1.5 else (' v-orange' if ratio <= 0.67 else '')
+        bar = table_gen.generate_bar_pair(avg_a, avg_b, scale=max_val, format_fn=char_fmt)
+        lines.append(f'        <tr><td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="bar-cell">{bar}</td>')
+        lines.append(f'            <td class="right mono">{avg_a:,.0f}</td>'
+                     f'<td class="right mono">{avg_b:,.0f}</td>'
+                     f'<td class="right mono{css}">{ratio:.1f}&times;</td></tr>')
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
+def generate_per_request_output_inline(spec: dict, data: dict, config: dict) -> str:
+    """Generate per-request output by complexity bar-pair table."""
+    lines = [f"<!-- title: {spec.get('title', 'Per-request output by complexity')} -->"]
+
+    ma, mb = config["model_a"], config["model_b"]
+    tokens = data.get("tokens", {})
+    ta = tokens.get(ma, {}).get("by_complexity", {})
+    tb = tokens.get(mb, {}).get("by_complexity", {})
+
+    # Compute max for bar scaling
+    all_vals = []
+    for cx in table_gen.COMPLEXITY_ORDER:
+        da = ta.get(cx, {})
+        db = tb.get(cx, {})
+        ci_a = da.get("output_per_request_ci95")
+        ci_b = db.get("output_per_request_ci95")
+        all_vals.append(ci_a[1] if ci_a else da.get("avg_output_per_request", 0))
+        all_vals.append(ci_b[1] if ci_b else db.get("avg_output_per_request", 0))
+    max_val = max(all_vals) if all_vals else 1
+
+    tok_fmt = lambda v: f"{v:,.0f}"
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Complexity</th><th>Output per Request</th>'
+                 '<th class="right">4.5</th>'
+                 '<th class="right">4.6</th><th class="right">Ratio</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    for cx in table_gen.COMPLEXITY_ORDER:
+        da = ta.get(cx, {})
+        db = tb.get(cx, {})
+        avg_a = da.get("avg_output_per_request", 0)
+        avg_b = db.get("avg_output_per_request", 0)
+        ci_a = tuple(da["output_per_request_ci95"]) if "output_per_request_ci95" in da else None
+        ci_b = tuple(db["output_per_request_ci95"]) if "output_per_request_ci95" in db else None
+
+        if avg_a > 0:
+            ratio = avg_b / avg_a
+            css = ' v-blue' if ratio >= 1.5 else (' v-orange' if ratio <= 0.67 else '')
+            ratio_str = f'{ratio:.1f}&times;'
+        else:
+            ratio_str = "&mdash;"
+            css = ""
+
+        bar_html = table_gen.generate_bar_pair(
+            avg_a, avg_b, scale=max_val, format_fn=tok_fmt,
+            ci_a=ci_a, ci_b=ci_b
+        )
+        label = table_gen._label_case(cx)
+        lines.append(f'        <tr><td class="label-cell">{label}</td>')
+        lines.append(f'            <td class="bar-cell">{bar_html}</td>')
+        lines.append(f'            <td class="right mono">{avg_a:,.0f}</td>'
+                     f'<td class="right mono">{avg_b:,.0f}</td>'
+                     f'<td class="right mono{css}">{ratio_str}</td></tr>')
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
+def generate_sensitivity_analysis(spec: dict, data: dict, config: dict) -> str:
+    """Generate sensitivity analysis table comparing full vs restricted dataset."""
+    lines = [f"<!-- title: {spec.get('title', 'Sensitivity Analysis: Robustness Validation')} -->"]
+
+    # Load sensitivity data directly
+    comparison_dir = config.get("comparison_dir", "")
+    sens_path = Path(comparison_dir) / "analysis" / "sensitivity-analysis.json" if comparison_dir else None
+
+    sens = {}
+    if sens_path and sens_path.exists():
+        sens = json.loads(sens_path.read_text())
+    else:
+        # Try to find it from data sources
+        stats = data.get("stats", {})
+        if "full" in stats and "restricted" in stats:
+            sens = stats
+
+    if not sens or "full" not in sens or "restricted" not in sens:
+        lines.append("<p><em>Sensitivity analysis data not available.</em></p>")
+        return "\n".join(lines)
+
+    full = sens["full"]
+    restricted = sens["restricted"]
+    metadata = sens.get("metadata", {})
+
+    # Count Bonferroni survivors in each dataset
+    def count_bonferroni(dataset):
+        count = 0
+        for test_type in ["chi_square", "mann_whitney", "proportions"]:
+            for entry in dataset.get("overall", {}).get(test_type, []):
+                if entry.get("bonferroni_significant"):
+                    count += 1
+        return count
+
+    full_survivors = count_bonferroni(full)
+    restricted_survivors = count_bonferroni(restricted)
+
+    # Collect per-metric comparison for Bonferroni survivors from full dataset
+    metrics = []
+    for test_type in ["chi_square", "mann_whitney", "proportions"]:
+        for entry in full.get("overall", {}).get(test_type, []):
+            if not entry.get("bonferroni_significant"):
+                continue
+            field = entry.get("field", "")
+            full_p = entry.get("p_value", 1)
+            # Find matching entry in restricted
+            restricted_p = None
+            restricted_sig = False
+            for r_entry in restricted.get("overall", {}).get(test_type, []):
+                if r_entry.get("field") == field:
+                    restricted_p = r_entry.get("p_value")
+                    restricted_sig = r_entry.get("bonferroni_significant", False)
+                    break
+            persists = "Yes" if restricted_sig else "No"
+            css = "v-green" if restricted_sig else "v-orange"
+            metrics.append((field, test_type, full_p, restricted_p, persists, css))
+
+    # Excluded projects
+    excluded = metadata.get("excluded_projects", metadata.get("overlapping_projects", []))
+
+    if excluded:
+        lines.append(f"<p>Restricted dataset excludes {len(excluded)} overlapping projects "
+                     f"to test whether findings depend on specific project mix.</p>")
+
+    lines.append(f"<p>Overall Bonferroni survivors: <strong>{full_survivors}</strong> (full dataset) "
+                 f"vs <strong>{restricted_survivors}</strong> (restricted).</p>")
+
+    lines.append("<table>")
+    lines.append("    <thead>")
+    lines.append('        <tr><th>Metric</th><th>Test</th>'
+                 '<th class="right">Full p</th>'
+                 '<th class="right">Restricted p</th>'
+                 '<th class="right">Persists?</th></tr>')
+    lines.append("    </thead>")
+    lines.append("    <tbody>")
+
+    for field, test_type, full_p, restricted_p, persists, css in metrics:
+        label = field.replace("_", " ").title()
+        test_label = test_type.replace("_", " ").title()
+        full_p_str = f"{full_p:.2e}" if full_p < 0.001 else f"{full_p:.4f}"
+        if restricted_p is not None:
+            restr_p_str = f"{restricted_p:.2e}" if restricted_p < 0.001 else f"{restricted_p:.4f}"
+        else:
+            restr_p_str = "&mdash;"
+        lines.append(f'        <tr><td>{label}</td><td>{test_label}</td>'
+                     f'<td class="right mono">{full_p_str}</td>'
+                     f'<td class="right mono">{restr_p_str}</td>'
+                     f'<td class="right mono {css}">{persists}</td></tr>')
+
+    lines.append("    </tbody>")
+    lines.append("</table>")
+    return "\n".join(lines)
+
+
 # ── Custom generator dispatch ─────────────────────────────────────
 
 CUSTOM_GENERATORS = {
@@ -2461,6 +2862,11 @@ CUSTOM_GENERATORS = {
     "idle_sensitivity_inline": generate_idle_sensitivity_inline,
     "complexity_scope_inline": generate_complexity_scope_inline,
     "stat_tests": None,  # handled by table_gen._generate_stat_test_rows
+    "thinking_depth_by_type_inline": generate_thinking_depth_by_type_inline,
+    "per_request_output_inline": generate_per_request_output_inline,
+    "sensitivity_analysis": generate_sensitivity_analysis,
+    "findings_summary": generate_findings_summary,
+    "findings_by_theme": generate_findings_by_theme,
 }
 
 
@@ -2804,7 +3210,9 @@ DATA_SOURCE_PATHS = {
     "compaction": "analysis/compaction-analysis.json",
     "behavior": "analysis/behavior-metrics.json",
     "sessions": "analysis/session-analysis.json",
+    "timing": "analysis/timing-analysis.json",
     "scores": "analysis/scores-latest.json",
+    "findings": "analysis/findings.json",
 }
 
 
@@ -2957,6 +3365,7 @@ def main():
         sys.exit(1)
 
     config = parse_comparison_dir(comparison_dir)
+    config["comparison_dir"] = str(comparison_dir)
     print(f"Comparison: {config['model_a']} vs {config['model_b']}")
     print(f"Display: {config['display_a']} vs {config['display_b']}")
 

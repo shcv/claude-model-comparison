@@ -28,7 +28,9 @@ STEPS = [
     ("annotate",  "Annotate tasks (LLM + signals)"),
     ("analyze",   "Run all analyses (behavior, edits, planning, compaction, timing)"),
     ("tokens",    "Extract tokens"),
+    ("enrich",    "Enrich tasks (join sources)"),
     ("stats",     "Run statistical tests"),
+    ("findings",  "Generate findings registry"),
     ("dataset",   "Generate dataset overview"),
     ("update",    "Update report sections"),
     ("report",    "Build report"),
@@ -115,17 +117,35 @@ def get_step_io(step, data_dir, analysis_dir, comparison_dir):
         h = _file_hash(analysis_dir / "token-analysis.json")
         outputs = {"token-analysis.json": h} if h else {}
         return (inputs, outputs)
+    elif step == "enrich":
+        inputs = {}
+        inputs.update(_glob_hashes(analysis_dir, "tasks-annotated-*.json"))
+        inputs.update(_glob_hashes(data_dir, "tokens-*.json"))
+        inputs.update(_glob_hashes(analysis_dir, "edit-metrics-*.json"))
+        inputs.update(_glob_hashes(data_dir, "tasks-classified-*.json"))
+        outputs = _glob_hashes(analysis_dir, "tasks-enriched-*.json")
+        return (inputs, outputs)
     elif step == "stats":
-        inputs = _glob_hashes(analysis_dir, "tasks-annotated-*.json")
+        # Prefer enriched, fall back to annotated
+        inputs = _glob_hashes(analysis_dir, "tasks-enriched-*.json")
+        if not inputs:
+            inputs = _glob_hashes(analysis_dir, "tasks-annotated-*.json")
         h = _file_hash(analysis_dir / "stat-tests.json")
         outputs = {"stat-tests.json": h} if h else {}
+        return (inputs, outputs)
+    elif step == "findings":
+        h_in = _file_hash(analysis_dir / "stat-tests.json")
+        inputs = {"stat-tests.json": h_in} if h_in else {}
+        h_out = _file_hash(analysis_dir / "findings.json")
+        outputs = {"findings.json": h_out} if h_out else {}
         return (inputs, outputs)
     elif step == "dataset":
         # Depends on all analysis outputs
         inputs = {}
         for name in ["behavior-metrics.json", "edit-analysis.json",
                       "planning-analysis.json", "compaction-analysis.json",
-                      "token-analysis.json", "stat-tests.json"]:
+                      "token-analysis.json", "stat-tests.json",
+                      "findings.json"]:
             h = _file_hash(analysis_dir / name)
             if h:
                 inputs[name] = h
@@ -142,7 +162,7 @@ def get_step_io(step, data_dir, analysis_dir, comparison_dir):
         for name in ["behavior-metrics.json", "edit-analysis.json",
                       "planning-analysis.json", "compaction-analysis.json",
                       "token-analysis.json", "stat-tests.json",
-                      "dataset-overview.json"]:
+                      "dataset-overview.json", "findings.json"]:
             h = _file_hash(analysis_dir / name)
             if h:
                 inputs[name] = h
@@ -249,11 +269,18 @@ def build_command(step, data_dir, analysis_dir):
     elif step == "tokens":
         return [sys.executable, str(scripts_dir / "extract_tokens.py"),
                 "--dir", str(comparison_dir)]
+    elif step == "enrich":
+        return [sys.executable, str(scripts_dir / "enrich_tasks.py"),
+                "--data-dir", str(data_dir),
+                "--analysis-dir", str(analysis_dir)]
     elif step == "stats":
         return [sys.executable, str(scripts_dir / "stat_tests.py"),
                 "--data-dir", str(data_dir),
-                "--analysis-dir", str(analysis_dir),
-                "--sensitivity"]
+                "--analysis-dir", str(analysis_dir)]
+    elif step == "findings":
+        return [sys.executable, str(scripts_dir / "generate_findings.py"),
+                "--data-dir", str(data_dir),
+                "--analysis-dir", str(analysis_dir)]
     elif step == "dataset":
         return [sys.executable, str(scripts_dir / "analyze_dataset.py"),
                 "--data-dir", str(data_dir),

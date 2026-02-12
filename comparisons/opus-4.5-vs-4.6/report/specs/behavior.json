@@ -1,7 +1,9 @@
 {
   "section_id": "behavior",
   "data_sources": {
-    "behavior": "analysis/behavior-metrics.json"
+    "behavior": "analysis/behavior-metrics.json",
+    "planning": "analysis/planning-analysis.json",
+    "sessions": "analysis/session-analysis.json"
   },
   "tables": {
     "behavior-adoption": {
@@ -13,6 +15,16 @@
       "title": "Subagent Type Distribution (inline)",
       "data_source": "behavior",
       "row_gen": "behavior_subagent_types_inline"
+    },
+    "planning-adoption": {
+      "title": "Planning Adoption (inline)",
+      "data_source": "planning",
+      "row_gen": "planning_adoption_inline"
+    },
+    "planning-by-complexity": {
+      "title": "Planning by Complexity (inline)",
+      "data_source": "planning",
+      "row_gen": "planning_by_complexity_inline"
     }
   },
   "prose": {

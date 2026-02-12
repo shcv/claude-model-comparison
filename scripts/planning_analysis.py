@@ -102,16 +102,9 @@ def analyze_model(data_dir, analysis_dir, model):
     total_tasks = len(tasks)
     total_planned = sum(1 for t in tasks if has_planning(t))
 
-    # Collapse complex+major if either has <10 planned tasks
-    complex_planned = cross_tab.get("complex", {}).get("planned", 0)
-    major_planned = cross_tab.get("major", {}).get("planned", 0)
-    collapse = complex_planned < 10 or major_planned < 10
-
-    # Build by_complexity dict
+    # Build by_complexity dict — always emit all 5 tiers
     by_complexity = {}
     for c in COMPLEXITY_ORDER:
-        if collapse and c in ("complex", "major"):
-            continue
         if c not in cross_tab:
             continue
         p = cross_tab[c]["planned"]
@@ -133,29 +126,6 @@ def analyze_model(data_dir, analysis_dir, model):
             "n_scored_planned": len(ps),
             "n_scored_unplanned": len(us),
         }
-
-    # Add collapsed complex+ bin if needed
-    if collapse and ("complex" in cross_tab or "major" in cross_tab):
-        p = cross_tab.get("complex", {}).get("planned", 0) + cross_tab.get("major", {}).get("planned", 0)
-        u = cross_tab.get("complex", {}).get("unplanned", 0) + cross_tab.get("major", {}).get("unplanned", 0)
-        n = p + u
-        ps = alignment.get("complex", {}).get("planned", []) + alignment.get("major", {}).get("planned", [])
-        us = alignment.get("complex", {}).get("unplanned", []) + alignment.get("major", {}).get("unplanned", [])
-        p_mean = sum(ps) / len(ps) if ps else None
-        u_mean = sum(us) / len(us) if us else None
-        delta = round(p_mean - u_mean, 4) if p_mean is not None and u_mean is not None else None
-        if n > 0:
-            by_complexity["complex+"] = {
-                "n": n,
-                "planned": p,
-                "unplanned": u,
-                "planning_rate_pct": round(100 * p / n, 1),
-                "alignment_planned": round(p_mean, 4) if p_mean is not None else None,
-                "alignment_unplanned": round(u_mean, 4) if u_mean is not None else None,
-                "alignment_delta": delta,
-                "n_scored_planned": len(ps),
-                "n_scored_unplanned": len(us),
-            }
 
     # Overall alignment
     all_planned = []

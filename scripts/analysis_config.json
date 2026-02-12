@@ -1,0 +1,98 @@
+{
+  "measurements": {
+    "categorical": [
+      "task_completion",
+      "normalized_user_sentiment",
+      "scope_management",
+      "iteration_required",
+      "error_recovery",
+      "communication_quality",
+      "normalized_execution_quality",
+      "autonomy_level"
+    ],
+    "continuous": [
+      "alignment_score",
+      "duration_seconds",
+      "tool_calls",
+      "files_touched",
+      "lines_added",
+      "lines_removed",
+      "lines_per_minute",
+      "tools_per_file",
+      "estimated_cost",
+      "total_output_tokens",
+      "total_input_tokens",
+      "thinking_chars",
+      "request_count",
+      "cost_per_minute",
+      "output_per_request",
+      "cache_hit_rate",
+      "thinking_fraction",
+      "overlap_count",
+      "rewrite_rate",
+      "triage_score",
+      "max_chain_depth"
+    ],
+    "proportions": {
+      "satisfaction_rate": {"field": "normalized_user_sentiment", "value": "satisfied"},
+      "dissatisfaction_rate": {"field": "normalized_user_sentiment", "value": "dissatisfied"},
+      "complete_rate": {"field": "task_completion", "value": "complete"},
+      "failed_rate": {"field": "task_completion", "value": "failed"},
+      "scope_expanded_rate": {"field": "scope_management", "value": "expanded"},
+      "one_shot_rate": {"field": "iteration_required", "value": "one_shot"},
+      "good_execution_rate": {"field": "normalized_execution_quality", "value": "good"},
+      "has_edits_rate": {"field": "has_edits", "value": true},
+      "has_overlaps_rate": {"field": "has_overlaps", "value": true}
+    }
+  },
+  "cross_cuts": [
+    {"name": "overall", "filter": null},
+    {
+      "name": "complexity",
+      "field": "complexity",
+      "values": ["trivial", "simple", "moderate", "complex"],
+      "min_n": 5
+    },
+    {
+      "name": "task_type",
+      "field": "task_type",
+      "values": ["investigation", "sysadmin", "refactor", "bugfix", "feature", "greenfield"],
+      "min_n": 10
+    },
+    {
+      "name": "iteration",
+      "field": "iteration_required",
+      "values": ["one_shot", "minor", "significant"],
+      "min_n": 5
+    }
+  ],
+  "correction": {
+    "method": "fdr_bh",
+    "alpha": 0.05
+  },
+  "themes": {
+    "quality": [
+      "alignment_score", "satisfaction_rate", "dissatisfaction_rate",
+      "complete_rate", "failed_rate", "good_execution_rate",
+      "task_completion", "normalized_user_sentiment",
+      "normalized_execution_quality"
+    ],
+    "cost": [
+      "estimated_cost", "total_output_tokens", "total_input_tokens",
+      "cost_per_minute", "output_per_request", "request_count", "cache_hit_rate"
+    ],
+    "behavior": [
+      "tool_calls", "files_touched", "tools_per_file", "lines_per_minute",
+      "scope_management", "autonomy_level", "communication_quality",
+      "one_shot_rate", "scope_expanded_rate", "iteration_required",
+      "duration_seconds"
+    ],
+    "thinking": [
+      "thinking_chars", "thinking_fraction"
+    ],
+    "editing": [
+      "overlap_count", "rewrite_rate", "triage_score", "max_chain_depth",
+      "has_edits_rate", "has_overlaps_rate", "lines_added", "lines_removed"
+    ]
+  }
+}

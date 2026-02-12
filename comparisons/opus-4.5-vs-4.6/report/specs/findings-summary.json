@@ -1,0 +1,57 @@
+{
+  "section_id": "findings-summary",
+  "data_sources": {
+    "findings": "analysis/findings.json",
+    "stats": "analysis/stat-tests.json"
+  },
+  "tables": {
+    "findings-summary": {
+      "title": "Key Findings Summary",
+      "data_source": "findings",
+      "row_gen": "findings_summary"
+    },
+    "findings-quality": {
+      "title": "Quality Findings",
+      "data_source": "findings",
+      "row_gen": "findings_by_theme",
+      "theme": "quality"
+    },
+    "findings-cost": {
+      "title": "Cost Findings",
+      "data_source": "findings",
+      "row_gen": "findings_by_theme",
+      "theme": "cost"
+    },
+    "findings-behavior": {
+      "title": "Behavioral Findings",
+      "data_source": "findings",
+      "row_gen": "findings_by_theme",
+      "theme": "behavior"
+    },
+    "findings-thinking": {
+      "title": "Thinking Findings",
+      "data_source": "findings",
+      "row_gen": "findings_by_theme",
+      "theme": "thinking"
+    },
+    "findings-editing": {
+      "title": "Editing Findings",
+      "data_source": "findings",
+      "row_gen": "findings_by_theme",
+      "theme": "editing"
+    },
+    "sensitivity-analysis": {
+      "title": "Sensitivity Analysis: Robustness Validation",
+      "data_source": "stats",
+      "row_gen": "sensitivity_analysis"
+    }
+  },
+  "prose": {
+    "key_metrics": [
+      "findings.metadata.total_tests",
+      "findings.metadata.fdr_significant",
+      "findings.metadata.bonferroni_significant"
+    ],
+    "guidance": "This section summarizes all statistically significant findings across the analysis, ranked by effect size. FDR-corrected p-values (Benjamini-Hochberg) are used for significance determination."
+  }
+}

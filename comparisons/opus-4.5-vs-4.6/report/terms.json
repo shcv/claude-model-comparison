@@ -48,5 +48,9 @@
   "compact_boundary": "A system message marking where compaction occurred, containing trigger type and pre-compaction token count.",
   "pre-compaction tokens": "The total token count at the moment compaction triggers, indicating how full the context window was.",
   "content ownership maps": "Per-file records tracking which edit introduced each line, enabling detection of when later edits overwrite earlier ones.",
-  "complexity confound": "A bias where one model\u2019s higher proportion of complex tasks inflates resource metrics and may suppress outcome scores."
+  "complexity confound": "A bias where one model\u2019s higher proportion of complex tasks inflates resource metrics and may suppress outcome scores.",
+  "cross-cut": "A stratification dimension used to test whether findings hold across subgroups. Three cross-cuts are used: complexity, task type, and iteration level.",
+  "task type": "Regex-classified category of the user\u2019s request: investigation, bugfix, feature, greenfield, refactor, or sysadmin.",
+  "iteration level": "LLM-classified back-and-forth intensity: one_shot (no iteration), minor (small corrections), significant (multiple rework cycles).",
+  "FDR correction": "Benjamini-Hochberg false discovery rate control\u2014less conservative than Bonferroni, controls the expected proportion of false positives among rejected hypotheses."
 }

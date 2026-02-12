@@ -3,11 +3,15 @@
 
 Runs Chi-square tests, Mann-Whitney U tests, calculates confidence intervals
 (Wilson score) and effect sizes (Cohen's h, Cohen's d) for comparing two models.
-Tests are run both overall and per-complexity-bin.
+Tests are run overall and across configurable cross-cutting dimensions.
+
+Supports config-driven measurements (via --config), FDR correction
+(Benjamini-Hochberg), and theme tagging for downstream findings generation.
 
 Usage:
     python scripts/stat_tests.py --data-dir data --analysis-dir analysis
-    python scripts/stat_tests.py --data-dir data --analysis-dir analysis --output analysis/stat-tests.json
+    python scripts/stat_tests.py --data-dir data --analysis-dir analysis --config scripts/analysis_config.json
+    python scripts/stat_tests.py --data-dir data --analysis-dir analysis --sensitivity
 """
 
 import argparse
@@ -19,6 +23,7 @@ from pathlib import Path
 
 import numpy as np
 from scipy import stats
+from scipy.stats import false_discovery_control
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from models import discover_model_pair, load_canonical_tasks
@@ -42,9 +47,9 @@ class NumpyEncoder(json.JSONEncoder):
 MODELS = ["opus-4-5", "opus-4-6"]  # set dynamically in main()
 COMPLEXITY_BINS = ["trivial", "simple", "moderate", "complex"]
 
-# Categorical fields from LLM analysis
-CATEGORICAL_FIELDS = {
-    "task_completion": None,       # all observed values
+# Default field lists (used when no --config provided)
+DEFAULT_CATEGORICAL_FIELDS = {
+    "task_completion": None,
     "normalized_user_sentiment": None,
     "scope_management": None,
     "iteration_required": None,
@@ -54,8 +59,7 @@ CATEGORICAL_FIELDS = {
     "autonomy_level": None,
 }
 
-# Binary proportion fields (derived from categorical)
-PROPORTION_FIELDS = {
+DEFAULT_PROPORTION_FIELDS = {
     "satisfaction_rate": lambda rec: rec.get("normalized_user_sentiment") == "satisfied",
     "dissatisfaction_rate": lambda rec: rec.get("normalized_user_sentiment") == "dissatisfied",
     "complete_rate": lambda rec: rec.get("task_completion") == "complete",
@@ -65,8 +69,7 @@ PROPORTION_FIELDS = {
     "good_execution_rate": lambda rec: rec.get("normalized_execution_quality") == "good",
 }
 
-# Continuous fields from LLM analysis
-CONTINUOUS_FIELDS = [
+DEFAULT_CONTINUOUS_FIELDS = [
     "alignment_score",
     "duration_seconds",
     "tool_calls",
@@ -77,26 +80,98 @@ CONTINUOUS_FIELDS = [
     "tools_per_file",
 ]
 
+# Module-level field lists (overridden by config if provided)
+CATEGORICAL_FIELDS = dict(DEFAULT_CATEGORICAL_FIELDS)
+PROPORTION_FIELDS = dict(DEFAULT_PROPORTION_FIELDS)
+CONTINUOUS_FIELDS = list(DEFAULT_CONTINUOUS_FIELDS)
+
+# Cross-cuts config (default: overall + complexity)
+CROSS_CUTS = None  # Set from config or defaults
+
+# Theme mapping (field -> theme name)
+THEME_MAP = {}
+
+
+def load_analysis_config(config_path):
+    """Load analysis config and populate module-level field lists."""
+    global CATEGORICAL_FIELDS, PROPORTION_FIELDS, CONTINUOUS_FIELDS
+    global CROSS_CUTS, THEME_MAP
+
+    with open(config_path) as f:
+        config = json.load(f)
+
+    measurements = config.get("measurements", {})
+
+    # Categorical fields
+    cat_list = measurements.get("categorical", [])
+    CATEGORICAL_FIELDS = {f: None for f in cat_list}
+
+    # Continuous fields
+    CONTINUOUS_FIELDS = measurements.get("continuous", [])
+
+    # Proportion fields: build lambda predicates from declarative specs
+    prop_specs = measurements.get("proportions", {})
+    PROPORTION_FIELDS = {}
+    for name, spec in prop_specs.items():
+        field = spec["field"]
+        value = spec["value"]
+        # Capture field/value in closure
+        PROPORTION_FIELDS[name] = _make_predicate(field, value)
+
+    # Cross-cuts
+    CROSS_CUTS = config.get("cross_cuts")
+
+    # Theme map: field -> theme
+    themes = config.get("themes", {})
+    THEME_MAP.clear()
+    for theme_name, fields in themes.items():
+        for f in fields:
+            THEME_MAP[f] = theme_name
+
+    return config
+
+
+def _make_predicate(field, value):
+    """Create a predicate function for proportion testing."""
+    def predicate(rec):
+        return rec.get(field) == value
+    return predicate
+
 
 def load_data(data_dir, analysis_dir):
     """Load task data for both models.
 
-    Prefers tasks-annotated-{model}.json (output of annotate_tasks.py) which
-    already contains merged LLM analysis + classification + canonical signals.
-    Falls back to merging llm-analysis + tasks-classified if annotated files
-    don't exist.
+    Prefers tasks-enriched (output of enrich_tasks.py), then tasks-annotated,
+    then falls back to llm-analysis + tasks-classified.
 
     Enriches records with project_path from canonical tasks for sensitivity analysis.
     """
     data = {}
     for model in MODELS:
-        annotated_path = Path(data_dir) / f"tasks-annotated-{model}.json"
+        # Try enriched first
+        enriched_path = Path(analysis_dir) / f"tasks-enriched-{model}.json"
+        if enriched_path.exists():
+            print(f"  Loading enriched tasks: {enriched_path}")
+            with open(enriched_path) as f:
+                records = json.load(f)
+            # Ensure project_path from canonical
+            canonical = load_canonical_tasks(data_dir, model)
+            canonical_by_id = {t['task_id']: t for t in canonical}
+            for rec in records:
+                tid = rec.get('task_id', '')
+                if tid in canonical_by_id:
+                    ct = canonical_by_id[tid]
+                    rec.setdefault('project_path', ct.get('project_path', ''))
+                    rec.setdefault('session_id', ct.get('session_id', ''))
+            data[model] = records
+            continue
 
+        # Try annotated
+        annotated_path = Path(analysis_dir) / f"tasks-annotated-{model}.json"
         if annotated_path.exists():
             print(f"  Loading annotated tasks: {annotated_path}")
             with open(annotated_path) as f:
                 records = json.load(f)
-            # Enrich with project_path from canonical tasks
             canonical = load_canonical_tasks(data_dir, model)
             canonical_by_id = {t['task_id']: t for t in canonical}
             for rec in records:
@@ -118,10 +193,7 @@ def load_data(data_dir, analysis_dir):
         with open(classified_path) as f:
             classified = json.load(f)
 
-        # Build lookup from classified tasks by task_id
         classified_by_id = {t["task_id"]: t for t in classified}
-
-        # Enrich with complexity from classified and project_path from canonical
         canonical = load_canonical_tasks(data_dir, model)
         canonical_by_id = {t['task_id']: t for t in canonical}
         for rec in analysis:
@@ -198,10 +270,7 @@ def effect_size_label(d):
 
 
 def chi_square_test(data_a, data_b, field):
-    """Run Chi-square test on a categorical field between two groups.
-
-    Returns dict with test results or None if insufficient data.
-    """
+    """Run Chi-square test on a categorical field between two groups."""
     counts_a = Counter(r.get(field) for r in data_a if r.get(field) is not None)
     counts_b = Counter(r.get(field) for r in data_b if r.get(field) is not None)
 
@@ -214,7 +283,6 @@ def chi_square_test(data_a, data_b, field):
         [counts_b.get(c, 0) for c in all_categories],
     ])
 
-    # Check minimum expected frequency
     row_totals = observed.sum(axis=1)
     col_totals = observed.sum(axis=0)
     total = observed.sum()
@@ -222,17 +290,13 @@ def chi_square_test(data_a, data_b, field):
         return None
 
     expected = np.outer(row_totals, col_totals) / total
-    if np.any(expected < 5):
-        low_expected = True
-    else:
-        low_expected = False
+    low_expected = bool(np.any(expected < 5))
 
     try:
         chi2, p_value, dof, _ = stats.chi2_contingency(observed)
     except ValueError:
         return None
 
-    # Cramers V as effect size
     min_dim = min(observed.shape[0] - 1, observed.shape[1] - 1)
     cramers_v = math.sqrt(chi2 / (total * min_dim)) if total * min_dim > 0 else 0.0
 
@@ -243,6 +307,7 @@ def chi_square_test(data_a, data_b, field):
         "p_value": round(p_value, 6),
         "dof": dof,
         "cramers_v": round(cramers_v, 4),
+        "effect_size": round(cramers_v, 4),
         "effect_size_label": effect_size_label(cramers_v),
         "significant_p05": p_value < 0.05,
         "low_expected_warning": low_expected,
@@ -297,6 +362,7 @@ def mann_whitney_test(data_a, data_b, field):
         "u_statistic": round(float(u_stat), 2),
         "p_value": round(float(p_value), 6),
         "cohens_d": round(d, 4) if not math.isnan(d) else None,
+        "effect_size": round(abs(d), 4) if not math.isnan(d) else None,
         "effect_size_label": effect_size_label(d),
         "significant_p05": p_value < 0.05,
         "n": {MODELS[0]: len(vals_a), MODELS[1]: len(vals_b)},
@@ -321,7 +387,6 @@ def proportion_test(data_a, data_b, name, predicate):
     p_a, lo_a, hi_a = wilson_score_interval(yes_a, n_a)
     p_b, lo_b, hi_b = wilson_score_interval(yes_b, n_b)
 
-    # Two-proportion z-test
     p_pool = (yes_a + yes_b) / (n_a + n_b) if (n_a + n_b) > 0 else 0
     se = math.sqrt(p_pool * (1 - p_pool) * (1/n_a + 1/n_b)) if p_pool > 0 and p_pool < 1 else 0
     z = (p_a - p_b) / se if se > 0 else 0
@@ -335,6 +400,7 @@ def proportion_test(data_a, data_b, name, predicate):
         "z_statistic": round(z, 4),
         "p_value": round(p_value, 6),
         "cohens_h": round(h, 4),
+        "effect_size": round(abs(h), 4),
         "effect_size_label": effect_size_label(h),
         "significant_p05": p_value < 0.05,
         MODELS[0]: {
@@ -358,19 +424,16 @@ def run_all_tests(data_a, data_b, label="overall"):
     """Run all statistical tests on two groups of records."""
     results = {"label": label, "chi_square": [], "mann_whitney": [], "proportions": []}
 
-    # Chi-square tests
     for field in CATEGORICAL_FIELDS:
         result = chi_square_test(data_a, data_b, field)
         if result:
             results["chi_square"].append(result)
 
-    # Mann-Whitney U tests
     for field in CONTINUOUS_FIELDS:
         result = mann_whitney_test(data_a, data_b, field)
         if result:
             results["mann_whitney"].append(result)
 
-    # Proportion tests
     for name, predicate in PROPORTION_FIELDS.items():
         result = proportion_test(data_a, data_b, name, predicate)
         if result:
@@ -387,23 +450,155 @@ def count_tests(results_list):
     return total
 
 
-def format_summary(all_results, total_tests):
+def flatten_tests(results_list):
+    """Flatten all test results from grouped format into a single list.
+
+    Each test gets a 'cross_cut' field from its group label.
+    """
+    flat = []
+    for group in results_list:
+        label = group["label"]
+        for test_list in [group["chi_square"], group["mann_whitney"], group["proportions"]]:
+            for t in test_list:
+                t["cross_cut"] = label
+                # Add theme from THEME_MAP
+                field = t.get("field", "")
+                t["theme"] = THEME_MAP.get(field)
+                flat.append(t)
+    return flat
+
+
+def apply_fdr_correction(flat_tests, alpha=0.05):
+    """Apply Benjamini-Hochberg FDR correction to all tests.
+
+    Adds p_adjusted and fdr_significant fields to each test dict.
+    """
+    if not flat_tests:
+        return
+
+    p_values = np.array([t["p_value"] for t in flat_tests])
+
+    # scipy's false_discovery_control returns adjusted p-values
+    adjusted = false_discovery_control(p_values, method='bh')
+
+    for t, adj_p in zip(flat_tests, adjusted):
+        t["p_adjusted"] = round(float(adj_p), 8)
+        t["fdr_significant"] = bool(adj_p < alpha)
+
+
+def apply_bonferroni(flat_tests):
+    """Apply Bonferroni correction to all tests."""
+    n = len(flat_tests)
+    if n == 0:
+        return 0.05
+    threshold = 0.05 / n
+    for t in flat_tests:
+        t["bonferroni_significant"] = t["p_value"] < threshold
+    return threshold
+
+
+def run_cross_cut_tests(data, cross_cuts=None):
+    """Run tests across all configured cross-cuts.
+
+    Returns (all_results_grouped, flat_tests).
+    """
+    all_results = []
+
+    if cross_cuts is None:
+        # Default: overall + complexity bins
+        overall = run_all_tests(data[MODELS[0]], data[MODELS[1]], label="overall")
+        all_results.append(overall)
+
+        for cbin in COMPLEXITY_BINS:
+            subset_a = [r for r in data[MODELS[0]] if r.get("complexity") == cbin]
+            subset_b = [r for r in data[MODELS[1]] if r.get("complexity") == cbin]
+            if len(subset_a) >= 3 and len(subset_b) >= 3:
+                print(f"Running tests for complexity={cbin} ({len(subset_a)} vs {len(subset_b)})...")
+                result = run_all_tests(subset_a, subset_b, label=f"complexity:{cbin}")
+                all_results.append(result)
+            else:
+                print(f"Skipping complexity={cbin} (insufficient data: {len(subset_a)} vs {len(subset_b)})")
+    else:
+        for cc in cross_cuts:
+            name = cc["name"]
+            field = cc.get("field")
+            values = cc.get("values")
+            min_n = cc.get("min_n", 3)
+
+            if cc.get("filter") is None and field is None:
+                # Overall: no filtering
+                print(f"Running tests for {name}...")
+                result = run_all_tests(data[MODELS[0]], data[MODELS[1]], label=name)
+                all_results.append(result)
+            elif values:
+                # Per-value slices
+                for val in values:
+                    subset_a = [r for r in data[MODELS[0]] if r.get(field) == val]
+                    subset_b = [r for r in data[MODELS[1]] if r.get(field) == val]
+                    if len(subset_a) >= min_n and len(subset_b) >= min_n:
+                        label = f"{name}:{val}"
+                        print(f"Running tests for {label} ({len(subset_a)} vs {len(subset_b)})...")
+                        result = run_all_tests(subset_a, subset_b, label=label)
+                        all_results.append(result)
+                    else:
+                        print(f"Skipping {name}:{val} (insufficient data: {len(subset_a)} vs {len(subset_b)})")
+
+    return all_results
+
+
+def regroup_results(flat_tests):
+    """Re-group flat test results back into the grouped format for backward compat.
+
+    Returns (overall_group, by_complexity_list, by_cross_cut_dict).
+    """
+    overall = {"label": "overall", "chi_square": [], "mann_whitney": [], "proportions": []}
+    by_complexity = {}
+    by_cross_cut = {}
+
+    for t in flat_tests:
+        cc = t.get("cross_cut", "overall")
+
+        if cc == "overall":
+            target = overall
+        elif cc.startswith("complexity:"):
+            if cc not in by_complexity:
+                by_complexity[cc] = {"label": cc, "chi_square": [], "mann_whitney": [], "proportions": []}
+            target = by_complexity[cc]
+        else:
+            if cc not in by_cross_cut:
+                by_cross_cut[cc] = {"label": cc, "chi_square": [], "mann_whitney": [], "proportions": []}
+            target = by_cross_cut[cc]
+
+        test_type = t.get("test", "")
+        if test_type == "chi-square":
+            target["chi_square"].append(t)
+        elif test_type == "mann-whitney-u":
+            target["mann_whitney"].append(t)
+        elif test_type == "two-proportion-z":
+            target["proportions"].append(t)
+
+    return overall, list(by_complexity.values()), by_cross_cut
+
+
+def format_summary(all_results, total_tests, fdr_significant_count=None):
     """Format a human-readable summary table."""
     lines = []
-    lines.append("=" * 90)
+    lines.append("=" * 100)
     lines.append("STATISTICAL SIGNIFICANCE TESTING SUMMARY")
-    lines.append("=" * 90)
+    lines.append("=" * 100)
     lines.append(f"Models compared: {MODELS[0]} vs {MODELS[1]}")
     lines.append(f"Total tests run: {total_tests}")
     bonferroni = 0.05 / total_tests if total_tests > 0 else 0.05
     lines.append(f"Bonferroni-corrected threshold: p < {bonferroni:.6f} (0.05 / {total_tests})")
+    if fdr_significant_count is not None:
+        lines.append(f"FDR significant (BH, alpha=0.05): {fdr_significant_count}")
     lines.append("")
 
     for group in all_results:
         label = group["label"].upper()
-        lines.append("-" * 90)
+        lines.append("-" * 100)
         lines.append(f"  {label}")
-        lines.append("-" * 90)
+        lines.append("-" * 100)
 
         sig_results = []
         all_tests_in_group = []
@@ -411,16 +606,20 @@ def format_summary(all_results, total_tests):
         # Proportion tests
         if group["proportions"]:
             lines.append("")
-            lines.append(f"  {'Proportion':<28} {'Opus4.5':>10} {'Opus4.6':>10} {'Diff':>8} {'p-value':>10} {'h':>7} {'Effect':>12} {'Sig':>5}")
-            lines.append(f"  {'-'*28} {'-'*10} {'-'*10} {'-'*8} {'-'*10} {'-'*7} {'-'*12} {'-'*5}")
+            lines.append(f"  {'Proportion':<28} {'Opus4.5':>10} {'Opus4.6':>10} {'Diff':>8} {'p-value':>10} {'p-adj':>10} {'h':>7} {'Effect':>12} {'Sig':>5}")
+            lines.append(f"  {'-'*28} {'-'*10} {'-'*10} {'-'*8} {'-'*10} {'-'*10} {'-'*7} {'-'*12} {'-'*5}")
             for t in group["proportions"]:
                 p_a = t[MODELS[0]]["proportion"]
                 p_b = t[MODELS[1]]["proportion"]
                 diff = p_a - p_b
+                p_adj = t.get("p_adjusted")
+                p_adj_str = f"{p_adj:.4f}" if p_adj is not None else "   n/a"
+                fdr = "†" if t.get("fdr_significant") else ""
                 sig = "*" if t["significant_p05"] else ""
-                bonf = "**" if t["p_value"] < bonferroni else sig
+                bonf = "**" if t.get("bonferroni_significant") else sig
+                mark = bonf + fdr
                 lines.append(
-                    f"  {t['field']:<28} {p_a:>9.1%} {p_b:>9.1%} {diff:>+7.1%} {t['p_value']:>10.4f} {t['cohens_h']:>+7.3f} {t['effect_size_label']:>12} {bonf:>5}"
+                    f"  {t['field']:<28} {p_a:>9.1%} {p_b:>9.1%} {diff:>+7.1%} {t['p_value']:>10.4f} {p_adj_str:>10} {t['cohens_h']:>+7.3f} {t['effect_size_label']:>12} {mark:>5}"
                 )
                 all_tests_in_group.append(t)
                 if t["significant_p05"]:
@@ -429,17 +628,21 @@ def format_summary(all_results, total_tests):
         # Mann-Whitney tests
         if group["mann_whitney"]:
             lines.append("")
-            lines.append(f"  {'Continuous':<28} {'Med 4.5':>10} {'Med 4.6':>10} {'U':>10} {'p-value':>10} {'d':>7} {'Effect':>12} {'Sig':>5}")
-            lines.append(f"  {'-'*28} {'-'*10} {'-'*10} {'-'*10} {'-'*10} {'-'*7} {'-'*12} {'-'*5}")
+            lines.append(f"  {'Continuous':<28} {'Med 4.5':>10} {'Med 4.6':>10} {'U':>10} {'p-value':>10} {'p-adj':>10} {'d':>7} {'Effect':>12} {'Sig':>5}")
+            lines.append(f"  {'-'*28} {'-'*10} {'-'*10} {'-'*10} {'-'*10} {'-'*10} {'-'*7} {'-'*12} {'-'*5}")
             for t in group["mann_whitney"]:
                 med_a = t["median"][MODELS[0]]
                 med_b = t["median"][MODELS[1]]
                 d_val = t["cohens_d"] if t["cohens_d"] is not None else float("nan")
+                p_adj = t.get("p_adjusted")
+                p_adj_str = f"{p_adj:.4f}" if p_adj is not None else "   n/a"
+                fdr = "†" if t.get("fdr_significant") else ""
                 sig = "*" if t["significant_p05"] else ""
-                bonf = "**" if t["p_value"] < bonferroni else sig
+                bonf = "**" if t.get("bonferroni_significant") else sig
+                mark = bonf + fdr
                 d_str = f"{d_val:>+7.3f}" if not math.isnan(d_val) else "    n/a"
                 lines.append(
-                    f"  {t['field']:<28} {med_a:>10.2f} {med_b:>10.2f} {t['u_statistic']:>10.0f} {t['p_value']:>10.4f} {d_str} {t['effect_size_label']:>12} {bonf:>5}"
+                    f"  {t['field']:<28} {med_a:>10.2f} {med_b:>10.2f} {t['u_statistic']:>10.0f} {t['p_value']:>10.4f} {p_adj_str:>10} {d_str} {t['effect_size_label']:>12} {mark:>5}"
                 )
                 all_tests_in_group.append(t)
                 if t["significant_p05"]:
@@ -448,14 +651,18 @@ def format_summary(all_results, total_tests):
         # Chi-square tests
         if group["chi_square"]:
             lines.append("")
-            lines.append(f"  {'Categorical':<28} {'chi2':>10} {'dof':>5} {'p-value':>10} {'V':>7} {'Effect':>12} {'Sig':>5} {'Warn':>5}")
-            lines.append(f"  {'-'*28} {'-'*10} {'-'*5} {'-'*10} {'-'*7} {'-'*12} {'-'*5} {'-'*5}")
+            lines.append(f"  {'Categorical':<28} {'chi2':>10} {'dof':>5} {'p-value':>10} {'p-adj':>10} {'V':>7} {'Effect':>12} {'Sig':>5} {'Warn':>5}")
+            lines.append(f"  {'-'*28} {'-'*10} {'-'*5} {'-'*10} {'-'*10} {'-'*7} {'-'*12} {'-'*5} {'-'*5}")
             for t in group["chi_square"]:
+                p_adj = t.get("p_adjusted")
+                p_adj_str = f"{p_adj:.4f}" if p_adj is not None else "   n/a"
+                fdr = "†" if t.get("fdr_significant") else ""
                 sig = "*" if t["significant_p05"] else ""
-                bonf = "**" if t["p_value"] < bonferroni else sig
+                bonf = "**" if t.get("bonferroni_significant") else sig
+                mark = bonf + fdr
                 warn = "low" if t["low_expected_warning"] else ""
                 lines.append(
-                    f"  {t['field']:<28} {t['chi2']:>10.2f} {t['dof']:>5} {t['p_value']:>10.4f} {t['cramers_v']:>7.3f} {t['effect_size_label']:>12} {bonf:>5} {warn:>5}"
+                    f"  {t['field']:<28} {t['chi2']:>10.2f} {t['dof']:>5} {t['p_value']:>10.4f} {p_adj_str:>10} {t['cramers_v']:>7.3f} {t['effect_size_label']:>12} {mark:>5} {warn:>5}"
                 )
                 all_tests_in_group.append(t)
                 if t["significant_p05"]:
@@ -464,19 +671,22 @@ def format_summary(all_results, total_tests):
         # Summary for this group
         lines.append("")
         n_sig = len(sig_results)
-        n_bonf = sum(1 for t in all_tests_in_group if t["p_value"] < bonferroni)
+        n_bonf = sum(1 for t in all_tests_in_group if t.get("bonferroni_significant"))
+        n_fdr = sum(1 for t in all_tests_in_group if t.get("fdr_significant"))
         lines.append(f"  Significant at p<0.05: {n_sig}/{len(all_tests_in_group)}")
         lines.append(f"  Significant after Bonferroni: {n_bonf}/{len(all_tests_in_group)}")
+        lines.append(f"  Significant after FDR (BH): {n_fdr}/{len(all_tests_in_group)}")
         lines.append("")
 
     # Legend
-    lines.append("=" * 90)
+    lines.append("=" * 100)
     lines.append("LEGEND")
     lines.append("  *  = significant at p < 0.05 (uncorrected)")
     lines.append(f"  ** = significant at p < {bonferroni:.6f} (Bonferroni-corrected for {total_tests} tests)")
+    lines.append("  †  = significant after FDR correction (Benjamini-Hochberg, alpha=0.05)")
     lines.append("  Effect sizes: |d/h| < 0.2 negligible, 0.2-0.5 small, 0.5-0.8 medium, > 0.8 large")
     lines.append("  Warn 'low': some expected cell frequencies < 5 (Chi-square may be unreliable)")
-    lines.append("=" * 90)
+    lines.append("=" * 100)
 
     return "\n".join(lines)
 
@@ -539,7 +749,6 @@ def compare_sensitivity(full_results, restricted_results, full_n, restricted_n):
     lines.append(f"Overlapping projects:  {restricted_n[MODELS[0]]:>5} vs {restricted_n[MODELS[1]]:>5} tasks")
     lines.append("")
 
-    # Compare overall proportion tests (most interpretable)
     full_overall = full_results[0]
     restricted_overall = restricted_results[0]
 
@@ -561,7 +770,6 @@ def compare_sensitivity(full_results, restricted_results, full_n, restricted_n):
         f_sig = fp["significant_p05"]
         r_sig = rp["significant_p05"]
 
-        # Agreement: both sig same direction, both non-sig, or divergent
         same_direction = (f_diff > 0) == (r_diff > 0) if f_diff != 0 and r_diff != 0 else True
         if f_sig == r_sig and same_direction:
             agreement = "agree"
@@ -588,6 +796,8 @@ def main():
     parser.add_argument("--data-dir", default="data", help="Directory containing classified task JSONs")
     parser.add_argument("--analysis-dir", default="analysis", help="Directory containing LLM analysis JSONs")
     parser.add_argument("--output", default=None, help="Output JSON path (default: analysis-dir/stat-tests.json)")
+    parser.add_argument("--config", default=None,
+                        help="Path to analysis_config.json (default: scripts/analysis_config.json if it exists)")
     parser.add_argument("--sensitivity", action="store_true",
                         help="Run sensitivity analysis: full dataset vs overlapping projects only")
     parser.add_argument("--overlapping-only", action="store_true",
@@ -598,86 +808,28 @@ def main():
 
     MODELS = list(discover_model_pair(args.data_dir))
 
+    # Load config if available
+    config_path = args.config
+    analysis_config = None
+    if config_path is None:
+        # Auto-detect
+        default_config = Path(__file__).resolve().parent / "analysis_config.json"
+        if default_config.exists():
+            config_path = str(default_config)
+
+    if config_path:
+        print(f"Loading analysis config from {config_path}")
+        analysis_config = load_analysis_config(config_path)
+        fdr_alpha = analysis_config.get("correction", {}).get("alpha", 0.05)
+    else:
+        print("No analysis config found, using default field lists")
+        fdr_alpha = 0.05
+
     print(f"Loading data from {args.data_dir}/ and {args.analysis_dir}/...")
     data = load_data(args.data_dir, args.analysis_dir)
 
     for model in MODELS:
         print(f"  {model}: {len(data[model])} tasks")
-
-    # Sensitivity mode: run both full and restricted, then compare
-    if args.sensitivity:
-        overlapping = find_overlapping_projects(args.data_dir)
-        print(f"\nOverlapping projects ({len(overlapping)}):")
-        for p in overlapping:
-            print(f"  {p}")
-
-        restricted_data = {
-            model: filter_to_projects(data[model], overlapping) for model in MODELS
-        }
-        print(f"\nRestricted dataset:")
-        for model in MODELS:
-            print(f"  {model}: {len(restricted_data[model])} tasks (from {len(data[model])})")
-
-        print("\n--- Full dataset tests ---")
-        full_results, full_total, full_bonf = run_test_suite(data, "full")
-        print(f"  {full_total} tests run")
-
-        print("\n--- Overlapping projects tests ---")
-        rest_results, rest_total, rest_bonf = run_test_suite(restricted_data, "restricted")
-        print(f"  {rest_total} tests run")
-
-        # Build combined output
-        output = {
-            "metadata": {
-                "models": MODELS,
-                "analysis_type": "sensitivity",
-                "overlapping_projects": overlapping,
-            },
-            "full": {
-                "metadata": {
-                    "total_tests": full_total,
-                    "bonferroni_threshold": round(full_bonf, 8),
-                    "sample_sizes": {model: len(data[model]) for model in MODELS},
-                },
-                "overall": full_results[0],
-                "by_complexity": full_results[1:],
-            },
-            "restricted": {
-                "metadata": {
-                    "total_tests": rest_total,
-                    "bonferroni_threshold": round(rest_bonf, 8),
-                    "sample_sizes": {model: len(restricted_data[model]) for model in MODELS},
-                },
-                "overall": rest_results[0],
-                "by_complexity": rest_results[1:],
-            },
-        }
-
-        sensitivity_path = str(Path(args.analysis_dir) / "sensitivity-analysis.json")
-        with open(sensitivity_path, "w") as f:
-            json.dump(output, f, indent=2, cls=NumpyEncoder)
-        print(f"\nSensitivity results written to {sensitivity_path}")
-
-        full_n = {model: len(data[model]) for model in MODELS}
-        rest_n = {model: len(restricted_data[model]) for model in MODELS}
-        comparison = compare_sensitivity(full_results, rest_results, full_n, rest_n)
-        print("\n" + comparison)
-
-        # Also write the full-dataset results to the standard output path
-        standard_output = {
-            "metadata": {
-                "models": MODELS,
-                "total_tests": full_total,
-                "bonferroni_threshold": round(full_bonf, 8),
-                "sample_sizes": {model: len(data[model]) for model in MODELS},
-            },
-            "overall": full_results[0],
-            "by_complexity": full_results[1:],
-        }
-        with open(output_path, "w") as f:
-            json.dump(standard_output, f, indent=2, cls=NumpyEncoder)
-        print(f"Standard results also written to {output_path}")
-        return
 
     # Filter to overlapping projects if requested
     if args.overlapping_only:
@@ -689,42 +841,42 @@ def main():
         for model in MODELS:
             print(f"  {model}: {len(data[model])} tasks after filtering")
 
-    # Standard mode
-    print("\nRunning overall tests...")
-    overall = run_all_tests(data[MODELS[0]], data[MODELS[1]], label="overall")
-
-    complexity_results = []
-    for cbin in COMPLEXITY_BINS:
-        subset_a = [r for r in data[MODELS[0]] if r.get("complexity") == cbin]
-        subset_b = [r for r in data[MODELS[1]] if r.get("complexity") == cbin]
-        if len(subset_a) >= 3 and len(subset_b) >= 3:
-            print(f"Running tests for complexity={cbin} ({len(subset_a)} vs {len(subset_b)})...")
-            result = run_all_tests(subset_a, subset_b, label=f"complexity: {cbin}")
-            complexity_results.append(result)
-        else:
-            print(f"Skipping complexity={cbin} (insufficient data: {len(subset_a)} vs {len(subset_b)})")
-
-    all_results = [overall] + complexity_results
+    # Standard mode with config-driven cross-cuts
+    print("\nRunning tests across cross-cuts...")
+    cross_cuts = CROSS_CUTS if analysis_config else None
+    all_results = run_cross_cut_tests(data, cross_cuts)
     total_tests = count_tests(all_results)
 
-    # Add Bonferroni info to each test result
-    bonferroni_threshold = 0.05 / total_tests if total_tests > 0 else 0.05
-    for group in all_results:
-        for test_list in [group["chi_square"], group["mann_whitney"], group["proportions"]]:
-            for t in test_list:
-                t["bonferroni_significant"] = t["p_value"] < bonferroni_threshold
+    # Flatten, apply corrections
+    flat_tests = flatten_tests(all_results)
+    bonferroni_threshold = apply_bonferroni(flat_tests)
+    apply_fdr_correction(flat_tests, fdr_alpha)
+
+    fdr_significant_count = sum(1 for t in flat_tests if t.get("fdr_significant"))
+    bonferroni_count = sum(1 for t in flat_tests if t.get("bonferroni_significant"))
+
+    # Re-group for backward-compatible output
+    overall, by_complexity, by_cross_cut = regroup_results(flat_tests)
 
     # Build output
     output = {
         "metadata": {
             "models": MODELS,
             "total_tests": total_tests,
+            "correction_method": "benjamini-hochberg",
+            "fdr_alpha": fdr_alpha,
+            "fdr_significant_count": fdr_significant_count,
             "bonferroni_threshold": round(bonferroni_threshold, 8),
+            "bonferroni_significant_count": bonferroni_count,
             "sample_sizes": {model: len(data[model]) for model in MODELS},
         },
         "overall": overall,
-        "by_complexity": complexity_results,
+        "by_complexity": by_complexity,
     }
+
+    # Add cross-cut results if any exist beyond complexity
+    if by_cross_cut:
+        output["by_cross_cut"] = by_cross_cut
 
     # Write JSON
     with open(output_path, "w") as f:
@@ -732,8 +884,59 @@ def main():
     print(f"\nResults written to {output_path}")
 
     # Print summary table
-    summary = format_summary(all_results, total_tests)
+    summary = format_summary(all_results, total_tests, fdr_significant_count)
     print("\n" + summary)
+
+    # Sensitivity side-output: compare full vs overlapping-projects-only
+    if args.sensitivity:
+        overlapping = find_overlapping_projects(args.data_dir)
+        if overlapping:
+            restricted_data = {
+                model: filter_to_projects(data[model], overlapping) for model in MODELS
+            }
+            rest_n = {model: len(restricted_data[model]) for model in MODELS}
+            if all(n >= 3 for n in rest_n.values()):
+                print(f"\n--- Sensitivity: overlapping projects ({len(overlapping)}) ---")
+                for model in MODELS:
+                    print(f"  {model}: {rest_n[model]} tasks (from {len(data[model])})")
+
+                rest_results, rest_total, rest_bonf = run_test_suite(
+                    restricted_data, "restricted")
+
+                sensitivity_output = {
+                    "metadata": {
+                        "models": MODELS,
+                        "analysis_type": "sensitivity",
+                        "overlapping_projects": overlapping,
+                    },
+                    "full": {
+                        "metadata": {
+                            "total_tests": total_tests,
+                            "bonferroni_threshold": round(bonferroni_threshold, 8),
+                            "sample_sizes": {model: len(data[model]) for model in MODELS},
+                        },
+                        "overall": overall,
+                        "by_complexity": by_complexity,
+                    },
+                    "restricted": {
+                        "metadata": {
+                            "total_tests": rest_total,
+                            "bonferroni_threshold": round(rest_bonf, 8),
+                            "sample_sizes": rest_n,
+                        },
+                        "overall": rest_results[0],
+                        "by_complexity": rest_results[1:],
+                    },
+                }
+                sensitivity_path = str(Path(args.analysis_dir) / "sensitivity-analysis.json")
+                with open(sensitivity_path, "w") as f:
+                    json.dump(sensitivity_output, f, indent=2, cls=NumpyEncoder)
+
+                full_n = {model: len(data[model]) for model in MODELS}
+                comparison = compare_sensitivity(
+                    [overall] + by_complexity, rest_results, full_n, rest_n)
+                print("\n" + comparison)
+                print(f"Sensitivity written to {sensitivity_path}")
 
 
 if __name__ == "__main__":

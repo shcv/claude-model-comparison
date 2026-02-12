@@ -100,6 +100,33 @@
     "path": "{model_b}.overall.total_cost_usd",
     "format": "${:,.0f}"
   },
+  "cost.avg_output_per_request_a": {
+    "source": "tokens",
+    "path": "{model_a}.overall.avg_output_per_request",
+    "format": "{:,.0f}"
+  },
+  "cost.avg_output_per_request_b": {
+    "source": "tokens",
+    "path": "{model_b}.overall.avg_output_per_request",
+    "format": "{:,.0f}"
+  },
+
+  "thinking.effect_d": {
+    "source": "stats",
+    "path": "overall.mann_whitney.[field=thinking_fraction].cohens_d",
+    "format": "{:.2f}"
+  },
+
+  "sessions.explore_median_a": {
+    "source": "timing",
+    "path": "{model_a}.explore_phase.explore_duration_seconds.median",
+    "format": "{:.1f}"
+  },
+  "sessions.explore_median_b": {
+    "source": "timing",
+    "path": "{model_b}.explore_phase.explore_duration_seconds.median",
+    "format": "{:.1f}"
+  },
 
   "edits.total_overlaps_a": {
     "source": "edits",
@@ -311,10 +338,38 @@
     "format": "{:.3f}"
   },
 
+  "findings.total_tests": {
+    "source": "findings",
+    "path": "metadata.total_tests",
+    "format": "{:,}"
+  },
+  "findings.fdr_significant": {
+    "source": "findings",
+    "path": "metadata.fdr_significant",
+    "format": "{:,}"
+  },
+  "findings.bonferroni_significant": {
+    "source": "findings",
+    "path": "metadata.bonferroni_significant",
+    "format": "{:,}"
+  },
+
   "template_tables": {
+    "findings-summary": {
+      "spec": "findings-summary",
+      "table": "findings-summary"
+    },
     "cost-thinking-calibration": {
-      "spec": "cost",
+      "spec": "thinking",
       "table": "cost-thinking-calibration"
+    },
+    "thinking-depth-by-type": {
+      "spec": "thinking",
+      "table": "thinking-depth-by-type"
+    },
+    "per-request-output": {
+      "spec": "cost",
+      "table": "per-request-output"
     },
     "cost-verbosity-by-type": {
       "spec": "cost",
@@ -331,6 +386,14 @@
     "behavior-subagent-types": {
       "spec": "behavior",
       "table": "behavior-subagent-types"
+    },
+    "planning-adoption": {
+      "spec": "behavior",
+      "table": "planning-adoption"
+    },
+    "planning-by-complexity": {
+      "spec": "behavior",
+      "table": "planning-by-complexity"
     },
     "complexity-distribution": {
       "spec": "complexity",

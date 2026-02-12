@@ -613,21 +613,10 @@ def compute_complexity_bins(model: str, data_dir: Path, analysis_dir: Path):
     for m in matched:
         bins_by_complexity[m['complexity']].append(m)
 
-    # Collapse complex+major if either has <10 tasks
-    complex_n = len(bins_by_complexity.get('complex', []))
-    major_n = len(bins_by_complexity.get('major', []))
-    collapse = complex_n < 10 or major_n < 10
-    if collapse and ('complex' in bins_by_complexity or 'major' in bins_by_complexity):
-        merged = bins_by_complexity.pop('complex', []) + bins_by_complexity.pop('major', [])
-        if merged:
-            bins_by_complexity['complex+'] = merged
-
     by_complexity = {}
-    for level in COMPLEXITY_ORDER + ['complex+']:
+    for level in COMPLEXITY_ORDER:
         tasks = bins_by_complexity.get(level)
         if tasks is None:
-            continue
-        if collapse and level in ('complex', 'major'):
             continue
         by_complexity[level] = _compute_bin_rates(tasks)
 

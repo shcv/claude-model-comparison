@@ -1,0 +1,37 @@
+{
+  "section_id": "thinking",
+  "data_sources": {
+    "tokens": "analysis/token-analysis.json",
+    "findings": "analysis/findings.json",
+    "stats": "analysis/stat-tests.json"
+  },
+  "tables": {
+    "cost-thinking-calibration": {
+      "title": "Thinking calibration by complexity (inline)",
+      "data_source": "tokens",
+      "row_gen": "thinking_calibration_inline"
+    },
+    "thinking-depth-by-type": {
+      "title": "Thinking depth by task type (inline)",
+      "data_source": "tokens",
+      "row_gen": "thinking_depth_by_type_inline"
+    },
+    "thinking-cross-cuts": {
+      "title": "Thinking Fraction: Cross-Cut Effect Sizes",
+      "data_source": "findings",
+      "row_gen": "findings_by_theme",
+      "theme": "thinking"
+    }
+  },
+  "prose": {
+    "key_metrics": [
+      "tokens.{model_a}.overall.thinking_ratio",
+      "tokens.{model_b}.overall.thinking_ratio",
+      "tokens.{model_a}.overall.avg_thinking_chars_when_used",
+      "tokens.{model_b}.overall.avg_thinking_chars_when_used",
+      "stats.overall.mann_whitney.[field=thinking_fraction].cohens_d",
+      "stats.overall.mann_whitney.[field=thinking_fraction].p_value"
+    ],
+    "guidance": "This section covers thinking calibration. Key finding: thinking_fraction is the #1 effect (d=0.67, LARGE). 4.5 thinks more often but shallowly; 4.6 reserves thinking for moderate+ complexity. Verify thinking ratios and depth data."
+  }
+}
