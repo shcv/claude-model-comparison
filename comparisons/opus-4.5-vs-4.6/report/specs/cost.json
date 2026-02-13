@@ -1,5 +1,14 @@
 {
   "section_id": "cost",
+  "review": {
+    "intent": "Compare token economics between models, showing how output volume, thinking depth, and caching interact to determine per-task cost.",
+    "focus": [
+      "Verify cost-per-task figures match token-analysis.json calculations",
+      "Check that complexity-stratified cost claims don't contradict the overall cost comparison",
+      "Ensure caching efficiency narrative is consistent with cache_hit_rate data",
+      "Confirm verbosity-by-type table rows use the correct task type taxonomy (no stale 'simple' type)"
+    ]
+  },
   "data_sources": {
     "tokens": "analysis/token-analysis.json"
   },
@@ -145,7 +154,7 @@
         }
       ],
       "prose": {
-        "guidance": "Explain thinking calibration differences: how 4.6 reserves thinking for complex tasks while being more concise on trivial ones. Note the steeper gradient in thinking allocation."
+        "guidance": "Explain thinking calibration differences between models: how thinking depth varies across complexity levels for each model. Characterize any gradient differences in thinking allocation."
       }
     },
     "per-request-output": {
@@ -184,6 +193,6 @@
       "tokens.{model_a}.overall.count",
       "tokens.{model_b}.overall.count"
     ],
-    "guidance": "This section covers token economy. Key narrative: despite more output, 4.6 achieves similar per-task cost through caching and batching. Verify all cost, token count, and ratio claims against the data."
+    "guidance": "This section covers token economy. Explain the relationship between output volume, caching efficiency, and per-task cost. Verify all cost, token count, and ratio claims against the data. Complexity-stratified claims should be consistent with overall figures."
   }
 }

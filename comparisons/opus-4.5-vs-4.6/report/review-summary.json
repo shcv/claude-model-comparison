@@ -1,0 +1,509 @@
+{
+  "total_corrections": 57,
+  "by_category": {
+    "factual": 28,
+    "consistency": 7,
+    "prose": 8,
+    "cross-consistency": 8,
+    "flow": 4,
+    "redundancy": 2
+  },
+  "by_severity": {
+    "medium": 25,
+    "high": 11,
+    "low": 21
+  },
+  "corrections": [
+    {
+      "old": "Over half of all tasks are trivial (single-turn interactions)",
+      "new": "Nearly half of all tasks are trivial (single-turn interactions)",
+      "reason": "Trivial tasks are 1,021 out of 2,320 = 44.0%, which is not over half. For Opus 4.5 alone it's 46.7%, still under half.",
+      "category": "factual",
+      "severity": "medium",
+      "section": "dataset"
+    },
+    {
+      "old": "the 8-day concentration of the Opus 4.6 data",
+      "new": "the 9-day concentration of the Opus 4.6 data",
+      "reason": "Feb 3 through Feb 11 inclusive is 9 days, not 8.",
+      "category": "factual",
+      "severity": "medium",
+      "section": "dataset"
+    },
+    {
+      "old": "Opus 4.6 sessions are concentrated across 14 projects (all of which also have Opus 4.5 sessions), providing natural overlap for matched-pair comparisons where they apply.",
+      "new": "Opus 4.6 sessions are concentrated across 14 projects (9 of which also have Opus 4.5 sessions), providing natural overlap for matched-pair comparisons where they apply.",
+      "reason": "The stat cards show 35 combined projects from 30 (4.5) + 14 (4.6) with 9 shared. That means only 9 of the 14 Opus 4.6 projects have 4.5 sessions, not all 14.",
+      "category": "factual",
+      "severity": "high",
+      "section": "dataset"
+    },
+    {
+      "old": "The 2:1 session ratio means per-task averages for Opus 4.5 are more robust",
+      "new": "The ~2.4:1 session ratio means per-task averages for Opus 4.5 are more robust",
+      "reason": "327/136 = 2.4:1, not 2:1. The task ratio is even larger at ~2.9:1. Using '~2.4:1' is more accurate while still being concise.",
+      "category": "factual",
+      "severity": "low",
+      "section": "dataset"
+    },
+    {
+      "old": "producing 2.4&times; more output tokens",
+      "new": "producing ~2.3&times; more output tokens",
+      "reason": "2240/953 = 2.349, which rounds to 2.3\u00d7, not 2.4\u00d7. The stat card below also says 2.4\u00d7 and should be updated separately.",
+      "category": "factual",
+      "severity": "medium",
+      "section": "cost"
+    },
+    {
+      "old": "<div class=\"value v-blue\">2.4&times;</div>",
+      "new": "<div class=\"value v-blue\">2.3&times;</div>",
+      "reason": "2240/953 = 2.349, rounds to 2.3\u00d7 not 2.4\u00d7.",
+      "category": "factual",
+      "severity": "medium",
+      "section": "cost"
+    },
+    {
+      "old": "Despite producing 2.4&times; more output",
+      "new": "Despite producing ~2.3&times; more output",
+      "reason": "Same ratio correction: 2240/953 = 2.35\u00d7.",
+      "category": "factual",
+      "severity": "medium",
+      "section": "cost"
+    },
+    {
+      "old": "writing 24% fewer tokens at the most expensive token category",
+      "new": "writing 25% fewer tokens at the most expensive token category",
+      "reason": "(68K - 51K)/68K = 0.25 = 25%, not 24%.",
+      "category": "factual",
+      "severity": "low",
+      "section": "cost"
+    },
+    {
+      "old": "4.6 writes 24% fewer tokens to cache per task",
+      "new": "4.6 writes 25% fewer tokens to cache per task",
+      "reason": "(68K - 51K)/68K = 25%, not 24%.",
+      "category": "factual",
+      "severity": "low",
+      "section": "cost"
+    },
+    {
+      "old": "4.6 writes 24% less to cache (the most expensive token category at $18.75/MTok)",
+      "new": "4.6 writes 25% less to cache (the most expensive token category at $18.75/MTok)",
+      "reason": "Same correction: (68K - 51K)/68K = 25%.",
+      "category": "factual",
+      "severity": "low",
+      "section": "cost"
+    },
+    {
+      "old": "Cache writes ($18.75/MTok) are 12.5&times; more expensive than cache reads ($1.50/MTok).</p>",
+      "new": "Cache writes ($18.75/MTok) are 10&times; more expensive than cache reads ($1.875/MTok).</p>",
+      "reason": "The cache read price is $1.875/MTok as shown in the cost breakdown table, not $1.50. And $18.75/$1.875 = 10\u00d7, not 12.5\u00d7.",
+      "category": "factual",
+      "severity": "high",
+      "section": "cost"
+    },
+    {
+      "old": "the cheapest category ($1.875/M). And the 2.4&times; output increase costs only $0.10",
+      "new": "the cheapest category ($1.875/M). And the ~2.3&times; output increase costs only $0.10",
+      "reason": "Consistent with the corrected output ratio.",
+      "category": "factual",
+      "severity": "low",
+      "section": "cost"
+    },
+    {
+      "old": "Per-request output survives Bonferroni correction (d=0.33, small). Opus 4.6 produces more tokens per API round-trip at every complexity level, concentrating work into fewer, larger responses rather than many small incremental calls.",
+      "new": "Per-request output survives Bonferroni correction (d=0.33, small). Opus 4.6 produces more tokens per API round-trip at every complexity level, concentrating work into larger responses rather than many small incremental calls.",
+      "reason": "4.6 actually makes MORE requests per task (9.6 vs 7.5), so 'fewer' is misleading. It makes larger responses but not fewer of them. Removing 'fewer' avoids the contradiction.",
+      "category": "consistency",
+      "severity": "medium",
+      "section": "cost"
+    },
+    {
+      "old": "A 10-step pipeline transforms raw JSONL session logs into the finished report.",
+      "new": "A 13-step pipeline transforms raw JSONL session logs into the finished report.",
+      "reason": "The pipeline orchestrator (run_pipeline.py) defines exactly 13 steps: collect, extract, classify, annotate, analyze, tokens, enrich, stats, findings, dataset, update, review, report. The diagram below shows a simplified visualization that groups some steps, but the prose should state the actual count.",
+      "category": "factual",
+      "severity": "medium",
+      "section": "how-it-works"
+    },
+    {
+      "old": "<div class=\"pipe-step\">LLM Classification<small>complexity, sentiment</small></div>",
+      "new": "<div class=\"pipe-step\">Classification<small>regex + LLM</small></div>",
+      "reason": "This pipeline box conflates two distinct steps: classify_tasks.py (regex-based task type and complexity classification) and annotate_tasks.py (LLM-based sentiment, scope, quality signals). Labeling it purely 'LLM Classification' misrepresents the regex-first design. The subtitle 'complexity, sentiment' names outputs from different steps; 'regex + LLM' more accurately conveys the two-pass approach.",
+      "category": "factual",
+      "severity": "medium",
+      "section": "how-it-works"
+    },
+    {
+      "old": "<div class=\"pipe-step\">Statistical Tests<small>529 comparisons</small></div>\n                    <span class=\"pipe-arrow\">&rarr;</span>\n                    <div class=\"pipe-step\">Edit Timeline<small>4,799 edits</small></div>\n                    <span class=\"pipe-arrow\">&rarr;</span>\n                    <div class=\"pipe-step\">Compaction<small>79 events</small></div>\n                    <span class=\"pipe-arrow\">&rarr;</span>\n                    <div class=\"pipe-step\">Report Build<small>terms, expansions</small></div>",
+      "new": "<div class=\"pipe-step\">Statistical Tests<small>529 comparisons</small></div>\n                    <span class=\"pipe-arrow\">&rarr;</span>\n                    <div class=\"pipe-step\">Report Build<small>terms, expansions</small></div>",
+      "reason": "Edit Timeline (4,799 edits) and Compaction (79 events) are sub-analyses within the 'analyze' step (run_analyses.py runs analyze_edits.py and analyze_compaction.py together), not separate pipeline stages that occur after statistical tests. Showing them as sequential steps after stats misrepresents the pipeline order. The Behavioral Analysis box already covers the analyze step; these details could be added as a subtitle there if desired, but they should not appear as independent post-stats stages.",
+      "category": "factual",
+      "severity": "high",
+      "section": "how-it-works"
+    },
+    {
+      "old": "<div class=\"pipe-step\">Behavioral Analysis<small>subagents, planning</small></div>",
+      "new": "<div class=\"pipe-step\">Behavioral Analysis<small>edits, planning, compaction</small></div>",
+      "reason": "Since Edit Timeline (4,799 edits) and Compaction (79 events) are sub-analyses within this step (run_analyses.py), the subtitle should reflect those key outputs. 'subagents' is not a primary analysis name in run_analyses.py; the actual sub-scripts are analyze_behavior, analyze_edits, analyze_planning, and analyze_compaction.",
+      "category": "factual",
+      "severity": "medium",
+      "section": "how-it-works"
+    },
+    {
+      "old": "Edit the template at <code>report/report.html</code>, not the built output at <code>dist/public/report.html</code>.",
+      "new": "",
+      "reason": "SKIP \u2014 this text is from CLAUDE.md, not the section under review. No correction needed.",
+      "category": "prose",
+      "severity": "low",
+      "section": "how-it-works"
+    },
+    {
+      "old": "Interpretive prose was drafted and checked with LLM assistance and may contain errors or overstatements.",
+      "new": "Interpretive prose was drafted and checked with LLM assistance and may contain errors or overstatements&mdash;see <a href=\"#methodology\">Methodology</a> for the full review process.",
+      "reason": "The section mentions an LLM prose-check pass but doesn't clarify how it works. Since the Methodology section describes the review_report.py process in detail, a forward reference helps readers who want specifics without cluttering this overview section.",
+      "category": "prose",
+      "severity": "low",
+      "section": "how-it-works"
+    },
+    {
+      "old": "A <a href=\"#methodology\">sensitivity analysis</a> validates key findings against restricted datasets excluding shared projects. The <a href=\"#methodology\">Methodology section</a> describes every step in full detail.",
+      "new": "A <a href=\"#methodology\">sensitivity analysis</a> validates key findings against restricted datasets excluding shared projects.",
+      "reason": "The sentence 'The Methodology section describes every step in full detail' is redundant given the new forward reference added to the previous sentence and the existing sensitivity analysis link. Two consecutive methodology links in the same paragraph is excessive.",
+      "category": "prose",
+      "severity": "low",
+      "section": "how-it-works"
+    },
+    {
+      "old": "that diminishes at complex and major tiers",
+      "new": "though the per-complexity detail table shows too few planned observations at higher tiers to draw strong conclusions",
+      "reason": "The planning-complexity-detail expansion table shows Complex+ with n=0 for both models, so the claim that the alignment benefit 'diminishes at complex and major tiers' is unsupported by the data shown. The prose should not make a directional claim about tiers where the table has no data.",
+      "category": "consistency",
+      "severity": "medium",
+      "section": "behavior"
+    },
+    {
+      "old": "These behavioral differences are among the most visible in the dataset, though the Claude Code platform itself evolved between the two collection periods&mdash;some of the shift may reflect SDK changes rather than model decisions.",
+      "new": "These behavioral differences are among the most visible in the dataset, though two confounds apply: the Claude Code platform itself evolved between the two collection periods, and Opus 4.6&rsquo;s task mix skews harder (42% moderate-and-above vs 33% for Opus 4.5)&mdash;so some of the shift may reflect SDK changes or task difficulty rather than model decisions alone.",
+      "reason": "The section intent specifically asks the review to check that 'complexity distribution prose acknowledges any skew between models and its implications for fair comparison.' The complexity distributions are quite different (4.6 has 36% trivial vs 47% for 4.5) and this could explain some behavioral differences like higher planning adoption. The current prose only mentions SDK changes as a confound.",
+      "category": "consistency",
+      "severity": "high",
+      "section": "behavior"
+    },
+    {
+      "old": "63% vs 53%",
+      "new": "63% vs 53% for 4.6",
+      "reason": "The original '63% vs 53%' follows the A-vs-B convention used everywhere else in the section, but the immediately preceding sentence discusses 4.6's self-correction share. Switching to 4.5 without labeling creates an ambiguous antecedent about which model is which. Adding the label clarifies.",
+      "category": "prose",
+      "severity": "low",
+      "section": "edits"
+    },
+    {
+      "old": "Error recovery rates are comparable (15.7% vs 15.0%).",
+      "new": "Error recovery shares are comparable (15.7% vs 15.0%).",
+      "category": "prose",
+      "severity": "low",
+      "reason": "These are shares of overlaps, not rates (rate would imply error-recovery edits / total edits). Using 'shares' is more precise and consistent with the preceding sentences that discuss proportions of overlaps.",
+      "section": "edits"
+    },
+    {
+      "old": "but engages thinking for 90%+ of moderate-and-above tasks",
+      "new": "but engages thinking for 90%+ of moderate and complex tasks",
+      "reason": "The calibration table shows Major complexity at 77.8% for Opus 4.6, which is below 90%. Only Moderate (90.4%) and Complex (93.2%) are above 90%. Major should be excluded from this claim.",
+      "category": "factual",
+      "severity": "medium",
+      "section": "thinking"
+    },
+    {
+      "old": "Thinking fraction survives Bonferroni correction across all complexity strata and cross-cut dimensions. This is the most robust and consistent finding in the study.",
+      "new": "Thinking fraction survives Bonferroni correction across trivial, simple, and moderate complexity strata, and most cross-cut slices. The complex stratum is non-significant (p<sub>adj</sub>=0.82), likely due to smaller sample size. This is the most robust and widespread finding in the study.",
+      "reason": "The cross-cut table's own non-significant section shows complexity:complex has p_adj=0.8174 for thinking_fraction. Also task_type:refactor (p=0.18) and task_type:greenfield (p=0.38) are non-significant. Claiming 'all complexity strata and cross-cut dimensions' is factually wrong.",
+      "category": "factual",
+      "severity": "high",
+      "section": "thinking"
+    },
+    {
+      "old": "Complexity-stratified alignment scores would strengthen or weaken this claim but are not yet part of the pipeline.",
+      "new": "The cross-cut detail below shows complexity-stratified alignment scores: 4.6 scores higher on trivial tasks (FDR-significant) and shows a similar but non-significant trend on moderate tasks, consistent with genuine improvement rather than a pure task-mix artifact.",
+      "reason": "The cross-cut findings table directly below this callout already contains complexity-stratified alignment scores (complexity:trivial, complexity:moderate). Claiming they are 'not yet part of the pipeline' contradicts the section's own data.",
+      "category": "factual",
+      "severity": "high",
+      "section": "quality"
+    },
+    {
+      "old": "Dissatisfaction rates are essentially tied (12.7% vs 12.0%, p=0.65).",
+      "new": "Dissatisfaction rates are essentially tied (12.7% vs 12.0%, p=0.65, negligible effect).",
+      "reason": "For consistency with how other metrics in the section cite their effect sizes, and since Cohen's h=0.022 is negligible, adding the effect size descriptor makes the tied claim more rigorous.",
+      "category": "prose",
+      "severity": "low",
+      "section": "quality"
+    },
+    {
+      "old": "All three overall chi-square Bonferroni survivors and the alignment score depend on LLM-generated categories.",
+      "new": "All three overall chi-square Bonferroni survivors and the alignment score depend on LLM-generated categories. Two of the three chi-square survivors (communication quality and autonomy level) carry low-expected-cell-count warnings.",
+      "reason": "The prior sentence claims 'All three overall chi-square Bonferroni survivors have low-expected-cell-count warnings' but stat-tests.json shows task_completion has low_expected_warning: false. Only communication_quality and autonomy_level have this warning. Moving the accurate version of this claim here, since the incorrect version in the prior paragraph is being fixed separately.",
+      "category": "factual",
+      "severity": "low",
+      "section": "methodology"
+    },
+    {
+      "old": "All three chi-square survivors have low-expected-cell-count warnings, which may inflate test statistics.",
+      "new": "Two of the three chi-square survivors have low-expected-cell-count warnings, which may inflate their test statistics.",
+      "reason": "stat-tests.json shows task_completion has low_expected_warning: false. Only communication_quality and autonomy_level have this warning. Saying 'all three' is factually incorrect.",
+      "category": "factual",
+      "severity": "medium",
+      "section": "methodology"
+    },
+    {
+      "old": "<h3>Observed Patterns by Task Type</h3>",
+      "new": "<h3>Observed Patterns by Task Dimension</h3>",
+      "reason": "The table header says 'Task Type' but the rows mix complexity tiers (trivial/simple, complex/major), actual task types (refactoring, investigation), and session-level observations (long sessions, parallel execution). 'Task Dimension' better describes the heterogeneous grouping.",
+      "category": "consistency",
+      "severity": "low",
+      "section": "profiles"
+    },
+    {
+      "old": "<tr><th>Task Type</th><th>Observed Pattern</th><th>Evidence &amp; Caveats</th></tr>",
+      "new": "<tr><th>Dimension</th><th>Observed Pattern</th><th>Evidence &amp; Caveats</th></tr>",
+      "reason": "Matching the section heading change \u2014 'Task Type' is misleading when the rows include complexity tiers and session characteristics, not just task types.",
+      "category": "consistency",
+      "severity": "low",
+      "section": "profiles"
+    },
+    {
+      "old": "Primarily autonomous (54%).",
+      "new": "54% autonomous subagent calls.",
+      "reason": "'Primarily autonomous' implies a majority, but 54% is barely over half. The rephrasing states the number without the superlative framing.",
+      "category": "prose",
+      "severity": "low",
+      "section": "profiles"
+    },
+    {
+      "old": "Both show some degradation",
+      "new": "Both decline; 4.6 drops more",
+      "reason": "The session-length expansion data shows 4.5 alignment drops negligibly (2.93\u21922.85, -0.08) while 4.6 drops substantially (3.53\u21922.96, -0.57). 'Both show some degradation' understates the asymmetry, especially since the 4.5 profile card claims 'Stable performance across session lengths.' The current phrasing creates tension between the profile claim and the table row.",
+      "category": "consistency",
+      "severity": "medium",
+      "section": "profiles"
+    },
+    {
+      "old": "Small sample for late-session tasks; 4.6 may degrade faster",
+      "new": "4.5: 2.93&rarr;2.85 alignment; 4.6: 3.53&rarr;2.96 (&sect;8); n=58/11 long sessions",
+      "reason": "Replace vague 'may degrade faster' hedge with the actual alignment numbers from the session-length expansion, which clearly show 4.6 drops 0.57 vs 4.5's 0.08. Including the sample sizes (n=58/11) lets the reader judge for themselves.",
+      "category": "prose",
+      "severity": "medium",
+      "section": "profiles"
+    },
+    {
+      "old": "4.6 backgrounded more tasks",
+      "new": "Similar background task rates",
+      "reason": "Opus 4.5 ran 45 background tasks and 4.6 ran 49 \u2014 a negligible difference (45 vs 49 out of 283 and 262 total subagent calls respectively). 'More' overstates a ~9% difference on small counts.",
+      "category": "factual",
+      "severity": "medium",
+      "section": "profiles"
+    },
+    {
+      "old": "4.5 spawned more agents but ran them sequentially",
+      "new": "4.5 spawned more total agents (283 vs 262) with 1 parallel directive; 4.6 had 0 parallel directives but more background tasks (49 vs 45)</td></tr>",
+      "reason": "The original claim 'ran them sequentially' is misleading \u2014 4.5 actually had the only parallel directive (1 task, 8 agents, all background). The data shows both models used background tasks at similar rates, with 4.5 having the only explicit parallelism directive.",
+      "category": "factual",
+      "severity": "medium",
+      "section": "profiles"
+    },
+    {
+      "old": "1,765 overlapping pairs, max concurrency 11",
+      "new": "1,773 overlapping pairs, max concurrency 11",
+      "reason": "timing-analysis.json shows overlapping_pairs: 1773, not 1,765",
+      "category": "factual",
+      "severity": "medium",
+      "section": "sessions"
+    },
+    {
+      "old": "the duration gap is largest for significantly-iterated tasks (median 98.9s vs 42.2s) and investigation tasks (median 100.7s vs 43.3s), both Bonferroni-significant. Effect sizes are negligible (d&lt;0.1) despite significance",
+      "new": "the duration gap is largest for significantly-iterated tasks (median 99.0s vs 46.7s) and investigation tasks (median 79.9s vs 41.0s), both Bonferroni-significant. Effect sizes are negligible (d&lt;0.1) despite significance",
+      "reason": "stat-tests.json shows iteration:significant medians are opus-4-6=99.016 and opus-4-5=46.701 (not 98.9 and 42.2). For task_type:investigation, medians are opus-4-6=79.909 and opus-4-5=41.002 (not 100.7 and 43.3). The investigation numbers were substantially wrong \u2014 100.7 may have come from a confidence interval bound (100.784 appears in mean_ci).",
+      "category": "factual",
+      "severity": "high",
+      "section": "sessions"
+    },
+    {
+      "old": "<strong>Position-adjusted effect:</strong> The negative values indicate compaction preserves rather than degrades performance relative to where it occurs in the session.",
+      "new": "<strong>Position-adjusted effect:</strong> The negative net values mean compacting sessions improve less than position-matched controls, suggesting the apparent post-compaction improvement is driven by session position rather than compaction itself. Compaction neither helps nor substantially harms outcomes.",
+      "reason": "The original phrasing 'preserves rather than degrades' is misleading \u2014 the net effect is actually negative (compacting sessions improve less than controls), not neutral or positive. The rewrite more accurately describes what the negative values mean while maintaining the correct conclusion that compaction isn't catastrophic.",
+      "category": "consistency",
+      "severity": "medium",
+      "section": "sessions"
+    },
+    {
+      "old": "Strongest signal (p&lt;0.000001, d=0.29)",
+      "new": "Strongest behavioral signal (p&lt;0.000001, d=0.29)",
+      "reason": "tool_calls (d=0.29) is NOT the strongest signal overall \u2014 thinking_fraction (d=0.67), total_output_tokens (d=0.42), and output_per_request (d=0.33) all have larger effect sizes. It is the strongest among behavioral/resource metrics specifically.",
+      "category": "factual",
+      "severity": "high",
+      "section": "complexity"
+    },
+    {
+      "old": "Tool calls per task and tools per file are the strongest statistical signals in the study (both p&lt;0.000001, Bonferroni).",
+      "new": "Tool calls per task is the strongest behavioral signal in the study (p&lt;0.000001, d=0.29, Bonferroni); tools per file also survives correction (p&lt;0.000001, d=0.10).",
+      "reason": "Three other metrics have larger overall effect sizes (thinking_fraction d=0.67, total_output_tokens d=0.42, output_per_request d=0.33). Calling tool_calls+tools_per_file 'the strongest signals in the study' is factually incorrect. Additionally, grouping them as 'both strongest' is misleading when tools_per_file (d=0.10) is negligible \u2014 the stat note in the same section correctly calls this out.",
+      "category": "factual",
+      "severity": "high",
+      "section": "complexity"
+    },
+    {
+      "old": "the tool-call gap is largest for significantly-iterated tasks (d=0.54)",
+      "new": "the tool-call gap is largest for significantly-iterated tasks (d=0.52)",
+      "reason": "The actual Cohen's d for tool_calls in the iteration:significant cross-cut is -0.5217, which rounds to 0.52, not 0.54.",
+      "category": "factual",
+      "severity": "medium",
+      "section": "complexity"
+    },
+    {
+      "old": "Per-task mean 13.4 vs 8.8 (incl. subagents: 16.3 vs 10.4) (&sect;7)",
+      "new": "Per-task mean 8.8 vs 13.4 (incl. subagents: 10.4 vs 16.3) (&sect;7)",
+      "reason": "The exec summary lists 4.5 first throughout (cost: $2.46 vs $2.62, output: 953 vs 2,240) but here lists 4.6's value first (13.4 is 4.6, 8.8 is 4.5). Should be 4.5 vs 4.6 order to match the rest of the stat card, which says '+53%' implying 4.6 is the higher value.",
+      "category": "cross-consistency",
+      "severity": "medium",
+      "sections": [
+        "executive-summary",
+        "complexity"
+      ]
+    },
+    {
+      "old": "A 10-step pipeline transforms raw JSONL session logs into the finished report.",
+      "new": "A multi-step pipeline transforms raw JSONL session logs into the finished report.",
+      "reason": "The visual diagram shows 9 boxes (Session Logs through Report Build), and the CLAUDE.md documents a 13-step pipeline. '10-step' matches neither count.",
+      "category": "cross-consistency",
+      "severity": "medium",
+      "sections": [
+        "how-it-works"
+      ]
+    },
+    {
+      "old": "Cache writes ($18.75/MTok) are 12.5&times; more expensive than cache reads ($1.50/MTok).",
+      "new": "Cache writes ($18.75/MTok) are 10&times; more expensive than cache reads ($1.875/MTok).",
+      "reason": "The main cost breakdown table in \u00a72 lists cache reads at $1.875/MTok, and the prose says '10\u00d7 the read price'. The expansion contradicts both with $1.50 and 12.5\u00d7. $18.75/$1.875 = 10\u00d7.",
+      "category": "cross-consistency",
+      "severity": "high",
+      "sections": [
+        "cost"
+      ]
+    },
+    {
+      "old": "<span class=\"finding\">Tool calls strongest signal (p&lt;0.000003)</span>",
+      "new": "<span class=\"finding\">Tool calls strongest signal (p&lt;0.000001)</span>",
+      "reason": "Section 7's stat note says 'p<0.000001' and the methodology full results table shows p=0.000000. The TOC's 'p<0.000003' is a less precise and inconsistent threshold.",
+      "category": "cross-consistency",
+      "severity": "low",
+      "sections": [
+        "toc",
+        "complexity"
+      ]
+    },
+    {
+      "old": "<div class=\"label\">Quality Survivors</div>\n                        <div class=\"value v-dark\">2 of 7</div>\n                        <div class=\"detail\">2 of 7 core Bonferroni survivors are quality metrics</div>",
+      "new": "<div class=\"label\">Quality Survivors</div>\n                        <div class=\"value v-dark\">2 of 15</div>\n                        <div class=\"detail\">2 of 15 overall Bonferroni survivors are quality metrics</div>",
+      "reason": "The methodology section states 'fifteen survive Bonferroni' at the overall level. The '7' denominator is undefined and inconsistent. Alignment score and task completion distribution are the 2 quality survivors out of 15 overall Bonferroni survivors.",
+      "category": "cross-consistency",
+      "severity": "high",
+      "sections": [
+        "quality",
+        "methodology"
+      ]
+    },
+    {
+      "old": "53% more tool calls per task (<a href=\"#complexity\">&sect;7</a>) are partly a consequence of this delegation shift.</p>",
+      "new": "57% more tool calls per task (<a href=\"#complexity\">&sect;7</a>) are partly a consequence of this delegation shift.</p>",
+      "reason": "Section 7's resource usage table shows +57% for tool calls per task (16.3 vs 10.4 including subagents). The exec summary stat card says '+53%' (which derives from 13.4/8.8 = 52%, excluding subagents), but this paragraph's '53%' references \u00a77 which uses the including-subagents figure of +57%.",
+      "category": "cross-consistency",
+      "severity": "medium",
+      "sections": [
+        "executive-summary",
+        "complexity"
+      ]
+    },
+    {
+      "old": "Despite 2.4&times; more output tokens and 53% more tool calls per task, 4.6 is 9&ndash;35% <em>cheaper</em>",
+      "new": "Despite 2.4&times; more output tokens and 57% more tool calls per task, 4.6 is 9&ndash;35% <em>cheaper</em>",
+      "reason": "Same issue: this paragraph references tool calls per task in the context of the including-subagents figure from \u00a77 (16.3 vs 10.4 = +57%), not the attributed-only figure (13.4 vs 8.8 \u2248 +52%).",
+      "category": "cross-consistency",
+      "severity": "medium",
+      "sections": [
+        "executive-summary"
+      ]
+    },
+    {
+      "old": "The extra activity is predominantly read-only research (74% Explore subagents, &sect;4), not proportional output growth. An alternative reading: 4.6 is simply less efficient, doing more work for similar results.",
+      "new": "The extra activity is predominantly read-only research (74% Explore subagents, &sect;4), not proportional output growth. An alternative reading: 4.6 is less efficient, doing more work for similar output.",
+      "reason": "Minor: 'simply' is unnecessary hedging in what's already presented as an alternative interpretation, and 'results' is vague\u2014'output' connects directly to the preceding sentence about lines of code.",
+      "category": "flow",
+      "severity": "low",
+      "sections": [
+        "complexity"
+      ]
+    },
+    {
+      "old": "Opus 4.6 costs ~6.5% more per task on average (<!-- var: cost.avg_cost_b -->$2.62<!-- /var --> vs <!-- var: cost.avg_cost_a -->$2.46<!-- /var -->), despite producing 2.4&times; more output tokens and making more API round-trips (9.6 vs 7.5 requests/task). But this aggregate masks a complexity-dependent pattern: at trivial through moderate levels, 4.6 is 9&ndash;35% <em>cheaper</em>, driven by superior cache economics&mdash;not output efficiency. Output tokens account for less than 7% of per-task cost; cache operations account for ~95%. 4.6 achieves a leaner cache footprint, writing 24% fewer tokens at the most expensive token category. The cost advantage reverses at complex and major tiers, where accumulated cache reads over many requests outweigh the write savings.</p>",
+      "new": "Opus 4.6 costs ~6.5% more per task on average (<!-- var: cost.avg_cost_b -->$2.62<!-- /var --> vs <!-- var: cost.avg_cost_a -->$2.46<!-- /var -->), despite producing 2.4&times; more output tokens and making more API round-trips (9.6 vs 7.5 requests/task). But this aggregate masks a complexity-dependent pattern: at trivial through moderate levels, 4.6 is 9&ndash;35% <em>cheaper</em>, driven by superior cache economics&mdash;not output efficiency. Output tokens account for less than 7% of per-task cost; cache operations account for ~95%. 4.6 achieves a leaner cache footprint, writing 24% fewer tokens at the most expensive token category ($18.75/MTok). The cost advantage reverses at complex and major tiers, where accumulated cache reads over many requests outweigh the write savings.</p>",
+      "reason": "The phrase 'the most expensive token category' appears here without identifying what it is. Later paragraphs explain it's cache writes at $18.75/MTok, but this opening paragraph introduces the concept before defining it. Adding the price inline helps readers follow the cost argument on first read.",
+      "category": "flow",
+      "severity": "low",
+      "sections": [
+        "cost"
+      ]
+    },
+    {
+      "old": "The &ldquo;LLM quality judgement&rdquo; approach was abandoned as unreliable (see <a href=\"#methodology\">&sect;10</a>), but alignment scoring proved more robust",
+      "new": "The &ldquo;LLM quality judgement&rdquo; approach was abandoned as unreliable (see <a href=\"#methodology\">&sect;10</a>), while alignment scoring proved more robust",
+      "reason": "'but' creates a confusing contrast since alignment scoring is also LLM-based. 'while' better conveys that both are LLM-based but one worked and the other didn't.",
+      "category": "flow",
+      "severity": "low",
+      "sections": [
+        "quality"
+      ]
+    },
+    {
+      "old": "Both alignment and failure rate are LLM-classified&mdash;a Claude Haiku model reads each session transcript and assigns scores. The &ldquo;LLM quality judgement&rdquo; approach was abandoned as unreliable (see <a href=\"#methodology\">&sect;10</a>)",
+      "new": "Both alignment and failure rate are LLM-classified&mdash;a Claude Haiku model reads each session transcript and assigns scores. A separate &ldquo;LLM quality judgement&rdquo; approach was abandoned as unreliable (see <a href=\"#methodology\">&sect;10</a>)",
+      "reason": "The reader has just been told alignment is LLM-classified, then immediately hears 'the LLM quality judgement approach was abandoned.' This reads as contradictory without 'separate' to clarify these are different LLM approaches.",
+      "category": "flow",
+      "severity": "medium",
+      "sections": [
+        "quality"
+      ]
+    },
+    {
+      "old": "<p>Effort distribution shows Opus 4.6 allocates more tool calls to research (35.1% vs 28.3%) and fewer to implementation (17.5% vs 27.0%), consistent with the research-first approach visible in subagent type preferences.</p>",
+      "new": "<p>Effort distribution confirms the pattern: Opus 4.6 allocates more tool calls to research (35.1% vs 28.3%) and fewer to implementation (17.5% vs 27.0%).</p>",
+      "reason": "Section 8 repeats the same effort distribution numbers (35.1% vs 28.3% research, 17.5% vs 27.0% implementation) almost verbatim. This sentence in \u00a74 can be tightened since the subagent data already made the point.",
+      "category": "redundancy",
+      "severity": "low",
+      "sections": [
+        "behavior",
+        "sessions"
+      ]
+    },
+    {
+      "old": "<p>Task duration survives Bonferroni correction (p=0.000001), though the effect size is negligible (d=0.005)&mdash;a case of statistical significance without practical significance, driven by sample size. Opus 4.6 takes longer per task (median 67s vs 42s, a 58% increase). The explore phase runs 2.2&times; longer at median (<!-- var: sessions.explore_median_b -->68.7<!-- /var -->s vs <!-- var: sessions.explore_median_a -->31.3<!-- /var -->s). Effort distribution shows 4.6 allocates more tool calls to research (35.1% vs 28.3%) and fewer to implementation (17.5% vs 27.0%). Active-time cost is $25.09/hour for 4.6 vs $20.96/hour for 4.5 (5-min idle threshold).</p>",
+      "new": "<p>Task duration survives Bonferroni correction (p=0.000001), though the effect size is negligible (d=0.005)&mdash;a case of statistical significance without practical significance, driven by sample size. Opus 4.6 takes longer per task (median 67s vs 42s, a 58% increase). The explore phase runs 2.2&times; longer at median (<!-- var: sessions.explore_median_b -->68.7<!-- /var -->s vs <!-- var: sessions.explore_median_a -->31.3<!-- /var -->s). Active-time cost is $25.09/hour for 4.6 vs $20.96/hour for 4.5 (5-min idle threshold).</p>",
+      "reason": "The effort distribution sentence (35.1% vs 28.3% research, 17.5% vs 27.0% implementation) is stated almost identically in \u00a74. In \u00a78 it adds no new information and the effort table immediately below already presents it.",
+      "category": "redundancy",
+      "severity": "low",
+      "sections": [
+        "sessions",
+        "behavior"
+      ]
+    },
+    {
+      "old": "alignment scores improve significantly (p=0.000023, one of 15 overall Bonferroni survivors)",
+      "new": "alignment scores improve significantly (p=0.000023, Bonferroni survivor)",
+      "reason": "The exec summary says '15 overall Bonferroni survivors' but the stat card says '93 / 529' Bonferroni survivors (across all strata). The '15' is the overall-level count, while '93' includes per-complexity/per-type strata. Using both numbers without qualification is confusing. Simplifying avoids the ambiguity here; the full breakdown is in \u00a710.",
+      "category": "cross-consistency",
+      "severity": "medium",
+      "sections": [
+        "executive-summary",
+        "methodology"
+      ]
+    }
+  ]
+}

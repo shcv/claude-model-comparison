@@ -35,11 +35,14 @@ python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --fro
 python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --force          # ignore staleness
 python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --check-stale    # show stale steps
 python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --check-consistency  # verify counts
+python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --no-llm         # skip LLM steps
 ```
 
 The pipeline tracks input/output file hashes in `data/pipeline-manifest.json`. Steps are skipped when inputs are unchanged since the last run. Use `--force` to override.
 
-Steps (in order): `collect`, `extract`, `classify`, `annotate`, `analyze`, `tokens`, `stats`, `dataset`, `update`, `report`.
+Steps (in order): `collect`, `extract`, `classify`, `annotate`, `analyze`, `tokens`, `enrich`, `stats`, `findings`, `dataset`, `update`, `review`, `report`.
+
+Use `--no-llm` to skip LLM-dependent steps (`annotate`, `review`) and run `update` in tables-only mode:
 
 Individual scripts can also be run directly with `--data-dir` and `--analysis-dir` arguments:
 
@@ -55,6 +58,10 @@ python scripts/analyze_dataset.py --data-dir comparisons/opus-4.5-vs-4.6/data --
 python scripts/update_sections.py --dir comparisons/opus-4.5-vs-4.6                          # update tables + prose
 python scripts/update_sections.py --dir comparisons/opus-4.5-vs-4.6 --tables-only            # tables only, no LLM
 python scripts/update_sections.py --dir comparisons/opus-4.5-vs-4.6 --sections cost --dry-run # preview changes
+python scripts/review_report.py --dir comparisons/opus-4.5-vs-4.6                             # show corrections
+python scripts/review_report.py --dir comparisons/opus-4.5-vs-4.6 --apply                    # apply corrections
+python scripts/review_report.py --dir comparisons/opus-4.5-vs-4.6 --sections cost            # review one section
+python scripts/review_report.py --dir comparisons/opus-4.5-vs-4.6 --skip-holistic            # per-section only
 python scripts/build_report.py --dir comparisons/opus-4.5-vs-4.6
 python scripts/build_report.py --dir comparisons/opus-4.5-vs-4.6 --check-stale  # check for outdated expansions
 ```

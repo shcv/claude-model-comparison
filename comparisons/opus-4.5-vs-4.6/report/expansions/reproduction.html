@@ -1,0 +1,48 @@
+<!-- title: Reproduction guide -->
+<p>The analysis pipeline is fully automated and can reproduce all tables and statistics from the raw session data.</p>
+
+<h4>Requirements</h4>
+<ul>
+    <li>Python 3.11+</li>
+    <li>scipy (<code>pip install scipy</code>)</li>
+    <li>Claude Code CLI (for LLM-dependent steps only)</li>
+</ul>
+
+<h4>Full pipeline</h4>
+<pre><code>python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data</code></pre>
+
+<h4>Tables only (no LLM, no cost)</h4>
+<pre><code>python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --no-llm</code></pre>
+
+<h4>Individual steps</h4>
+<pre><code># Run from a specific step onward
+python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --from stats
+
+# Run specific steps
+python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --steps dataset,update,report
+
+# Check what needs re-running
+python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --check-stale</code></pre>
+
+<h4>Step cost breakdown</h4>
+<table>
+    <thead>
+        <tr><th>Step</th><th>LLM?</th><th>Estimated Cost</th><th>--no-llm behavior</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>collect</td><td>No</td><td>$0</td><td>Runs normally</td></tr>
+        <tr><td>extract</td><td>No</td><td>$0</td><td>Runs normally</td></tr>
+        <tr><td>classify</td><td>No</td><td>$0</td><td>Runs normally</td></tr>
+        <tr><td>annotate</td><td>Yes (Haiku)</td><td>$0.50&ndash;2.00</td><td>Skipped (uses cached annotations)</td></tr>
+        <tr><td>analyze</td><td>No</td><td>$0</td><td>Runs normally</td></tr>
+        <tr><td>tokens</td><td>No</td><td>$0</td><td>Runs normally</td></tr>
+        <tr><td>enrich</td><td>No</td><td>$0</td><td>Runs normally</td></tr>
+        <tr><td>stats</td><td>No</td><td>$0</td><td>Runs normally</td></tr>
+        <tr><td>findings</td><td>No</td><td>$0</td><td>Runs normally</td></tr>
+        <tr><td>dataset</td><td>No</td><td>$0</td><td>Runs normally</td></tr>
+        <tr><td>update</td><td>Partial (Opus/Sonnet)</td><td>$0.10&ndash;0.50</td><td>Tables only, no prose check</td></tr>
+        <tr><td>review</td><td>Yes (Opus/Sonnet)</td><td>$0.50&ndash;2.00</td><td>Skipped</td></tr>
+        <tr><td>report</td><td>No</td><td>$0</td><td>Runs normally</td></tr>
+    </tbody>
+</table>
+<p>All statistical results, tables, and charts are deterministic (no LLM). Only task annotation, prose fact-checking, and quality review use LLM calls. The <code>--no-llm</code> flag produces identical quantitative results at zero API cost.</p>

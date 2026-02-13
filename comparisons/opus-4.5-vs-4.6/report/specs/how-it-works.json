@@ -1,0 +1,11 @@
+{
+  "section_id": "how-it-works",
+  "review": {
+    "intent": "Explain the analysis pipeline end-to-end so readers understand data provenance, processing steps, and which claims rest on automated classification vs statistical tests.",
+    "focus": [
+      "Verify pipeline diagram counts match current data files",
+      "Check that the 'What to Trust' subsection accurately conveys which findings survive multiple-testing correction vs which are exploratory",
+      "Ensure the pipeline step descriptions match the actual script chain (collect through report) without omitting or misordering steps"
+    ]
+  }
+}

@@ -1,5 +1,13 @@
 {
   "section_id": "thinking",
+  "review": {
+    "intent": "Show that the two models allocate thinking effort differently across complexity levels, with one exhibiting a steeper calibration gradient.",
+    "focus": [
+      "Verify thinking_fraction effect size and p-value are cited correctly from stat-tests.json",
+      "Check that the calibration narrative matches the by-complexity breakdown in the data",
+      "Ensure cross-cut effect sizes from findings.json are rendered accurately in the thinking cross-cuts table"
+    ]
+  },
   "data_sources": {
     "tokens": "analysis/token-analysis.json",
     "findings": "analysis/findings.json",
@@ -32,6 +40,6 @@
       "stats.overall.mann_whitney.[field=thinking_fraction].cohens_d",
       "stats.overall.mann_whitney.[field=thinking_fraction].p_value"
     ],
-    "guidance": "This section covers thinking calibration. Key finding: thinking_fraction is the #1 effect (d=0.67, LARGE). 4.5 thinks more often but shallowly; 4.6 reserves thinking for moderate+ complexity. Verify thinking ratios and depth data."
+    "guidance": "This section covers thinking calibration. Key finding: thinking_fraction is a leading effect with a large effect size. Characterize each model's thinking strategy (frequency vs depth) and how thinking allocation varies by complexity level. Verify thinking ratios and depth data match stat-tests.json."
   }
 }

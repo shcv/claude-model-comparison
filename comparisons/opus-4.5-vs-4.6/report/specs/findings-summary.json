@@ -1,5 +1,13 @@
 {
   "section_id": "findings-summary",
+  "review": {
+    "intent": "Provide a single ranked table of all statistically significant findings with effect sizes and sensitivity analysis to show which results are robust.",
+    "focus": [
+      "Verify the findings summary table includes all Bonferroni survivors and uses FDR-corrected p-values from findings.json",
+      "Check that sensitivity analysis robustness ratings match the sensitivity breakdown in stat-tests.json",
+      "Ensure cross-cut theme tables (quality, cost, behavior, thinking, editing) partition findings without overlap or omission"
+    ]
+  },
   "data_sources": {
     "findings": "analysis/findings.json",
     "stats": "analysis/stat-tests.json"

@@ -1,5 +1,13 @@
 {
   "section_id": "compaction",
+  "review": {
+    "intent": "Quantify context window compaction frequency, triggers, and post-compaction outcome effects while flagging the small sample sizes involved.",
+    "focus": [
+      "Verify compaction event counts and session rates match compaction-analysis.json",
+      "Check that outcome correlation analysis acknowledges the task-ordering confound (compaction happens late in sessions where tasks are naturally harder)",
+      "Ensure any compaction effect claims are presented with appropriate uncertainty given small sample sizes"
+    ]
+  },
   "data_sources": {
     "compaction": "analysis/compaction-analysis.json"
   },
@@ -19,7 +27,7 @@
       "data_source": "compaction",
       "row_gen": "compaction_outcomes",
       "prose": {
-        "guidance": "Discuss pre/post compaction outcome differences. For 4.5, the compaction effect is near zero after controlling for position. For 4.6, negative effects are larger but sample is too small. Possible task-ordering confound."
+        "guidance": "Discuss pre/post compaction outcome differences for each model. Note whether position-controlled effects differ from raw effects. Flag small sample sizes and the task-ordering confound (compaction happens late in sessions where tasks may be naturally harder)."
       }
     }
   },
@@ -50,6 +58,6 @@
       "compaction.{model_a}.outcome_correlation.median_split_position_pct",
       "compaction.{model_b}.outcome_correlation.median_split_position_pct"
     ],
-    "guidance": "This section covers context window compaction events. Update stat-cards, bar-fill widths, table cells, and delta values. Note very small sample sizes may limit the outcome correlation analysis. If data has fewer sessions than the HTML shows, update accordingly."
+    "guidance": "This section covers context window compaction events. Verify stat-card values, bar-fill widths, and table cells match the data. Note that very small sample sizes limit the outcome correlation analysis. Present compaction effects with appropriate uncertainty given the available evidence."
   }
 }

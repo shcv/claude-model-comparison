@@ -1,5 +1,13 @@
 {
   "section_id": "complexity",
+  "review": {
+    "intent": "Show how resource consumption (tool calls, files touched, lines modified) scales with task complexity and differs between models.",
+    "focus": [
+      "Verify tool_calls effect size claim matches stat-tests.json and its relative ranking among all effects is accurate",
+      "Check that complexity distribution prose acknowledges any skew between models and its implications for fair comparison",
+      "Confirm resource scaling tables show per-complexity-level values, not just aggregates"
+    ]
+  },
   "data_sources": {
     "dataset": "analysis/dataset-overview.json",
     "stats": "analysis/stat-tests.json"
@@ -32,6 +40,6 @@
       "dataset.{model_a}.total_lines_added",
       "dataset.{model_b}.total_lines_added"
     ],
-    "guidance": "This section covers complexity distribution and resource usage. Key finding: 4.6 skews toward harder tasks. Tool usage gap is the strongest statistical signal."
+    "guidance": "This section covers complexity distribution and resource usage. Characterize how resource consumption scales with complexity for each model. Note any complexity distribution skew between models and its implications for interpreting aggregate comparisons."
   }
 }

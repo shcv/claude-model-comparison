@@ -1,5 +1,13 @@
 {
   "section_id": "sessions",
+  "review": {
+    "intent": "Analyze within-session temporal effects: warmup improvements, effort distribution over task position, compaction impacts, and session length degradation.",
+    "focus": [
+      "Verify warmup effect claims match the session-analysis.json warmup data",
+      "Check that idle-time sensitivity analysis thresholds are correctly rendered and the cost-per-minute narrative accounts for idle filtering",
+      "Ensure session length degradation is presented as a shared effect, not attributed to only one model"
+    ]
+  },
   "data_sources": {
     "sessions": "analysis/session-analysis.json",
     "overview": "analysis/dataset-overview.json",
@@ -43,6 +51,6 @@
       "sessions.effort_distribution",
       "sessions.session_length"
     ],
-    "guidance": "This section covers session dynamics. Key finding: 4.6 benefits from session context (warm-up improvement), both degrade in long sessions, 4.6 front-loads research."
+    "guidance": "This section covers session dynamics. Characterize warm-up effects, effort distribution over task position, and long-session degradation for each model. Note whether session-level effects are shared or model-specific. Idle-time sensitivity analysis should document how different thresholds affect cost-per-minute calculations."
   }
 }

@@ -1,5 +1,13 @@
 {
   "section_id": "methodology",
+  "review": {
+    "intent": "Document the statistical test battery, correction methods, and known limitations so readers can assess the rigor of findings.",
+    "focus": [
+      "Verify total test count and Bonferroni threshold match stat-tests.json metadata",
+      "Check that the full stat test results table includes all test categories (Mann-Whitney, proportion, chi-square) with correct field lists",
+      "Ensure limitations section honestly describes single-user bias, non-random task assignment, and temporal confounds"
+    ]
+  },
   "data_sources": {
     "stats": "analysis/stat-tests.json"
   },

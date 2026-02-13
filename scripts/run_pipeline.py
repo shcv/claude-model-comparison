@@ -11,6 +11,7 @@ Usage:
     python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --check-stale
     python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --check-consistency
     python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --force
+    python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --no-llm
 """
 
 import argparse
@@ -33,8 +34,29 @@ STEPS = [
     ("findings",  "Generate findings registry"),
     ("dataset",   "Generate dataset overview"),
     ("update",    "Update report sections"),
+    ("review",    "Review report quality (LLM)"),
     ("report",    "Build report"),
 ]
+
+# Steps that require LLM calls, with cost estimates and fallback mode.
+# fallback: "skip" = skip entirely, "tables-only" = pass --tables-only flag
+LLM_STEPS = {
+    "annotate": {
+        "description": "LLM task annotation (Haiku)",
+        "cost_estimate": "$0.50–2.00",
+        "fallback": "skip",
+    },
+    "update": {
+        "description": "LLM prose fact-check (Opus/Sonnet)",
+        "cost_estimate": "$0.10–0.50",
+        "fallback": "tables-only",
+    },
+    "review": {
+        "description": "LLM quality review (Opus/Sonnet)",
+        "cost_estimate": "$0.50–2.00",
+        "fallback": "skip",
+    },
+}
 
 STEP_NAMES = [s[0] for s in STEPS]
 
@@ -168,6 +190,18 @@ def get_step_io(step, data_dir, analysis_dir, comparison_dir):
                 inputs[name] = h
         outputs = _glob_hashes(expansions_dir, "*.html")
         return (inputs, outputs)
+    elif step == "review":
+        # Template + expansions -> review-summary.json
+        inputs = {}
+        template = report_dir / "report.html"
+        h = _file_hash(template)
+        if h:
+            inputs["report.html"] = h
+        for name, fh in _glob_hashes(expansions_dir, "*.html").items():
+            inputs[f"expansions/{name}"] = fh
+        h = _file_hash(report_dir / "review-summary.json")
+        outputs = {"review-summary.json": h} if h else {}
+        return (inputs, outputs)
     elif step == "report":
         inputs = {}
         template = report_dir / "report.html"
@@ -244,7 +278,7 @@ def record_step(step, manifest, data_dir, analysis_dir, comparison_dir):
 
 # -- Commands --
 
-def build_command(step, data_dir, analysis_dir):
+def build_command(step, data_dir, analysis_dir, no_llm=False):
     """Return the command list for a given step."""
     scripts_dir = Path(__file__).resolve().parent
     comparison_dir = data_dir.parent
@@ -286,7 +320,13 @@ def build_command(step, data_dir, analysis_dir):
                 "--data-dir", str(data_dir),
                 "--analysis-dir", str(analysis_dir)]
     elif step == "update":
-        return [sys.executable, str(scripts_dir / "update_sections.py"),
+        cmd = [sys.executable, str(scripts_dir / "update_sections.py"),
+               "--dir", str(comparison_dir)]
+        if no_llm:
+            cmd.append("--tables-only")
+        return cmd
+    elif step == "review":
+        return [sys.executable, str(scripts_dir / "review_report.py"),
                 "--dir", str(comparison_dir)]
     elif step == "report":
         return [sys.executable, str(scripts_dir / "build_report.py"),
@@ -296,11 +336,27 @@ def build_command(step, data_dir, analysis_dir):
 
 
 def run_step(name, label, data_dir, analysis_dir, comparison_dir,
-             manifest, force=False):
+             manifest, force=False, no_llm=False):
     """Run a single pipeline step with staleness detection.
 
     Returns: "success", "skipped", or "failed".
     """
+    # Handle --no-llm for LLM-dependent steps
+    if no_llm and name in LLM_STEPS:
+        info = LLM_STEPS[name]
+        if info["fallback"] == "skip":
+            print(f"\n  [{name}] SKIPPED (--no-llm): {info['description']}")
+            # Warn if cached outputs don't exist
+            if name == "annotate":
+                cached = list(Path(analysis_dir).glob("tasks-annotated-*.json"))
+                if not cached:
+                    print(f"  WARNING: No cached tasks-annotated-*.json files found.",
+                          file=sys.stderr)
+                    print(f"  Downstream steps may fail without annotation data.",
+                          file=sys.stderr)
+            return "skipped"
+        # "tables-only" fallback is handled by build_command
+
     # Check staleness
     if not force:
         stale, reason = is_step_stale(name, manifest, data_dir, analysis_dir,
@@ -309,10 +365,12 @@ def run_step(name, label, data_dir, analysis_dir, comparison_dir,
             print(f"\n  [{name}] SKIPPED: {reason}")
             return "skipped"
 
-    cmd = build_command(name, data_dir, analysis_dir)
+    cmd = build_command(name, data_dir, analysis_dir, no_llm=no_llm)
     sys.stdout.flush()
     print(f"\n{'='*60}")
     print(f"  [{name}] {label}")
+    if no_llm and name in LLM_STEPS:
+        print(f"  (--no-llm: {LLM_STEPS[name]['fallback']} mode)")
     print(f"  {' '.join(cmd)}")
     print(f"{'='*60}", flush=True)
 
@@ -328,6 +386,25 @@ def run_step(name, label, data_dir, analysis_dir, comparison_dir,
     except FileNotFoundError as e:
         print(f"  [{name}] FAILED ({e})", file=sys.stderr)
         return "failed"
+
+
+def warn_llm_cost(steps_to_run, no_llm):
+    """Print cost information for LLM-dependent steps."""
+    llm_steps_in_run = [(name, label) for name, label in steps_to_run
+                        if name in LLM_STEPS]
+    if not llm_steps_in_run:
+        return
+
+    if no_llm:
+        print(f"\n  --no-llm: LLM steps will be skipped or run in reduced mode:")
+        for name, label in llm_steps_in_run:
+            info = LLM_STEPS[name]
+            print(f"    {name:12s} {info['fallback']:>12s}  ({info['description']})")
+    else:
+        print(f"\n  LLM steps in this run (use --no-llm to skip):")
+        for name, label in llm_steps_in_run:
+            info = LLM_STEPS[name]
+            print(f"    {name:12s} {info['cost_estimate']:>12s}  ({info['description']})")
 
 
 # -- Consistency checks --
@@ -455,6 +532,9 @@ def main():
     parser.add_argument("--check-consistency", action="store_true",
                         help="Verify task counts are consistent across "
                              "analysis files")
+    parser.add_argument("--no-llm", action="store_true",
+                        help="Skip LLM-dependent steps (annotate, review) "
+                             "and pass --tables-only to update")
     args = parser.parse_args()
 
     data_dir = args.data_dir.resolve()
@@ -517,13 +597,17 @@ def main():
     print(f"Steps:        {', '.join(s[0] for s in steps_to_run)}")
     if args.force:
         print(f"Mode:         FORCE (ignoring staleness)")
+    if args.no_llm:
+        print(f"Mode:         NO-LLM (skipping/reducing LLM steps)")
+
+    warn_llm_cost(steps_to_run, args.no_llm)
 
     succeeded = 0
     skipped = 0
     failed = 0
     for name, label in steps_to_run:
         result = run_step(name, label, data_dir, analysis_dir, comparison_dir,
-                          manifest, force=args.force)
+                          manifest, force=args.force, no_llm=args.no_llm)
         if result == "success":
             succeeded += 1
         elif result == "skipped":

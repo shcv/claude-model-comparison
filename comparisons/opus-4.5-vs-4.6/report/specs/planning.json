@@ -1,5 +1,13 @@
 {
   "section_id": "planning",
+  "review": {
+    "intent": "Detail planning adoption rates and whether planning correlates with better alignment scores, noting very small planned-task sample sizes.",
+    "focus": [
+      "Verify planning rates per model match planning-analysis.json",
+      "Check that alignment delta interpretation carries appropriate small-sample caveats",
+      "Ensure the by-complexity breakdown flags which bins have too few planned observations to be meaningful"
+    ]
+  },
   "data_sources": {
     "planning": "analysis/planning-analysis.json"
   },
@@ -95,7 +103,7 @@
         }
       ],
       "prose": {
-        "guidance": "Discuss planning alignment by complexity. Note very small sample sizes for planned tasks. The moderate bin is the most reliable indicator. Opus 4.6 shows consistently positive deltas."
+        "guidance": "Discuss planning alignment by complexity. Note very small sample sizes for planned tasks. Identify which complexity bins have enough observations to draw conclusions and which do not."
       }
     }
   },
@@ -112,6 +120,6 @@
       "planning.{model_a}.overall_alignment_unplanned",
       "planning.{model_b}.overall_alignment_unplanned"
     ],
-    "guidance": "This section covers planning behavior. Key finding: Opus 4.5 never plans (0% rate), while 4.6 plans 4% of the time, mostly on complex+ tasks. Small sample caveat applies."
+    "guidance": "This section covers planning behavior. Characterize each model's planning adoption rate and how planning frequency varies by complexity. Small sample caveat applies to planned-task alignment analysis. Verify planning rates match planning-analysis.json."
   }
 }

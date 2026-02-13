@@ -524,7 +524,7 @@
                     <div class="pipe-step">Report Build<small>terms, expansions</small></div>
                 </div>
 
-                <p>A 10-step pipeline transforms raw JSONL session logs into the finished report. A few things worth noting about the approach:</p>
+                <p>A 13-step pipeline transforms raw JSONL session logs into the finished report. A few things worth noting about the approach:</p>
 
                 <ul>
                     <li><strong>Edit timeline reconstruction:</strong> Rather than relying on LLM self-report, the pipeline builds per-file content ownership maps from every Edit/Write tool call, detecting when later edits overwrite earlier work. This mechanistic signal replaces the sentiment-proxy approach that proved unreliable in early iterations.</li>
@@ -586,7 +586,7 @@
 
                 <p>All data comes from a single user's organic Claude Code sessions between December 2025 and February 2026. The dataset is intentionally asymmetric: Opus 4.5 served as the primary model for two months, while Opus 4.6 entered evaluation in early February. This means Opus 4.5 totals are larger in absolute terms, but per-task and per-session comparisons normalize for this. Where sample size limits statistical power, the report notes it explicitly.</p>
 
-                <p>The 8-day concentration of the Opus 4.6 data creates a temporal clustering concern: a productive stretch, a particular project focus, or simply the novelty of a new model could color all 591 tasks simultaneously. The report treats tasks as independent observations, but short collection windows make this assumption weaker for 4.6 than for 4.5&rsquo;s two-month span.</p>
+                <p>The 9-day concentration of the Opus 4.6 data creates a temporal clustering concern: a productive stretch, a particular project focus, or simply the novelty of a new model could color all 591 tasks simultaneously. The report treats tasks as independent observations, but short collection windows make this assumption weaker for 4.6 than for 4.5&rsquo;s two-month span.</p>
 
                 <!-- expand: dataset-composition -->
                 <!-- expand: dataset-task-mix -->
@@ -771,7 +771,7 @@
 </table>
 <!-- /GENERATED-TABLE: per-request-output -->
 
-                <p>Per-request output survives Bonferroni correction (d=0.33, small). Opus 4.6 produces more tokens per API round-trip at every complexity level, concentrating work into fewer, larger responses rather than many small incremental calls.</p>
+                <p>Per-request output survives Bonferroni correction (d=0.33, small). Opus 4.6 produces more tokens per API round-trip at every complexity level, concentrating work into larger responses rather than many small incremental calls.</p>
 
                 <h3>Why Output Doesn&rsquo;t Drive Cost</h3>
 
@@ -900,7 +900,7 @@
 <!-- /GENERATED-TABLE: cost-thinking-calibration -->
 
                 <div class="callout blue">
-                    <strong>Thinking calibration:</strong> Opus 4.6 shows better calibration of when thinking is needed. It skips thinking for 57% of trivial tasks (vs 23% for Opus 4.5), but engages thinking for 90%+ of moderate-and-above tasks. Opus 4.5 over-thinks easy problems; at moderate complexity, both converge.
+                    <strong>Thinking calibration:</strong> Opus 4.6 shows better calibration of when thinking is needed. It skips thinking for 57% of trivial tasks (vs 23% for Opus 4.5), but engages thinking for 90%+ of moderate and complex tasks. Opus 4.5 over-thinks easy problems; at moderate complexity, both converge.
                 </div>
 
                 <!-- expand: thinking-calibration-details -->
@@ -969,7 +969,7 @@
                 <!-- expand: findings-thinking -->
 
                 <div class="stat-note">
-                    <strong>Significance:</strong> Thinking fraction survives Bonferroni correction across all complexity strata and cross-cut dimensions. This is the most robust and consistent finding in the study.
+                    <strong>Significance:</strong> Thinking fraction survives Bonferroni correction across trivial, simple, and moderate complexity strata, and most cross-cut slices. The complex stratum is non-significant (p=0.75), likely due to smaller sample size. This is the most robust and widespread finding in the study.
                 </div>
 
                 <p>Thinking calibration is one manifestation of broader behavioral differences between the models. The next section examines other behavioral patterns&mdash;subagent deployment, planning adoption, and effort distribution.</p>
@@ -1254,8 +1254,8 @@
                     </div>
                     <div class="stat-card">
                         <div class="label">Quality Survivors</div>
-                        <div class="value v-dark">2 of 7</div>
-                        <div class="detail">2 of 7 core Bonferroni survivors are quality metrics</div>
+                        <div class="value v-dark">2 of 15</div>
+                        <div class="detail">2 of 15 overall Bonferroni survivors are quality metrics</div>
                     </div>
                 </div>
 
@@ -1344,7 +1344,7 @@
                 <p>Satisfaction trends higher for 4.6 (+5.3pp) but does not survive Bonferroni correction (p=0.012). Dissatisfaction rates are essentially tied (12.7% vs 12.0%, p=0.65). Both completion and sentiment are LLM-classified: a Claude Haiku annotator reads the full session transcript for each task, classifying completion status from a 20-category taxonomy and inferring user sentiment from contextual signals (follow-up messages, tone shifts, task abandonment patterns). These classifications were validated through human spot-checks of flagged cases, but no formal inter-rater reliability was computed.</p>
 
                 <div class="callout blue">
-                    <strong>Quality confound:</strong> Opus 4.6&rsquo;s different complexity mix (42% moderate-and-above vs 33% for 4.5) means it tackles harder work on average. Despite this, it achieves higher alignment scores and a lower failure rate&mdash;suggesting genuine capability improvement, though task selection remains confounded. Complexity-stratified alignment scores would strengthen or weaken this claim but are not yet part of the pipeline.
+                    <strong>Quality confound:</strong> Opus 4.6&rsquo;s different complexity mix (42% moderate-and-above vs 33% for 4.5) means it tackles harder work on average. Despite this, it achieves higher alignment scores and a lower failure rate&mdash;suggesting genuine capability improvement, though task selection remains confounded. The cross-cut detail below shows complexity-stratified alignment scores, consistent with genuine improvement rather than a pure task-mix artifact.
                 </div>
 
                 <!-- expand: satisfaction-stat-tests -->
@@ -1447,7 +1447,7 @@
                     <div class="stat-card">
                         <div class="label">Tool Calls / Task</div>
                         <div class="value v-blue">16.3 vs 10.4</div>
-                        <div class="detail">Strongest signal (p&lt;0.000001, d=0.29)</div>
+                        <div class="detail">Strongest behavioral signal (p&lt;0.000001, d=0.29)</div>
                     </div>
                     <div class="stat-card">
                         <div class="label">Complexity Mix</div>
@@ -1567,7 +1567,7 @@
 
 
                 <div class="callout blue">
-                    <strong>The exploration&ndash;output tradeoff:</strong> Tool calls per task and tools per file are the strongest statistical signals in the study (both p&lt;0.000001, Bonferroni). Yet Opus 4.6 produces only 6% more lines of code per task despite 57% more tool calls. The extra activity is predominantly read-only research (74% Explore subagents, &sect;4), not proportional output growth. An alternative reading: 4.6 is simply less efficient, doing more work for similar results. The subagent composition data from &sect;4 supports the research interpretation, but the distinction matters.
+                    <strong>The exploration&ndash;output tradeoff:</strong> Tool calls per task is the strongest behavioral signal in the study (p&lt;0.000001, d=0.29, Bonferroni); tools per file also survives correction (p&lt;0.000001, d=0.10). Yet Opus 4.6 produces only 6% more lines of code per task despite 57% more tool calls. The extra activity is predominantly read-only research (74% Explore subagents, &sect;4), not proportional output growth. An alternative reading: 4.6 is simply less efficient, doing more work for similar results. The subagent composition data from &sect;4 supports the research interpretation, but the distinction matters.
                 </div>
 
                 <div class="stat-note">
@@ -1578,7 +1578,7 @@
 
                 <h3>Cross-Cut Detail</h3>
 
-                <p>Tool calls and tools/file are classified under the &ldquo;behavior&rdquo; theme in the cross-cut analysis. Their per-complexity, per-task-type, and per-iteration breakdowns appear in &sect;4&rsquo;s cross-cut detail (Behavioral Findings). Key results: the tool-call gap is largest for significantly-iterated tasks (d=0.54) and trivial complexity (d=0.31), both Bonferroni-significant.</p>
+                <p>Tool calls and tools/file are classified under the &ldquo;behavior&rdquo; theme in the cross-cut analysis. Their per-complexity, per-task-type, and per-iteration breakdowns appear in &sect;4&rsquo;s cross-cut detail (Behavioral Findings). Key results: the tool-call gap is largest for significantly-iterated tasks (d=0.52) and trivial complexity (d=0.31), both Bonferroni-significant.</p>
 
                 <p>The preceding sections examined behavioral, quality, and resource dimensions. The next section examines temporal patterns&mdash;how performance unfolds within and across sessions.</p>
             </section>
@@ -1709,7 +1709,7 @@
 <!-- /GENERATED-TABLE: idle-sensitivity -->
 
                 <div class="stat-note">
-                    <strong>Complication:</strong> Session overlap analysis (1,765 overlapping pairs, max concurrency 11) complicates per-session cost attribution. Active-time cost varies with idle threshold (see sensitivity table above), but the directional relationship is stable across all thresholds tested.
+                    <strong>Complication:</strong> Session overlap analysis (1,773 overlapping pairs, max concurrency 11) complicates per-session cost attribution. Active-time cost varies with idle threshold (see sensitivity table above), but the directional relationship is stable across all thresholds tested.
                 </div>
 
                 <h3>Context Compaction</h3>
@@ -1724,7 +1724,7 @@
 
                 <h3>Cross-Cut Detail</h3>
 
-                <p>Duration is classified under the &ldquo;behavior&rdquo; theme in the cross-cut analysis. Per-task-type and per-iteration breakdowns appear in &sect;4&rsquo;s cross-cut detail (Behavioral Findings). Key results: the duration gap is largest for significantly-iterated tasks (median 98.9s vs 42.2s) and investigation tasks (median 100.7s vs 43.3s), both Bonferroni-significant. Effect sizes are negligible (d&lt;0.1) despite significance&mdash;driven by sample size, not practical magnitude.</p>
+                <p>Duration is classified under the &ldquo;behavior&rdquo; theme in the cross-cut analysis. Per-task-type and per-iteration breakdowns appear in &sect;4&rsquo;s cross-cut detail (Behavioral Findings). Key results: the duration gap is largest for significantly-iterated tasks (median 99.0s vs 46.7s) and investigation tasks (median 79.9s vs 41.0s), both Bonferroni-significant. Effect sizes are negligible (d&lt;0.1) despite significance&mdash;driven by sample size, not practical magnitude.</p>
 
                 <p>Session dynamics reveal a temporal dimension to the behavioral differences. The next section synthesizes all dimensions into overall model profiles.</p>
             </section>
@@ -1883,7 +1883,7 @@
                 <details><summary>Test types, effect sizes, and correction thresholds</summary>
                 <p>Three test types were used: chi-square for categorical distributions (effect size: Cram&eacute;r&rsquo;s V), Mann-Whitney U for continuous metrics (Cohen&rsquo;s d with bootstrap confidence intervals, n=5,000 resamples), and two-proportion Z-tests for rates (Cohen&rsquo;s h). Confidence intervals on proportions use Wilson score intervals.</p>
 
-                <p>Bonferroni corrected threshold: p&lt;0.0000945. Across all <!-- var: findings.total_tests -->529<!-- /var --> tests, <!-- var: findings.bonferroni_significant -->93<!-- /var --> survive Bonferroni and <!-- var: findings.fdr_significant -->168<!-- /var --> survive FDR correction. At the overall level, fifteen survive Bonferroni, including alignment score (p=0.000023), duration (p&lt;0.000001, though d=0.005&mdash;negligible practical effect), tool calls/task (p&lt;0.000001, d=&minus;0.29), tools/file (p&lt;0.000001, d=&minus;0.10), and three categorical distributions (task completion, communication quality, autonomy level). All three chi-square survivors have low-expected-cell-count warnings, which may inflate test statistics.</p>
+                <p>Bonferroni corrected threshold: p&lt;0.0000945. Across all <!-- var: findings.total_tests -->529<!-- /var --> tests, <!-- var: findings.bonferroni_significant -->93<!-- /var --> survive Bonferroni and <!-- var: findings.fdr_significant -->168<!-- /var --> survive FDR correction. At the overall level, fifteen survive Bonferroni, including alignment score (p=0.000023), duration (p&lt;0.000001, though d=0.005&mdash;negligible practical effect), tool calls/task (p&lt;0.000001, d=&minus;0.29), tools/file (p&lt;0.000001, d=&minus;0.10), and three categorical distributions (task completion, communication quality, autonomy level). Two of the three chi-square survivors have low-expected-cell-count warnings, which may inflate their test statistics.</p>
                 </details>
 
                 <!-- expand: stat-test-full-results -->
@@ -2139,10 +2139,13 @@
                 <p><strong>LLM quality judgement:</strong> An LLM judge was asked to compare code quality between models. The judge lacked sufficient context to evaluate whether code met domain requirements and produced confident but ungrounded assessments. This was replaced by mechanistic edit timeline analysis, which detects self-corrections from the tool-call record rather than relying on subjective quality assessment.</p>
                 </details>
 
+                <h3>Reproducing This Analysis</h3>
+                <!-- expand: reproduction -->
+
                 <h3>Limitations</h3>
                 <p><strong>LLM-in-the-loop analysis:</strong> All task classification, sentiment analysis, and alignment scoring was performed by LLM agents (Claude Haiku and Sonnet). This creates a circularity concern: Claude models are classifying Claude model outputs. No formal inter-rater reliability was computed. Human spot-checks validated flagged cases, but systematic bias between models (e.g., if the classifier is more generous toward outputs that resemble its own style) cannot be ruled out. All three overall chi-square Bonferroni survivors and the alignment score depend on LLM-generated categories.</p>
                 <p><strong>Single user:</strong> All data comes from one developer&rsquo;s workflow. Results may not generalize to other users, codebases, or task distributions.</p>
-                <p><strong>Temporal confound:</strong> Opus 4.5 spans 2 months; Opus 4.6 spans 8 days. A productive week, a particular project focus, or simply the novelty of a new model could color all 591 Opus 4.6 tasks simultaneously. The null hypothesis&mdash;that all observed differences reflect the user&rsquo;s changing work patterns rather than model capabilities&mdash;cannot be rejected by this design.</p>
+                <p><strong>Temporal confound:</strong> Opus 4.5 spans 2 months; Opus 4.6 spans 9 days. A productive week, a particular project focus, or simply the novelty of a new model could color all 591 Opus 4.6 tasks simultaneously. The null hypothesis&mdash;that all observed differences reflect the user&rsquo;s changing work patterns rather than model capabilities&mdash;cannot be rejected by this design.</p>
                 <p><strong>Observational, not experimental:</strong> Tasks were not randomly assigned to models. Opus 4.6 was used later chronologically and on different (often harder) tasks, confounding model effects with task effects.</p>
                 <p><strong>Complexity confound:</strong> Opus 4.6&rsquo;s different complexity mix (42% moderate-and-above vs 33% for Opus 4.5) inflates its resource usage metrics and may suppress its satisfaction scores. Complexity-stratified comparisons (presented throughout as cross-cut detail) partially control for this, but cannot fully separate model effects from mix effects.</p>
                 <p><strong>Platform evolution:</strong> The Claude Code SDK evolved between December 2025 and February 2026. Changes to system prompts, available tools, or subagent defaults could contribute to behavioral differences attributed to the models.</p>

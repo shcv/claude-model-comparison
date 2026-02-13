@@ -1,5 +1,13 @@
 {
   "section_id": "behavior",
+  "review": {
+    "intent": "Characterize each model's tool-use strategy, showing how subagent delegation, planning adoption, and effort distribution differ.",
+    "focus": [
+      "Verify subagent type breakdown percentages match behavior-metrics.json",
+      "Check that planning adoption claims are still accurate after any data updates",
+      "Confirm effort distribution prose correctly characterizes each model's research vs implementation pattern"
+    ]
+  },
   "data_sources": {
     "behavior": "analysis/behavior-metrics.json",
     "planning": "analysis/planning-analysis.json",
@@ -42,6 +50,6 @@
       "behavior.{model_a}.subagent_types",
       "behavior.{model_b}.subagent_types"
     ],
-    "guidance": "This section covers behavioral patterns. Key finding: 4.6 deploys more subagents but they are mostly read-only Explore agents. 4.5 uses more general-purpose implementation workers."
+    "guidance": "This section covers behavioral patterns. Characterize each model's subagent strategy (type distribution, delegation frequency) and how it relates to their overall tool-use approach. Verify subagent and planning claims match the data."
   }
 }

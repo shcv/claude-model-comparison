@@ -1,5 +1,13 @@
 {
   "section_id": "dataset",
+  "review": {
+    "intent": "Establish the dataset's scope, balance, and composition so readers can gauge how much weight to give downstream findings.",
+    "focus": [
+      "Verify session, task, and project counts in stat cards match dataset-overview.json totals",
+      "Check that task type and complexity distributions are presented for both models, not just combined",
+      "Confirm token volume figures are internally consistent with the cost section's per-task averages multiplied by task counts"
+    ]
+  },
   "data_sources": {
     "overview": "analysis/dataset-overview.json"
   },
