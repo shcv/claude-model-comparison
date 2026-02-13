@@ -31,7 +31,7 @@
         }
 
         .page {
-            max-width: 960px;
+            max-width: 880px;
             margin: 0 auto;
             padding: 3rem 2rem 4rem;
         }
@@ -74,11 +74,11 @@
         }
 
         /* -- Sections -- */
-        section { margin-bottom: 2.5rem; }
+        section { margin-bottom: 2.5rem; padding-top: 1.5rem; }
 
         h2 {
             font-family: 'Poppins', Arial, sans-serif;
-            font-size: 1.15rem;
+            font-size: 1.35rem;
             font-weight: 600;
             color: var(--dark);
             border-bottom: 1px solid var(--light-gray);
@@ -95,9 +95,6 @@
         }
 
         p {
-            max-width: 740px;
-            margin-left: auto;
-            margin-right: auto;
             margin-bottom: 0.8rem;
             text-align: justify;
         }
@@ -105,7 +102,7 @@
         /* -- Stat Cards -- */
         .stat-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 0.8rem;
             margin-bottom: 1.5rem;
         }
@@ -126,7 +123,7 @@
         }
         .stat-card .value {
             font-family: 'Poppins', Arial, sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.35rem;
             font-weight: 700;
         }
         .stat-card .detail {
@@ -257,9 +254,8 @@
             background: white;
             border-left: 3px solid var(--orange);
             padding: 0.8rem 1rem;
-            margin: 1rem auto 1.2rem;
+            margin: 1rem 0 1.2rem;
             font-size: 0.88rem;
-            max-width: 740px;
             text-align: justify;
         }
         .callout strong {
@@ -421,10 +417,9 @@
             font-family: 'Poppins', Arial, sans-serif;
             font-size: 0.72rem;
             color: var(--mid-gray);
-            margin: 0.6rem auto 1rem;
+            margin: 0.6rem 0 1rem;
             padding: 0.5rem 0.8rem;
             border-left: 2px solid var(--light-gray);
-            max-width: 740px;
             text-align: justify;
         }
         .stat-note strong {
@@ -532,14 +527,10 @@
             <!-- ===== HEADER ===== -->
             <header>
                 <div class="eyebrow">Claude Code EAP Report</div>
-                <h1>Opus 4.5 vs Opus 4.6: Behavioral Patterns in Practice</h1>
-                <div class="subtitle">An exploratory single-user case study across 2,320 tasks&mdash;observational findings, not controlled comparison</div>
+                <h1>Opus 4.5 &rarr; 4.6: What Changed in Practice?</h1>
+                <div class="subtitle">A single-user behavioral study across 2,320 Claude Code tasks</div>
                 <div class="meta">Samuel H. Christie V &middot; February 2026 &middot; Claude Code Early Access Program</div>
             </header>
-
-            <div class="callout" style="border-left:3px solid var(--orange); margin-bottom:1.5rem;">
-                <strong>AI-assisted analysis:</strong> This report was generated with substantial assistance from Claude (Opus 4.6). All statistical computations, table generation, and report assembly are automated, but prose was drafted and reviewed with LLM assistance. Numbers are computed from data; interpretive claims may contain inaccuracies. Additionally, all data comes from a single user&rsquo;s workflow over a limited time period&mdash;treat all findings as anecdotal observations, not generalizable conclusions.
-            </div>
 
             <!-- ===== EXECUTIVE SUMMARY ===== -->
             <section>
@@ -568,8 +559,8 @@
                     </div>
                 </div>
 
-                <div class="callout">
-                    <strong>Study design note:</strong> This is a single-user observational study with non-random task assignment. Opus 4.5 data spans 2 months across 30 projects (1,729 tasks); Opus 4.6 spans 8 days across 14 projects (591 tasks). Differences may reflect the user, project mix, or time period rather than model capabilities. All findings should be treated as hypotheses for future testing.
+                <div class="callout" style="border-left:3px solid var(--orange);">
+                    <strong>Before you read:</strong> This report was generated with substantial assistance from Claude (Opus 4.6). All statistical computations, table generation, and report assembly are automated, but prose was drafted and reviewed with LLM assistance. Numbers are computed from data; interpretive claims may contain inaccuracies. Additionally, all data comes from a single user&rsquo;s workflow over a limited time period&mdash;treat all findings as anecdotal observations, not generalizable conclusions.
                 </div>
 
                 <h3>What Changes When You Switch</h3>
@@ -602,23 +593,39 @@
             <section id="how-it-works">
                 <h2>How This Report Works</h2>
 
-                <p>This report is itself a Claude Code project. The analysis pipeline, statistical tests, table generation, and report assembly are all automated Python scripts, most of which were written with substantial assistance from Opus 4.6&mdash;the same model being evaluated. This recursive quality is worth noting both as an interesting artifact and as context for assessing the results.</p>
+                <p>This report is itself a Claude Code project. The analysis pipeline, statistical tests, table generation, and report assembly are all automated Python scripts, most written with substantial assistance from Opus 4.6&mdash;the same model being evaluated. All data comes from one user&rsquo;s real Claude Code sessions during and after the Early Access Program&mdash;not synthetic benchmarks or controlled experiments.</p>
 
-                <h3>Data Source</h3>
+                <div class="pipeline">
+                    <div class="pipe-step">Session Logs<small>463 sessions</small></div>
+                    <span class="pipe-arrow">&rarr;</span>
+                    <div class="pipe-step">Task Extraction<small>2,320 tasks</small></div>
+                    <span class="pipe-arrow">&rarr;</span>
+                    <div class="pipe-step">LLM Classification<small>complexity, sentiment</small></div>
+                    <span class="pipe-arrow">&rarr;</span>
+                    <div class="pipe-step">Behavioral Analysis<small>subagents, planning</small></div>
+                    <span class="pipe-arrow">&rarr;</span>
+                    <div class="pipe-step">Token Extraction<small>cost, verbosity</small></div>
+                    <span class="pipe-arrow">&rarr;</span>
+                    <div class="pipe-step">Statistical Tests<small>529 comparisons</small></div>
+                    <span class="pipe-arrow">&rarr;</span>
+                    <div class="pipe-step">Edit Timeline<small>4,799 edits</small></div>
+                    <span class="pipe-arrow">&rarr;</span>
+                    <div class="pipe-step"><span class="term" data-def="Claude Code's process of summarizing earlier messages to free context window space when the conversation grows too long.">Compaction</span><small>79 events</small></div>
+                    <span class="pipe-arrow">&rarr;</span>
+                    <div class="pipe-step">Report Build<small>terms, expansions</small></div>
+                </div>
 
-                <p>All data comes from one user&rsquo;s real Claude Code sessions during the Early Access Program&mdash;not synthetic benchmarks or controlled experiments. Session logs are JSONL files containing every API request, tool call, and response. The dataset spans 463 sessions across 35 projects, representing $7,411 in API costs over two months of daily software engineering work.</p>
+                <p>A 10-step pipeline transforms raw JSONL session logs into the finished report. A few things worth noting about the approach:</p>
 
-                <h3>Automated Pipeline</h3>
-
-                <p>A 10-step pipeline transforms raw session logs into the finished report: session collection, task extraction (segmenting at user-message boundaries), regex and LLM classification (complexity, type, quality, sentiment), behavioral analysis, token extraction, statistical testing, and report generation. Each step tracks input/output file hashes and skips re-computation when inputs haven&rsquo;t changed. The LLM classifier (Haiku) is verified against a regex baseline with 100% unknown-task resolution and 55% agreement on classified tasks.</p>
-
-                <h3>Report Generation</h3>
-
-                <p>Every number in the report is computed, not typed. Template variables (<code>{{section.metric}}</code>) resolve directly from analysis JSON files. Named table markers pull column definitions from spec files and generate HTML from data. An LLM prose-check pass verifies that narrative text is consistent with current numbers. 529 statistical tests use Bonferroni correction&mdash;the most conservative standard&mdash;to minimize false positives given the observational design. The <a href="#methodology">Methodology section</a> provides full technical detail on every step.</p>
+                <ul>
+                    <li><strong>Edit timeline reconstruction:</strong> Rather than relying on LLM self-report, the pipeline builds per-file <span class="term" data-def="Per-file records tracking which edit introduced each line, enabling detection of when later edits overwrite earlier ones.">content ownership maps</span> from every Edit/Write tool call, detecting when later edits overwrite earlier work. This mechanistic signal replaces the sentiment-proxy approach that proved unreliable in early iterations.</li>
+                    <li><strong>Multi-signal sentiment:</strong> Dissatisfaction detection combines keyword patterns, structural edit signals (<span class="term" data-def="When the agent rewrites its own code within the same task without any error or user prompt.">self-correction</span>s, error recoveries), and LLM judgement with downgrade logic&mdash;no single source is trusted alone.</li>
+                    <li><strong>Fully computed output:</strong> Every number resolves from analysis JSON via template variables; every table is generated from spec files. An LLM prose-check pass verifies narrative text against current data. Nothing is typed by hand.</li>
+                </ul>
 
                 <h3>What to Trust</h3>
 
-                <p>All numbers, tables, and statistical results are computed deterministically from session data and are reproducible by re-running the pipeline. Interpretive prose was drafted and checked with LLM assistance and may contain errors or overstatements. <span class="term" data-def="A standardized measure of difference magnitude independent of sample size. Cohen’s d: 0.2 small, 0.5 medium, 0.8 large.">Effect size</span>s and p-values are exact; narrative claims linking those numbers to causal explanations are hypotheses, not conclusions. The <a href="#methodology">sensitivity analysis</a> validates key findings against restricted datasets excluding shared projects.</p>
+                <p>Numbers, tables, and statistical results are computed deterministically and are reproducible by re-running the pipeline. Interpretive prose was drafted and checked with LLM assistance and may contain errors or overstatements. <span class="term" data-def="A standardized measure of difference magnitude independent of sample size. Cohen’s d: 0.2 small, 0.5 medium, 0.8 large.">Effect size</span>s and p-values are exact; narrative claims linking those numbers to causal explanations are hypotheses, not conclusions. A <a href="#methodology">sensitivity analysis</a> validates key findings against restricted datasets excluding shared projects. The <a href="#methodology">Methodology section</a> describes every step in full detail.</p>
             </section>
 
             <nav class="toc">
@@ -2510,9 +2517,9 @@
                         <div class="detail">4.6 favors read-only exploration</div>
                     </div>
                     <div class="stat-card">
-                        <div class="label">Autonomy Level</div>
-                        <div class="value v-green">Bonferroni</div>
-                        <div class="detail">Distribution survives correction (V=0.15)</div>
+                        <div class="label">Autonomous Subagents</div>
+                        <div class="value v-dark">84% vs 54%</div>
+                        <div class="detail">4.6 self-initiates most subagent calls</div>
                     </div>
                 </div>
 
@@ -2802,10 +2809,6 @@
 
     </div>
 </details>
-
-                <div class="stat-note">
-                    <strong>Caution:</strong> Planning is not randomly assigned&mdash;the model selects when to plan. Propensity-score matching or complexity-controlled analysis would help separate planning efficacy from task selection bias.
-                </div>
 
                 <h3>Effort Distribution</h3>
 
@@ -3770,11 +3773,11 @@
                     <div class="stat-card">
                         <div class="label">Overlapping Edits</div>
                         <div class="value v-dark">407 vs 120</div>
-                        <div class="detail"><span class="term" data-def="When the agent rewrites its own code within the same task without any error or user prompt.">Self-correction</span>s, <span class="term" data-def="When the agent rewrites code after a tool error (test failure, syntax error, compilation failure) occurred.">error recovery</span>, user-directed, iterative</div>
+                        <div class="detail">Self-corrections, <span class="term" data-def="When the agent rewrites code after a tool error (test failure, syntax error, compilation failure) occurred.">error recovery</span>, user-directed, iterative</div>
                     </div>
                 </div>
 
-                <p><span class="term" data-def="Reconstructing the chronological sequence of all Edit/Write tool calls per session to detect when later edits modify regions written by earlier ones.">Edit timeline analysis</span> tracks every Edit and Write tool call, building per-file <span class="term" data-def="Per-file records tracking which edit introduced each line, enabling detection of when later edits overwrite earlier ones.">content ownership maps</span> to detect when a model later overwrites its own earlier output. Opus 4.5 rewrites 16.6% of its edits vs 10.3% for Opus 4.6. Overlap classification reveals the rewrites are predominantly <span class="term" data-def="Sequential edits to the same code region without error signals or user dissatisfaction—normal incremental development.">iterative refinement</span> (63% for 4.5, largest category), not error recovery.</p>
+                <p><span class="term" data-def="Reconstructing the chronological sequence of all Edit/Write tool calls per session to detect when later edits modify regions written by earlier ones.">Edit timeline analysis</span> tracks every Edit and Write tool call, building per-file content ownership maps to detect when a model later overwrites its own earlier output. Opus 4.5 rewrites 16.6% of its edits vs 10.3% for Opus 4.6. Overlap classification reveals the rewrites are predominantly <span class="term" data-def="Sequential edits to the same code region without error signals or user dissatisfaction—normal incremental development.">iterative refinement</span> (63% for 4.5, largest category), not error recovery.</p>
 
                 <h3>Overlap Breakdown</h3>
 <!-- GENERATED-TABLE: edit-overview-inline -->
@@ -4616,7 +4619,7 @@
                 </div>
 
                 <h3>Context Compaction</h3>
-                <p>Context-window compaction occurs in 10.1% of 4.5 sessions (33/327) and 12.5% of 4.6 sessions (17/136). Pre/post comparisons show improvement after compaction, but a position-adjusted <span class="term" data-def="Non-compacting sessions used as a baseline, split at the median compaction position to isolate position effects from compaction effects.">control group</span>&mdash;splitting non-compacting sessions at the median <span class="term" data-def="Claude Code's process of summarizing earlier messages to free context window space when the conversation grows too long.">compaction</span> position to isolate position effects&mdash;reveals the effect is driven by session position, not compaction itself (position-adjusted effect: &minus;0.23 for 4.5, &minus;0.22 for 4.6). Compaction appears to preserve rather than degrade performance.</p>
+                <p>Context-window compaction occurs in 10.1% of 4.5 sessions (33/327) and 12.5% of 4.6 sessions (17/136). Pre/post comparisons show improvement after compaction, but a position-adjusted <span class="term" data-def="Non-compacting sessions used as a baseline, split at the median compaction position to isolate position effects from compaction effects.">control group</span>&mdash;splitting non-compacting sessions at the median compaction position to isolate position effects&mdash;reveals the effect is driven by session position, not compaction itself (position-adjusted effect: &minus;0.23 for 4.5, &minus;0.22 for 4.6). Compaction appears to preserve rather than degrade performance.</p>
 
                 <details class="expansion">
     <summary>Compaction Overview</summary>
@@ -4747,26 +4750,6 @@
             <!-- ===== 10. METHODOLOGY ===== -->
             <section id="methodology"><h2>10. Methodology</h2>
 
-                <div class="pipeline">
-                    <div class="pipe-step">Session Logs<small>463 sessions</small></div>
-                    <span class="pipe-arrow">&rarr;</span>
-                    <div class="pipe-step">Task Extraction<small>2,320 tasks</small></div>
-                    <span class="pipe-arrow">&rarr;</span>
-                    <div class="pipe-step">LLM Classification<small>complexity, sentiment</small></div>
-                    <span class="pipe-arrow">&rarr;</span>
-                    <div class="pipe-step">Behavioral Analysis<small>subagents, planning</small></div>
-                    <span class="pipe-arrow">&rarr;</span>
-                    <div class="pipe-step">Token Extraction<small>cost, verbosity</small></div>
-                    <span class="pipe-arrow">&rarr;</span>
-                    <div class="pipe-step">Statistical Tests<small>529 comparisons</small></div>
-                    <span class="pipe-arrow">&rarr;</span>
-                    <div class="pipe-step">Edit Timeline<small>4,799 edits</small></div>
-                    <span class="pipe-arrow">&rarr;</span>
-                    <div class="pipe-step">Compaction<small>79 events</small></div>
-                    <span class="pipe-arrow">&rarr;</span>
-                    <div class="pipe-step">Report Build<small>terms, expansions</small></div>
-                </div>
-
                 <details class="expansion">
     <summary>Data Cleaning Methodology</summary>
     <div class="expansion-body">
@@ -4807,12 +4790,27 @@
     </div>
 </details>
 
-                <p>Each Claude Code session was segmented into tasks based on user-message boundaries and topic shifts. An <span class="term" data-def="A language model (Claude Haiku or Sonnet) used to automatically classify tasks for complexity, sentiment, and other attributes.">LLM annotator</span> classified each task for complexity, type, sentiment, completion status, and alignment score (1&ndash;5 scale). Behavioral metrics&mdash;subagent usage, planning, parallelization&mdash;were extracted from tool-call logs.</p>
+                <p>This section documents how each pipeline step works. Each step includes a summary of the approach and a collapsible detail block with thresholds, algorithms, and parameters.</p>
+
+                <h3>Task Extraction &amp; Classification</h3>
+
+                <p>Each Claude Code session was segmented into tasks at user-message boundaries. An <span class="term" data-def="A language model (Claude Haiku or Sonnet) used to automatically classify tasks for complexity, sentiment, and other attributes.">LLM annotator</span> (Haiku) then classified each task for complexity, type, sentiment, completion status, and alignment score (1&ndash;5 scale). Behavioral metrics&mdash;subagent usage, planning, parallelization&mdash;were extracted directly from tool-call logs.</p>
+
+                <details><summary>Sentiment detection detail</summary>
+                <p>Three independent signal sources feed into sentiment aggregation:</p>
+                <ol>
+                    <li><strong>Keyword patterns:</strong> Regex matching in user messages for positive signals (<em>thanks, perfect, excellent, looks good</em>), negative signals (<em>wrong, incorrect, please fix, revert, undo</em>), and continuation signals (<em>now, next, also, can you</em>). Confidence: low (0 hits), medium (1&ndash;2), high (&ge;3).</li>
+                    <li><strong>Structural edit signals:</strong> Self-corrections (consecutive edits overlapping on same file), error recoveries (edits within 10 message indices of an error), user corrections (redirect patterns in the next user message), and rewrite rate (overlaps / total edits).</li>
+                    <li><strong>LLM judgement:</strong> Haiku classifies the full task context. Free-text sentiment is normalized to satisfied/neutral/dissatisfied/ambiguous via pattern matching.</li>
+                </ol>
+                <p>Aggregation uses downgrade logic: if edit signals contradict the LLM (e.g., user corrections present but LLM says &ldquo;satisfied&rdquo;), the combined score is downgraded. If rewrite rate &gt;0.3 but execution quality is &ldquo;excellent,&rdquo; the quality score is downgraded to &ldquo;good.&rdquo;</p>
+                </details>
 
                 <h3>Cross-Cut Dimensions</h3>
 
                 <p>All 529 statistical tests are run both at the overall level and stratified across three cross-cut dimensions. Each section&rsquo;s &ldquo;Cross-Cut Detail&rdquo; expansion shows how its metrics behave under each slice.</p>
 
+                <details><summary>Cross-cut dimension definitions</summary>
                 <table>
                     <thead>
                         <tr><th>Dimension</th><th>Levels</th><th>Method</th></tr>
@@ -4826,7 +4824,7 @@
                         <tr>
                             <td class="label-cell">Task type</td>
                             <td><strong>investigation</strong>, <strong>bugfix</strong>, <strong>feature</strong>, <strong>greenfield</strong>, <strong>refactor</strong>, <strong>sysadmin</strong>, <strong>docs</strong>, <strong>continuation</strong>, <strong>port</strong></td>
-                            <td>LLM-classified (Haiku) from user prompt, tool usage, and work summary. Regex pattern matching provides initial signal; LLM classification overrides at medium/high confidence, resolving previously &ldquo;unknown&rdquo; tasks (32.6% of dataset). Eval: 100% unknown resolution, LLM agrees with regex on 55% of classified tasks (LLM typically more accurate on context-dependent prompts).</td>
+                            <td>LLM-classified (Haiku) from user prompt, tool usage, and work summary. Regex pattern matching provides initial signal; LLM classification overrides at medium/high confidence, resolving previously &ldquo;unknown&rdquo; tasks (32.6% of dataset). Eval: 100% unknown resolution, LLM agrees with regex on 55% of classified tasks.</td>
                         </tr>
                         <tr>
                             <td class="label-cell">Iteration</td>
@@ -4839,12 +4837,65 @@
                 <div class="stat-note">
                     <strong>Minimum sample sizes:</strong> Cross-cut cells with fewer than 5&ndash;10 observations (depending on test type) are excluded from statistical testing. This primarily affects the &ldquo;major&rdquo; complexity tier (n=19/18) and rare task types.
                 </div>
+                </details>
 
-                <p>Edit timeline analysis tracked 4,799 Edit/Write tool calls across all sessions, building per-file content ownership maps to detect when a later edit&rsquo;s <code>old_string</code> overlaps with an earlier edit&rsquo;s <code>new_string</code>. Overlaps are detected via three tiers (exact match, containment at &ge;30% ratio, and Jaccard line overlap) and classified by context (self-correction, error recovery, user-directed, iterative refinement). Edit metrics were joined with task classifications to compute complexity-binned accuracy rates (93% and 88% coverage for the two models).</p>
+                <h3>Edit Timeline Analysis</h3>
 
-                <p>Compaction analysis found 79 <code>compact_boundary</code> system messages across 50 compacting sessions, extracting trigger type, pre-compaction token count, and position. Outcome impact was measured by splitting tasks into pre/post groups at the first compaction timestamp, with a control group of non-compacting sessions split at the median compaction position to isolate position effects.</p>
+                <p>The edit timeline reconstructs a per-file content ownership history from every Edit/Write tool call across all sessions. When a later edit&rsquo;s <code>old_string</code> overlaps with content placed by an earlier edit, a rewrite is detected&mdash;providing a mechanistic signal for self-correction that doesn&rsquo;t depend on sentiment classification.</p>
 
-                <p><strong>Statistical testing:</strong> 529 tests were conducted: chi-square (categorical), <span class="term" data-def="A nonparametric test comparing continuous metrics between two groups without assuming normal distributions.">Mann-Whitney U</span> (continuous), proportion tests (rates). Bonferroni correction was chosen over less conservative alternatives (e.g., Benjamini-Hochberg FDR) to minimize false positives given the observational design; the tradeoff is higher false-negative risk. Corrected threshold: p&lt;0.0000945. Across all 529 tests (overall and per-complexity strata), 93 findings survive Bonferroni and 168 survive <span class="term" data-def="Benjamini-Hochberg false discovery rate control—less conservative than Bonferroni, controls the expected proportion of false positives among rejected hypotheses.">FDR correction</span>. At the overall level, fifteen survive Bonferroni, including alignment score (p=0.000023), duration (p&lt;0.000001, though d=0.005&mdash;negligible practical effect), tool calls/task (p&lt;0.000001, d=&minus;0.29), tools/file (p&lt;0.000001, d=&minus;0.10), and three categorical distributions (task completion, communication quality, autonomy level). All three chi-square survivors have low-expected-cell-count warnings, which may inflate test statistics. Significance notes appear inline in each section.</p>
+                <details><summary>Overlap detection tiers and classification</summary>
+                <p>Overlaps are matched via three tiers, evaluated in order:</p>
+                <table>
+                    <thead>
+                        <tr><th>Tier</th><th>Method</th><th>Threshold</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="label-cell">Exact</td>
+                            <td>String equality between prior <code>new_string</code> and later <code>old_string</code></td>
+                            <td>100% match</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Containment</td>
+                            <td>Substring match with size constraints</td>
+                            <td>&ge;40 chars AND &ge;30% of larger string</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Line overlap</td>
+                            <td>Jaccard coefficient on non-trivial lines (&gt;15 chars)</td>
+                            <td>Jaccard &gt;0.3 OR coverage &gt;0.5</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>Each detected overlap is classified by context:</p>
+                <ul>
+                    <li><strong>Self-correction:</strong> Same task, no intervening user prompt or errors</li>
+                    <li><strong>Error recovery:</strong> Error detected between the two edits</li>
+                    <li><strong>User-directed:</strong> Dissatisfaction keyword in intervening user message</li>
+                    <li><strong>Iterative refinement:</strong> Chain depth &gt;3, or none of the above</li>
+                </ul>
+
+                <p>A per-task <em>triage score</em> weights these: <code>(self_corrections&times;3 + error_recoveries&times;2 + user_corrections&times;5 + max_chain_depth) / total_edits</code>. Edit metrics were joined with task classifications to compute complexity-binned accuracy rates (93% and 88% coverage for the two models).</p>
+                </details>
+
+                <h3>Compaction Analysis</h3>
+
+                <p>Claude Code compacts conversation context when token limits approach. This analysis measures whether compaction degrades task outcomes or merely correlates with session position.</p>
+
+                <details><summary>Compaction detection and outcome measurement</summary>
+                <p>79 <code>compact_boundary</code> system messages were found across 50 compacting sessions, with trigger type, pre-compaction token count, and session position extracted for each. Outcome impact was measured by splitting tasks into pre/post groups at the first compaction timestamp. A control group of non-compacting sessions, split at the median compaction position, isolates position effects from compaction effects.</p>
+                </details>
+
+                <h3>Statistical Testing</h3>
+
+                <p>529 tests were conducted across overall and per-complexity strata, using Bonferroni correction&mdash;the most conservative standard&mdash;to minimize false positives given the observational design.</p>
+
+                <details><summary>Test types, effect sizes, and correction thresholds</summary>
+                <p>Three test types were used: chi-square for categorical distributions (effect size: Cram&eacute;r&rsquo;s V), <span class="term" data-def="A nonparametric test comparing continuous metrics between two groups without assuming normal distributions.">Mann-Whitney U</span> for continuous metrics (Cohen&rsquo;s d with bootstrap confidence intervals, n=5,000 resamples), and two-proportion Z-tests for rates (Cohen&rsquo;s h). Confidence intervals on proportions use Wilson score intervals.</p>
+
+                <p>Bonferroni corrected threshold: p&lt;0.0000945. Across all 529 tests, 93 survive Bonferroni and 168 survive <span class="term" data-def="Benjamini-Hochberg false discovery rate control—less conservative than Bonferroni, controls the expected proportion of false positives among rejected hypotheses.">FDR correction</span>. At the overall level, fifteen survive Bonferroni, including alignment score (p=0.000023), duration (p&lt;0.000001, though d=0.005&mdash;negligible practical effect), tool calls/task (p&lt;0.000001, d=&minus;0.29), tools/file (p&lt;0.000001, d=&minus;0.10), and three categorical distributions (task completion, communication quality, autonomy level). All three chi-square survivors have low-expected-cell-count warnings, which may inflate test statistics.</p>
+                </details>
 
                 <details class="expansion">
     <summary>Complete statistical test results (529 tests)</summary>
@@ -5293,20 +5344,20 @@
 
                 <h3>Development Process</h3>
 
-                <p>This analysis was developed iteratively. Several approaches were tried and abandoned when they proved unreliable:</p>
+                <p>This analysis was developed iteratively. Two early approaches were replaced after proving unreliable:</p>
 
-                <p><strong>Automated dissatisfaction detection (abandoned as primary signal):</strong> Initial LLM-based sentiment classification flagged 7&ndash;9% dissatisfaction for both models. LLM-agent audit of all 59 flagged cases revealed 73&ndash;93% <span class="term" data-def="The proportion of flagged cases incorrectly identified—here, dissatisfaction signals that were actually normal task-coordination language.">false positive rate</span>s&mdash;the classifiers were fooled by task-coordination language (e.g., &ldquo;fix&rdquo; in subagent prompts). This approach was replaced by edit timeline analysis, which detects self-corrections mechanistically rather than through sentiment proxies.</p>
+                <details><summary>Abandoned approaches</summary>
+                <p><strong>LLM-only dissatisfaction detection:</strong> Initial LLM-based sentiment classification flagged 7&ndash;9% dissatisfaction for both models. An audit of all 59 flagged cases revealed 73&ndash;93% <span class="term" data-def="The proportion of flagged cases incorrectly identified—here, dissatisfaction signals that were actually normal task-coordination language.">false positive rate</span>s&mdash;the classifiers were fooled by task-coordination language (e.g., &ldquo;fix&rdquo; in subagent prompts). This was replaced by the current multi-signal approach, which requires corroboration from keyword patterns and structural edit signals before classifying dissatisfaction.</p>
 
-                <p><strong>LLM quality judgement (dropped):</strong> An LLM judge was asked to compare code quality between models. The results were unreliable&mdash;the judge lacked sufficient context to evaluate whether code met domain requirements, and produced confident but ungrounded assessments. This section was removed entirely rather than presented with caveats.</p>
-
-                <p><strong>Refactoring routing recommendation (revised):</strong> Early signals suggested Opus 4.5 was better for refactoring, based on four false-positive dissatisfaction flags and small sample sizes. Sentiment detection and git retention both proved unreliable. Edit timeline analysis provided a more direct mechanistic signal: tracking every edit across all sessions revealed Opus 4.5 with a 16.6% rewrite rate vs 10.3% for Opus 4.6 (now 246 editing tasks, 120 overlapping edits).</p>
+                <p><strong>LLM quality judgement:</strong> An LLM judge was asked to compare code quality between models. The judge lacked sufficient context to evaluate whether code met domain requirements and produced confident but ungrounded assessments. This was replaced by mechanistic edit timeline analysis, which detects self-corrections from the tool-call record rather than relying on subjective quality assessment.</p>
+                </details>
 
                 <h3>Limitations</h3>
                 <p><strong>LLM-in-the-loop analysis:</strong> All task classification, sentiment analysis, and alignment scoring was performed by LLM agents (Claude Haiku and Sonnet). This creates a circularity concern: Claude models are classifying Claude model outputs. No formal inter-rater reliability was computed. Human spot-checks validated flagged cases, but systematic bias between models (e.g., if the classifier is more generous toward outputs that resemble its own style) cannot be ruled out. All three overall chi-square Bonferroni survivors and the alignment score depend on LLM-generated categories.</p>
                 <p><strong>Single user:</strong> All data comes from one developer&rsquo;s workflow. Results may not generalize to other users, codebases, or task distributions.</p>
                 <p><strong>Temporal confound:</strong> Opus 4.5 spans 2 months; Opus 4.6 spans 8 days. A productive week, a particular project focus, or simply the novelty of a new model could color all 591 Opus 4.6 tasks simultaneously. The null hypothesis&mdash;that all observed differences reflect the user&rsquo;s changing work patterns rather than model capabilities&mdash;cannot be rejected by this design.</p>
                 <p><strong>Observational, not experimental:</strong> Tasks were not randomly assigned to models. Opus 4.6 was used later chronologically and on different (often harder) tasks, confounding model effects with task effects.</p>
-                <p><strong><span class="term" data-def="A bias where one model’s higher proportion of complex tasks inflates resource metrics and may suppress outcome scores.">Complexity confound</span>:</strong> Opus 4.6&rsquo;s different complexity mix (42% moderate-and-above vs 33% for Opus 4.5) inflates its resource usage metrics and may suppress its satisfaction scores. Complexity-stratified comparisons would isolate model effects from mix effects but are not yet in the pipeline.</p>
+                <p><strong><span class="term" data-def="A bias where one model’s higher proportion of complex tasks inflates resource metrics and may suppress outcome scores.">Complexity confound</span>:</strong> Opus 4.6&rsquo;s different complexity mix (42% moderate-and-above vs 33% for Opus 4.5) inflates its resource usage metrics and may suppress its satisfaction scores. Complexity-stratified comparisons (presented throughout as cross-cut detail) partially control for this, but cannot fully separate model effects from mix effects.</p>
                 <p><strong>Platform evolution:</strong> The Claude Code SDK evolved between December 2025 and February 2026. Changes to system prompts, available tools, or subagent defaults could contribute to behavioral differences attributed to the models.</p>
                 <p><strong>Sample asymmetry:</strong> The 2.9:1 ratio (1,729 vs 591 tasks) means Opus 4.5 estimates have narrower confidence intervals. Effect sizes for Opus 4.6 are less precise.</p>
                 <p><strong>User learning effect:</strong> The user may have learned to use Claude Code more effectively over time, benefiting whichever model came second in the chronological sequence.</p>
