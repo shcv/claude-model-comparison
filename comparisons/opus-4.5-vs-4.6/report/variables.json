@@ -338,6 +338,70 @@
     "format": "{:.3f}"
   },
 
+  "cost.avg_requests_a": {
+    "source": "tokens",
+    "path": "{model_a}.overall.avg_requests_per_task",
+    "format": "{:.1f}"
+  },
+  "cost.avg_requests_b": {
+    "source": "tokens",
+    "path": "{model_b}.overall.avg_requests_per_task",
+    "format": "{:.1f}"
+  },
+
+  "behavior.total_tasks_a": {
+    "source": "behavior",
+    "path": "{model_a}.total_tasks",
+    "format": "{:,}"
+  },
+  "behavior.total_tasks_b": {
+    "source": "behavior",
+    "path": "{model_b}.total_tasks",
+    "format": "{:,}"
+  },
+  "edits.total_edits_a": {
+    "source": "edits",
+    "path": "{model_a}.total_edits",
+    "format": "{:,}"
+  },
+  "edits.total_edits_b": {
+    "source": "edits",
+    "path": "{model_b}.total_edits",
+    "format": "{:,}"
+  },
+  "edits.total_writes_a": {
+    "source": "edits",
+    "path": "{model_a}.total_writes",
+    "format": "{:,}"
+  },
+  "edits.total_writes_b": {
+    "source": "edits",
+    "path": "{model_b}.total_writes",
+    "format": "{:,}"
+  },
+
+  "sessions.explore_mean_a": {
+    "source": "timing",
+    "path": "{model_a}.explore_phase.explore_duration_seconds.mean",
+    "format": "{:.1f}"
+  },
+  "sessions.explore_mean_b": {
+    "source": "timing",
+    "path": "{model_b}.explore_phase.explore_duration_seconds.mean",
+    "format": "{:.1f}"
+  },
+
+  "dataset.projects_a": {
+    "source": "dataset",
+    "path": "{model_a}.projects",
+    "format": "{:,}"
+  },
+  "dataset.projects_b": {
+    "source": "dataset",
+    "path": "{model_b}.projects",
+    "format": "{:,}"
+  },
+
   "findings.total_tests": {
     "source": "findings",
     "path": "metadata.total_tests",

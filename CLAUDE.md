@@ -40,9 +40,9 @@ python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --no-
 
 The pipeline tracks input/output file hashes in `data/pipeline-manifest.json`. Steps are skipped when inputs are unchanged since the last run. Use `--force` to override.
 
-Steps (in order): `collect`, `extract`, `classify`, `annotate`, `analyze`, `tokens`, `enrich`, `stats`, `findings`, `dataset`, `update`, `review`, `report`.
+Steps (in order): `collect`, `extract`, `classify`, `annotate`, `analyze`, `tokens`, `enrich`, `stats`, `findings`, `dataset`, `update`, `report`.
 
-Use `--no-llm` to skip LLM-dependent steps (`annotate`, `review`) and run `update` in tables-only mode:
+Use `--no-llm` to skip LLM-dependent steps (`annotate`) and run `update` in tables-only mode:
 
 Individual scripts can also be run directly with `--data-dir` and `--analysis-dir` arguments:
 
@@ -89,20 +89,20 @@ Edit the template at `report/report.html`, not the built output at `dist/public/
 
 ## Section Update System
 
-The `update` pipeline step (`scripts/update_sections.py`) auto-generates expansion tables from analysis data and LLM-checks prose against current numbers. It runs in two phases:
+The `update` pipeline step (`scripts/update_sections.py`) auto-generates expansion tables and resolves data-grounded expressions. It runs in three phases:
 
 1. **Table generation**: Regenerate all tables from analysis data. Tables in both expansions and the main template use `<!-- GENERATED-TABLE: table-id -->` named markers.
-2. **Template variable resolution**: Replace `{{section.metric}}` markers with data values from `report/variables.json`.
-3. **Whole-document prose check**: Build an annotated template (inlining all expansions between `BEGIN-EXPANSION`/`END-EXPANSION` sentinels), send it with all key metrics in a single LLM call, then decompose the result back into template + expansion files.
+2. **Expression authoring** (LLM): Convert literal numbers in prose to `{{expression | format}}` markers. Once all literals are expressions, this step caches and becomes a no-op.
+3. **Expression resolution**: Evaluate all `{{expression | format}}` markers via `scripts/expr_eval.py` (safe AST-based evaluator). Supports simple lookups (`{{cost.avg_cost_a}}`), math (`{{cost.avg_output_b / cost.avg_output_a | .1f}}`), and builtins (`abs()`, `round()`, `min()`, `max()`).
 
-The single-pass approach gives the LLM cross-section context and reduces SDK overhead vs per-section calls. `GENERATED-TABLE` markers tell the LLM which content is data-driven and should not be modified.
+Expressions are wrapped in sentinels: `<!-- var: expr -->value<!-- /var -->`. The build step strips sentinels; the update step re-resolves them. `GENERATED-TABLE` markers tell the LLM which content is data-driven and should not be modified.
 
 ### Spec files
 
 Each `report/specs/{section-id}.json` defines:
 - **`data_sources`**: analysis JSON files to load
 - **`tables`**: expansion table definitions (columns, row order, data paths)
-- **`prose`**: key metrics paths and guidance for LLM fact-checking
+- **`prose`**: key metrics paths and guidance for LLM expression authoring
 
 Column paths use `{model_a}`, `{model_b}`, `{row_key}` placeholders. Display names use `{display_a}`, `{display_b}`.
 

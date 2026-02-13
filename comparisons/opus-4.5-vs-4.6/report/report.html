@@ -463,8 +463,8 @@
                     </div>
                     <div class="stat-card">
                         <div class="label">Bonferroni Survivors</div>
-                        <div class="value v-dark">93 / 529</div>
-                        <div class="detail">93 tests survive across overall and per-complexity strata</div>
+                        <div class="value v-dark">15 / 529</div>
+                        <div class="detail">15 overall; 93 including per-complexity and cross-cut strata</div>
                     </div>
                 </div>
 
@@ -474,7 +474,7 @@
 
                 <h3>What Changes When You Switch</h3>
 
-                <p>Across <!-- var: findings.total_tests -->529<!-- /var --> statistical tests, <!-- var: findings.bonferroni_significant -->93<!-- /var --> survive Bonferroni correction&mdash;and most describe <em>how</em> the model works, not <em>whether</em> it succeeds. The overall success rates are comparable; what changes is the experience of working alongside it. These are the five most noticeable differences, drawn from one user&rsquo;s workflow over <!-- var: dataset.total_tasks -->2,320<!-- /var --> tasks.</p>
+                <p>Across <!-- var: findings.total_tests -->529<!-- /var --> statistical tests (overall, per-complexity, and cross-cut strata), <!-- var: findings.bonferroni_significant -->93<!-- /var --> survive Bonferroni correction&mdash;15 at the overall level. Most describe <em>how</em> the model works, not <em>whether</em> it succeeds. The overall success rates are comparable; what changes is the experience of working alongside it. These are the five most noticeable differences, drawn from one user&rsquo;s workflow over <!-- var: dataset.total_tasks -->2,320<!-- /var --> tasks.</p>
 
                 <h3>1. The model plans before it acts&mdash;and you stop steering it</h3>
 
@@ -511,15 +511,11 @@
                     <span class="pipe-arrow">&rarr;</span>
                     <div class="pipe-step">LLM Classification<small>complexity, sentiment</small></div>
                     <span class="pipe-arrow">&rarr;</span>
-                    <div class="pipe-step">Behavioral Analysis<small>subagents, planning</small></div>
+                    <div class="pipe-step">Behavioral Analysis<small>edits, planning, subagents</small></div>
                     <span class="pipe-arrow">&rarr;</span>
                     <div class="pipe-step">Token Extraction<small>cost, verbosity</small></div>
                     <span class="pipe-arrow">&rarr;</span>
                     <div class="pipe-step">Statistical Tests<small>529 comparisons</small></div>
-                    <span class="pipe-arrow">&rarr;</span>
-                    <div class="pipe-step">Edit Timeline<small>4,799 edits</small></div>
-                    <span class="pipe-arrow">&rarr;</span>
-                    <div class="pipe-step">Compaction<small>79 events</small></div>
                     <span class="pipe-arrow">&rarr;</span>
                     <div class="pipe-step">Report Build<small>terms, expansions</small></div>
                 </div>
@@ -1253,9 +1249,9 @@
                         <div class="detail">4.6 higher (p=<!-- var: quality.alignment_p -->0.000023<!-- /var -->, Bonferroni)</div>
                     </div>
                     <div class="stat-card">
-                        <div class="label">Quality Survivors</div>
-                        <div class="value v-dark">2 of 15</div>
-                        <div class="detail">2 of 15 overall Bonferroni survivors are quality metrics</div>
+                        <div class="label">Completion Dist.</div>
+                        <div class="value v-blue">p=0.000017</div>
+                        <div class="detail">Chi-square Bonferroni survivor (V=0.10)</div>
                     </div>
                 </div>
 

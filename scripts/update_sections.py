@@ -22,6 +22,7 @@ from pathlib import Path
 
 # Add scripts dir to path for imports
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import expr_eval
 import table_gen
 from models import load_comparison_config
 
@@ -2955,34 +2956,34 @@ def extract_expansion_prose(content: str) -> dict:
 
 # ── LLM Prose Check ──────────────────────────────────────────────
 
-DOCUMENT_PROSE_PROMPT = """You are a fact-checker for a technical report comparing two AI models.
-The document below has been auto-updated with fresh data tables, but the
-surrounding prose may contain stale numbers. Review ALL prose and identify
-corrections needed.
+EXPRESSION_AUTHORING_PROMPT = """You are converting literal numbers in a technical report into data-grounded expressions.
+
+The document below compares two AI models. Literal numbers in the prose should be replaced with {{{{expression | format}}}} markers that will be auto-evaluated from data on every build.
+
+VARIABLE CATALOG (name → current value, formatted, description):
+{catalog}
 
 RULES:
-1. Only report numbers, percentages, ratios, comparisons, or bar-fill widths
-   that are WRONG when checked against the provided DATA.
-2. Do NOT report content that is factually correct.
-3. Do NOT touch content between <!-- GENERATED-TABLE --> and
-   <!-- /GENERATED-TABLE --> markers.
-4. The "old" field must be an exact substring of the document — include enough
-   surrounding text to make the match unique (aim for 40-120 chars).
-5. Preserve all HTML tags, CSS classes, and entities in "new".
-6. If a direction reversed (e.g., "A is higher" but data shows B is higher),
-   include "DIRECTION CHANGE" at the start of the reason.
+1. Find literal numbers, percentages, ratios, and comparisons in prose text.
+2. Replace each with a {{{{expression | format}}}} marker using variables from the catalog.
+3. Simple lookups: {{{{cost.avg_cost_a}}}} — uses the variable's default format.
+4. Math expressions: {{{{cost.avg_output_b / cost.avg_output_a | .1f}}}} — explicit format.
+5. Format specs: .0f, .1f, .2f (decimals), ,.0f (thousands), $.2f (currency), +.1f (signed), pct (×100+%), pct1 (×100+% 1dp), x.1f (ratio with ×), pp (percentage points).
+6. Do NOT touch content between <!-- GENERATED-TABLE --> and <!-- /GENERATED-TABLE --> markers.
+7. Do NOT touch version numbers (e.g., "4.5", "4.6"), section numbers, statistical conventions (α = 0.05), or CSS values.
+8. Do NOT touch numbers that are not derivable from the catalog variables.
+9. The "old" field must be an exact substring of the document — include enough surrounding text to make the match unique (aim for 40-120 chars).
+10. Preserve all HTML tags, CSS classes, entities, and <!-- var: ... --> sentinels in both old and new.
+11. If a number is already wrapped in <!-- var: ... -->...<!-- /var -->, leave it alone.
 
 OUTPUT FORMAT: Return ONLY a JSON array. No commentary, no markdown fences.
 Each element:
-  {{"old": "exact substring to find", "new": "replacement", "reason": "brief explanation"}}
+  {{"old": "exact substring to find", "new": "replacement with {{{{expr | fmt}}}} markers", "reason": "brief explanation"}}
 
-If everything is factually correct, return: []
+If no literals need conversion, return: []
 
 SECTION NOTES:
 {guidance}
-
-DATA:
-{data_json}
 
 DOCUMENT:
 {document}"""
@@ -3299,43 +3300,38 @@ def load_variable_data_sources(variables: dict, comparison_dir: Path) -> dict:
     return data
 
 
-def resolve_template_variables(template_html: str, variables: dict,
-                                var_data: dict, config: dict) -> tuple[str, int]:
-    """Resolve {{section.metric}} patterns in template HTML.
+def _convert_format_spec(fmt: str) -> str:
+    """Convert variables.json format strings to expr_eval format specs.
 
-    Uses persistent sentinels so variables can be re-resolved on subsequent
-    runs. The flow is:
-    1. Un-resolve: replace <!-- var: name -->...<!-- /var --> back to {{name}}
-    2. Resolve: replace {{name}} with <!-- var: name -->value<!-- /var -->
+    variables.json uses Python .format() syntax like '{:,.0f}', '${:.2f}'.
+    expr_eval uses simpler specs like ',.0f', '$.2f'.
+    Named formats like 'pct', 'pct1' pass through unchanged.
+    """
+    # Named formats pass through
+    if fmt in ("pct", "pct1", "pp", "pp_raw", "delta", "dash_if_none"):
+        return fmt
+    # Handle dollar prefix: ${:.2f} -> $.2f, ${:,.0f} -> $,.0f
+    if fmt.startswith("${:") and fmt.endswith("}"):
+        return "$" + fmt[3:-1]
+    # Strip {: and } wrapper: {:,.0f} -> ,.0f, {:,} -> ,
+    if fmt.startswith("{:") and fmt.endswith("}"):
+        return fmt[2:-1]
+    # Already a simple spec or empty
+    return fmt
 
-    This means the template always retains resolvable markers.
 
-    Args:
-        template_html: The report template with {{...}} or sentinel patterns.
-        variables: Variable definitions from variables.json.
-        var_data: Loaded data sources keyed by source name.
-        config: Model config from parse_comparison_dir.
+def build_variable_catalog(variables: dict, var_data: dict, config: dict) -> tuple[dict, dict]:
+    """Resolve all variables to build a namespace and descriptive catalog.
 
     Returns:
-        (modified_html, n_resolved) tuple.
+        (namespace, default_formats)
+        - namespace: flat dict of {name: numeric_value} for expr_eval
+        - default_formats: dict of {name: format_spec} for default formatting
     """
-    # Step 1: Un-resolve any previously resolved variables
-    sentinel_pattern = re.compile(r'<!-- var: (\S+?) -->.*?<!-- /var -->')
-    template_html = sentinel_pattern.sub(lambda m: '{{' + m.group(1) + '}}', template_html)
+    namespace = {}
+    default_formats = {}
 
-    # Step 2: Resolve {{...}} patterns
-    var_pattern = re.compile(r'\{\{(\S+?)\}\}')
-    n_resolved = 0
-    unresolved = []
-
-    def replace_var(m):
-        nonlocal n_resolved
-        var_name = m.group(1)
-        var_def = variables.get(var_name)
-        if not var_def:
-            unresolved.append(var_name)
-            return m.group(0)  # leave unresolved
-
+    for var_name, var_def in variables.items():
         source = var_def.get("source", "")
         path = var_def.get("path", "")
         fmt = var_def.get("format", "{}")
@@ -3343,17 +3339,81 @@ def resolve_template_variables(template_html: str, variables: dict,
         source_data = var_data.get(source, {})
         val = table_gen.resolve_path(source_data, path, config)
         if val is None:
-            unresolved.append(var_name)
-            return m.group(0)
+            continue
+        if not isinstance(val, (int, float)):
+            continue
 
-        formatted = table_gen.format_value(val, fmt)
-        n_resolved += 1
-        return f'<!-- var: {var_name} -->{formatted}<!-- /var -->'
+        namespace[var_name] = val
+        default_formats[var_name] = _convert_format_spec(fmt)
 
-    result = var_pattern.sub(replace_var, template_html)
+    return namespace, default_formats
+
+
+def format_variable_catalog(variables: dict, namespace: dict,
+                            default_formats: dict) -> str:
+    """Format the variable catalog as text for the LLM prompt."""
+    lines = []
+    for var_name in sorted(namespace):
+        val = namespace[var_name]
+        # Use original format from variables.json for display
+        orig_fmt = variables.get(var_name, {}).get("format", "{}")
+        formatted = table_gen.format_value(val, orig_fmt)
+        expr_fmt = default_formats.get(var_name, "")
+        fmt_hint = f", format: {expr_fmt}" if expr_fmt else ""
+        lines.append(f"  {var_name} = {val} (displayed: {formatted}{fmt_hint})")
+    return "\n".join(lines)
+
+
+def resolve_all_expressions(html: str, variables: dict, var_data: dict,
+                            config: dict) -> tuple[str, int]:
+    """Resolve all {{expression | format}} patterns in HTML.
+
+    Handles both simple variable lookups and math expressions.
+    Uses persistent sentinels so expressions can be re-resolved.
+
+    Flow:
+    1. Un-resolve: <!-- var: expr -->value<!-- /var --> → {{expr}}
+    2. Evaluate each {{expr}} or {{expr | fmt}} via expr_eval
+    3. Re-wrap: {{expr}} → <!-- var: expr -->formatted<!-- /var -->
+
+    Args:
+        html: HTML with {{...}} or sentinel patterns.
+        variables: Variable definitions from variables.json.
+        var_data: Loaded data sources keyed by source name.
+        config: Model config from parse_comparison_dir.
+
+    Returns:
+        (modified_html, n_resolved) tuple.
+    """
+    # Build namespace from variables
+    namespace, default_formats = build_variable_catalog(variables, var_data, config)
+
+    # Step 1: Un-resolve any previously resolved expressions
+    # Use .+? (not \S+?) to handle expressions with spaces
+    sentinel_pattern = re.compile(r'<!-- var: (.+?) -->.*?<!-- /var -->')
+    html = sentinel_pattern.sub(lambda m: '{{' + m.group(1) + '}}', html)
+
+    # Step 2: Resolve {{...}} patterns (allow spaces for expressions)
+    var_pattern = re.compile(r'\{\{(.+?)\}\}')
+    n_resolved = 0
+    unresolved = []
+
+    def replace_expr(m):
+        nonlocal n_resolved
+        raw_expr = m.group(1).strip()
+
+        try:
+            formatted = expr_eval.evaluate(raw_expr, namespace, default_formats)
+            n_resolved += 1
+            return f'<!-- var: {raw_expr} -->{formatted}<!-- /var -->'
+        except expr_eval.ExprError:
+            unresolved.append(raw_expr)
+            return m.group(0)  # leave unresolved
+
+    result = var_pattern.sub(replace_expr, html)
 
     if unresolved:
-        print(f"  Warning: {len(unresolved)} unresolved variable(s): {', '.join(unresolved)}", file=sys.stderr)
+        print(f"  Warning: {len(unresolved)} unresolved expression(s): {', '.join(unresolved[:10])}", file=sys.stderr)
 
     return result, n_resolved
 
@@ -3497,22 +3557,7 @@ def main():
                 print(f"    Wrote: {expansion_path.name}")
             tables_generated += 1
 
-    # ── Phase 1b: Template variable resolution ────────────────
-
-    variables = load_variables(report_dir)
-    vars_resolved = 0
-    if variables:
-        var_data = load_variable_data_sources(variables, comparison_dir)
-        template_html, vars_resolved = resolve_template_variables(
-            template_html, variables, var_data, config)
-        if vars_resolved > 0:
-            if args.dry_run:
-                print(f"\n  Would resolve {vars_resolved} template variable(s)")
-            else:
-                template_path.write_text(template_html)
-                print(f"\n  Resolved {vars_resolved} template variable(s)")
-
-    # ── Phase 1c: Named GENERATED-TABLE in template ─────────
+    # ── Phase 1b: Named GENERATED-TABLE in template ─────────
 
     template_tables_updated = 0
     template_table_registry = _load_template_table_registry(report_dir)
@@ -3564,41 +3609,51 @@ def main():
                 template_path.write_text(template_html)
                 print(f"  Updated {template_tables_updated} template table(s)")
 
-    # ── Phase 2: Whole-document prose check ───────────────────
+    # ── Phase 2: LLM expression authoring ─────────────────────
+    # The LLM converts literal numbers in prose to {{expression}} markers.
+    # Once all literals are converted, subsequent runs find nothing to
+    # convert → [] → cached. No LLM call needed unless new prose with
+    # literals is added.
 
-    prose_checked = 0
-    prose_cached = 0
-    prose_updated = 0
+    expr_authored = 0
+    expr_cached = 0
+    expr_updated = 0
 
-    if not args.tables_only:
+    variables = load_variables(report_dir)
+    var_data = load_variable_data_sources(variables, comparison_dir) if variables else {}
+
+    if not args.tables_only and variables:
         # Build annotated template — use overrides so dry-run sees fresh tables
         annotated, expansion_names = build_annotated_template(
             template_html, expansions_dir, overrides=generated_expansions)
 
-        # Collect all metrics and guidance from processed specs
-        all_metrics = collect_all_metrics(specs_loaded, config)
+        # Build catalog for LLM prompt
+        namespace, default_formats = build_variable_catalog(
+            variables, var_data, config)
+        catalog_text = format_variable_catalog(
+            variables, namespace, default_formats)
         guidance = collect_guidance(specs_loaded)
 
-        # Single cache key (include sections filter for correctness)
+        # Single cache key
         sections_key = args.sections or "all"
-        cache_input = sections_key + "\n" + annotated + json.dumps(all_metrics, sort_keys=True)
+        cache_input = sections_key + "\n" + annotated + catalog_text
         cache_key = content_hash(cache_input)
 
         prose_cache = load_prose_cache(cache_dir)
 
         if cache_key in prose_cache:
-            print(f"\nDocument prose: cached (skipping)")
-            prose_cached = 1
+            print(f"\nExpression authoring: cached (skipping)")
+            expr_cached = 1
         else:
-            prompt = DOCUMENT_PROSE_PROMPT.format(
+            prompt = EXPRESSION_AUTHORING_PROMPT.format(
+                catalog=catalog_text,
                 guidance=guidance,
-                data_json=json.dumps(all_metrics, indent=2),
                 document=annotated,
             )
 
-            print(f"\nDocument prose: checking with LLM...")
+            print(f"\nExpression authoring: converting literals with LLM...")
             result = call_claude_sdk(prompt, args.model)
-            prose_checked = 1
+            expr_authored = 1
 
             if result:
                 corrections = parse_corrections(result)
@@ -3606,38 +3661,30 @@ def main():
                     print(f"  Warning: could not parse LLM output as JSON", file=sys.stderr)
                     print(f"  Preview: {result[:200]}...", file=sys.stderr)
                 elif len(corrections) == 0:
-                    print(f"  No corrections needed (all prose is factually correct)")
+                    print(f"  No literals to convert (all numbers are expressions)")
                     prose_cache[cache_key] = {"unchanged": True}
                     if not args.dry_run:
                         save_prose_cache(cache_dir, prose_cache)
                 else:
-                    print(f"  {len(corrections)} correction(s) found:")
+                    print(f"  {len(corrections)} literal(s) to convert:")
 
                     if args.dry_run:
-                        # Show what would change without applying
                         for i, corr in enumerate(corrections):
                             reason = corr.get("reason", "")
                             old_preview = corr.get("old", "")[:80]
                             print(f"    [{i}] {reason}: {old_preview}...")
-                            if "DIRECTION CHANGE" in reason.upper():
-                                direction_changes.append(reason)
-                        prose_updated = len(corrections)
+                        expr_updated = len(corrections)
                     else:
-                        # Apply corrections to annotated template
                         modified, n_applied, dir_changes = apply_corrections(
                             annotated, corrections)
                         direction_changes.extend(dir_changes)
 
                         if n_applied > 0:
-                            # Decompose back into template + expansions
                             new_template, new_expansions = decompose_document(
                                 modified, expansion_names)
 
-                            # Write template
-                            if new_template.strip() != template_html.strip():
-                                template_path.write_text(new_template)
-                                print(f"  Updated template: {template_path}")
-                                prose_updated += 1
+                            # Update template_html for Phase 3
+                            template_html = new_template
 
                             # Write modified expansions
                             for name, content in new_expansions.items():
@@ -3647,7 +3694,7 @@ def main():
                                     continue
                                 exp_path.write_text(new_content)
                                 print(f"  Updated expansion: {name}")
-                                prose_updated += 1
+                                expr_updated += 1
                         else:
                             print(f"  No corrections could be applied")
 
@@ -3655,24 +3702,39 @@ def main():
                         prose_cache[cache_key] = {"unchanged": True}
                         if n_applied > 0:
                             new_annotated, _ = build_annotated_template(
-                                new_template, expansions_dir)
-                            new_cache_input = sections_key + "\n" + new_annotated + json.dumps(all_metrics, sort_keys=True)
+                                template_html, expansions_dir)
+                            new_cache_input = sections_key + "\n" + new_annotated + catalog_text
                             new_cache_key = content_hash(new_cache_input)
                             if new_cache_key != cache_key:
                                 prose_cache[new_cache_key] = {"unchanged": True}
                         save_prose_cache(cache_dir, prose_cache)
             else:
-                print("  LLM call failed, prose unchanged")
+                print("  LLM call failed, expressions unchanged")
+
+    # ── Phase 3: Expression resolution ────────────────────────
+    # Evaluates all {{expression | format}} markers in the template,
+    # including any newly authored by the LLM in Phase 2.
+
+    exprs_resolved = 0
+    if variables:
+        template_html, exprs_resolved = resolve_all_expressions(
+            template_html, variables, var_data, config)
+        if exprs_resolved > 0:
+            if args.dry_run:
+                print(f"\n  Would resolve {exprs_resolved} expression(s)")
+            else:
+                template_path.write_text(template_html)
+                print(f"\n  Resolved {exprs_resolved} expression(s)")
 
     # Summary
     print(f"\n{'='*50}")
     print(f"  Tables generated: {tables_generated}")
-    if vars_resolved:
-        print(f"  Template variables resolved: {vars_resolved}")
+    if exprs_resolved:
+        print(f"  Expressions resolved: {exprs_resolved}")
     if template_tables_updated:
         print(f"  Template tables updated: {template_tables_updated}")
     if not args.tables_only:
-        print(f"  Prose: {prose_checked} LLM call(s) (cached: {prose_cached}, updated: {prose_updated})")
+        print(f"  Expression authoring: {expr_authored} LLM call(s) (cached: {expr_cached}, updated: {expr_updated})")
     if direction_changes:
         print(f"  Direction changes detected: {len(direction_changes)}")
         for dc in direction_changes:

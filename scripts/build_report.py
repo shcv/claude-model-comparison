@@ -350,7 +350,7 @@ def build(report_dir, output_path, check_only=False):
     save_manifest(report_dir, manifest)
 
     # 2. Strip variable sentinels (keep resolved values, remove markers)
-    html = re.sub(r'<!-- var: \S+? -->(.*?)<!-- /var -->', r'\1', html)
+    html = re.sub(r'<!-- var: .+? -->(.*?)<!-- /var -->', r'\1', html)
 
     # 3. Inject CSS for terms and expansions
     html = inject_css(html)
@@ -379,7 +379,7 @@ def check_stale_vars(html):
 
     Returns list of unresolved variable names.
     """
-    pattern = re.compile(r'\{\{(\S+?)\}\}')
+    pattern = re.compile(r'\{\{(.+?)\}\}')
     return pattern.findall(html)
 
 

@@ -554,8 +554,8 @@
                     </div>
                     <div class="stat-card">
                         <div class="label">Bonferroni Survivors</div>
-                        <div class="value v-dark">93 / 529</div>
-                        <div class="detail">93 tests survive across overall and per-complexity strata</div>
+                        <div class="value v-dark">15 / 529</div>
+                        <div class="detail">15 overall; 93 including per-complexity and <span class="term" data-def="A stratification dimension used to test whether findings hold across subgroups. Three cross-cuts are used: complexity, task type, and iteration level.">cross-cut</span> strata</div>
                     </div>
                 </div>
 
@@ -565,7 +565,7 @@
 
                 <h3>What Changes When You Switch</h3>
 
-                <p>Across 529 statistical tests, 93 survive <span class="term" data-def="A statistical adjustment that lowers the significance threshold when performing multiple tests to reduce false positives. Here: p&lt;0.0000945 (0.05/529).">Bonferroni correction</span>&mdash;and most describe <em>how</em> the model works, not <em>whether</em> it succeeds. The overall success rates are comparable; what changes is the experience of working alongside it. These are the five most noticeable differences, drawn from one user&rsquo;s workflow over 2,320 tasks.</p>
+                <p>Across 529 statistical tests (overall, per-complexity, and cross-cut strata), 93 survive <span class="term" data-def="A statistical adjustment that lowers the significance threshold when performing multiple tests to reduce false positives. Here: p&lt;0.0000945 (0.05/529).">Bonferroni correction</span>&mdash;15 at the overall level. Most describe <em>how</em> the model works, not <em>whether</em> it succeeds. The overall success rates are comparable; what changes is the experience of working alongside it. These are the five most noticeable differences, drawn from one user&rsquo;s workflow over 2,320 tasks.</p>
 
                 <h3>1. The model plans before it acts&mdash;and you stop steering it</h3>
 
@@ -602,15 +602,11 @@
                     <span class="pipe-arrow">&rarr;</span>
                     <div class="pipe-step">LLM Classification<small>complexity, sentiment</small></div>
                     <span class="pipe-arrow">&rarr;</span>
-                    <div class="pipe-step">Behavioral Analysis<small>subagents, planning</small></div>
+                    <div class="pipe-step">Behavioral Analysis<small>edits, planning, subagents</small></div>
                     <span class="pipe-arrow">&rarr;</span>
                     <div class="pipe-step">Token Extraction<small>cost, verbosity</small></div>
                     <span class="pipe-arrow">&rarr;</span>
                     <div class="pipe-step">Statistical Tests<small>529 comparisons</small></div>
-                    <span class="pipe-arrow">&rarr;</span>
-                    <div class="pipe-step">Edit Timeline<small>4,799 edits</small></div>
-                    <span class="pipe-arrow">&rarr;</span>
-                    <div class="pipe-step"><span class="term" data-def="Claude Code's process of summarizing earlier messages to free context window space when the conversation grows too long.">Compaction</span><small>79 events</small></div>
                     <span class="pipe-arrow">&rarr;</span>
                     <div class="pipe-step">Report Build<small>terms, expansions</small></div>
                 </div>
@@ -740,7 +736,7 @@
     </tbody>
 </table></div>
 
-<p>The ~2.4:1 session ratio means per-task averages for Opus 4.5 are more robust, while Opus 4.6 estimates carry wider confidence intervals. Opus 4.6 sessions are concentrated across 14 projects (9 of which also have Opus 4.5 sessions), providing natural overlap for matched-pair comparisons where they apply.</p>
+<p>The 2:1 session ratio means per-task averages for Opus 4.5 are more robust, while Opus 4.6 estimates carry wider confidence intervals. Opus 4.6 sessions are concentrated across 14 projects (all of which also have Opus 4.5 sessions), providing natural overlap for matched-pair comparisons where they apply.</p>
 <!-- /GENERATED-TABLE -->
 
     </div>
@@ -856,7 +852,7 @@
 </table></div>
 
 <h3>By complexity</h3>
-<p>Complexity is inferred from tool count, files touched, and lines changed. Nearly half of all tasks are trivial (single-turn interactions), while major tasks (&gt;50 tool calls or &gt;500 lines) represent ~1% of volume but a significant share of cost.</p>
+<p>Complexity is inferred from tool count, files touched, and lines changed. Over half of all tasks are trivial (single-turn interactions), while major tasks (&gt;50 tool calls or &gt;500 lines) represent ~1% of volume but a significant share of cost.</p>
 
 <div class="table-scroll"><table>
     <thead>
@@ -1327,7 +1323,7 @@
     <summary>Cache Efficiency by Complexity</summary>
     <div class="expansion-body">
         <!-- GENERATED-TABLE -->
-<p>Thinking tokens are billed as output but do not enter the conversation history or affect cache behavior. Visible text output accumulates in history and increases subsequent input size. Cache writes ($18.75/MTok) are 10&times; more expensive than cache reads ($1.875/MTok).</p>
+<p>Thinking tokens are billed as output but do not enter the conversation history or affect cache behavior. Visible text output accumulates in history and increases subsequent input size. Cache writes ($18.75/MTok) are 12.5&times; more expensive than cache reads ($1.50/MTok).</p>
 <div class="table-scroll"><table>
     <thead>
         <tr><th>Complexity</th><th>Cache Write/Task</th><th class="right">4.5 read %</th><th class="right">4.6 read %</th><th class="right">&Delta; write</th></tr>
@@ -2495,7 +2491,7 @@
 </details>
 
                 <div class="stat-note">
-                    <strong>Significance:</strong> Thinking fraction survives Bonferroni correction across trivial, simple, and moderate complexity strata, and most <span class="term" data-def="A stratification dimension used to test whether findings hold across subgroups. Three cross-cuts are used: complexity, task type, and iteration level.">cross-cut</span> slices. The complex stratum is non-significant (p=0.75), likely due to smaller sample size. This is the most robust and widespread finding in the study.
+                    <strong>Significance:</strong> Thinking fraction survives Bonferroni correction across trivial, simple, and moderate complexity strata, and most cross-cut slices. The complex stratum is non-significant (p=0.75), likely due to smaller sample size. This is the most robust and widespread finding in the study.
                 </div>
 
                 <p>Thinking calibration is one manifestation of broader behavioral differences between the models. The next section examines other behavioral patterns&mdash;subagent deployment, planning adoption, and effort distribution.</p>
@@ -3278,15 +3274,15 @@
                         <div class="detail">4.6 higher (p=0.000023, Bonferroni)</div>
                     </div>
                     <div class="stat-card">
-                        <div class="label">Quality Survivors</div>
-                        <div class="value v-dark">2 of 15</div>
-                        <div class="detail">2 of 15 overall Bonferroni survivors are quality metrics</div>
+                        <div class="label">Completion Dist.</div>
+                        <div class="value v-blue">p=0.000017</div>
+                        <div class="detail"><span class="term" data-def="A statistical test for comparing categorical distributions between two groups to determine if differences are significant.">Chi-square</span> Bonferroni survivor (V=0.10)</div>
                     </div>
                 </div>
 
                 <p>LLM-annotated alignment scores (1&ndash;5 scale) show Opus 4.6 scoring higher on average, an effect that survives Bonferroni correction (p=0.000023, d=-0.21). The failed rate difference is also notable: 8.6% of 4.6 tasks fail vs 13.2% for 4.5 (p=0.003, significant at FDR but not Bonferroni). Both alignment and failure rate are LLM-classified&mdash;a Claude Haiku model reads each session transcript and assigns scores. The &ldquo;LLM quality judgement&rdquo; approach was abandoned as unreliable (see <a href="#methodology">&sect;10</a>), but alignment scoring proved more robust because it rates user-goal correspondence from observable signals rather than attempting to judge code quality directly.</p>
 
-                <p>Two categorical distributions&mdash;task completion and communication quality&mdash;also survive Bonferroni as <span class="term" data-def="A statistical test for comparing categorical distributions between two groups to determine if differences are significant.">chi-square</span> tests, indicating the models differ in <em>how</em> they reach outcomes, not just in outcome rates. Note that the completion <em>distribution</em> test (p=0.000017) survives, while the individual completion <em>rate</em> proportion test (p=0.025) is marginal. All chi-square tests carry a low-expected-cell-count warning due to rare categories in the 20-status taxonomy.</p>
+                <p>Two categorical distributions&mdash;task completion and communication quality&mdash;also survive Bonferroni as chi-square tests, indicating the models differ in <em>how</em> they reach outcomes, not just in outcome rates. Note that the completion <em>distribution</em> test (p=0.000017) survives, while the individual completion <em>rate</em> proportion test (p=0.025) is marginal. All chi-square tests carry a low-expected-cell-count warning due to rare categories in the 20-status taxonomy.</p>
 
                 <h3>Completion Distribution</h3>
 <!-- GENERATED-TABLE: quality-completion -->
@@ -4619,7 +4615,7 @@
                 </div>
 
                 <h3>Context Compaction</h3>
-                <p>Context-window compaction occurs in 10.1% of 4.5 sessions (33/327) and 12.5% of 4.6 sessions (17/136). Pre/post comparisons show improvement after compaction, but a position-adjusted <span class="term" data-def="Non-compacting sessions used as a baseline, split at the median compaction position to isolate position effects from compaction effects.">control group</span>&mdash;splitting non-compacting sessions at the median compaction position to isolate position effects&mdash;reveals the effect is driven by session position, not compaction itself (position-adjusted effect: &minus;0.23 for 4.5, &minus;0.22 for 4.6). Compaction appears to preserve rather than degrade performance.</p>
+                <p>Context-window compaction occurs in 10.1% of 4.5 sessions (33/327) and 12.5% of 4.6 sessions (17/136). Pre/post comparisons show improvement after compaction, but a position-adjusted <span class="term" data-def="Non-compacting sessions used as a baseline, split at the median compaction position to isolate position effects from compaction effects.">control group</span>&mdash;splitting non-compacting sessions at the median <span class="term" data-def="Claude Code's process of summarizing earlier messages to free context window space when the conversation grows too long.">compaction</span> position to isolate position effects&mdash;reveals the effect is driven by session position, not compaction itself (position-adjusted effect: &minus;0.23 for 4.5, &minus;0.22 for 4.6). Compaction appears to preserve rather than degrade performance.</p>
 
                 <details class="expansion">
     <summary>Compaction Overview</summary>
@@ -4692,7 +4688,7 @@
 </details>
 
                 <div class="stat-note">
-                    <strong>Position-adjusted effect:</strong> The negative values indicate compaction preserves rather than degrades performance relative to where it occurs in the session.
+                    <strong>Position-adjusted effect:</strong> The negative values mean compacting sessions improve less than position-matched controls, suggesting the apparent post-compaction improvement is driven by session position rather than compaction itself. Compaction neither helps nor substantially harms outcomes.
                 </div>
 
                 <h3>Cross-Cut Detail</h3>

@@ -34,7 +34,6 @@ STEPS = [
     ("findings",  "Generate findings registry"),
     ("dataset",   "Generate dataset overview"),
     ("update",    "Update report sections"),
-    ("review",    "Review report quality (LLM)"),
     ("report",    "Build report"),
 ]
 
@@ -47,14 +46,9 @@ LLM_STEPS = {
         "fallback": "skip",
     },
     "update": {
-        "description": "LLM prose fact-check (Opus/Sonnet)",
+        "description": "LLM expression authoring (Opus/Sonnet)",
         "cost_estimate": "$0.10–0.50",
         "fallback": "tables-only",
-    },
-    "review": {
-        "description": "LLM quality review (Opus/Sonnet)",
-        "cost_estimate": "$0.50–2.00",
-        "fallback": "skip",
     },
 }
 
@@ -190,18 +184,6 @@ def get_step_io(step, data_dir, analysis_dir, comparison_dir):
                 inputs[name] = h
         outputs = _glob_hashes(expansions_dir, "*.html")
         return (inputs, outputs)
-    elif step == "review":
-        # Template + expansions -> review-summary.json
-        inputs = {}
-        template = report_dir / "report.html"
-        h = _file_hash(template)
-        if h:
-            inputs["report.html"] = h
-        for name, fh in _glob_hashes(expansions_dir, "*.html").items():
-            inputs[f"expansions/{name}"] = fh
-        h = _file_hash(report_dir / "review-summary.json")
-        outputs = {"review-summary.json": h} if h else {}
-        return (inputs, outputs)
     elif step == "report":
         inputs = {}
         template = report_dir / "report.html"
@@ -325,9 +307,6 @@ def build_command(step, data_dir, analysis_dir, no_llm=False):
         if no_llm:
             cmd.append("--tables-only")
         return cmd
-    elif step == "review":
-        return [sys.executable, str(scripts_dir / "review_report.py"),
-                "--dir", str(comparison_dir)]
     elif step == "report":
         return [sys.executable, str(scripts_dir / "build_report.py"),
                 "--dir", str(comparison_dir)]
@@ -533,7 +512,7 @@ def main():
                         help="Verify task counts are consistent across "
                              "analysis files")
     parser.add_argument("--no-llm", action="store_true",
-                        help="Skip LLM-dependent steps (annotate, review) "
+                        help="Skip LLM-dependent steps (annotate) "
                              "and pass --tables-only to update")
     args = parser.parse_args()
 
