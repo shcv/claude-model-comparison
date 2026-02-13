@@ -513,18 +513,18 @@
                     </div>
                     <div class="stat-card">
                         <div class="label">Bonferroni Survivors</div>
-                        <div class="value v-dark">15 / <!-- var: findings.total_tests | .0f -->529<!-- /var --></div>
-                        <div class="detail">15 overall; <!-- var: findings.bonferroni_significant | .0f -->93<!-- /var --> including per-complexity and cross-cut strata</div>
+                        <div class="value v-dark"><!-- var: stats.overall_bonferroni_count | .0f -->15<!-- /var --> / <!-- var: findings.total_tests | .0f -->529<!-- /var --></div>
+                        <div class="detail"><!-- var: stats.overall_bonferroni_count | .0f -->15<!-- /var --> overall; <!-- var: findings.bonferroni_significant | .0f -->93<!-- /var --> including per-complexity and cross-cut strata</div>
                     </div>
                 </div>
 
                 <div class="callout" style="border-left:3px solid var(--orange);">
-                    <strong>Before you read:</strong> This report was generated with substantial assistance from Claude (Opus 4.6). All statistical computations, table generation, and report assembly are automated, but prose was drafted and reviewed with LLM assistance. Numbers are computed from data; interpretive claims may contain inaccuracies. Additionally, all data comes from a single user&rsquo;s workflow over a limited time period&mdash;treat all findings as anecdotal observations, not generalizable conclusions.
+                    <strong>Before you read:</strong> Every number, table, and statistical result in this report is computed directly from analysis data by deterministic Python scripts&mdash;no LLM produces or modifies quantitative claims. LLMs assisted with prose drafting and expression authoring (converting literal numbers to data-bound template variables), but never with fact production. All data comes from a single user&rsquo;s workflow over a limited time period&mdash;treat all findings as anecdotal observations, not generalizable conclusions.
                 </div>
 
                 <h3>What Changes When You Switch</h3>
 
-                <p>Across <!-- var: findings.total_tests -->529<!-- /var --> statistical tests (overall, per-complexity, and cross-cut strata), <!-- var: findings.bonferroni_significant -->93<!-- /var --> survive Bonferroni correction&mdash;15 at the overall level. Most describe <em>how</em> the model works, not <em>whether</em> it succeeds. The overall success rates are comparable; what changes is the experience of working alongside it. These are the five most noticeable differences, drawn from one user&rsquo;s workflow over <!-- var: dataset.total_tasks -->2,320<!-- /var --> tasks.</p>
+                <p>Across <!-- var: findings.total_tests -->529<!-- /var --> statistical tests (overall, per-complexity, and cross-cut strata), <!-- var: findings.bonferroni_significant -->93<!-- /var --> survive Bonferroni correction&mdash;<!-- var: stats.overall_bonferroni_count | .0f -->15<!-- /var --> at the overall level. Most describe <em>how</em> the model works, not <em>whether</em> it succeeds. The overall success rates are comparable; what changes is the experience of working alongside it. These are the five most noticeable differences, drawn from one user&rsquo;s workflow over <!-- var: dataset.total_tasks -->2,320<!-- /var --> tasks.</p>
 
                 <h3>1. The model plans before it acts&mdash;and you stop steering it</h3>
 
@@ -536,7 +536,7 @@
 
                 <h3>3. Fewer rewrites, better first-attempt accuracy</h3>
 
-                <p>Opus 4.6 rewrites its own edits <!-- var: edits.rewrite_rate_b | pct1 -->10.3%<!-- /var --> of the time vs <!-- var: edits.rewrite_rate_a | pct1 -->16.6%<!-- /var -->&mdash;a <!-- var: (1 - edits.rewrite_rate_b / edits.rewrite_rate_a) * 100 | .0f -->38<!-- /var -->% reduction. Its self-correction rate is actually <em>higher</em> (<!-- var: edits.self_correction_b / edits.total_edits_b * 100 | .1f -->3.3<!-- /var -->% vs <!-- var: edits.self_correction_a / edits.total_edits_a * 100 | .1f -->1.9<!-- /var -->%), meaning it catches its own mistakes rather than having the user point them out. Failure rates drop from <!-- var: stat.failed_rate_a * 100 | .1f -->13.2<!-- /var -->% to <!-- var: stat.failed_rate_b * 100 | .1f -->8.6<!-- /var -->%, and alignment scores improve significantly (p=<!-- var: quality.alignment_p -->0.000023<!-- /var -->, one of 15 overall Bonferroni survivors). The &ldquo;plan first&rdquo; approach appears to pay off in execution accuracy (<a href="#quality">&sect;5</a>, <a href="#edits">&sect;6</a>).</p>
+                <p>Opus 4.6 rewrites its own edits <!-- var: edits.rewrite_rate_b | pct1 -->10.3%<!-- /var --> of the time vs <!-- var: edits.rewrite_rate_a | pct1 -->16.6%<!-- /var -->&mdash;a <!-- var: (1 - edits.rewrite_rate_b / edits.rewrite_rate_a) * 100 | .0f -->38<!-- /var -->% reduction. Its self-correction rate is actually <em>higher</em> (<!-- var: edits.self_correction_b / edits.total_edits_b * 100 | .1f -->3.3<!-- /var -->% vs <!-- var: edits.self_correction_a / edits.total_edits_a * 100 | .1f -->1.9<!-- /var -->%), meaning it catches its own mistakes rather than having the user point them out. Failure rates drop from <!-- var: stat.failed_rate_a * 100 | .1f -->13.2<!-- /var -->% to <!-- var: stat.failed_rate_b * 100 | .1f -->8.6<!-- /var -->%, and alignment scores improve significantly (p=<!-- var: quality.alignment_p -->0.000023<!-- /var -->, one of <!-- var: stats.overall_bonferroni_count | .0f -->15<!-- /var --> overall Bonferroni survivors). The &ldquo;plan first&rdquo; approach appears to pay off in execution accuracy (<a href="#quality">&sect;5</a>, <a href="#edits">&sect;6</a>).</p>
 
                 <h3>4. Sessions get longer&mdash;you trust it with more</h3>
 
@@ -552,7 +552,7 @@
             <section id="how-it-works">
                 <h2>How This Report Works</h2>
 
-                <p>This report is itself a Claude Code project. The analysis pipeline, statistical tests, table generation, and report assembly are all automated Python scripts, most written with substantial assistance from Opus 4.6&mdash;the same model being evaluated. All data comes from one user&rsquo;s real Claude Code sessions during and after the Early Access Program&mdash;not synthetic benchmarks or controlled experiments.</p>
+                <p>This report is itself a Claude Code project. The analysis pipeline, statistical tests, table generation, and report assembly are all automated Python scripts, most written with substantial assistance from Opus 4.6&mdash;the same model being evaluated. LLMs are used in two places: task classification (Haiku annotates complexity, sentiment, and task type) and prose drafting. All quantitative claims&mdash;every number, table, and statistical test&mdash;are produced by deterministic computation, not LLM generation. All data comes from one user&rsquo;s real Claude Code sessions during and after the Early Access Program&mdash;not synthetic benchmarks or controlled experiments.</p>
 
                 <div class="pipeline">
                     <div class="pipe-step">Session Logs<small><!-- var: dataset.total_sessions | .0f -->463<!-- /var --> sessions</small></div>
@@ -570,17 +570,17 @@
                     <div class="pipe-step">Report Build<small>terms, expansions</small></div>
                 </div>
 
-                <p>A 13-step pipeline transforms raw JSONL session logs into the finished report. A few things worth noting about the approach:</p>
+                <p>A 12-step pipeline transforms raw JSONL session logs into the finished report. A few things worth noting about the approach:</p>
 
                 <ul>
                     <li><strong>Edit timeline reconstruction:</strong> Rather than relying on LLM self-report, the pipeline builds per-file content ownership maps from every Edit/Write tool call, detecting when later edits overwrite earlier work. This mechanistic signal replaces the sentiment-proxy approach that proved unreliable in early iterations.</li>
                     <li><strong>Multi-signal sentiment:</strong> Dissatisfaction detection combines keyword patterns, structural edit signals (self-corrections, error recoveries), and LLM judgement with downgrade logic&mdash;no single source is trusted alone.</li>
-                    <li><strong>Fully computed output:</strong> Every number resolves from analysis JSON via template variables; every table is generated from spec files. An LLM prose-check pass verifies narrative text against current data. Nothing is typed by hand.</li>
+                    <li><strong>Fully computed output:</strong> Every number in this report resolves from analysis JSON via expression-based template variables (<code>{{expr | format}}</code>); every table is generated from spec files. LLMs assist with prose drafting and with converting hardcoded literals into data-bound expressions, but all quantitative claims are produced by deterministic scripts, not LLMs. The pipeline can be re-run end-to-end to reproduce the entire report from raw session logs.</li>
                 </ul>
 
                 <h3>What to Trust</h3>
 
-                <p>Numbers, tables, and statistical results are computed deterministically and are reproducible by re-running the pipeline. Interpretive prose was drafted and checked with LLM assistance and may contain errors or overstatements. Effect sizes and p-values are exact; narrative claims linking those numbers to causal explanations are hypotheses, not conclusions. A <a href="#methodology">sensitivity analysis</a> validates key findings against restricted datasets excluding shared projects. The <a href="#methodology">Methodology section</a> describes every step in full detail.</p>
+                <p>Numbers, tables, and statistical results are computed deterministically from analysis JSON files and are reproducible by re-running the pipeline. No LLM is in the loop for quantitative claims&mdash;the expression evaluator resolves template variables via pure arithmetic on data paths. Interpretive prose was drafted with LLM assistance and may contain errors or overstatements. Effect sizes and p-values are exact; narrative claims linking those numbers to causal explanations are hypotheses, not conclusions. A <a href="#methodology">sensitivity analysis</a> validates key findings against restricted datasets excluding shared projects. The <a href="#methodology">Methodology section</a> describes every step in full detail.</p>
             </section>
 
             <nav class="toc">
@@ -596,7 +596,7 @@
                     <li><a href="#behavior">Behavioral Patterns</a><span class="finding"><!-- var: round(planning.rate_b / planning.rate_a) | .0f -->8<!-- /var -->&times; planning; <!-- var: behavior.explore_count_b / behavior.total_subagents_b * 100 | .0f -->74<!-- /var -->% read-only Explore; effort front-loading</span></li>
                     <li><a href="#quality">Quality &amp; Satisfaction</a><span class="finding">Alignment survives Bonferroni; 4.6 fails less (<!-- var: stat.failed_rate_b * 100 | .1f -->8.6<!-- /var -->% vs <!-- var: stat.failed_rate_a * 100 | .1f -->13.2<!-- /var -->%)</span></li>
                     <li><a href="#edits">Edit Accuracy</a><span class="finding">4.6 rewrites <!-- var: edits.rewrite_rate_b | pct1 -->10.3%<!-- /var --> vs <!-- var: edits.rewrite_rate_a | pct1 -->16.6%<!-- /var --></span></li>
-                    <li><a href="#complexity">Complexity &amp; Resource Usage</a><span class="finding">Tool calls strongest signal (p&lt;0.000003)</span></li>
+                    <li><a href="#complexity">Complexity &amp; Resource Usage</a><span class="finding">Tool calls strongest signal (p&lt;0.000001, d=<!-- var: -1 * stat.tool_calls_d | .2f -->0.29<!-- /var -->)</span></li>
                     <li><a href="#sessions">Session Dynamics</a><span class="finding"><!-- var: sessions.explore_median_b / sessions.explore_median_a | x.1f -->2.2×<!-- /var --> explore phase; compaction preserves not degrades</span></li>
                     <li><a href="#profiles">Model Profiles</a><span class="finding">Observed behavioral patterns (not routing recommendations)</span></li>
                     <li><a href="#methodology">Methodology</a><span class="finding"><!-- var: findings.total_tests -->529<!-- /var --> tests, sensitivity-validated</span></li>
@@ -621,7 +621,7 @@
                     <div class="stat-card">
                         <div class="label">Projects Spanned</div>
                         <div class="value v-dark"><!-- var: dataset.total_projects -->35<!-- /var --></div>
-                        <div class="detail">9 shared between both models</div>
+                        <div class="detail"><!-- var: dataset.projects_a + dataset.projects_b - dataset.total_projects | .0f -->9<!-- /var --> shared between both models</div>
                     </div>
                     <div class="stat-card">
                         <div class="label">Total API Cost</div>
@@ -778,7 +778,7 @@
                 <p>Normalizing by session hours rather than task count: Opus 4.5 costs $<!-- var: dataset.cost_a / dataset.session_hours_a | .2f -->12.75<!-- /var -->/session-hour (<!-- var: dataset.cost_a -->$5,292<!-- /var --> over <!-- var: dataset.session_hours_a -->415.2<!-- /var -->h) vs $<!-- var: dataset.cost_b / dataset.session_hours_b | .2f -->6.82<!-- /var -->/session-hour for Opus 4.6 (<!-- var: dataset.cost_b -->$2,119<!-- /var --> over <!-- var: dataset.session_hours_b -->310.9<!-- /var -->h). Session hours measure wall-clock time from first to last message, so this metric includes idle time and is not a direct measure of active coding cost.</p>
 
                 <div class="callout green">
-                    <strong>Cost pattern (with caveats):</strong> Despite producing <!-- var: cost.avg_output_b / cost.avg_output_a | x.1f -->2.4×<!-- /var --> more output and costing ~<!-- var: (cost.avg_cost_b / cost.avg_cost_a - 1) * 100 | .1f -->6.8<!-- /var -->% more per task overall, Opus 4.6 is 9&ndash;35% <em>cheaper</em> at trivial through moderate complexity. The explanation is structural: output is &lt;7% of cost, caching is ~95%, and 4.6 writes <!-- var: (1 - cost.cache_write_b / cost.count_b / (cost.cache_write_a / cost.count_a)) * 100 | .0f -->24<!-- /var -->% less to cache (the most expensive token category at $18.75/MTok). At major tiers, accumulated cache reads over 30+ requests exceed the write savings (+29%), but this is based on <!-- var: cost.major_count_b | .0f -->18<!-- /var --> vs <!-- var: cost.major_count_a | .0f -->19<!-- /var --> tasks. These figures come from organic sessions where task mix and session structure differ between models.
+                    <strong>Cost pattern (with caveats):</strong> Despite producing <!-- var: cost.avg_output_b / cost.avg_output_a | x.1f -->2.4×<!-- /var --> more output and costing ~<!-- var: (cost.avg_cost_b / cost.avg_cost_a - 1) * 100 | .1f -->6.8<!-- /var -->% more per task overall, Opus 4.6 is <!-- var: abs((cost.moderate_cost_b / cost.moderate_cost_a - 1) * 100) | .0f -->9<!-- /var -->&ndash;<!-- var: abs((cost.trivial_cost_b / cost.trivial_cost_a - 1) * 100) | .0f -->35<!-- /var -->% <em>cheaper</em> at trivial through moderate complexity. The explanation is structural: output accounts for just <!-- var: max(tokens.cost_output_pct_a, tokens.cost_output_pct_b) | .0f -->6<!-- /var -->% of cost while cache operations account for <!-- var: min(tokens.cost_cache_read_pct_a + tokens.cost_cache_write_pct_a, tokens.cost_cache_read_pct_b + tokens.cost_cache_write_pct_b) | .0f -->94<!-- /var -->&ndash;<!-- var: max(tokens.cost_cache_read_pct_a + tokens.cost_cache_write_pct_a, tokens.cost_cache_read_pct_b + tokens.cost_cache_write_pct_b) | .0f -->97<!-- /var -->%, and 4.6 writes <!-- var: (1 - cost.cache_write_b / cost.count_b / (cost.cache_write_a / cost.count_a)) * 100 | .0f -->24<!-- /var -->% less to cache (the most expensive token category at $18.75/MTok). At major tiers, accumulated cache reads over 30+ requests exceed the write savings (+<!-- var: (cost.major_cost_b / cost.major_cost_a - 1) * 100 | .0f -->29<!-- /var -->%), but this is based on <!-- var: cost.major_count_b | .0f -->18<!-- /var --> vs <!-- var: cost.major_count_a | .0f -->19<!-- /var --> tasks. These figures come from organic sessions where task mix and session structure differ between models.
                 </div>
 
                 <h3>Per-Request Output</h3>
@@ -844,9 +844,9 @@
 
                 <p>Three forces offset to produce the $<!-- var: cost.avg_cost_b - cost.avg_cost_a | .2f -->0.17<!-- /var --> net difference. 4.6 writes <!-- var: (1 - cost.cache_write_b / cost.count_b / (cost.cache_write_a / cost.count_a)) * 100 | .0f -->24<!-- /var -->% fewer tokens to cache per task (<!-- var: cost.cache_write_b / cost.count_b / 1000 | .0f -->51<!-- /var -->K vs <!-- var: cost.cache_write_a / cost.count_a / 1000 | .0f -->68<!-- /var -->K), saving $<!-- var: (cost.cache_write_a / cost.count_a - cost.cache_write_b / cost.count_b) * 18.75 / 1000000 | .2f -->0.30<!-- /var --> at the most expensive category ($18.75/M&mdash;10&times; the read price). But 4.6 reads <!-- var: (cost.cache_read_b / cost.count_b / (cost.cache_read_a / cost.count_a) - 1) * 100 | .0f -->34<!-- /var -->% more cached context (<!-- var: cost.cache_read_b / cost.count_b / 1000 | .0f -->794<!-- /var -->K vs <!-- var: cost.cache_read_a / cost.count_a / 1000 | .0f -->594<!-- /var -->K), costing $<!-- var: (cost.cache_read_b / cost.count_b - cost.cache_read_a / cost.count_a) * 1.875 / 1000000 | .2f -->0.38<!-- /var --> at the cheapest category ($1.875/M). And the <!-- var: cost.avg_output_b / cost.avg_output_a | x.1f -->2.4×<!-- /var --> output increase costs only $<!-- var: (cost.avg_output_b - cost.avg_output_a) * 75 / 1000000 | .2f -->0.10<!-- /var -->. The write savings nearly cancel the read and output increases: &minus;$<!-- var: (cost.cache_write_a / cost.count_a - cost.cache_write_b / cost.count_b) * 18.75 / 1000000 | .2f -->0.30<!-- /var --> + $<!-- var: (cost.cache_read_b / cost.count_b - cost.cache_read_a / cost.count_a) * 1.875 / 1000000 | .2f -->0.38<!-- /var --> + $<!-- var: (cost.avg_output_b - cost.avg_output_a) * 75 / 1000000 | .2f -->0.10<!-- /var --> = +$<!-- var: cost.avg_cost_b - cost.avg_cost_a | .2f -->0.17<!-- /var -->.</p>
 
-                <p><em>Why</em> does 4.6 write less to cache? Per-request analysis reveals two mechanisms. First, 4.6 starts tasks with a leaner cache footprint&mdash;its first API request writes 49% fewer cache tokens than 4.5&rsquo;s, suggesting a more compact or reusable context structure. Second, when cache cools (gap &gt;5 minutes between tasks), both models experience cold starts at identical rates (~25% of transitions), but 4.5 must re-write 177K tokens to repopulate vs 87K for 4.6. Cold cache causes a 6.4&times; write inflation for 4.5 but only 2.1&times; for 4.6. The likely explanation: 4.6&rsquo;s &ldquo;investigate then execute&rdquo; pattern creates more compact, reusable context, while 4.5&rsquo;s incremental approach builds a larger accumulated context that costs more to re-cache after cooling.</p>
+                <p><em>Why</em> does 4.6 write less to cache? Per-request analysis reveals two mechanisms. First, 4.6 starts tasks with a leaner cache footprint&mdash;its first API request writes <!-- var: (1 - tokens.cold_first_write_b / tokens.cold_first_write_a) * 100 | .0f -->43<!-- /var -->% fewer cache tokens than 4.5&rsquo;s, suggesting a more compact or reusable context structure. Second, when cache cools (gap &gt;5 minutes between tasks), both models experience cold starts at identical rates (~25% of transitions), but 4.5 must re-write 177K tokens to repopulate vs 87K for 4.6. Cold cache causes a 6.4&times; write inflation for 4.5 but only 2.1&times; for 4.6. The likely explanation: 4.6&rsquo;s &ldquo;investigate then execute&rdquo; pattern creates more compact, reusable context, while 4.5&rsquo;s incremental approach builds a larger accumulated context that costs more to re-cache after cooling.</p>
 
-                <p>This mechanism produces the complexity-dependent curve above. At trivial through moderate tiers (typically &le;30 API requests), lean initialization dominates and 4.6 is 9&ndash;35% cheaper. At 30+ requests, cumulative cache reads compound past the initialization savings&mdash;4.6&rsquo;s per-request cache reads are slightly higher (89K vs 80K in the 30+ tier), and spread over 50+ requests, this adds up.</p>
+                <p>This mechanism produces the complexity-dependent curve above. At trivial through moderate tiers (typically &le;30 API requests), lean initialization dominates and 4.6 is <!-- var: abs((cost.moderate_cost_b / cost.moderate_cost_a - 1) * 100) | .0f -->9<!-- /var -->&ndash;<!-- var: abs((cost.trivial_cost_b / cost.trivial_cost_a - 1) * 100) | .0f -->35<!-- /var -->% cheaper. At 30+ requests, cumulative cache reads compound past the initialization savings&mdash;4.6&rsquo;s per-request cache reads are slightly higher (89K vs 80K in the 30+ tier), and spread over 50+ requests, this adds up.</p>
 
                 <!-- expand: cost-cache-analysis -->
 
@@ -952,7 +952,7 @@
 <!-- /GENERATED-TABLE: cost-thinking-calibration -->
 
                 <div class="callout blue">
-                    <strong>Thinking calibration:</strong> Opus 4.6 shows better calibration of when thinking is needed. It skips thinking for 57% of trivial tasks (vs 23% for Opus 4.5), but engages thinking for 90%+ of moderate and complex tasks. Opus 4.5 over-thinks easy problems; at moderate complexity, both converge.
+                    <strong>Thinking calibration:</strong> Opus 4.6 shows better calibration of when thinking is needed. It skips thinking for <!-- var: tokens.thinking_skip_trivial_b * 100 | .0f -->57<!-- /var -->% of trivial tasks (vs <!-- var: tokens.thinking_skip_trivial_a * 100 | .0f -->23<!-- /var -->% for Opus 4.5), but engages thinking for 90%+ of moderate and complex tasks. Opus 4.5 over-thinks easy problems; at moderate complexity, both converge.
                 </div>
 
                 <!-- expand: thinking-calibration-details -->
@@ -1767,7 +1767,7 @@
 <!-- /GENERATED-TABLE: idle-sensitivity -->
 
                 <div class="stat-note">
-                    <strong>Complication:</strong> Session overlap analysis (1,773 overlapping pairs, max concurrency 11) complicates per-session cost attribution. Active-time cost varies with idle threshold (see sensitivity table above), but the directional relationship is stable across all thresholds tested.
+                    <strong>Complication:</strong> Session overlap analysis (<!-- var: timing.overlap_pairs | ,.0f -->1,773<!-- /var --> overlapping pairs, max concurrency <!-- var: timing.max_concurrency | .0f -->11<!-- /var -->) complicates per-session cost attribution. Active-time cost varies with idle threshold (see sensitivity table above), but the directional relationship is stable across all thresholds tested.
                 </div>
 
                 <h3>Context Compaction</h3>
@@ -1871,7 +1871,7 @@
                         <tr>
                             <td class="label-cell">Task type</td>
                             <td><strong>investigation</strong>, <strong>bugfix</strong>, <strong>feature</strong>, <strong>greenfield</strong>, <strong>refactor</strong>, <strong>sysadmin</strong>, <strong>docs</strong>, <strong>continuation</strong>, <strong>port</strong></td>
-                            <td>LLM-classified (Haiku) from user prompt, tool usage, and work summary. Regex pattern matching provides initial signal; LLM classification overrides at medium/high confidence, resolving previously &ldquo;unknown&rdquo; tasks (32.6% of dataset). Eval: 100% unknown resolution, LLM agrees with regex on 55% of classified tasks.</td>
+                            <td>LLM-classified (Haiku) from user prompt, tool usage, and work summary. Regex pattern matching provides initial signal; LLM classification overrides at medium/high confidence, resolving previously &ldquo;unknown&rdquo; tasks (<!-- var: classify.unknown_rate * 100 | .1f -->34.3<!-- /var -->% of dataset). Eval: 100% unknown resolution, LLM agrees with regex on 55% of classified tasks.</td>
                         </tr>
                         <tr>
                             <td class="label-cell">Iteration</td>
@@ -1923,7 +1923,7 @@
                     <li><strong>Iterative refinement:</strong> Chain depth &gt;3, or none of the above</li>
                 </ul>
 
-                <p>A per-task <em>triage score</em> weights these: <code>(self_corrections&times;3 + error_recoveries&times;2 + user_corrections&times;5 + max_chain_depth) / total_edits</code>. Edit metrics were joined with task classifications to compute complexity-binned accuracy rates (93% and 88% coverage for the two models).</p>
+                <p>A per-task <em>triage score</em> weights these: <code>(self_corrections&times;3 + error_recoveries&times;2 + user_corrections&times;5 + max_chain_depth) / total_edits</code>. Edit metrics were joined with task classifications to compute complexity-binned accuracy rates (100% coverage for both models).</p>
                 </details>
 
                 <h3>Compaction Analysis</h3>
@@ -1941,7 +1941,7 @@
                 <details><summary>Test types, effect sizes, and correction thresholds</summary>
                 <p>Three test types were used: chi-square for categorical distributions (effect size: Cram&eacute;r&rsquo;s V), Mann-Whitney U for continuous metrics (Cohen&rsquo;s d with bootstrap confidence intervals, n=5,000 resamples), and two-proportion Z-tests for rates (Cohen&rsquo;s h). Confidence intervals on proportions use Wilson score intervals.</p>
 
-                <p>Bonferroni corrected threshold: p&lt;<!-- var: 0.05 / findings.total_tests | .7f -->0.0000945<!-- /var -->. Across all <!-- var: findings.total_tests -->529<!-- /var --> tests, <!-- var: findings.bonferroni_significant -->93<!-- /var --> survive Bonferroni and <!-- var: findings.fdr_significant -->168<!-- /var --> survive FDR correction. At the overall level, fifteen survive Bonferroni, including alignment score (p=<!-- var: quality.alignment_p -->0.000023<!-- /var -->), duration (p&lt;0.000001, though d=<!-- var: stat.duration_d -->0.005<!-- /var -->&mdash;negligible practical effect), tool calls/task (p&lt;0.000001, d=&minus;<!-- var: -1 * stat.tool_calls_d | .2f -->0.29<!-- /var -->), tools/file (p&lt;0.000001, d=&minus;<!-- var: -1 * stat.tools_per_file_d | .2f -->0.10<!-- /var -->), and three categorical distributions (task completion, communication quality, autonomy level). Two of the three chi-square survivors have low-expected-cell-count warnings, which may inflate their test statistics.</p>
+                <p>Bonferroni corrected threshold: p&lt;<!-- var: 0.05 / findings.total_tests | .7f -->0.0000945<!-- /var -->. Across all <!-- var: findings.total_tests -->529<!-- /var --> tests, <!-- var: findings.bonferroni_significant -->93<!-- /var --> survive Bonferroni and <!-- var: findings.fdr_significant -->168<!-- /var --> survive FDR correction. At the overall level, <!-- var: stats.overall_bonferroni_count | .0f -->15<!-- /var --> survive Bonferroni, including alignment score (p=<!-- var: quality.alignment_p -->0.000023<!-- /var -->), duration (p&lt;0.000001, though d=<!-- var: stat.duration_d -->0.005<!-- /var -->&mdash;negligible practical effect), tool calls/task (p&lt;0.000001, d=&minus;<!-- var: -1 * stat.tool_calls_d | .2f -->0.29<!-- /var -->), tools/file (p&lt;0.000001, d=&minus;<!-- var: -1 * stat.tools_per_file_d | .2f -->0.10<!-- /var -->), and three categorical distributions (task completion, communication quality, autonomy level). Two of the three chi-square survivors have low-expected-cell-count warnings, which may inflate their test statistics.</p>
                 </details>
 
                 <!-- expand: stat-test-full-results -->
@@ -2210,6 +2210,10 @@
                 <p><strong>Sample asymmetry:</strong> The <!-- var: dataset.tasks_a / dataset.tasks_b | .1f -->2.9<!-- /var -->:1 ratio (<!-- var: dataset.tasks_a -->1,729<!-- /var --> vs <!-- var: dataset.tasks_b -->591<!-- /var --> tasks) means Opus 4.5 estimates have narrower confidence intervals. Effect sizes for Opus 4.6 are less precise.</p>
                 <p><strong>User learning effect:</strong> The user may have learned to use Claude Code more effectively over time, benefiting whichever model came second in the chronological sequence.</p>
 </section>
+
+            <section id="acknowledgments" style="margin-top:2rem; padding-top:1rem; border-top:1px solid var(--light-gray);">
+                <p style="font-size:0.85rem; color:var(--gray);">Thanks to Anthropic for including me in the Claude Code Early Access Program and for supporting independent research into model behavior. The EAP provided early access to Opus 4.6, making this comparative analysis possible.</p>
+            </section>
 
             <footer>
                 Claude Code Early Access Program &middot; Single-user exploratory case study &middot; February 2026

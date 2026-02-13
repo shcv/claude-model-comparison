@@ -610,7 +610,7 @@
                 </div>
 
                 <div class="callout" style="border-left:3px solid var(--orange);">
-                    <strong>Before you read:</strong> This report was generated with substantial assistance from Claude (Opus 4.6). All statistical computations, table generation, and report assembly are automated, but prose was drafted and reviewed with LLM assistance. Numbers are computed from data; interpretive claims may contain inaccuracies. Additionally, all data comes from a single user&rsquo;s workflow over a limited time period&mdash;treat all findings as anecdotal observations, not generalizable conclusions.
+                    <strong>Before you read:</strong> Every number, table, and statistical result in this report is computed directly from analysis data by deterministic Python scripts&mdash;no LLM produces or modifies quantitative claims. LLMs assisted with prose drafting and expression authoring (converting literal numbers to data-bound template variables), but never with fact production. All data comes from a single user&rsquo;s workflow over a limited time period&mdash;treat all findings as anecdotal observations, not generalizable conclusions.
                 </div>
 
                 <h3>What Changes When You Switch</h3>
@@ -643,7 +643,7 @@
             <section id="how-it-works">
                 <h2>How This Report Works</h2>
 
-                <p>This report is itself a Claude Code project. The analysis pipeline, statistical tests, table generation, and report assembly are all automated Python scripts, most written with substantial assistance from Opus 4.6&mdash;the same model being evaluated. All data comes from one user&rsquo;s real Claude Code sessions during and after the Early Access Program&mdash;not synthetic benchmarks or controlled experiments.</p>
+                <p>This report is itself a Claude Code project. The analysis pipeline, statistical tests, table generation, and report assembly are all automated Python scripts, most written with substantial assistance from Opus 4.6&mdash;the same model being evaluated. LLMs are used in two places: task classification (Haiku annotates complexity, sentiment, and <span class="term" data-def="Regex-classified category of the user’s request: investigation, bugfix, feature, greenfield, refactor, or sysadmin.">task type</span>) and prose drafting. All quantitative claims&mdash;every number, table, and statistical test&mdash;are produced by deterministic computation, not LLM generation. All data comes from one user&rsquo;s real Claude Code sessions during and after the Early Access Program&mdash;not synthetic benchmarks or controlled experiments.</p>
 
                 <div class="pipeline">
                     <div class="pipe-step">Session Logs<small>463 sessions</small></div>
@@ -661,17 +661,17 @@
                     <div class="pipe-step">Report Build<small>terms, expansions</small></div>
                 </div>
 
-                <p>A 13-step pipeline transforms raw JSONL session logs into the finished report. A few things worth noting about the approach:</p>
+                <p>A 12-step pipeline transforms raw JSONL session logs into the finished report. A few things worth noting about the approach:</p>
 
                 <ul>
                     <li><strong>Edit timeline reconstruction:</strong> Rather than relying on LLM self-report, the pipeline builds per-file <span class="term" data-def="Per-file records tracking which edit introduced each line, enabling detection of when later edits overwrite earlier ones.">content ownership maps</span> from every Edit/Write tool call, detecting when later edits overwrite earlier work. This mechanistic signal replaces the sentiment-proxy approach that proved unreliable in early iterations.</li>
                     <li><strong>Multi-signal sentiment:</strong> Dissatisfaction detection combines keyword patterns, structural edit signals (<span class="term" data-def="When the agent rewrites its own code within the same task without any error or user prompt.">self-correction</span>s, error recoveries), and LLM judgement with downgrade logic&mdash;no single source is trusted alone.</li>
-                    <li><strong>Fully computed output:</strong> Every number resolves from analysis JSON via template variables; every table is generated from spec files. An LLM prose-check pass verifies narrative text against current data. Nothing is typed by hand.</li>
+                    <li><strong>Fully computed output:</strong> Every number in this report resolves from analysis JSON via expression-based template variables (<code>{{expr | format}}</code>); every table is generated from spec files. LLMs assist with prose drafting and with converting hardcoded literals into data-bound expressions, but all quantitative claims are produced by deterministic scripts, not LLMs. The pipeline can be re-run end-to-end to reproduce the entire report from raw session logs.</li>
                 </ul>
 
                 <h3>What to Trust</h3>
 
-                <p>Numbers, tables, and statistical results are computed deterministically and are reproducible by re-running the pipeline. Interpretive prose was drafted and checked with LLM assistance and may contain errors or overstatements. <span class="term" data-def="A standardized measure of difference magnitude independent of sample size. Cohen’s d: 0.2 small, 0.5 medium, 0.8 large.">Effect size</span>s and p-values are exact; narrative claims linking those numbers to causal explanations are hypotheses, not conclusions. A <a href="#methodology">sensitivity analysis</a> validates key findings against restricted datasets excluding shared projects. The <a href="#methodology">Methodology section</a> describes every step in full detail.</p>
+                <p>Numbers, tables, and statistical results are computed deterministically from analysis JSON files and are reproducible by re-running the pipeline. No LLM is in the loop for quantitative claims&mdash;the expression evaluator resolves template variables via pure arithmetic on data paths. Interpretive prose was drafted with LLM assistance and may contain errors or overstatements. <span class="term" data-def="A standardized measure of difference magnitude independent of sample size. Cohen’s d: 0.2 small, 0.5 medium, 0.8 large.">Effect size</span>s and p-values are exact; narrative claims linking those numbers to causal explanations are hypotheses, not conclusions. A <a href="#methodology">sensitivity analysis</a> validates key findings against restricted datasets excluding shared projects. The <a href="#methodology">Methodology section</a> describes every step in full detail.</p>
             </section>
 
             <nav class="toc">
@@ -687,7 +687,7 @@
                     <li><a href="#behavior">Behavioral Patterns</a><span class="finding">8&times; planning; 74% read-only Explore; effort front-loading</span></li>
                     <li><a href="#quality">Quality &amp; Satisfaction</a><span class="finding">Alignment survives Bonferroni; 4.6 fails less (8.6% vs 13.2%)</span></li>
                     <li><a href="#edits">Edit Accuracy</a><span class="finding">4.6 rewrites 10.3% vs 16.6%</span></li>
-                    <li><a href="#complexity">Complexity &amp; Resource Usage</a><span class="finding">Tool calls strongest signal (p&lt;0.000003)</span></li>
+                    <li><a href="#complexity">Complexity &amp; Resource Usage</a><span class="finding">Tool calls strongest signal (p&lt;0.000001, d=0.29)</span></li>
                     <li><a href="#sessions">Session Dynamics</a><span class="finding">2.2× explore phase; compaction preserves not degrades</span></li>
                     <li><a href="#profiles">Model Profiles</a><span class="finding">Observed behavioral patterns (not routing recommendations)</span></li>
                     <li><a href="#methodology">Methodology</a><span class="finding">529 tests, sensitivity-validated</span></li>
@@ -792,7 +792,7 @@
     </div>
 </details>
                 <details class="expansion">
-    <summary><span class="term" data-def="Regex-classified category of the user’s request: investigation, bugfix, feature, greenfield, refactor, or sysadmin.">Task type</span> and complexity distribution</summary>
+    <summary>Task type and complexity distribution</summary>
     <div class="expansion-body">
         <!-- GENERATED-TABLE -->
 <h3>By task type</h3>
@@ -1241,7 +1241,7 @@
                 <p>Normalizing by session hours rather than task count: Opus 4.5 costs $12.75/session-hour ($5,292 over 415.2h) vs $6.82/session-hour for Opus 4.6 ($2,119 over 310.9h). Session hours measure wall-clock time from first to last message, so this metric includes idle time and is not a direct measure of active coding cost.</p>
 
                 <div class="callout green">
-                    <strong>Cost pattern (with caveats):</strong> Despite producing 2.4× more output and costing ~6.8% more per task overall, Opus 4.6 is 9&ndash;35% <em>cheaper</em> at trivial through moderate complexity. The explanation is structural: output is &lt;7% of cost, caching is ~95%, and 4.6 writes 24% less to cache (the most expensive token category at $18.75/MTok). At major tiers, accumulated cache reads over 30+ requests exceed the write savings (+29%), but this is based on 18 vs 19 tasks. These figures come from organic sessions where task mix and session structure differ between models.
+                    <strong>Cost pattern (with caveats):</strong> Despite producing 2.4× more output and costing ~6.8% more per task overall, Opus 4.6 is 9&ndash;35% <em>cheaper</em> at trivial through moderate complexity. The explanation is structural: output accounts for just 6% of cost while cache operations account for 94&ndash;97%, and 4.6 writes 24% less to cache (the most expensive token category at $18.75/MTok). At major tiers, accumulated cache reads over 30+ requests exceed the write savings (+29%), but this is based on 18 vs 19 tasks. These figures come from organic sessions where task mix and session structure differ between models.
                 </div>
 
                 <h3>Per-Request Output</h3>
@@ -1307,7 +1307,7 @@
 
                 <p>Three forces offset to produce the $0.17 net difference. 4.6 writes 24% fewer tokens to cache per task (51K vs 68K), saving $0.30 at the most expensive category ($18.75/M&mdash;10&times; the read price). But 4.6 reads 34% more cached context (794K vs 594K), costing $0.38 at the cheapest category ($1.875/M). And the 2.4× output increase costs only $0.10. The write savings nearly cancel the read and output increases: &minus;$0.30 + $0.38 + $0.10 = +$0.17.</p>
 
-                <p><em>Why</em> does 4.6 write less to cache? Per-request analysis reveals two mechanisms. First, 4.6 starts tasks with a leaner cache footprint&mdash;its first API request writes 49% fewer cache tokens than 4.5&rsquo;s, suggesting a more compact or reusable context structure. Second, when cache cools (gap &gt;5 minutes between tasks), both models experience cold starts at identical rates (~25% of transitions), but 4.5 must re-write 177K tokens to repopulate vs 87K for 4.6. Cold cache causes a 6.4&times; write inflation for 4.5 but only 2.1&times; for 4.6. The likely explanation: 4.6&rsquo;s &ldquo;investigate then execute&rdquo; pattern creates more compact, reusable context, while 4.5&rsquo;s incremental approach builds a larger accumulated context that costs more to re-cache after cooling.</p>
+                <p><em>Why</em> does 4.6 write less to cache? Per-request analysis reveals two mechanisms. First, 4.6 starts tasks with a leaner cache footprint&mdash;its first API request writes 43% fewer cache tokens than 4.5&rsquo;s, suggesting a more compact or reusable context structure. Second, when cache cools (gap &gt;5 minutes between tasks), both models experience cold starts at identical rates (~25% of transitions), but 4.5 must re-write 177K tokens to repopulate vs 87K for 4.6. Cold cache causes a 6.4&times; write inflation for 4.5 but only 2.1&times; for 4.6. The likely explanation: 4.6&rsquo;s &ldquo;investigate then execute&rdquo; pattern creates more compact, reusable context, while 4.5&rsquo;s incremental approach builds a larger accumulated context that costs more to re-cache after cooling.</p>
 
                 <p>This mechanism produces the complexity-dependent curve above. At trivial through moderate tiers (typically &le;30 API requests), lean initialization dominates and 4.6 is 9&ndash;35% cheaper. At 30+ requests, cumulative cache reads compound past the initialization savings&mdash;4.6&rsquo;s per-request cache reads are slightly higher (89K vs 80K in the 30+ tier), and spread over 50+ requests, this adds up.</p>
 
@@ -4882,7 +4882,7 @@
                         <tr>
                             <td class="label-cell">Task type</td>
                             <td><strong>investigation</strong>, <strong>bugfix</strong>, <strong>feature</strong>, <strong>greenfield</strong>, <strong>refactor</strong>, <strong>sysadmin</strong>, <strong>docs</strong>, <strong>continuation</strong>, <strong>port</strong></td>
-                            <td>LLM-classified (Haiku) from user prompt, tool usage, and work summary. Regex pattern matching provides initial signal; LLM classification overrides at medium/high confidence, resolving previously &ldquo;unknown&rdquo; tasks (32.6% of dataset). Eval: 100% unknown resolution, LLM agrees with regex on 55% of classified tasks.</td>
+                            <td>LLM-classified (Haiku) from user prompt, tool usage, and work summary. Regex pattern matching provides initial signal; LLM classification overrides at medium/high confidence, resolving previously &ldquo;unknown&rdquo; tasks (34.3% of dataset). Eval: 100% unknown resolution, LLM agrees with regex on 55% of classified tasks.</td>
                         </tr>
                         <tr>
                             <td class="label-cell">Iteration</td>
@@ -4934,7 +4934,7 @@
                     <li><strong>Iterative refinement:</strong> Chain depth &gt;3, or none of the above</li>
                 </ul>
 
-                <p>A per-task <em>triage score</em> weights these: <code>(self_corrections&times;3 + error_recoveries&times;2 + user_corrections&times;5 + max_chain_depth) / total_edits</code>. Edit metrics were joined with task classifications to compute complexity-binned accuracy rates (93% and 88% coverage for the two models).</p>
+                <p>A per-task <em>triage score</em> weights these: <code>(self_corrections&times;3 + error_recoveries&times;2 + user_corrections&times;5 + max_chain_depth) / total_edits</code>. Edit metrics were joined with task classifications to compute complexity-binned accuracy rates (100% coverage for both models).</p>
                 </details>
 
                 <h3>Compaction Analysis</h3>
@@ -4952,7 +4952,7 @@
                 <details><summary>Test types, effect sizes, and correction thresholds</summary>
                 <p>Three test types were used: chi-square for categorical distributions (effect size: Cram&eacute;r&rsquo;s V), <span class="term" data-def="A nonparametric test comparing continuous metrics between two groups without assuming normal distributions.">Mann-Whitney U</span> for continuous metrics (Cohen&rsquo;s d with bootstrap confidence intervals, n=5,000 resamples), and two-proportion Z-tests for rates (Cohen&rsquo;s h). Confidence intervals on proportions use Wilson score intervals.</p>
 
-                <p>Bonferroni corrected threshold: p&lt;0.0000945. Across all 529 tests, 93 survive Bonferroni and 168 survive <span class="term" data-def="Benjamini-Hochberg false discovery rate control—less conservative than Bonferroni, controls the expected proportion of false positives among rejected hypotheses.">FDR correction</span>. At the overall level, fifteen survive Bonferroni, including alignment score (p=0.000023), duration (p&lt;0.000001, though d=0.005&mdash;negligible practical effect), tool calls/task (p&lt;0.000001, d=&minus;0.29), tools/file (p&lt;0.000001, d=&minus;0.10), and three categorical distributions (task completion, communication quality, autonomy level). Two of the three chi-square survivors have low-expected-cell-count warnings, which may inflate their test statistics.</p>
+                <p>Bonferroni corrected threshold: p&lt;0.0000945. Across all 529 tests, 93 survive Bonferroni and 168 survive <span class="term" data-def="Benjamini-Hochberg false discovery rate control—less conservative than Bonferroni, controls the expected proportion of false positives among rejected hypotheses.">FDR correction</span>. At the overall level, 15 survive Bonferroni, including alignment score (p=0.000023), duration (p&lt;0.000001, though d=0.005&mdash;negligible practical effect), tool calls/task (p&lt;0.000001, d=&minus;0.29), tools/file (p&lt;0.000001, d=&minus;0.10), and three categorical distributions (task completion, communication quality, autonomy level). Two of the three chi-square survivors have low-expected-cell-count warnings, which may inflate their test statistics.</p>
                 </details>
 
                 <details class="expansion">
@@ -5475,6 +5475,10 @@ python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --che
                 <p><strong>Sample asymmetry:</strong> The 2.9:1 ratio (1,729 vs 591 tasks) means Opus 4.5 estimates have narrower confidence intervals. Effect sizes for Opus 4.6 are less precise.</p>
                 <p><strong>User learning effect:</strong> The user may have learned to use Claude Code more effectively over time, benefiting whichever model came second in the chronological sequence.</p>
 </section>
+
+            <section id="acknowledgments" style="margin-top:2rem; padding-top:1rem; border-top:1px solid var(--light-gray);">
+                <p style="font-size:0.85rem; color:var(--gray);">Thanks to Anthropic for including me in the Claude Code Early Access Program and for supporting independent research into model behavior. The EAP provided early access to Opus 4.6, making this comparative analysis possible.</p>
+            </section>
 
             <footer>
                 Claude Code Early Access Program &middot; Single-user exploratory case study &middot; February 2026
