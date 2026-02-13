@@ -480,6 +480,31 @@ def normalize_llm_fields(llm_data):
     }
 
 
+CANONICAL_COMPLETIONS = {"complete", "partial", "interrupted", "failed"}
+
+
+def _normalize_completion(value):
+    """Normalize task_completion to one of 4 canonical values.
+
+    LLM sometimes returns verbose strings like 'partial - agent diagnosed...'
+    or non-standard categories like 'incomplete', 'in_progress', etc.
+    """
+    if not value or not isinstance(value, str):
+        return "partial"
+    v = value.strip().lower()
+    if v in CANONICAL_COMPLETIONS:
+        return v
+    if v.startswith("partial"):
+        return "partial"
+    if v.startswith("failed"):
+        return "failed"
+    if v in ("incomplete", "in_progress", "uncertain", "unclear"):
+        return "partial"
+    if v == "not_started":
+        return "interrupted"
+    return "partial"
+
+
 def _extract_llm_signals(raw):
     """Extract structured signals from raw LLM response dict."""
     alignment = raw.get('alignment_score', 3)
@@ -495,6 +520,10 @@ def _extract_llm_signals(raw):
         task_type = ''
     task_type_confidence = raw.get('task_type_confidence', 'medium')
 
+    # Normalize task_completion to canonical values
+    raw_completion = raw.get('task_completion', 'complete')
+    completion = _normalize_completion(raw_completion)
+
     llm_signals = {
         'task_type': task_type,
         'task_type_confidence': task_type_confidence,
@@ -506,7 +535,7 @@ def _extract_llm_signals(raw):
         'communication_quality': raw.get('communication_quality', 'adequate'),
         'error_recovery': raw.get('error_recovery', 'none_needed'),
         'iteration_required': raw.get('iteration_required', 'one_shot'),
-        'task_completion': raw.get('task_completion', 'complete'),
+        'task_completion': completion,
         'alignment_score': alignment,
         'summary': raw.get('summary', ''),
         'follow_up_pattern': raw.get('follow_up_pattern', ''),

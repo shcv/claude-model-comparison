@@ -107,7 +107,7 @@ def get_step_io(step, data_dir, analysis_dir, comparison_dir):
         outputs = {}
         for name in ["behavior-metrics.json", "edit-analysis.json",
                       "planning-analysis.json", "compaction-analysis.json",
-                      "timing-analysis.json"]:
+                      "timing-analysis.json", "cross-task-edits.json"]:
             h = _file_hash(analysis_dir / name)
             if h:
                 outputs[name] = h

@@ -200,20 +200,21 @@
         }
       },
       "without_subagents": {
-        "satisfied": 415,
-        "neutral": 970,
-        "dissatisfied": 217,
+        "satisfied": 410,
+        "neutral": 980,
+        "dissatisfied": 212,
         "total": 1602,
-        "avg_alignment": 2.9831460674157304,
+        "avg_alignment": 3.0343320848938826,
         "completions": {
-          "partial": 634,
-          "complete": 540,
-          "interrupted": 157,
-          "failed": 238,
-          "incomplete": 27,
-          "unclear": 3,
-          "uncertain": 2,
-          "not_applicable": 1
+          "partial": 623,
+          "complete": 563,
+          "interrupted": 151,
+          "failed": 224,
+          "incomplete": 34,
+          "not_started": 2,
+          "unclear": 2,
+          "in_progress": 1,
+          "uncertain": 2
         }
       }
     },
@@ -1282,7 +1283,7 @@
         "neutral": 71,
         "dissatisfied": 7,
         "total": 126,
-        "avg_alignment": 3.4126984126984126,
+        "avg_alignment": 3.4206349206349205,
         "completions": {
           "partial": 71,
           "failed": 2,

@@ -48,6 +48,12 @@ ANALYSES = [
          "--data-dir", str(data_dir),
          "--analysis-dir", str(analysis_dir),
      ]),
+    ("analyze_cross_task_edits.py", "Cross-task edit analysis",
+     lambda data_dir, analysis_dir: [
+         sys.executable, str(Path(__file__).resolve().parent / "analyze_cross_task_edits.py"),
+         "--data-dir", str(data_dir),
+         "--analysis-dir", str(analysis_dir),
+     ]),
 ]
 
 

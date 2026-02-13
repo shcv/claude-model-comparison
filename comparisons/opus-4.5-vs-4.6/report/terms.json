@@ -15,7 +15,7 @@
   "task complexity": "LLM-assigned difficulty: trivial (one-line), simple (small feature), moderate (multi-file), complex (architectural), major (large-scale).",
   "one-shot rate": "Percentage of tasks completed in a single agent turn without back-and-forth interaction.",
   "front-loading": "Allocating research tool calls (Read, Grep, Glob) disproportionately toward the beginning of a task.",
-  "bonferroni correction": "A statistical adjustment that lowers the significance threshold when performing multiple tests to reduce false positives. Here: p<0.00048 (0.05/105).",
+  "bonferroni correction": "A statistical adjustment that lowers the significance threshold when performing multiple tests to reduce false positives. Here: p<0.0000945 (0.05/529).",
   "mann-whitney u": "A nonparametric test comparing continuous metrics between two groups without assuming normal distributions.",
   "effect size": "A standardized measure of difference magnitude independent of sample size. Cohen\u2019s d: 0.2 small, 0.5 medium, 0.8 large.",
   "satisfaction rate": "Percentage of tasks where the user expressed explicit satisfaction with the agent's work.",

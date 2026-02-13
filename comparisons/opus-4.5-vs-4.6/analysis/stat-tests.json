@@ -7,7 +7,7 @@
     "total_tests": 529,
     "correction_method": "benjamini-hochberg",
     "fdr_alpha": 0.05,
-    "fdr_significant_count": 169,
+    "fdr_significant_count": 168,
     "bonferroni_threshold": 9.452e-05,
     "bonferroni_significant_count": 93,
     "sample_sizes": {
@@ -21,83 +21,32 @@
       {
         "test": "chi-square",
         "field": "task_completion",
-        "chi2": 58.4687,
-        "p_value": 1.2e-05,
-        "dof": 20,
-        "cramers_v": 0.1588,
-        "effect_size": 0.1588,
+        "chi2": 24.8511,
+        "p_value": 1.7e-05,
+        "dof": 3,
+        "cramers_v": 0.1035,
+        "effect_size": 0.1035,
         "effect_size_label": "negligible",
         "significant_p05": true,
-        "low_expected_warning": true,
+        "low_expected_warning": false,
         "categories": [
           "complete",
           "failed",
-          "failed - the initial request for uncommitted changes status was not addressed with any tool output or response",
-          "in_progress",
-          "incomplete",
           "interrupted",
-          "not_started",
-          "partial",
-          "partial - agent created a functional script but final validation was pending at message cutoff",
-          "partial - agent diagnosed and attempted to fix the database schema issue, but the actual resolution wasn't validated in the conversation",
-          "partial - agent diagnosed but did not implement the fix",
-          "partial - agent identified and prepared the deploy script but was interrupted before execution by user's \"run it\" command",
-          "partial - agent successfully completed planning and analysis phases, but did not deliver the simplified refactored code or implementation helpers/middleware that was the ultimate goal",
-          "partial - investigation was complete, but the actual cleanup removal work appears to have been left for the next task/interaction",
-          "partial - investigation was completed, but the removal action requested in the follow-up message was not executed",
-          "partial - the agent completed the exploration phase (grep/read) but the documentation reorganization was not successfully completed due to an edit error",
-          "partial - the agent diagnosed the problem and proposed a solution but didn't implement the actual fix to the script",
-          "partial - the agent prepared for the task and got approval but encountered errors during the write operation that prevented full completion",
-          "partial - the investigation phase was completed successfully, but the second request to write reports was not executed",
-          "uncertain",
-          "unclear"
+          "partial"
         ],
         "counts": {
           "opus-4-5": {
             "complete": 602,
             "failed": 229,
-            "failed - the initial request for uncommitted changes status was not addressed with any tool output or response": 0,
-            "in_progress": 1,
-            "incomplete": 34,
-            "interrupted": 166,
-            "not_started": 2,
-            "partial": 686,
-            "partial - agent created a functional script but final validation was pending at message cutoff": 0,
-            "partial - agent diagnosed and attempted to fix the database schema issue, but the actual resolution wasn't validated in the conversation": 1,
-            "partial - agent diagnosed but did not implement the fix": 0,
-            "partial - agent identified and prepared the deploy script but was interrupted before execution by user's \"run it\" command": 1,
-            "partial - agent successfully completed planning and analysis phases, but did not deliver the simplified refactored code or implementation helpers/middleware that was the ultimate goal": 0,
-            "partial - investigation was complete, but the actual cleanup removal work appears to have been left for the next task/interaction": 0,
-            "partial - investigation was completed, but the removal action requested in the follow-up message was not executed": 0,
-            "partial - the agent completed the exploration phase (grep/read) but the documentation reorganization was not successfully completed due to an edit error": 1,
-            "partial - the agent diagnosed the problem and proposed a solution but didn't implement the actual fix to the script": 1,
-            "partial - the agent prepared for the task and got approval but encountered errors during the write operation that prevented full completion": 1,
-            "partial - the investigation phase was completed successfully, but the second request to write reports was not executed": 0,
-            "uncertain": 2,
-            "unclear": 2
+            "interrupted": 168,
+            "partial": 730
           },
           "opus-4-6": {
             "complete": 236,
-            "failed": 50,
-            "failed - the initial request for uncommitted changes status was not addressed with any tool output or response": 1,
-            "in_progress": 0,
-            "incomplete": 2,
+            "failed": 51,
             "interrupted": 29,
-            "not_started": 0,
-            "partial": 267,
-            "partial - agent created a functional script but final validation was pending at message cutoff": 1,
-            "partial - agent diagnosed and attempted to fix the database schema issue, but the actual resolution wasn't validated in the conversation": 0,
-            "partial - agent diagnosed but did not implement the fix": 1,
-            "partial - agent identified and prepared the deploy script but was interrupted before execution by user's \"run it\" command": 0,
-            "partial - agent successfully completed planning and analysis phases, but did not deliver the simplified refactored code or implementation helpers/middleware that was the ultimate goal": 1,
-            "partial - investigation was complete, but the actual cleanup removal work appears to have been left for the next task/interaction": 1,
-            "partial - investigation was completed, but the removal action requested in the follow-up message was not executed": 1,
-            "partial - the agent completed the exploration phase (grep/read) but the documentation reorganization was not successfully completed due to an edit error": 0,
-            "partial - the agent diagnosed the problem and proposed a solution but didn't implement the actual fix to the script": 0,
-            "partial - the agent prepared for the task and got approval but encountered errors during the write operation that prevented full completion": 0,
-            "partial - the investigation phase was completed successfully, but the second request to write reports was not executed": 1,
-            "uncertain": 0,
-            "unclear": 0
+            "partial": 275
           }
         },
         "n": {
@@ -107,7 +56,7 @@
         "cross_cut": "overall",
         "theme": "quality",
         "bonferroni_significant": true,
-        "p_adjusted": 7.837e-05,
+        "p_adjusted": 0.00010835,
         "fdr_significant": true
       },
       {
@@ -148,7 +97,7 @@
         "cross_cut": "overall",
         "theme": "quality",
         "bonferroni_significant": false,
-        "p_adjusted": 0.21266243,
+        "p_adjusted": 0.21089759,
         "fdr_significant": false
       },
       {
@@ -234,7 +183,7 @@
         "cross_cut": "overall",
         "theme": "behavior",
         "bonferroni_significant": false,
-        "p_adjusted": 0.00166479,
+        "p_adjusted": 0.00168128,
         "fdr_significant": true
       },
       {
@@ -308,7 +257,7 @@
         "cross_cut": "overall",
         "theme": "behavior",
         "bonferroni_significant": false,
-        "p_adjusted": 0.00341961,
+        "p_adjusted": 0.00345041,
         "fdr_significant": true
       },
       {
@@ -409,7 +358,7 @@
         "cross_cut": "overall",
         "theme": null,
         "bonferroni_significant": false,
-        "p_adjusted": 0.02817942,
+        "p_adjusted": 0.02836123,
         "fdr_significant": true
       },
       {
@@ -530,7 +479,7 @@
         "cross_cut": "overall",
         "theme": "quality",
         "bonferroni_significant": false,
-        "p_adjusted": 0.31302879,
+        "p_adjusted": 0.314131,
         "fdr_significant": false
       },
       {
@@ -855,7 +804,7 @@
         "cross_cut": "overall",
         "theme": "editing",
         "bonferroni_significant": false,
-        "p_adjusted": 0.3646475,
+        "p_adjusted": 0.365847,
         "fdr_significant": false
       },
       {
@@ -957,7 +906,7 @@
         "cross_cut": "overall",
         "theme": "behavior",
         "bonferroni_significant": false,
-        "p_adjusted": 0.85004301,
+        "p_adjusted": 0.84655207,
         "fdr_significant": false
       },
       {
@@ -1059,7 +1008,7 @@
         "cross_cut": "overall",
         "theme": "cost",
         "bonferroni_significant": false,
-        "p_adjusted": 0.4445416,
+        "p_adjusted": 0.44587256,
         "fdr_significant": false
       },
       {
@@ -1518,7 +1467,7 @@
         "cross_cut": "overall",
         "theme": "editing",
         "bonferroni_significant": false,
-        "p_adjusted": 0.17918316,
+        "p_adjusted": 0.1784041,
         "fdr_significant": false
       },
       {
@@ -1569,7 +1518,7 @@
         "cross_cut": "overall",
         "theme": "editing",
         "bonferroni_significant": false,
-        "p_adjusted": 0.12637192,
+        "p_adjusted": 0.12701668,
         "fdr_significant": false
       },
       {
@@ -1702,7 +1651,7 @@
         "cross_cut": "overall",
         "theme": "quality",
         "bonferroni_significant": false,
-        "p_adjusted": 0.03872022,
+        "p_adjusted": 0.03895777,
         "fdr_significant": true
       },
       {
@@ -1760,16 +1709,16 @@
         "cross_cut": "overall",
         "theme": "quality",
         "bonferroni_significant": false,
-        "p_adjusted": 0.07520075,
+        "p_adjusted": 0.07562322,
         "fdr_significant": false
       },
       {
         "test": "two-proportion-z",
         "field": "failed_rate",
-        "z_statistic": 3.087,
-        "p_value": 0.002022,
-        "cohens_h": 0.1547,
-        "effect_size": 0.1547,
+        "z_statistic": 2.9733,
+        "p_value": 0.002947,
+        "cohens_h": 0.1487,
+        "effect_size": 0.1487,
         "effect_size_label": "negligible",
         "significant_p05": true,
         "opus-4-5": {
@@ -1780,16 +1729,16 @@
           "n": 1729
         },
         "opus-4-6": {
-          "proportion": 0.0846,
-          "ci_lower": 0.0648,
-          "ci_upper": 0.1098,
-          "count": 50,
+          "proportion": 0.0863,
+          "ci_lower": 0.0662,
+          "ci_upper": 0.1117,
+          "count": 51,
           "n": 591
         },
         "cross_cut": "overall",
         "theme": "quality",
         "bonferroni_significant": false,
-        "p_adjusted": 0.00857826,
+        "p_adjusted": 0.01199202,
         "fdr_significant": true
       },
       {
@@ -1818,7 +1767,7 @@
         "cross_cut": "overall",
         "theme": "behavior",
         "bonferroni_significant": false,
-        "p_adjusted": 0.04547522,
+        "p_adjusted": 0.0457459,
         "fdr_significant": true
       },
       {
@@ -1905,7 +1854,7 @@
         "cross_cut": "overall",
         "theme": "editing",
         "bonferroni_significant": false,
-        "p_adjusted": 0.46840961,
+        "p_adjusted": 0.47103375,
         "fdr_significant": false
       },
       {
@@ -1946,50 +1895,32 @@
         {
           "test": "chi-square",
           "field": "task_completion",
-          "chi2": 38.8329,
-          "p_value": 1.2e-05,
-          "dof": 9,
-          "cramers_v": 0.195,
-          "effect_size": 0.195,
+          "chi2": 26.1113,
+          "p_value": 9e-06,
+          "dof": 3,
+          "cramers_v": 0.1599,
+          "effect_size": 0.1599,
           "effect_size_label": "negligible",
           "significant_p05": true,
-          "low_expected_warning": true,
+          "low_expected_warning": false,
           "categories": [
             "complete",
             "failed",
-            "failed - the initial request for uncommitted changes status was not addressed with any tool output or response",
-            "in_progress",
-            "incomplete",
             "interrupted",
-            "not_started",
-            "partial",
-            "uncertain",
-            "unclear"
+            "partial"
           ],
           "counts": {
             "opus-4-5": {
               "complete": 232,
               "failed": 186,
-              "failed - the initial request for uncommitted changes status was not addressed with any tool output or response": 0,
-              "in_progress": 1,
-              "incomplete": 34,
-              "interrupted": 126,
-              "not_started": 2,
-              "partial": 223,
-              "uncertain": 2,
-              "unclear": 2
+              "interrupted": 128,
+              "partial": 262
             },
             "opus-4-6": {
               "complete": 87,
-              "failed": 41,
-              "failed - the initial request for uncommitted changes status was not addressed with any tool output or response": 1,
-              "in_progress": 0,
-              "incomplete": 2,
+              "failed": 42,
               "interrupted": 9,
-              "not_started": 0,
-              "partial": 73,
-              "uncertain": 0,
-              "unclear": 0
+              "partial": 75
             }
           },
           "n": {
@@ -1999,7 +1930,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "quality",
           "bonferroni_significant": true,
-          "p_adjusted": 7.837e-05,
+          "p_adjusted": 5.951e-05,
           "fdr_significant": true
         },
         {
@@ -2040,7 +1971,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.34784395,
+          "p_adjusted": 0.34900731,
           "fdr_significant": false
         },
         {
@@ -2084,7 +2015,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.19343315,
+          "p_adjusted": 0.19261003,
           "fdr_significant": false
         },
         {
@@ -2175,7 +2106,7 @@
           "cross_cut": "complexity:trivial",
           "theme": null,
           "bonferroni_significant": false,
-          "p_adjusted": 0.32405735,
+          "p_adjusted": 0.32518255,
           "fdr_significant": false
         },
         {
@@ -2263,7 +2194,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.36021922,
+          "p_adjusted": 0.36141596,
           "fdr_significant": false
         },
         {
@@ -2408,7 +2339,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.57063894,
+          "p_adjusted": 0.57202064,
           "fdr_significant": false
         },
         {
@@ -2510,7 +2441,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.60291933,
+          "p_adjusted": 0.60429273,
           "fdr_significant": false
         },
         {
@@ -2561,7 +2492,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.40388577,
+          "p_adjusted": 0.40640219,
           "fdr_significant": false
         },
         {
@@ -2612,7 +2543,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.24475279,
+          "p_adjusted": 0.24377378,
           "fdr_significant": false
         },
         {
@@ -2663,7 +2594,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.39488502,
+          "p_adjusted": 0.39614664,
           "fdr_significant": false
         },
         {
@@ -2765,7 +2696,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.18467776,
+          "p_adjusted": 0.18388854,
           "fdr_significant": false
         },
         {
@@ -2969,7 +2900,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00431158,
+          "p_adjusted": 0.00435008,
           "fdr_significant": true
         },
         {
@@ -3020,7 +2951,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.2886388,
+          "p_adjusted": 0.28757763,
           "fdr_significant": false
         },
         {
@@ -3224,7 +3155,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.39514158,
+          "p_adjusted": 0.39761895,
           "fdr_significant": false
         },
         {
@@ -3275,7 +3206,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.39514158,
+          "p_adjusted": 0.39761895,
           "fdr_significant": false
         },
         {
@@ -3326,7 +3257,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.39514158,
+          "p_adjusted": 0.39761895,
           "fdr_significant": false
         },
         {
@@ -3377,7 +3308,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.39514158,
+          "p_adjusted": 0.39761895,
           "fdr_significant": false
         }
       ],
@@ -3408,7 +3339,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.52755987,
+          "p_adjusted": 0.52891956,
           "fdr_significant": false
         },
         {
@@ -3466,16 +3397,16 @@
           "cross_cut": "complexity:trivial",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00326056,
+          "p_adjusted": 0.00329048,
           "fdr_significant": true
         },
         {
           "test": "two-proportion-z",
           "field": "failed_rate",
-          "z_statistic": 1.1774,
-          "p_value": 0.23902,
-          "cohens_h": 0.0924,
-          "effect_size": 0.0924,
+          "z_statistic": 1.0292,
+          "p_value": 0.303369,
+          "cohens_h": 0.0806,
+          "effect_size": 0.0806,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "opus-4-5": {
@@ -3486,16 +3417,16 @@
             "n": 808
           },
           "opus-4-6": {
-            "proportion": 0.1925,
-            "ci_lower": 0.1452,
-            "ci_upper": 0.2507,
-            "count": 41,
+            "proportion": 0.1972,
+            "ci_lower": 0.1493,
+            "ci_upper": 0.2558,
+            "count": 42,
             "n": 213
           },
           "cross_cut": "complexity:trivial",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.39514158,
+          "p_adjusted": 0.46558574,
           "fdr_significant": false
         },
         {
@@ -3524,7 +3455,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.51683715,
+          "p_adjusted": 0.51819368,
           "fdr_significant": false
         },
         {
@@ -3553,7 +3484,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.23301035,
+          "p_adjusted": 0.23205539,
           "fdr_significant": false
         },
         {
@@ -3611,7 +3542,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.26206245,
+          "p_adjusted": 0.26103877,
           "fdr_significant": false
         },
         {
@@ -3640,7 +3571,7 @@
           "cross_cut": "complexity:trivial",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.39514158,
+          "p_adjusted": 0.39761895,
           "fdr_significant": false
         }
       ]
@@ -3651,47 +3582,32 @@
         {
           "test": "chi-square",
           "field": "task_completion",
-          "chi2": 8.3125,
-          "p_value": 0.403553,
-          "dof": 8,
-          "cramers_v": 0.1324,
-          "effect_size": 0.1324,
+          "chi2": 1.9855,
+          "p_value": 0.575416,
+          "dof": 3,
+          "cramers_v": 0.0647,
+          "effect_size": 0.0647,
           "effect_size_label": "negligible",
           "significant_p05": false,
-          "low_expected_warning": true,
+          "low_expected_warning": false,
           "categories": [
             "complete",
             "failed",
             "interrupted",
-            "partial",
-            "partial - agent diagnosed and attempted to fix the database schema issue, but the actual resolution wasn't validated in the conversation",
-            "partial - agent diagnosed but did not implement the fix",
-            "partial - agent identified and prepared the deploy script but was interrupted before execution by user's \"run it\" command",
-            "partial - investigation was completed, but the removal action requested in the follow-up message was not executed",
-            "partial - the agent completed the exploration phase (grep/read) but the documentation reorganization was not successfully completed due to an edit error"
+            "partial"
           ],
           "counts": {
             "opus-4-5": {
               "complete": 133,
               "failed": 25,
               "interrupted": 22,
-              "partial": 162,
-              "partial - agent diagnosed and attempted to fix the database schema issue, but the actual resolution wasn't validated in the conversation": 1,
-              "partial - agent diagnosed but did not implement the fix": 0,
-              "partial - agent identified and prepared the deploy script but was interrupted before execution by user's \"run it\" command": 1,
-              "partial - investigation was completed, but the removal action requested in the follow-up message was not executed": 0,
-              "partial - the agent completed the exploration phase (grep/read) but the documentation reorganization was not successfully completed due to an edit error": 1
+              "partial": 165
             },
             "opus-4-6": {
               "complete": 43,
               "failed": 7,
               "interrupted": 9,
-              "partial": 68,
-              "partial - agent diagnosed and attempted to fix the database schema issue, but the actual resolution wasn't validated in the conversation": 0,
-              "partial - agent diagnosed but did not implement the fix": 1,
-              "partial - agent identified and prepared the deploy script but was interrupted before execution by user's \"run it\" command": 0,
-              "partial - investigation was completed, but the removal action requested in the follow-up message was not executed": 1,
-              "partial - the agent completed the exploration phase (grep/read) but the documentation reorganization was not successfully completed due to an edit error": 0
+              "partial": 70
             }
           },
           "n": {
@@ -3701,7 +3617,7 @@
           "cross_cut": "complexity:simple",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.53535861,
+          "p_adjusted": 0.67493362,
           "fdr_significant": false
         },
         {
@@ -3804,7 +3720,7 @@
           "cross_cut": "complexity:simple",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.11067794,
+          "p_adjusted": 0.11126353,
           "fdr_significant": false
         },
         {
@@ -3857,7 +3773,7 @@
           "cross_cut": "complexity:simple",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.26484716,
+          "p_adjusted": 0.26381662,
           "fdr_significant": false
         },
         {
@@ -3922,7 +3838,7 @@
           "cross_cut": "complexity:simple",
           "theme": null,
           "bonferroni_significant": false,
-          "p_adjusted": 0.48346322,
+          "p_adjusted": 0.48608362,
           "fdr_significant": false
         },
         {
@@ -3978,7 +3894,7 @@
           "cross_cut": "complexity:simple",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.32066063,
+          "p_adjusted": 0.32178182,
           "fdr_significant": false
         },
         {
@@ -4022,7 +3938,7 @@
           "cross_cut": "complexity:simple",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.91572126,
+          "p_adjusted": 0.91388982,
           "fdr_significant": false
         },
         {
@@ -4072,7 +3988,7 @@
           "cross_cut": "complexity:simple",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.46167075,
+          "p_adjusted": 0.46303261,
           "fdr_significant": false
         }
       ],
@@ -4125,7 +4041,7 @@
           "cross_cut": "complexity:simple",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.51245006,
+          "p_adjusted": 0.51382025,
           "fdr_significant": false
         },
         {
@@ -4176,7 +4092,7 @@
           "cross_cut": "complexity:simple",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.51466508,
+          "p_adjusted": 0.51603387,
           "fdr_significant": false
         },
         {
@@ -4227,7 +4143,7 @@
           "cross_cut": "complexity:simple",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.5930467,
+          "p_adjusted": 0.59445871,
           "fdr_significant": false
         },
         {
@@ -4329,7 +4245,7 @@
           "cross_cut": "complexity:simple",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00295848,
+          "p_adjusted": 0.00298613,
           "fdr_significant": true
         },
         {
@@ -4431,7 +4347,7 @@
           "cross_cut": "complexity:simple",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.0016289,
+          "p_adjusted": 0.00164519,
           "fdr_significant": true
         },
         {
@@ -4482,7 +4398,7 @@
           "cross_cut": "complexity:simple",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.11067794,
+          "p_adjusted": 0.11126353,
           "fdr_significant": false
         },
         {
@@ -4533,7 +4449,7 @@
           "cross_cut": "complexity:simple",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00162403,
+          "p_adjusted": 0.00164043,
           "fdr_significant": true
         },
         {
@@ -4737,7 +4653,7 @@
           "cross_cut": "complexity:simple",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.34784395,
+          "p_adjusted": 0.34900731,
           "fdr_significant": false
         },
         {
@@ -4788,7 +4704,7 @@
           "cross_cut": "complexity:simple",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00720151,
+          "p_adjusted": 0.00726254,
           "fdr_significant": true
         },
         {
@@ -4992,7 +4908,7 @@
           "cross_cut": "complexity:simple",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.01013645,
+          "p_adjusted": 0.01028474,
           "fdr_significant": true
         },
         {
@@ -5043,7 +4959,7 @@
           "cross_cut": "complexity:simple",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00920127,
+          "p_adjusted": 0.00934849,
           "fdr_significant": true
         },
         {
@@ -5094,7 +5010,7 @@
           "cross_cut": "complexity:simple",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00775426,
+          "p_adjusted": 0.00781942,
           "fdr_significant": true
         },
         {
@@ -5145,7 +5061,7 @@
           "cross_cut": "complexity:simple",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00797801,
+          "p_adjusted": 0.0080434,
           "fdr_significant": true
         }
       ],
@@ -5234,7 +5150,7 @@
           "cross_cut": "complexity:simple",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.4609525,
+          "p_adjusted": 0.46231626,
           "fdr_significant": false
         },
         {
@@ -5263,7 +5179,7 @@
           "cross_cut": "complexity:simple",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.59814926,
+          "p_adjusted": 0.5995403,
           "fdr_significant": false
         },
         {
@@ -5292,7 +5208,7 @@
           "cross_cut": "complexity:simple",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.65865095,
+          "p_adjusted": 0.66012115,
           "fdr_significant": false
         },
         {
@@ -5408,7 +5324,7 @@
           "cross_cut": "complexity:simple",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00857826,
+          "p_adjusted": 0.00871775,
           "fdr_significant": true
         }
       ]
@@ -5419,11 +5335,11 @@
         {
           "test": "chi-square",
           "field": "task_completion",
-          "chi2": 11.9917,
-          "p_value": 0.151573,
-          "dof": 8,
-          "cramers_v": 0.1513,
-          "effect_size": 0.1513,
+          "chi2": 3.8222,
+          "p_value": 0.281314,
+          "dof": 3,
+          "cramers_v": 0.0854,
+          "effect_size": 0.0854,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
@@ -5431,35 +5347,20 @@
             "complete",
             "failed",
             "interrupted",
-            "partial",
-            "partial - agent created a functional script but final validation was pending at message cutoff",
-            "partial - investigation was complete, but the actual cleanup removal work appears to have been left for the next task/interaction",
-            "partial - the agent diagnosed the problem and proposed a solution but didn't implement the actual fix to the script",
-            "partial - the agent prepared for the task and got approval but encountered errors during the write operation that prevented full completion",
-            "partial - the investigation phase was completed successfully, but the second request to write reports was not executed"
+            "partial"
           ],
           "counts": {
             "opus-4-5": {
               "complete": 142,
               "failed": 13,
               "interrupted": 11,
-              "partial": 199,
-              "partial - agent created a functional script but final validation was pending at message cutoff": 0,
-              "partial - investigation was complete, but the actual cleanup removal work appears to have been left for the next task/interaction": 0,
-              "partial - the agent diagnosed the problem and proposed a solution but didn't implement the actual fix to the script": 1,
-              "partial - the agent prepared for the task and got approval but encountered errors during the write operation that prevented full completion": 1,
-              "partial - the investigation phase was completed successfully, but the second request to write reports was not executed": 0
+              "partial": 201
             },
             "opus-4-6": {
               "complete": 69,
               "failed": 2,
               "interrupted": 7,
-              "partial": 76,
-              "partial - agent created a functional script but final validation was pending at message cutoff": 1,
-              "partial - investigation was complete, but the actual cleanup removal work appears to have been left for the next task/interaction": 1,
-              "partial - the agent diagnosed the problem and proposed a solution but didn't implement the actual fix to the script": 0,
-              "partial - the agent prepared for the task and got approval but encountered errors during the write operation that prevented full completion": 0,
-              "partial - the investigation phase was completed successfully, but the second request to write reports was not executed": 1
+              "partial": 79
             }
           },
           "n": {
@@ -5469,7 +5370,7 @@
           "cross_cut": "complexity:moderate",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.29157133,
+          "p_adjusted": 0.44587256,
           "fdr_significant": false
         },
         {
@@ -5510,7 +5411,7 @@
           "cross_cut": "complexity:moderate",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.09155378,
+          "p_adjusted": 0.092046,
           "fdr_significant": false
         },
         {
@@ -5569,7 +5470,7 @@
           "cross_cut": "complexity:moderate",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.32405735,
+          "p_adjusted": 0.32518255,
           "fdr_significant": false
         },
         {
@@ -5622,7 +5523,7 @@
           "cross_cut": "complexity:moderate",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.26118854,
+          "p_adjusted": 0.26016427,
           "fdr_significant": false
         },
         {
@@ -5687,7 +5588,7 @@
           "cross_cut": "complexity:moderate",
           "theme": null,
           "bonferroni_significant": false,
-          "p_adjusted": 0.26911304,
+          "p_adjusted": 0.26808589,
           "fdr_significant": false
         },
         {
@@ -5740,7 +5641,7 @@
           "cross_cut": "complexity:moderate",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.12595328,
+          "p_adjusted": 0.12659919,
           "fdr_significant": false
         },
         {
@@ -5834,7 +5735,7 @@
           "cross_cut": "complexity:moderate",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.5243508,
+          "p_adjusted": 0.52570571,
           "fdr_significant": false
         }
       ],
@@ -5887,7 +5788,7 @@
           "cross_cut": "complexity:moderate",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.19701536,
+          "p_adjusted": 0.19535278,
           "fdr_significant": false
         },
         {
@@ -6040,7 +5941,7 @@
           "cross_cut": "complexity:moderate",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.34265885,
+          "p_adjusted": 0.34382833,
           "fdr_significant": false
         },
         {
@@ -6142,7 +6043,7 @@
           "cross_cut": "complexity:moderate",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00218088,
+          "p_adjusted": 0.00220165,
           "fdr_significant": true
         },
         {
@@ -6193,7 +6094,7 @@
           "cross_cut": "complexity:moderate",
           "theme": "behavior",
           "bonferroni_significant": true,
-          "p_adjusted": 6.027e-05,
+          "p_adjusted": 5.951e-05,
           "fdr_significant": true
         },
         {
@@ -6244,7 +6145,7 @@
           "cross_cut": "complexity:moderate",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.40388577,
+          "p_adjusted": 0.40640219,
           "fdr_significant": false
         },
         {
@@ -6295,7 +6196,7 @@
           "cross_cut": "complexity:moderate",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.48319321,
+          "p_adjusted": 0.48584085,
           "fdr_significant": false
         },
         {
@@ -6448,7 +6349,7 @@
           "cross_cut": "complexity:moderate",
           "theme": "thinking",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00607005,
+          "p_adjusted": 0.00612193,
           "fdr_significant": true
         },
         {
@@ -6499,7 +6400,7 @@
           "cross_cut": "complexity:moderate",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.58962844,
+          "p_adjusted": 0.59103567,
           "fdr_significant": false
         },
         {
@@ -6550,7 +6451,7 @@
           "cross_cut": "complexity:moderate",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00446866,
+          "p_adjusted": 0.0045082,
           "fdr_significant": true
         },
         {
@@ -6938,7 +6839,7 @@
           "cross_cut": "complexity:moderate",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.25940256,
+          "p_adjusted": 0.25836908,
           "fdr_significant": false
         },
         {
@@ -6996,7 +6897,7 @@
           "cross_cut": "complexity:moderate",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.42354077,
+          "p_adjusted": 0.42615522,
           "fdr_significant": false
         },
         {
@@ -7083,7 +6984,7 @@
           "cross_cut": "complexity:moderate",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.64067738,
+          "p_adjusted": 0.6421236,
           "fdr_significant": false
         },
         {
@@ -7112,7 +7013,7 @@
           "cross_cut": "complexity:moderate",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00991567,
+          "p_adjusted": 0.01007183,
           "fdr_significant": true
         },
         {
@@ -7141,7 +7042,7 @@
           "cross_cut": "complexity:moderate",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00205554,
+          "p_adjusted": 0.00207531,
           "fdr_significant": true
         },
         {
@@ -7181,11 +7082,11 @@
         {
           "test": "chi-square",
           "field": "task_completion",
-          "chi2": 4.7419,
-          "p_value": 0.314815,
-          "dof": 4,
-          "cramers_v": 0.134,
-          "effect_size": 0.134,
+          "chi2": 2.3477,
+          "p_value": 0.503452,
+          "dof": 3,
+          "cramers_v": 0.0943,
+          "effect_size": 0.0943,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
@@ -7193,23 +7094,20 @@
             "complete",
             "failed",
             "interrupted",
-            "partial",
-            "partial - agent successfully completed planning and analysis phases, but did not deliver the simplified refactored code or implementation helpers/middleware that was the ultimate goal"
+            "partial"
           ],
           "counts": {
             "opus-4-5": {
               "complete": 89,
               "failed": 4,
               "interrupted": 7,
-              "partial": 90,
-              "partial - agent successfully completed planning and analysis phases, but did not deliver the simplified refactored code or implementation helpers/middleware that was the ultimate goal": 0
+              "partial": 90
             },
             "opus-4-6": {
               "complete": 31,
               "failed": 0,
               "interrupted": 3,
-              "partial": 39,
-              "partial - agent successfully completed planning and analysis phases, but did not deliver the simplified refactored code or implementation helpers/middleware that was the ultimate goal": 1
+              "partial": 40
             }
           },
           "n": {
@@ -7219,7 +7117,7 @@
           "cross_cut": "complexity:complex",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.46840961,
+          "p_adjusted": 0.60528661,
           "fdr_significant": false
         },
         {
@@ -7260,7 +7158,7 @@
           "cross_cut": "complexity:complex",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.60291933,
+          "p_adjusted": 0.60429273,
           "fdr_significant": false
         },
         {
@@ -7304,7 +7202,7 @@
           "cross_cut": "complexity:complex",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.36316372,
+          "p_adjusted": 0.36436228,
           "fdr_significant": false
         },
         {
@@ -7345,7 +7243,7 @@
           "cross_cut": "complexity:complex",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.4450118,
+          "p_adjusted": 0.4463402,
           "fdr_significant": false
         },
         {
@@ -7386,7 +7284,7 @@
           "cross_cut": "complexity:complex",
           "theme": null,
           "bonferroni_significant": false,
-          "p_adjusted": 0.47136977,
+          "p_adjusted": 0.47399579,
           "fdr_significant": false
         },
         {
@@ -7468,7 +7366,7 @@
           "cross_cut": "complexity:complex",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.43494285,
+          "p_adjusted": 0.4375709,
           "fdr_significant": false
         },
         {
@@ -7506,7 +7404,7 @@
           "cross_cut": "complexity:complex",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.28880687,
+          "p_adjusted": 0.28775283,
           "fdr_significant": false
         }
       ],
@@ -7559,7 +7457,7 @@
           "cross_cut": "complexity:complex",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.65372065,
+          "p_adjusted": 0.65518968,
           "fdr_significant": false
         },
         {
@@ -7610,7 +7508,7 @@
           "cross_cut": "complexity:complex",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00533069,
+          "p_adjusted": 0.00537665,
           "fdr_significant": true
         },
         {
@@ -7712,7 +7610,7 @@
           "cross_cut": "complexity:complex",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.0413792,
+          "p_adjusted": 0.04162848,
           "fdr_significant": true
         },
         {
@@ -7865,7 +7763,7 @@
           "cross_cut": "complexity:complex",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.46840961,
+          "p_adjusted": 0.47103375,
           "fdr_significant": false
         },
         {
@@ -7967,7 +7865,7 @@
           "cross_cut": "complexity:complex",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.9211495,
+          "p_adjusted": 0.91931454,
           "fdr_significant": false
         },
         {
@@ -8120,7 +8018,7 @@
           "cross_cut": "complexity:complex",
           "theme": "thinking",
           "bonferroni_significant": false,
-          "p_adjusted": 0.32805041,
+          "p_adjusted": 0.32917387,
           "fdr_significant": false
         },
         {
@@ -8222,7 +8120,7 @@
           "cross_cut": "complexity:complex",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.03576105,
+          "p_adjusted": 0.0359818,
           "fdr_significant": true
         },
         {
@@ -8375,7 +8273,7 @@
           "cross_cut": "complexity:complex",
           "theme": "thinking",
           "bonferroni_significant": false,
-          "p_adjusted": 0.82075118,
+          "p_adjusted": 0.81735965,
           "fdr_significant": false
         },
         {
@@ -8426,7 +8324,7 @@
           "cross_cut": "complexity:complex",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.91895235,
+          "p_adjusted": 0.91711811,
           "fdr_significant": false
         },
         {
@@ -8477,7 +8375,7 @@
           "cross_cut": "complexity:complex",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.81747657,
+          "p_adjusted": 0.81409157,
           "fdr_significant": false
         },
         {
@@ -8610,7 +8508,7 @@
           "cross_cut": "complexity:complex",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.86000953,
+          "p_adjusted": 0.85649211,
           "fdr_significant": false
         },
         {
@@ -8639,7 +8537,7 @@
           "cross_cut": "complexity:complex",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.81747657,
+          "p_adjusted": 0.81409157,
           "fdr_significant": false
         },
         {
@@ -8668,7 +8566,7 @@
           "cross_cut": "complexity:complex",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.58962844,
+          "p_adjusted": 0.59103567,
           "fdr_significant": false
         },
         {
@@ -8697,7 +8595,7 @@
           "cross_cut": "complexity:complex",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.36316372,
+          "p_adjusted": 0.36436228,
           "fdr_significant": false
         },
         {
@@ -8784,7 +8682,7 @@
           "cross_cut": "complexity:complex",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.31555035,
+          "p_adjusted": 0.31665754,
           "fdr_significant": false
         },
         {
@@ -8855,47 +8753,32 @@
         {
           "test": "chi-square",
           "field": "task_completion",
-          "chi2": 20.8171,
-          "p_value": 0.00765,
-          "dof": 8,
-          "cramers_v": 0.1911,
-          "effect_size": 0.1911,
+          "chi2": 7.9035,
+          "p_value": 0.048049,
+          "dof": 3,
+          "cramers_v": 0.1178,
+          "effect_size": 0.1178,
           "effect_size_label": "negligible",
           "significant_p05": true,
-          "low_expected_warning": true,
+          "low_expected_warning": false,
           "categories": [
             "complete",
             "failed",
-            "incomplete",
             "interrupted",
-            "partial",
-            "partial - investigation was complete, but the actual cleanup removal work appears to have been left for the next task/interaction",
-            "partial - investigation was completed, but the removal action requested in the follow-up message was not executed",
-            "partial - the agent completed the exploration phase (grep/read) but the documentation reorganization was not successfully completed due to an edit error",
-            "partial - the investigation phase was completed successfully, but the second request to write reports was not executed"
+            "partial"
           ],
           "counts": {
             "opus-4-5": {
               "complete": 108,
               "failed": 72,
-              "incomplete": 9,
               "interrupted": 34,
-              "partial": 213,
-              "partial - investigation was complete, but the actual cleanup removal work appears to have been left for the next task/interaction": 0,
-              "partial - investigation was completed, but the removal action requested in the follow-up message was not executed": 0,
-              "partial - the agent completed the exploration phase (grep/read) but the documentation reorganization was not successfully completed due to an edit error": 1,
-              "partial - the investigation phase was completed successfully, but the second request to write reports was not executed": 0
+              "partial": 223
             },
             "opus-4-6": {
               "complete": 43,
               "failed": 13,
-              "incomplete": 0,
               "interrupted": 5,
-              "partial": 69,
-              "partial - investigation was complete, but the actual cleanup removal work appears to have been left for the next task/interaction": 1,
-              "partial - investigation was completed, but the removal action requested in the follow-up message was not executed": 1,
-              "partial - the agent completed the exploration phase (grep/read) but the documentation reorganization was not successfully completed due to an edit error": 0,
-              "partial - the investigation phase was completed successfully, but the second request to write reports was not executed": 1
+              "partial": 72
             }
           },
           "n": {
@@ -8905,8 +8788,8 @@
           "cross_cut": "task_type:investigation",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.02627825,
-          "fdr_significant": true
+          "p_adjusted": 0.12902498,
+          "fdr_significant": false
         },
         {
           "test": "chi-square",
@@ -8946,7 +8829,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.87928454,
+          "p_adjusted": 0.87570294,
           "fdr_significant": false
         },
         {
@@ -8996,7 +8879,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.02817942,
+          "p_adjusted": 0.02836123,
           "fdr_significant": true
         },
         {
@@ -9046,7 +8929,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.08215399,
+          "p_adjusted": 0.08260538,
           "fdr_significant": false
         },
         {
@@ -9102,7 +8985,7 @@
           "cross_cut": "task_type:investigation",
           "theme": null,
           "bonferroni_significant": false,
-          "p_adjusted": 0.28880687,
+          "p_adjusted": 0.28775283,
           "fdr_significant": false
         },
         {
@@ -9152,7 +9035,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00920127,
+          "p_adjusted": 0.00934849,
           "fdr_significant": true
         },
         {
@@ -9196,7 +9079,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.29157133,
+          "p_adjusted": 0.29135396,
           "fdr_significant": false
         },
         {
@@ -9246,7 +9129,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00784756,
+          "p_adjusted": 0.00791296,
           "fdr_significant": true
         }
       ],
@@ -9299,7 +9182,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.09705743,
+          "p_adjusted": 0.09757645,
           "fdr_significant": false
         },
         {
@@ -9452,7 +9335,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.05131922,
+          "p_adjusted": 0.05162289,
           "fdr_significant": false
         },
         {
@@ -9503,7 +9386,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.92881042,
+          "p_adjusted": 0.92696754,
           "fdr_significant": false
         },
         {
@@ -9554,7 +9437,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.57063894,
+          "p_adjusted": 0.57202064,
           "fdr_significant": false
         },
         {
@@ -9605,7 +9488,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.8166998,
+          "p_adjusted": 0.81330396,
           "fdr_significant": false
         },
         {
@@ -9707,7 +9590,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.42440521,
+          "p_adjusted": 0.42701694,
           "fdr_significant": false
         },
         {
@@ -9860,7 +9743,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "thinking",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00115516,
+          "p_adjusted": 0.00116707,
           "fdr_significant": true
         },
         {
@@ -10166,7 +10049,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.5243508,
+          "p_adjusted": 0.52570571,
           "fdr_significant": false
         },
         {
@@ -10217,7 +10100,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.51683715,
+          "p_adjusted": 0.51819368,
           "fdr_significant": false
         },
         {
@@ -10268,7 +10151,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.49695083,
+          "p_adjusted": 0.49962981,
           "fdr_significant": false
         },
         {
@@ -10319,7 +10202,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.51683715,
+          "p_adjusted": 0.51819368,
           "fdr_significant": false
         }
       ],
@@ -10350,7 +10233,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.51466508,
+          "p_adjusted": 0.51603387,
           "fdr_significant": false
         },
         {
@@ -10408,7 +10291,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.18467776,
+          "p_adjusted": 0.18388854,
           "fdr_significant": false
         },
         {
@@ -10466,7 +10349,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.21174447,
+          "p_adjusted": 0.20997994,
           "fdr_significant": false
         },
         {
@@ -10495,7 +10378,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.55821878,
+          "p_adjusted": 0.5595971,
           "fdr_significant": false
         },
         {
@@ -10524,7 +10407,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.26696798,
+          "p_adjusted": 0.26593322,
           "fdr_significant": false
         },
         {
@@ -10553,7 +10436,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.59814926,
+          "p_adjusted": 0.5995403,
           "fdr_significant": false
         },
         {
@@ -10582,7 +10465,7 @@
           "cross_cut": "task_type:investigation",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.51702035,
+          "p_adjusted": 0.51837028,
           "fdr_significant": false
         }
       ]
@@ -10593,41 +10476,32 @@
         {
           "test": "chi-square",
           "field": "task_completion",
-          "chi2": 7.1449,
-          "p_value": 0.307653,
-          "dof": 6,
-          "cramers_v": 0.1684,
-          "effect_size": 0.1684,
+          "chi2": 3.1964,
+          "p_value": 0.362328,
+          "dof": 3,
+          "cramers_v": 0.1126,
+          "effect_size": 0.1126,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
             "complete",
             "failed",
-            "incomplete",
             "interrupted",
-            "partial",
-            "partial - agent created a functional script but final validation was pending at message cutoff",
-            "uncertain"
+            "partial"
           ],
           "counts": {
             "opus-4-5": {
               "complete": 76,
               "failed": 15,
-              "incomplete": 3,
               "interrupted": 13,
-              "partial": 62,
-              "partial - agent created a functional script but final validation was pending at message cutoff": 0,
-              "uncertain": 1
+              "partial": 66
             },
             "opus-4-6": {
               "complete": 41,
               "failed": 9,
-              "incomplete": 0,
               "interrupted": 2,
-              "partial": 29,
-              "partial - agent created a functional script but final validation was pending at message cutoff": 1,
-              "uncertain": 0
+              "partial": 30
             }
           },
           "n": {
@@ -10637,7 +10511,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.46658255,
+          "p_adjusted": 0.51382025,
           "fdr_significant": false
         },
         {
@@ -10678,7 +10552,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.48346322,
+          "p_adjusted": 0.48608362,
           "fdr_significant": false
         },
         {
@@ -10719,7 +10593,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.37592339,
+          "p_adjusted": 0.37713605,
           "fdr_significant": false
         },
         {
@@ -10760,7 +10634,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.56101549,
+          "p_adjusted": 0.56239053,
           "fdr_significant": false
         },
         {
@@ -10810,7 +10684,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": null,
           "bonferroni_significant": false,
-          "p_adjusted": 0.53535861,
+          "p_adjusted": 0.53805563,
           "fdr_significant": false
         },
         {
@@ -10851,7 +10725,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.37757755,
+          "p_adjusted": 0.37878774,
           "fdr_significant": false
         },
         {
@@ -10933,7 +10807,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.34784395,
+          "p_adjusted": 0.34900731,
           "fdr_significant": false
         }
       ],
@@ -10986,7 +10860,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.37317147,
+          "p_adjusted": 0.37439498,
           "fdr_significant": false
         },
         {
@@ -11037,7 +10911,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.24432334,
+          "p_adjusted": 0.24334212,
           "fdr_significant": false
         },
         {
@@ -11088,7 +10962,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.08185258,
+          "p_adjusted": 0.0823048,
           "fdr_significant": false
         },
         {
@@ -11139,7 +11013,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.46840961,
+          "p_adjusted": 0.47084789,
           "fdr_significant": false
         },
         {
@@ -11190,7 +11064,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.59814926,
+          "p_adjusted": 0.5995403,
           "fdr_significant": false
         },
         {
@@ -11241,7 +11115,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.51683715,
+          "p_adjusted": 0.51819368,
           "fdr_significant": false
         },
         {
@@ -11292,7 +11166,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.42354077,
+          "p_adjusted": 0.42615522,
           "fdr_significant": false
         },
         {
@@ -11343,7 +11217,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.02934276,
+          "p_adjusted": 0.02952966,
           "fdr_significant": true
         },
         {
@@ -11394,7 +11268,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.66556782,
+          "p_adjusted": 0.66705015,
           "fdr_significant": false
         },
         {
@@ -11598,7 +11472,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.0632611,
+          "p_adjusted": 0.06362677,
           "fdr_significant": false
         },
         {
@@ -11649,7 +11523,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.57934401,
+          "p_adjusted": 0.58074002,
           "fdr_significant": false
         },
         {
@@ -11853,7 +11727,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.26975393,
+          "p_adjusted": 0.26873599,
           "fdr_significant": false
         },
         {
@@ -11904,7 +11778,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.26911304,
+          "p_adjusted": 0.26808589,
           "fdr_significant": false
         },
         {
@@ -11955,7 +11829,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.26875855,
+          "p_adjusted": 0.26772487,
           "fdr_significant": false
         },
         {
@@ -12006,7 +11880,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.26721471,
+          "p_adjusted": 0.266183,
           "fdr_significant": false
         }
       ],
@@ -12037,7 +11911,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.48190599,
+          "p_adjusted": 0.48455383,
           "fdr_significant": false
         },
         {
@@ -12066,7 +11940,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.60291933,
+          "p_adjusted": 0.60429273,
           "fdr_significant": false
         },
         {
@@ -12095,7 +11969,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.5586422,
+          "p_adjusted": 0.56001816,
           "fdr_significant": false
         },
         {
@@ -12153,7 +12027,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.59814926,
+          "p_adjusted": 0.5995403,
           "fdr_significant": false
         },
         {
@@ -12182,7 +12056,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.59754222,
+          "p_adjusted": 0.59895152,
           "fdr_significant": false
         },
         {
@@ -12211,7 +12085,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.08946641,
+          "p_adjusted": 0.08995002,
           "fdr_significant": false
         },
         {
@@ -12240,7 +12114,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.47136977,
+          "p_adjusted": 0.47399579,
           "fdr_significant": false
         },
         {
@@ -12269,7 +12143,7 @@
           "cross_cut": "task_type:sysadmin",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.26975393,
+          "p_adjusted": 0.26873401,
           "fdr_significant": false
         }
       ]
@@ -12280,38 +12154,32 @@
         {
           "test": "chi-square",
           "field": "task_completion",
-          "chi2": 9.0789,
-          "p_value": 0.105958,
-          "dof": 5,
-          "cramers_v": 0.3527,
-          "effect_size": 0.3527,
+          "chi2": 6.8585,
+          "p_value": 0.076547,
+          "dof": 3,
+          "cramers_v": 0.3065,
+          "effect_size": 0.3065,
           "effect_size_label": "small",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
             "complete",
             "failed",
-            "incomplete",
             "interrupted",
-            "partial",
-            "partial - agent successfully completed planning and analysis phases, but did not deliver the simplified refactored code or implementation helpers/middleware that was the ultimate goal"
+            "partial"
           ],
           "counts": {
             "opus-4-5": {
               "complete": 25,
               "failed": 4,
-              "incomplete": 1,
               "interrupted": 4,
-              "partial": 14,
-              "partial - agent successfully completed planning and analysis phases, but did not deliver the simplified refactored code or implementation helpers/middleware that was the ultimate goal": 0
+              "partial": 15
             },
             "opus-4-6": {
               "complete": 8,
               "failed": 0,
-              "incomplete": 0,
               "interrupted": 2,
-              "partial": 14,
-              "partial - agent successfully completed planning and analysis phases, but did not deliver the simplified refactored code or implementation helpers/middleware that was the ultimate goal": 1
+              "partial": 15
             }
           },
           "n": {
@@ -12321,7 +12189,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.23161893,
+          "p_adjusted": 0.17760247,
           "fdr_significant": false
         },
         {
@@ -12444,7 +12312,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.54883946,
+          "p_adjusted": 0.55019797,
           "fdr_significant": false
         },
         {
@@ -12488,7 +12356,7 @@
           "cross_cut": "task_type:refactor",
           "theme": null,
           "bonferroni_significant": false,
-          "p_adjusted": 0.08016113,
+          "p_adjusted": 0.08060896,
           "fdr_significant": false
         },
         {
@@ -12529,7 +12397,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.51908331,
+          "p_adjusted": 0.52043157,
           "fdr_significant": false
         },
         {
@@ -12573,7 +12441,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.27072072,
+          "p_adjusted": 0.26970679,
           "fdr_significant": false
         },
         {
@@ -12614,7 +12482,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.20957328,
+          "p_adjusted": 0.20781953,
           "fdr_significant": false
         }
       ],
@@ -12718,7 +12586,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00170399,
+          "p_adjusted": 0.00172053,
           "fdr_significant": true
         },
         {
@@ -12769,7 +12637,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00138395,
+          "p_adjusted": 0.00139807,
           "fdr_significant": true
         },
         {
@@ -12820,7 +12688,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00797801,
+          "p_adjusted": 0.0080434,
           "fdr_significant": true
         },
         {
@@ -12922,7 +12790,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.46367773,
+          "p_adjusted": 0.46502956,
           "fdr_significant": false
         },
         {
@@ -12973,7 +12841,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.54883946,
+          "p_adjusted": 0.55019797,
           "fdr_significant": false
         },
         {
@@ -13024,7 +12892,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.56844388,
+          "p_adjusted": 0.56982696,
           "fdr_significant": false
         },
         {
@@ -13177,7 +13045,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.06345279,
+          "p_adjusted": 0.06381747,
           "fdr_significant": false
         },
         {
@@ -13228,7 +13096,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "thinking",
           "bonferroni_significant": false,
-          "p_adjusted": 0.87926738,
+          "p_adjusted": 0.87567853,
           "fdr_significant": false
         },
         {
@@ -13330,7 +13198,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.27690799,
+          "p_adjusted": 0.27588619,
           "fdr_significant": false
         },
         {
@@ -13381,7 +13249,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00168972,
+          "p_adjusted": 0.00170628,
           "fdr_significant": true
         },
         {
@@ -13483,7 +13351,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "thinking",
           "bonferroni_significant": false,
-          "p_adjusted": 0.17918316,
+          "p_adjusted": 0.1784041,
           "fdr_significant": false
         },
         {
@@ -13534,7 +13402,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.51683715,
+          "p_adjusted": 0.51819368,
           "fdr_significant": false
         },
         {
@@ -13585,7 +13453,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.44683233,
+          "p_adjusted": 0.44816219,
           "fdr_significant": false
         },
         {
@@ -13636,7 +13504,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.54883946,
+          "p_adjusted": 0.55019797,
           "fdr_significant": false
         },
         {
@@ -13687,7 +13555,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.53535861,
+          "p_adjusted": 0.53805563,
           "fdr_significant": false
         }
       ],
@@ -13747,7 +13615,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.48851301,
+          "p_adjusted": 0.49115362,
           "fdr_significant": false
         },
         {
@@ -13776,7 +13644,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.22351018,
+          "p_adjusted": 0.22167059,
           "fdr_significant": false
         },
         {
@@ -13805,7 +13673,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.2727104,
+          "p_adjusted": 0.27169282,
           "fdr_significant": false
         },
         {
@@ -13834,7 +13702,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.58962844,
+          "p_adjusted": 0.59103567,
           "fdr_significant": false
         },
         {
@@ -13892,7 +13760,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.20396088,
+          "p_adjusted": 0.20224692,
           "fdr_significant": false
         },
         {
@@ -13950,7 +13818,7 @@
           "cross_cut": "task_type:refactor",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.53535861,
+          "p_adjusted": 0.53724482,
           "fdr_significant": false
         }
       ]
@@ -13961,44 +13829,32 @@
         {
           "test": "chi-square",
           "field": "task_completion",
-          "chi2": 2.9261,
-          "p_value": 0.891755,
-          "dof": 7,
-          "cramers_v": 0.1133,
-          "effect_size": 0.1133,
+          "chi2": 1.2787,
+          "p_value": 0.734193,
+          "dof": 3,
+          "cramers_v": 0.0749,
+          "effect_size": 0.0749,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
             "complete",
             "failed",
-            "incomplete",
             "interrupted",
-            "not_started",
-            "partial",
-            "partial - agent diagnosed and attempted to fix the database schema issue, but the actual resolution wasn't validated in the conversation",
-            "partial - the agent diagnosed the problem and proposed a solution but didn't implement the actual fix to the script"
+            "partial"
           ],
           "counts": {
             "opus-4-5": {
               "complete": 57,
               "failed": 32,
-              "incomplete": 4,
-              "interrupted": 7,
-              "not_started": 1,
-              "partial": 87,
-              "partial - agent diagnosed and attempted to fix the database schema issue, but the actual resolution wasn't validated in the conversation": 1,
-              "partial - the agent diagnosed the problem and proposed a solution but didn't implement the actual fix to the script": 1
+              "interrupted": 8,
+              "partial": 93
             },
             "opus-4-6": {
               "complete": 12,
               "failed": 4,
-              "incomplete": 0,
               "interrupted": 1,
-              "not_started": 0,
-              "partial": 21,
-              "partial - agent diagnosed and attempted to fix the database schema issue, but the actual resolution wasn't validated in the conversation": 0,
-              "partial - the agent diagnosed the problem and proposed a solution but didn't implement the actual fix to the script": 0
+              "partial": 21
             }
           },
           "n": {
@@ -14008,7 +13864,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.93584081,
+          "p_adjusted": 0.81037069,
           "fdr_significant": false
         },
         {
@@ -14049,7 +13905,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.32751622,
+          "p_adjusted": 0.3286417,
           "fdr_significant": false
         },
         {
@@ -14093,7 +13949,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.81133961,
+          "p_adjusted": 0.80964225,
           "fdr_significant": false
         },
         {
@@ -14137,7 +13993,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.46840961,
+          "p_adjusted": 0.47103375,
           "fdr_significant": false
         },
         {
@@ -14231,7 +14087,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.88985219,
+          "p_adjusted": 0.88624955,
           "fdr_significant": false
         },
         {
@@ -14275,7 +14131,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.81376136,
+          "p_adjusted": 0.81037069,
           "fdr_significant": false
         },
         {
@@ -14316,7 +14172,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.90798371,
+          "p_adjusted": 0.90433718,
           "fdr_significant": false
         }
       ],
@@ -14369,7 +14225,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.37468265,
+          "p_adjusted": 0.37589916,
           "fdr_significant": false
         },
         {
@@ -14471,7 +14327,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.06255117,
+          "p_adjusted": 0.06291697,
           "fdr_significant": false
         },
         {
@@ -14573,7 +14429,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.57934401,
+          "p_adjusted": 0.58074002,
           "fdr_significant": false
         },
         {
@@ -14624,7 +14480,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.65204778,
+          "p_adjusted": 0.65351635,
           "fdr_significant": false
         },
         {
@@ -14777,7 +14633,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.53535861,
+          "p_adjusted": 0.53805563,
           "fdr_significant": false
         },
         {
@@ -14828,7 +14684,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "cost",
           "bonferroni_significant": true,
-          "p_adjusted": 8.923e-05,
+          "p_adjusted": 9.032e-05,
           "fdr_significant": true
         },
         {
@@ -15185,7 +15041,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "thinking",
           "bonferroni_significant": true,
-          "p_adjusted": 8.923e-05,
+          "p_adjusted": 9.032e-05,
           "fdr_significant": true
         },
         {
@@ -15236,7 +15092,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.59754222,
+          "p_adjusted": 0.59895152,
           "fdr_significant": false
         },
         {
@@ -15287,7 +15143,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.37592339,
+          "p_adjusted": 0.37713605,
           "fdr_significant": false
         },
         {
@@ -15338,7 +15194,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.47809716,
+          "p_adjusted": 0.4807313,
           "fdr_significant": false
         },
         {
@@ -15389,7 +15245,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.53172638,
+          "p_adjusted": 0.53309329,
           "fdr_significant": false
         }
       ],
@@ -15420,7 +15276,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.34943877,
+          "p_adjusted": 0.35060357,
           "fdr_significant": false
         },
         {
@@ -15449,7 +15305,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.26975393,
+          "p_adjusted": 0.26873599,
           "fdr_significant": false
         },
         {
@@ -15478,7 +15334,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.90478984,
+          "p_adjusted": 0.90114884,
           "fdr_significant": false
         },
         {
@@ -15507,7 +15363,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.47809716,
+          "p_adjusted": 0.4807313,
           "fdr_significant": false
         },
         {
@@ -15536,7 +15392,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.56195541,
+          "p_adjusted": 0.56332938,
           "fdr_significant": false
         },
         {
@@ -15565,7 +15421,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.54883946,
+          "p_adjusted": 0.55019797,
           "fdr_significant": false
         },
         {
@@ -15594,7 +15450,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.60291933,
+          "p_adjusted": 0.60429273,
           "fdr_significant": false
         },
         {
@@ -15623,7 +15479,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.59814926,
+          "p_adjusted": 0.5995403,
           "fdr_significant": false
         },
         {
@@ -15652,7 +15508,7 @@
           "cross_cut": "task_type:bugfix",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.60291933,
+          "p_adjusted": 0.60429273,
           "fdr_significant": false
         }
       ]
@@ -15663,11 +15519,11 @@
         {
           "test": "chi-square",
           "field": "task_completion",
-          "chi2": 3.2866,
-          "p_value": 0.511056,
-          "dof": 4,
-          "cramers_v": 0.1103,
-          "effect_size": 0.1103,
+          "chi2": 2.8883,
+          "p_value": 0.409163,
+          "dof": 3,
+          "cramers_v": 0.1034,
+          "effect_size": 0.1034,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
@@ -15675,22 +15531,19 @@
             "complete",
             "failed",
             "interrupted",
-            "not_started",
             "partial"
           ],
           "counts": {
             "opus-4-5": {
               "complete": 88,
               "failed": 7,
-              "interrupted": 7,
-              "not_started": 1,
+              "interrupted": 8,
               "partial": 89
             },
             "opus-4-6": {
               "complete": 30,
               "failed": 1,
               "interrupted": 3,
-              "not_started": 0,
               "partial": 44
             }
           },
@@ -15701,7 +15554,7 @@
           "cross_cut": "task_type:feature",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.61164847,
+          "p_adjusted": 0.54383725,
           "fdr_significant": false
         },
         {
@@ -15742,7 +15595,7 @@
           "cross_cut": "task_type:feature",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.48346322,
+          "p_adjusted": 0.48608362,
           "fdr_significant": false
         },
         {
@@ -15786,7 +15639,7 @@
           "cross_cut": "task_type:feature",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.5168993,
+          "p_adjusted": 0.51825244,
           "fdr_significant": false
         },
         {
@@ -15906,7 +15759,7 @@
           "cross_cut": "task_type:feature",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.18428436,
+          "p_adjusted": 0.18349003,
           "fdr_significant": false
         },
         {
@@ -15988,7 +15841,7 @@
           "cross_cut": "task_type:feature",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.53535861,
+          "p_adjusted": 0.53724482,
           "fdr_significant": false
         }
       ],
@@ -16092,7 +15945,7 @@
           "cross_cut": "task_type:feature",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.03456786,
+          "p_adjusted": 0.03478257,
           "fdr_significant": true
         },
         {
@@ -16143,7 +15996,7 @@
           "cross_cut": "task_type:feature",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.0031012,
+          "p_adjusted": 0.00312992,
           "fdr_significant": true
         },
         {
@@ -16194,7 +16047,7 @@
           "cross_cut": "task_type:feature",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.06288067,
+          "p_adjusted": 0.06324626,
           "fdr_significant": false
         },
         {
@@ -16296,7 +16149,7 @@
           "cross_cut": "task_type:feature",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.89645475,
+          "p_adjusted": 0.89284001,
           "fdr_significant": false
         },
         {
@@ -16398,7 +16251,7 @@
           "cross_cut": "task_type:feature",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.1803522,
+          "p_adjusted": 0.17957145,
           "fdr_significant": false
         },
         {
@@ -16449,7 +16302,7 @@
           "cross_cut": "task_type:feature",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.59814926,
+          "p_adjusted": 0.5995403,
           "fdr_significant": false
         },
         {
@@ -16602,7 +16455,7 @@
           "cross_cut": "task_type:feature",
           "theme": "thinking",
           "bonferroni_significant": false,
-          "p_adjusted": 0.59754222,
+          "p_adjusted": 0.59895152,
           "fdr_significant": false
         },
         {
@@ -16704,7 +16557,7 @@
           "cross_cut": "task_type:feature",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.21390335,
+          "p_adjusted": 0.21213556,
           "fdr_significant": false
         },
         {
@@ -16857,7 +16710,7 @@
           "cross_cut": "task_type:feature",
           "theme": "thinking",
           "bonferroni_significant": false,
-          "p_adjusted": 0.03452629,
+          "p_adjusted": 0.03474207,
           "fdr_significant": true
         },
         {
@@ -16908,7 +16761,7 @@
           "cross_cut": "task_type:feature",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.92452656,
+          "p_adjusted": 0.92268853,
           "fdr_significant": false
         },
         {
@@ -17061,7 +16914,7 @@
           "cross_cut": "task_type:feature",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.81133961,
+          "p_adjusted": 0.80964225,
           "fdr_significant": false
         }
       ],
@@ -17092,7 +16945,7 @@
           "cross_cut": "task_type:feature",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.53535861,
+          "p_adjusted": 0.53805563,
           "fdr_significant": false
         },
         {
@@ -17121,7 +16974,7 @@
           "cross_cut": "task_type:feature",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.6571963,
+          "p_adjusted": 0.65866654,
           "fdr_significant": false
         },
         {
@@ -17150,7 +17003,7 @@
           "cross_cut": "task_type:feature",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.43280748,
+          "p_adjusted": 0.43546274,
           "fdr_significant": false
         },
         {
@@ -17179,7 +17032,7 @@
           "cross_cut": "task_type:feature",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.46367773,
+          "p_adjusted": 0.46502956,
           "fdr_significant": false
         },
         {
@@ -17208,7 +17061,7 @@
           "cross_cut": "task_type:feature",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.62977868,
+          "p_adjusted": 0.63120352,
           "fdr_significant": false
         },
         {
@@ -17295,7 +17148,7 @@
           "cross_cut": "task_type:feature",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.23771239,
+          "p_adjusted": 0.23674999,
           "fdr_significant": false
         },
         {
@@ -17370,7 +17223,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.12546571,
+          "p_adjusted": 0.12611579,
           "fdr_significant": false
         },
         {
@@ -17411,7 +17264,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.0413792,
+          "p_adjusted": 0.04162848,
           "fdr_significant": true
         },
         {
@@ -17455,7 +17308,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.46840961,
+          "p_adjusted": 0.47103375,
           "fdr_significant": false
         },
         {
@@ -17493,7 +17346,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.45013361,
+          "p_adjusted": 0.45146932,
           "fdr_significant": false
         },
         {
@@ -17572,7 +17425,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.12471175,
+          "p_adjusted": 0.12536469,
           "fdr_significant": false
         },
         {
@@ -17610,7 +17463,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.48346322,
+          "p_adjusted": 0.48608362,
           "fdr_significant": false
         },
         {
@@ -17648,7 +17501,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.32751622,
+          "p_adjusted": 0.3286417,
           "fdr_significant": false
         }
       ],
@@ -17701,7 +17554,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.0300299,
+          "p_adjusted": 0.03021996,
           "fdr_significant": true
         },
         {
@@ -17752,7 +17605,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.47809716,
+          "p_adjusted": 0.4807313,
           "fdr_significant": false
         },
         {
@@ -17803,7 +17656,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.43342787,
+          "p_adjusted": 0.4360788,
           "fdr_significant": false
         },
         {
@@ -17905,7 +17758,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.6709585,
+          "p_adjusted": 0.67244952,
           "fdr_significant": false
         },
         {
@@ -18007,7 +17860,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.47809716,
+          "p_adjusted": 0.4807313,
           "fdr_significant": false
         },
         {
@@ -18058,7 +17911,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.46840961,
+          "p_adjusted": 0.47103375,
           "fdr_significant": false
         },
         {
@@ -18109,7 +17962,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.4445416,
+          "p_adjusted": 0.44587256,
           "fdr_significant": false
         },
         {
@@ -18160,7 +18013,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.07179158,
+          "p_adjusted": 0.07219948,
           "fdr_significant": false
         },
         {
@@ -18211,7 +18064,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.26073612,
+          "p_adjusted": 0.25970555,
           "fdr_significant": false
         },
         {
@@ -18313,7 +18166,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.23771239,
+          "p_adjusted": 0.23674999,
           "fdr_significant": false
         },
         {
@@ -18466,7 +18319,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00339799,
+          "p_adjusted": 0.00342888,
           "fdr_significant": true
         },
         {
@@ -18517,7 +18370,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "thinking",
           "bonferroni_significant": false,
-          "p_adjusted": 0.37458353,
+          "p_adjusted": 0.37580367,
           "fdr_significant": false
         },
         {
@@ -18810,7 +18663,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.05647616,
+          "p_adjusted": 0.05680838,
           "fdr_significant": false
         },
         {
@@ -18839,7 +18692,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.46658255,
+          "p_adjusted": 0.4679233,
           "fdr_significant": false
         },
         {
@@ -18868,7 +18721,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.27690799,
+          "p_adjusted": 0.27588619,
           "fdr_significant": false
         },
         {
@@ -18897,7 +18750,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.27044676,
+          "p_adjusted": 0.26943004,
           "fdr_significant": false
         },
         {
@@ -18955,7 +18808,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.54883946,
+          "p_adjusted": 0.55019797,
           "fdr_significant": false
         },
         {
@@ -18984,7 +18837,7 @@
           "cross_cut": "task_type:greenfield",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.27690799,
+          "p_adjusted": 0.27588619,
           "fdr_significant": false
         }
       ]
@@ -18995,47 +18848,32 @@
         {
           "test": "chi-square",
           "field": "task_completion",
-          "chi2": 11.6744,
-          "p_value": 0.166333,
-          "dof": 8,
-          "cramers_v": 0.1152,
-          "effect_size": 0.1152,
+          "chi2": 6.5635,
+          "p_value": 0.087192,
+          "dof": 3,
+          "cramers_v": 0.0864,
+          "effect_size": 0.0864,
           "effect_size_label": "negligible",
           "significant_p05": false,
-          "low_expected_warning": true,
+          "low_expected_warning": false,
           "categories": [
             "complete",
             "failed",
-            "in_progress",
-            "incomplete",
             "interrupted",
-            "not_started",
-            "partial",
-            "uncertain",
-            "unclear"
+            "partial"
           ],
           "counts": {
             "opus-4-5": {
               "complete": 463,
               "failed": 41,
-              "in_progress": 1,
-              "incomplete": 12,
-              "interrupted": 55,
-              "not_started": 1,
-              "partial": 76,
-              "uncertain": 1,
-              "unclear": 1
+              "interrupted": 56,
+              "partial": 91
             },
             "opus-4-6": {
               "complete": 180,
               "failed": 8,
-              "in_progress": 0,
-              "incomplete": 0,
               "interrupted": 12,
-              "not_started": 0,
-              "partial": 28,
-              "uncertain": 0,
-              "unclear": 0
+              "partial": 28
             }
           },
           "n": {
@@ -19045,7 +18883,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.3098245,
+          "p_adjusted": 0.19535278,
           "fdr_significant": false
         },
         {
@@ -19086,7 +18924,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.60291933,
+          "p_adjusted": 0.60429273,
           "fdr_significant": false
         },
         {
@@ -19171,7 +19009,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": null,
           "bonferroni_significant": false,
-          "p_adjusted": 0.85105759,
+          "p_adjusted": 0.84756965,
           "fdr_significant": false
         },
         {
@@ -19209,7 +19047,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.08568362,
+          "p_adjusted": 0.08615184,
           "fdr_significant": false
         },
         {
@@ -19253,7 +19091,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.60291933,
+          "p_adjusted": 0.60429273,
           "fdr_significant": false
         },
         {
@@ -19291,7 +19129,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.03433541,
+          "p_adjusted": 0.03455135,
           "fdr_significant": true
         }
       ],
@@ -19344,7 +19182,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.08913221,
+          "p_adjusted": 0.08961663,
           "fdr_significant": false
         },
         {
@@ -19497,7 +19335,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.43494285,
+          "p_adjusted": 0.4375709,
           "fdr_significant": false
         },
         {
@@ -19548,7 +19386,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.56052996,
+          "p_adjusted": 0.56190718,
           "fdr_significant": false
         },
         {
@@ -19599,7 +19437,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.46840961,
+          "p_adjusted": 0.47103375,
           "fdr_significant": false
         },
         {
@@ -19701,7 +19539,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.12546571,
+          "p_adjusted": 0.12611579,
           "fdr_significant": false
         },
         {
@@ -19752,7 +19590,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.60291933,
+          "p_adjusted": 0.60429273,
           "fdr_significant": false
         },
         {
@@ -19905,7 +19743,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "thinking",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00531736,
+          "p_adjusted": 0.0053636,
           "fdr_significant": true
         },
         {
@@ -19956,7 +19794,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.08185258,
+          "p_adjusted": 0.0823048,
           "fdr_significant": false
         },
         {
@@ -20007,7 +19845,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00229893,
+          "p_adjusted": 0.00232061,
           "fdr_significant": true
         },
         {
@@ -20262,7 +20100,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.37757755,
+          "p_adjusted": 0.37878774,
           "fdr_significant": false
         },
         {
@@ -20313,7 +20151,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.39514158,
+          "p_adjusted": 0.39761895,
           "fdr_significant": false
         },
         {
@@ -20364,7 +20202,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.43494285,
+          "p_adjusted": 0.4375709,
           "fdr_significant": false
         }
       ],
@@ -20395,7 +20233,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.37431833,
+          "p_adjusted": 0.37554159,
           "fdr_significant": false
         },
         {
@@ -20424,7 +20262,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.46658255,
+          "p_adjusted": 0.4679233,
           "fdr_significant": false
         },
         {
@@ -20453,7 +20291,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.06537057,
+          "p_adjusted": 0.06574412,
           "fdr_significant": false
         },
         {
@@ -20482,7 +20320,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.24432334,
+          "p_adjusted": 0.24334212,
           "fdr_significant": false
         },
         {
@@ -20511,7 +20349,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.65534106,
+          "p_adjusted": 0.65681043,
           "fdr_significant": false
         },
         {
@@ -20598,7 +20436,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.34784395,
+          "p_adjusted": 0.34900731,
           "fdr_significant": false
         },
         {
@@ -20627,7 +20465,7 @@
           "cross_cut": "iteration:one_shot",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.43494285,
+          "p_adjusted": 0.4375709,
           "fdr_significant": false
         }
       ]
@@ -20638,44 +20476,32 @@
         {
           "test": "chi-square",
           "field": "task_completion",
-          "chi2": 3.2272,
-          "p_value": 0.863216,
-          "dof": 7,
-          "cramers_v": 0.0848,
-          "effect_size": 0.0848,
+          "chi2": 1.3,
+          "p_value": 0.729128,
+          "dof": 3,
+          "cramers_v": 0.0538,
+          "effect_size": 0.0538,
           "effect_size_label": "negligible",
           "significant_p05": false,
           "low_expected_warning": true,
           "categories": [
             "complete",
             "failed",
-            "incomplete",
             "interrupted",
-            "not_started",
-            "partial",
-            "uncertain",
-            "unclear"
+            "partial"
           ],
           "counts": {
             "opus-4-5": {
               "complete": 125,
               "failed": 7,
-              "incomplete": 2,
-              "interrupted": 7,
-              "not_started": 1,
-              "partial": 164,
-              "uncertain": 1,
-              "unclear": 1
+              "interrupted": 8,
+              "partial": 168
             },
             "opus-4-6": {
               "complete": 50,
               "failed": 4,
-              "incomplete": 2,
               "interrupted": 3,
-              "not_started": 0,
-              "partial": 82,
-              "uncertain": 0,
-              "unclear": 0
+              "partial": 84
             }
           },
           "n": {
@@ -20685,7 +20511,7 @@
           "cross_cut": "iteration:minor",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.91572126,
+          "p_adjusted": 0.80964225,
           "fdr_significant": false
         },
         {
@@ -20852,7 +20678,7 @@
           "cross_cut": "iteration:minor",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.40997663,
+          "p_adjusted": 0.41252307,
           "fdr_significant": false
         },
         {
@@ -20896,7 +20722,7 @@
           "cross_cut": "iteration:minor",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.59609274,
+          "p_adjusted": 0.59750864,
           "fdr_significant": false
         },
         {
@@ -20934,7 +20760,7 @@
           "cross_cut": "iteration:minor",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.8377739,
+          "p_adjusted": 0.83431917,
           "fdr_significant": false
         }
       ],
@@ -20987,7 +20813,7 @@
           "cross_cut": "iteration:minor",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.46840961,
+          "p_adjusted": 0.47103375,
           "fdr_significant": false
         },
         {
@@ -21038,7 +20864,7 @@
           "cross_cut": "iteration:minor",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.53535861,
+          "p_adjusted": 0.53805563,
           "fdr_significant": false
         },
         {
@@ -21089,7 +20915,7 @@
           "cross_cut": "iteration:minor",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.58425069,
+          "p_adjusted": 0.58565514,
           "fdr_significant": false
         },
         {
@@ -21140,7 +20966,7 @@
           "cross_cut": "iteration:minor",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.53535861,
+          "p_adjusted": 0.53805563,
           "fdr_significant": false
         },
         {
@@ -21191,7 +21017,7 @@
           "cross_cut": "iteration:minor",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.50639727,
+          "p_adjusted": 0.50911984,
           "fdr_significant": false
         },
         {
@@ -21242,7 +21068,7 @@
           "cross_cut": "iteration:minor",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.34784395,
+          "p_adjusted": 0.34900731,
           "fdr_significant": false
         },
         {
@@ -21344,7 +21170,7 @@
           "cross_cut": "iteration:minor",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.23632425,
+          "p_adjusted": 0.23535966,
           "fdr_significant": false
         },
         {
@@ -21395,7 +21221,7 @@
           "cross_cut": "iteration:minor",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.54883946,
+          "p_adjusted": 0.55019797,
           "fdr_significant": false
         },
         {
@@ -21599,7 +21425,7 @@
           "cross_cut": "iteration:minor",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.91532966,
+          "p_adjusted": 0.911661,
           "fdr_significant": false
         },
         {
@@ -21650,7 +21476,7 @@
           "cross_cut": "iteration:minor",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.0413792,
+          "p_adjusted": 0.04162848,
           "fdr_significant": true
         },
         {
@@ -21956,7 +21782,7 @@
           "cross_cut": "iteration:minor",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.12595328,
+          "p_adjusted": 0.12659919,
           "fdr_significant": false
         },
         {
@@ -22007,7 +21833,7 @@
           "cross_cut": "iteration:minor",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.11941829,
+          "p_adjusted": 0.12004681,
           "fdr_significant": false
         }
       ],
@@ -22038,7 +21864,7 @@
           "cross_cut": "iteration:minor",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.88364656,
+          "p_adjusted": 0.88006178,
           "fdr_significant": false
         },
         {
@@ -22067,7 +21893,7 @@
           "cross_cut": "iteration:minor",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.60291933,
+          "p_adjusted": 0.60429273,
           "fdr_significant": false
         },
         {
@@ -22096,7 +21922,7 @@
           "cross_cut": "iteration:minor",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.46367773,
+          "p_adjusted": 0.46502956,
           "fdr_significant": false
         },
         {
@@ -22212,7 +22038,7 @@
           "cross_cut": "iteration:minor",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.32751622,
+          "p_adjusted": 0.3286417,
           "fdr_significant": false
         },
         {
@@ -22241,7 +22067,7 @@
           "cross_cut": "iteration:minor",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.34784395,
+          "p_adjusted": 0.34900731,
           "fdr_significant": false
         },
         {
@@ -22281,18 +22107,17 @@
         {
           "test": "chi-square",
           "field": "task_completion",
-          "chi2": 21.976,
-          "p_value": 0.000203,
-          "dof": 4,
-          "cramers_v": 0.1497,
-          "effect_size": 0.1497,
+          "chi2": 14.3134,
+          "p_value": 0.002508,
+          "dof": 3,
+          "cramers_v": 0.1209,
+          "effect_size": 0.1209,
           "effect_size_label": "negligible",
           "significant_p05": true,
           "low_expected_warning": true,
           "categories": [
             "complete",
             "failed",
-            "incomplete",
             "interrupted",
             "partial"
           ],
@@ -22300,14 +22125,12 @@
             "opus-4-5": {
               "complete": 14,
               "failed": 181,
-              "incomplete": 20,
               "interrupted": 104,
-              "partial": 446
+              "partial": 466
             },
             "opus-4-6": {
               "complete": 6,
               "failed": 38,
-              "incomplete": 0,
               "interrupted": 14,
               "partial": 157
             }
@@ -22319,7 +22142,7 @@
           "cross_cut": "iteration:significant",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00110708,
+          "p_adjusted": 0.01028474,
           "fdr_significant": true
         },
         {
@@ -22360,7 +22183,7 @@
           "cross_cut": "iteration:significant",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.46840961,
+          "p_adjusted": 0.47103375,
           "fdr_significant": false
         },
         {
@@ -22404,7 +22227,7 @@
           "cross_cut": "iteration:significant",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.00958399,
+          "p_adjusted": 0.00973612,
           "fdr_significant": true
         },
         {
@@ -22792,7 +22615,7 @@
           "cross_cut": "iteration:significant",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.004761,
+          "p_adjusted": 0.00480276,
           "fdr_significant": true
         },
         {
@@ -22843,7 +22666,7 @@
           "cross_cut": "iteration:significant",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.26118854,
+          "p_adjusted": 0.26016427,
           "fdr_significant": false
         },
         {
@@ -22894,7 +22717,7 @@
           "cross_cut": "iteration:significant",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.46367773,
+          "p_adjusted": 0.46502956,
           "fdr_significant": false
         },
         {
@@ -22945,7 +22768,7 @@
           "cross_cut": "iteration:significant",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.89114396,
+          "p_adjusted": 0.88754338,
           "fdr_significant": false
         },
         {
@@ -23200,7 +23023,7 @@
           "cross_cut": "iteration:significant",
           "theme": "thinking",
           "bonferroni_significant": false,
-          "p_adjusted": 0.04236093,
+          "p_adjusted": 0.04261459,
           "fdr_significant": true
         },
         {
@@ -23302,7 +23125,7 @@
           "cross_cut": "iteration:significant",
           "theme": "cost",
           "bonferroni_significant": false,
-          "p_adjusted": 0.02858959,
+          "p_adjusted": 0.02877285,
           "fdr_significant": true
         },
         {
@@ -23506,7 +23329,7 @@
           "cross_cut": "iteration:significant",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.84682407,
+          "p_adjusted": 0.8433392,
           "fdr_significant": false
         },
         {
@@ -23690,7 +23513,7 @@
           "cross_cut": "iteration:significant",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.26073612,
+          "p_adjusted": 0.25970555,
           "fdr_significant": false
         },
         {
@@ -23719,7 +23542,7 @@
           "cross_cut": "iteration:significant",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.56736087,
+          "p_adjusted": 0.56874467,
           "fdr_significant": false
         },
         {
@@ -23748,7 +23571,7 @@
           "cross_cut": "iteration:significant",
           "theme": "quality",
           "bonferroni_significant": false,
-          "p_adjusted": 0.51908331,
+          "p_adjusted": 0.52043157,
           "fdr_significant": false
         },
         {
@@ -23806,7 +23629,7 @@
           "cross_cut": "iteration:significant",
           "theme": "behavior",
           "bonferroni_significant": false,
-          "p_adjusted": 0.07414619,
+          "p_adjusted": 0.07456509,
           "fdr_significant": false
         },
         {
@@ -23922,7 +23745,7 @@
           "cross_cut": "iteration:significant",
           "theme": "editing",
           "bonferroni_significant": false,
-          "p_adjusted": 0.88364656,
+          "p_adjusted": 0.88006178,
           "fdr_significant": false
         }
       ]

@@ -17,6 +17,32 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from models import discover_model_pair
 
 
+CANONICAL_COMPLETIONS = {"complete", "partial", "interrupted", "failed"}
+
+
+def normalize_completion(value):
+    """Normalize task_completion to one of 4 canonical values.
+
+    LLM annotator sometimes returns verbose strings like
+    'partial - agent diagnosed but did not implement the fix' or
+    non-standard categories like 'incomplete', 'in_progress', etc.
+    """
+    if not value or not isinstance(value, str):
+        return "partial"
+    v = value.strip().lower()
+    if v in CANONICAL_COMPLETIONS:
+        return v
+    if v.startswith("partial"):
+        return "partial"
+    if v.startswith("failed"):
+        return "failed"
+    if v in ("incomplete", "in_progress", "uncertain", "unclear"):
+        return "partial"
+    if v == "not_started":
+        return "interrupted"
+    return "partial"
+
+
 def load_json(path):
     """Load JSON file, return empty list if missing."""
     if not Path(path).exists():
@@ -121,6 +147,10 @@ def enrich_model(data_dir, analysis_dir, model):
             rec.setdefault("task_type", classification.get("type"))
         else:
             rec.setdefault("task_type", None)
+
+        # Normalize task_completion to canonical values
+        if "task_completion" in rec:
+            rec["task_completion"] = normalize_completion(rec["task_completion"])
 
         # Compute derived fields
         duration = rec.get("duration_seconds") or 0

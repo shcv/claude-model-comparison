@@ -449,7 +449,7 @@
                     <div class="stat-card">
                         <div class="label">Per-Task Cost</div>
                         <div class="value v-dark"><!-- var: cost.avg_cost_a -->$2.46<!-- /var --> vs <!-- var: cost.avg_cost_b -->$2.62<!-- /var --></div>
-                        <div class="detail">4.6 saves 10&ndash;35% at trivial-moderate; +29% at major (&sect;2)</div>
+                        <div class="detail">4.6 saves 9&ndash;35% at trivial-moderate; +29% at major (&sect;2)</div>
                     </div>
                     <div class="stat-card">
                         <div class="label">Output Token Ratio</div>
@@ -482,19 +482,19 @@
 
                 <h3>2. It thinks less often, but more carefully</h3>
 
-                <p>The single largest effect across all <!-- var: findings.total_tests -->529<!-- /var --> tests is thinking fraction (d=<!-- var: thinking.effect_d -->0.67<!-- /var -->, <a href="#thinking">&sect;3</a>). Opus 4.5 activates extended thinking on 75% of requests regardless of difficulty; 4.6 activates on 58% but averages 4,175 characters when it does (vs 2,635). On trivial tasks, 4.6 often skips thinking entirely. On complex tasks, it thinks deeply. This calibration means compute is allocated where it matters rather than spread uniformly across every interaction.</p>
+                <p>The largest overall effect across all <!-- var: findings.total_tests -->529<!-- /var --> tests is thinking fraction (d=<!-- var: thinking.effect_d -->0.67<!-- /var -->, medium, <a href="#thinking">&sect;3</a>). Opus 4.5 activates extended thinking on 75% of requests regardless of difficulty; 4.6 activates on 58% but averages 4,175 characters when it does (vs 2,635). On trivial tasks, 4.6 often skips thinking entirely. On complex tasks, it thinks deeply. This calibration means compute is allocated where it matters rather than spread uniformly across every interaction.</p>
 
                 <h3>3. Fewer rewrites, better first-attempt accuracy</h3>
 
-                <p>Opus 4.6 rewrites its own edits 10.3% of the time vs 16.6%&mdash;a 38% reduction. Its self-correction rate is actually <em>higher</em> (3.3% vs 1.2%), meaning it catches its own mistakes rather than having the user point them out. Failure rates drop from 13.2% to 8.6%, and alignment scores improve significantly (p=0.000023, one of 15 overall Bonferroni survivors). The &ldquo;plan first&rdquo; approach appears to pay off in execution accuracy (<a href="#quality">&sect;5</a>, <a href="#edits">&sect;6</a>).</p>
+                <p>Opus 4.6 rewrites its own edits 10.3% of the time vs 16.6%&mdash;a 38% reduction. Its self-correction rate is actually <em>higher</em> (3.3% vs 1.9%), meaning it catches its own mistakes rather than having the user point them out. Failure rates drop from 13.2% to 8.6%, and alignment scores improve significantly (p=0.000023, one of 15 overall Bonferroni survivors). The &ldquo;plan first&rdquo; approach appears to pay off in execution accuracy (<a href="#quality">&sect;5</a>, <a href="#edits">&sect;6</a>).</p>
 
                 <h3>4. Sessions get longer&mdash;you trust it with more</h3>
 
-                <p>Median task duration rises 60% (67s vs 42s), with fewer ultra-short interactions (34% of tasks under 30 seconds vs 42%). The task mix shifts toward moderate-to-complex work issued in a single instruction, and 4.6 runs more tasks in the background for parallel execution. This isn&rsquo;t purely a model capability difference&mdash;it&rsquo;s a workflow adaptation. When the model handles larger tasks reliably, the user gives it larger tasks, waits longer, and intervenes less. The 8&times; increase in planning mode (<a href="#behavior">&sect;4</a>) and 53% more tool calls per task (<a href="#complexity">&sect;7</a>) are partly a consequence of this delegation shift.</p>
+                <p>Median task duration rises 58% (67s vs 42s), with fewer ultra-short interactions (34% of tasks under 30 seconds vs 42%). The task mix shifts toward moderate-to-complex work issued in a single instruction, and 4.6 runs more tasks in the background for parallel execution. This isn&rsquo;t purely a model capability difference&mdash;it&rsquo;s a workflow adaptation. When the model handles larger tasks reliably, the user gives it larger tasks, waits longer, and intervenes less. The 8&times; increase in planning mode (<a href="#behavior">&sect;4</a>) and 53% more tool calls per task (<a href="#complexity">&sect;7</a>) are partly a consequence of this delegation shift.</p>
 
                 <h3>5. Cost stays flat where it counts</h3>
 
-                <p>Despite 2.4&times; more output tokens and 53% more tool calls per task, 4.6 is 10&ndash;35% <em>cheaper</em> at trivial through moderate complexity&mdash;the bulk of daily work. The reason is counterintuitive: output tokens are less than 7% of per-task cost, while cache operations account for ~95%. Opus 4.6 writes 24% less to cache (the most expensive token category at $18.75/MTok), more than offsetting its higher output and cache reads. Cost only tips higher at 30+ API requests, where cumulative cache reads compound past the write savings. Overall per-task cost is <!-- var: cost.avg_cost_b -->$2.62<!-- /var --> vs <!-- var: cost.avg_cost_a -->$2.46<!-- /var -->: functionally neutral for a meaningfully different style of work (<a href="#cost">&sect;2</a>).</p>
+                <p>Despite 2.4&times; more output tokens and 53% more tool calls per task, 4.6 is 9&ndash;35% <em>cheaper</em> at trivial through moderate complexity&mdash;the bulk of daily work. The reason is counterintuitive: output tokens are less than 7% of per-task cost, while cache operations account for ~95%. Opus 4.6 writes 24% less to cache (the most expensive token category at $18.75/MTok), more than offsetting its higher output and cache reads. Cost only tips higher at 30+ API requests, where cumulative cache reads compound past the write savings. Overall per-task cost is <!-- var: cost.avg_cost_b -->$2.62<!-- /var --> vs <!-- var: cost.avg_cost_a -->$2.46<!-- /var -->: functionally neutral for a meaningfully different style of work (<a href="#cost">&sect;2</a>).</p>
 
                 <p>The data is consistent with a tentative characterization: Opus 4.5 acts first and adjusts, while Opus 4.6 investigates first and implements in concentrated bursts. The confounded study design means this framing is a hypothesis, not a conclusion. The analysis was iterative&mdash;several initial findings were revised or reversed when more direct signals became available (<a href="#methodology">&sect;10</a>).</p>
             </section>
@@ -545,8 +545,8 @@
                 </div>
                 <ol>
                     <li><a href="#dataset">Dataset at a Glance</a><span class="finding"><!-- var: dataset.total_sessions -->463<!-- /var --> sessions, <!-- var: dataset.total_tasks -->2,320<!-- /var --> tasks, <!-- var: dataset.total_projects -->35<!-- /var --> projects, <!-- var: dataset.total_cost -->$7,411<!-- /var --> total cost</span></li>
-                    <li><a href="#cost">Token Economy &amp; Cost</a><span class="finding">4.6 10&ndash;35% cheaper trivial&ndash;moderate despite 2.4&times; output</span></li>
-                    <li><a href="#thinking">Thinking &amp; Calibration</a><span class="finding">d=<!-- var: thinking.effect_d -->0.67<!-- /var --> LARGE effect, #1 of <!-- var: findings.total_tests -->529<!-- /var --> tests</span></li>
+                    <li><a href="#cost">Token Economy &amp; Cost</a><span class="finding">4.6 9&ndash;35% cheaper trivial&ndash;moderate despite 2.4&times; output</span></li>
+                    <li><a href="#thinking">Thinking &amp; Calibration</a><span class="finding">d=<!-- var: thinking.effect_d -->0.67<!-- /var --> medium effect, #1 overall Bonferroni survivor</span></li>
                     <li><a href="#behavior">Behavioral Patterns</a><span class="finding">8&times; planning; 74% read-only Explore; effort front-loading</span></li>
                     <li><a href="#quality">Quality &amp; Satisfaction</a><span class="finding">Alignment survives Bonferroni; 4.6 fails less (8.6% vs 13.2%)</span></li>
                     <li><a href="#edits">Edit Accuracy</a><span class="finding">4.6 rewrites 10.3% vs 16.6%</span></li>
@@ -598,13 +598,13 @@
 <!-- ===== 2. TOKEN ECONOMY &amp; COST ===== -->
             <section id="cost"><h2>2. Token Economy &amp; Cost</h2>
 
-                <p>Opus 4.6 costs 7% more per task on average (<!-- var: cost.avg_cost_b -->$2.62<!-- /var --> vs <!-- var: cost.avg_cost_a -->$2.46<!-- /var -->), despite producing 2.4&times; more output tokens and making more API round-trips (9.6 vs 7.5 requests/task). But this aggregate masks a complexity-dependent pattern: at trivial through moderate levels, 4.6 is 10&ndash;35% <em>cheaper</em>, driven by superior cache economics&mdash;not output efficiency. Output tokens account for less than 7% of per-task cost; cache operations account for ~95%. 4.6 achieves a leaner cache footprint, writing 24% fewer tokens at the most expensive token category. The cost advantage reverses at complex and major tiers, where accumulated cache reads over many requests outweigh the write savings.</p>
+                <p>Opus 4.6 costs ~6.5% more per task on average (<!-- var: cost.avg_cost_b -->$2.62<!-- /var --> vs <!-- var: cost.avg_cost_a -->$2.46<!-- /var -->), despite producing 2.4&times; more output tokens and making more API round-trips (9.6 vs 7.5 requests/task). But this aggregate masks a complexity-dependent pattern: at trivial through moderate levels, 4.6 is 9&ndash;35% <em>cheaper</em>, driven by superior cache economics&mdash;not output efficiency. Output tokens account for less than 7% of per-task cost; cache operations account for ~95%. 4.6 achieves a leaner cache footprint, writing 24% fewer tokens at the most expensive token category. The cost advantage reverses at complex and major tiers, where accumulated cache reads over many requests outweigh the write savings.</p>
 
                 <div class="stat-row">
                     <div class="stat-card">
                         <div class="label">Per-Task Cost</div>
                         <div class="value v-dark"><!-- var: cost.avg_cost_a -->$2.46<!-- /var --> vs <!-- var: cost.avg_cost_b -->$2.62<!-- /var --></div>
-                        <div class="detail">4.6 is 7% more expensive overall; cheaper at trivial&ndash;moderate</div>
+                        <div class="detail">4.6 is ~6.5% more expensive overall; cheaper at trivial&ndash;moderate</div>
                     </div>
                     <div class="stat-card">
                         <div class="label">Output Token Ratio</div>
@@ -726,7 +726,7 @@
                 <p>Normalizing by session hours rather than task count: Opus 4.5 costs $12.75/session-hour ($5,292 over 415.2h) vs $6.81/session-hour for Opus 4.6 ($2,119 over 310.9h). Session hours measure wall-clock time from first to last message, so this metric includes idle time and is not a direct measure of active coding cost.</p>
 
                 <div class="callout green">
-                    <strong>Cost pattern (with caveats):</strong> Despite producing 2.4&times; more output and costing 7% more per task overall, Opus 4.6 is 10&ndash;35% <em>cheaper</em> at trivial through moderate complexity. The explanation is structural: output is &lt;7% of cost, caching is ~95%, and 4.6 writes 24% less to cache (the most expensive token category at $18.75/MTok). At major tiers, accumulated cache reads over 30+ requests exceed the write savings (+29%), but this is based on 18 vs 19 tasks. These figures come from organic sessions where task mix and session structure differ between models.
+                    <strong>Cost pattern (with caveats):</strong> Despite producing 2.4&times; more output and costing ~6.5% more per task overall, Opus 4.6 is 9&ndash;35% <em>cheaper</em> at trivial through moderate complexity. The explanation is structural: output is &lt;7% of cost, caching is ~95%, and 4.6 writes 24% less to cache (the most expensive token category at $18.75/MTok). At major tiers, accumulated cache reads over 30+ requests exceed the write savings (+29%), but this is based on 18 vs 19 tasks. These figures come from organic sessions where task mix and session structure differ between models.
                 </div>
 
                 <h3>Per-Request Output</h3>
@@ -771,7 +771,7 @@
 </table>
 <!-- /GENERATED-TABLE: per-request-output -->
 
-                <p>Per-request output is the 3rd largest effect size across all 529 tests. Opus 4.6 produces more tokens per API round-trip at every complexity level, concentrating work into fewer, larger responses rather than many small incremental calls.</p>
+                <p>Per-request output survives Bonferroni correction (d=0.33, small). Opus 4.6 produces more tokens per API round-trip at every complexity level, concentrating work into fewer, larger responses rather than many small incremental calls.</p>
 
                 <h3>Why Output Doesn&rsquo;t Drive Cost</h3>
 
@@ -805,7 +805,7 @@
                 <h3>Cross-Cut Detail</h3>
                 <!-- expand: findings-cost -->
 
-                <p>The cost difference raises a natural question: does 4.6&rsquo;s different spending pattern correspond to different thinking strategies? The next section examines thinking calibration&mdash;the single largest effect in the study.</p>
+                <p>The cost difference raises a natural question: does 4.6&rsquo;s different spending pattern correspond to different thinking strategies? The next section examines thinking calibration&mdash;the largest overall effect in the study.</p>
             </section>
 
             <!-- ===== 3. THINKING & CALIBRATION ===== -->
@@ -816,7 +816,7 @@
                     <div class="stat-card">
                         <div class="label">Thinking Fraction Effect</div>
                         <div class="value v-blue">d=<!-- var: thinking.effect_d -->0.67<!-- /var --></div>
-                        <div class="detail">#1 effect of <!-- var: findings.total_tests -->529<!-- /var --> tests (LARGE)</div>
+                        <div class="detail">#1 overall Bonferroni survivor (medium)</div>
                     </div>
                     <div class="stat-card">
                         <div class="label">Thinking Frequency</div>
@@ -830,7 +830,7 @@
                     </div>
                 </div>
 
-                <p>Thinking fraction is the single largest effect in the study (d=<!-- var: thinking.effect_d -->0.67<!-- /var -->, LARGE). Opus 4.5 thinks on <!-- var: cost.thinking_ratio_a -->75%<!-- /var --> of tasks but shallowly; Opus 4.6 thinks on <!-- var: cost.thinking_ratio_b -->58%<!-- /var --> of tasks but more deeply when it does (<!-- var: cost.avg_thinking_when_used_b -->4,175<!-- /var --> vs <!-- var: cost.avg_thinking_when_used_a -->2,635<!-- /var --> chars). The pattern suggests 4.6 has better calibration of <em>when</em> thinking is needed, reserving it for moderate-and-above complexity.</p>
+                <p>Thinking fraction is the largest overall effect in the study (d=<!-- var: thinking.effect_d -->0.67<!-- /var -->, medium by Cohen&rsquo;s convention). Opus 4.5 thinks on <!-- var: cost.thinking_ratio_a -->75%<!-- /var --> of tasks but shallowly; Opus 4.6 thinks on <!-- var: cost.thinking_ratio_b -->58%<!-- /var --> of tasks but more deeply when it does (<!-- var: cost.avg_thinking_when_used_b -->4,175<!-- /var --> vs <!-- var: cost.avg_thinking_when_used_a -->2,635<!-- /var --> chars). The pattern suggests 4.6 has better calibration of <em>when</em> thinking is needed, reserving it for moderate-and-above complexity.</p>
 
                 <h3>Calibration by Complexity</h3>
 
@@ -1106,7 +1106,7 @@
                 </div>
 
                 <div class="stat-note">
-                    <strong>Significance:</strong> Autonomy level distribution (p&lt;0.001, Cram&eacute;r&rsquo;s V=0.15) survives Bonferroni correction (threshold p&lt;0.0000945).
+                    <strong>Significance:</strong> Autonomy level distribution (p&lt;0.0000945, Cram&eacute;r&rsquo;s V=0.15) survives Bonferroni correction.
                 </div>
 
                 <h3>Planning Adoption</h3>
@@ -1259,9 +1259,9 @@
                     </div>
                 </div>
 
-                <p>LLM-annotated alignment scores (1&ndash;5 scale) show Opus 4.6 scoring higher on average, an effect that survives Bonferroni correction (p=<!-- var: quality.alignment_p -->0.000023<!-- /var -->, d=<!-- var: quality.alignment_d -->-0.21<!-- /var -->). The failed rate difference is also notable: 8.6% of 4.6 tasks fail vs 13.2% for 4.5 (p=0.003, marginal after Bonferroni correction). Both alignment and failure rate are LLM-classified&mdash;a Claude Haiku model reads each session transcript and assigns scores. The &ldquo;LLM quality judgement&rdquo; approach was abandoned as unreliable (see <a href="#methodology">&sect;10</a>), but alignment scoring proved more robust because it rates user-goal correspondence from observable signals rather than attempting to judge code quality directly.</p>
+                <p>LLM-annotated alignment scores (1&ndash;5 scale) show Opus 4.6 scoring higher on average, an effect that survives Bonferroni correction (p=<!-- var: quality.alignment_p -->0.000023<!-- /var -->, d=<!-- var: quality.alignment_d -->-0.21<!-- /var -->). The failed rate difference is also notable: 8.6% of 4.6 tasks fail vs 13.2% for 4.5 (p=0.003, significant at FDR but not Bonferroni). Both alignment and failure rate are LLM-classified&mdash;a Claude Haiku model reads each session transcript and assigns scores. The &ldquo;LLM quality judgement&rdquo; approach was abandoned as unreliable (see <a href="#methodology">&sect;10</a>), but alignment scoring proved more robust because it rates user-goal correspondence from observable signals rather than attempting to judge code quality directly.</p>
 
-                <p>Two categorical distributions&mdash;task completion and communication quality&mdash;also survive Bonferroni as chi-square tests, indicating the models differ in <em>how</em> they reach outcomes, not just in outcome rates. Note that the completion <em>distribution</em> test (p=0.000012) survives, while the individual completion <em>rate</em> proportion test (p=0.025) is marginal. All chi-square tests carry a low-expected-cell-count warning due to rare categories in the 20-status taxonomy.</p>
+                <p>Two categorical distributions&mdash;task completion and communication quality&mdash;also survive Bonferroni as chi-square tests, indicating the models differ in <em>how</em> they reach outcomes, not just in outcome rates. Note that the completion <em>distribution</em> test (p=0.000017) survives, while the individual completion <em>rate</em> proportion test (p=0.025) is marginal. All chi-square tests carry a low-expected-cell-count warning due to rare categories in the 20-status taxonomy.</p>
 
                 <h3>Completion Distribution</h3>
 <!-- GENERATED-TABLE: quality-completion -->
@@ -1590,8 +1590,8 @@
                 <div class="stat-row">
                     <div class="stat-card">
                         <div class="label">Median Task Duration</div>
-                        <div class="value v-dark">129.6s vs 94.0s</div>
-                        <div class="detail">4.6 takes longer per task (from timing analysis)</div>
+                        <div class="value v-dark">67s vs 42s</div>
+                        <div class="detail">4.6 takes 58% longer per task</div>
                     </div>
                     <div class="stat-card">
                         <div class="label">Explore Phase</div>
@@ -1605,7 +1605,7 @@
                     </div>
                 </div>
 
-                <p>Task duration survives Bonferroni correction (p=0.000001), though the effect size is negligible (d=0.005)&mdash;a case of statistical significance without practical significance, driven by sample size. Opus 4.6 takes longer per task (median 129.6s vs 94.0s from timing analysis). The explore phase runs 2.2&times; longer at median (<!-- var: sessions.explore_median_b -->68.7<!-- /var -->s vs <!-- var: sessions.explore_median_a -->31.3<!-- /var -->s). Effort distribution shows 4.6 allocates more tool calls to research (35.1% vs 28.3%) and fewer to implementation (17.5% vs 27.0%). Active-time cost is $25.09/hour for 4.6 vs $20.96/hour for 4.5 (5-min idle threshold).</p>
+                <p>Task duration survives Bonferroni correction (p=0.000001), though the effect size is negligible (d=0.005)&mdash;a case of statistical significance without practical significance, driven by sample size. Opus 4.6 takes longer per task (median 67s vs 42s, a 58% increase). The explore phase runs 2.2&times; longer at median (<!-- var: sessions.explore_median_b -->68.7<!-- /var -->s vs <!-- var: sessions.explore_median_a -->31.3<!-- /var -->s). Effort distribution shows 4.6 allocates more tool calls to research (35.1% vs 28.3%) and fewer to implementation (17.5% vs 27.0%). Active-time cost is $25.09/hour for 4.6 vs $20.96/hour for 4.5 (5-min idle threshold).</p>
 
                 <h3>Task Duration</h3>
 
@@ -1744,7 +1744,7 @@
                         <p><strong>Thinking:</strong> Thinks on 75% of tasks but shallowly (2,635 avg chars). Over-thinks trivial tasks (&sect;3).</p>
                         <p><strong>Subagents:</strong> 47% Explore, 37% general-purpose (implementation workers). Primarily autonomous (54%).</p>
                         <p><strong>Planning:</strong> Rarely uses planning mode (1.7%). Distributes research evenly through the task (&sect;4).</p>
-                        <p><strong>Observed strengths:</strong> Lower tool overhead (mean 8.8 calls/task). 28&ndash;35% cheaper at trivial-simple (&sect;2). Stable performance across session lengths (&sect;8).</p>
+                        <p><strong>Observed strengths:</strong> Lower tool overhead (mean 8.8 calls/task). ~6.5% cheaper overall per task (&sect;2). Stable performance across session lengths (&sect;8).</p>
                         <p><strong>Observed weaknesses:</strong> Higher rewrite rate (16.6%, &sect;6). Higher failure rate (13.2% vs 8.6%, &sect;5).</p>
                     </div>
                     <div class="profile-card" style="border-left:3px solid var(--blue);">
@@ -1754,7 +1754,7 @@
                         <p><strong>Subagents:</strong> 74% Explore (read-only research), 15% general-purpose. More autonomous (84%).</p>
                         <p><strong>Planning:</strong> Uses planning mode on 13.9% of tasks (82 of 591). 51% at complex, 72% at major (&sect;4).</p>
                         <p><strong>Observed strengths:</strong> Lower rewrite rate (10.3%, &sect;6). Lower failure rate (8.6%, &sect;5). Lower cost at trivial&ndash;moderate (&sect;2).</p>
-                        <p><strong>Observed weaknesses:</strong> 53% more tool calls per task (&sect;7). 7% more expensive overall. Costlier at major complexity (n=18, &sect;2).</p>
+                        <p><strong>Observed weaknesses:</strong> 53% more tool calls per task (&sect;7). ~6.5% more expensive overall. Costlier at major complexity (n=18, &sect;2).</p>
                     </div>
                 </div>
 
@@ -1764,7 +1764,7 @@
                         <tr><th>Task Type</th><th>Observed Pattern</th><th>Evidence &amp; Caveats</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td class="label-cell">Trivial / simple tasks</td><td>Similar completion rates</td><td>4.6 appears 28&ndash;35% cheaper (&sect;2); n=808/213 and 345/129</td></tr>
+                        <tr><td class="label-cell">Trivial / simple tasks</td><td>Similar completion rates</td><td>4.6 is 28&ndash;35% cheaper (&sect;2); n=808/213 and 345/129</td></tr>
                         <tr><td class="label-cell">Complex / major tasks</td><td>4.6 showed higher alignment</td><td>n=74+18 for 4.6 vs 190+19 for 4.5; confounded by project differences</td></tr>
                         <tr><td class="label-cell">Refactoring</td><td>4.6 produced 2.7&times; output tokens</td><td>7,908 vs 2,936 avg output (&sect;2); lower rewrite rate (&sect;6)</td></tr>
                         <tr><td class="label-cell">Investigation / research</td><td>4.6 used more Explore agents</td><td>74% read-only subagents (&sect;4); 2.2&times; longer explore phase (&sect;8)</td></tr>

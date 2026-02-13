@@ -56,9 +56,9 @@
 <tr><th class="label-cell">Metric</th><th class="right">Opus 4.5</th><th class="right">Opus 4.6</th></tr>
 </thead>
 <tbody>
-<tr><td class="label-cell">Proportion</td><td class="right mono">0.132</td><td class="right mono v-green">0.085</td></tr>
-<tr><td class="label-cell">Count</td><td class="right mono">229 / 1729</td><td class="right mono">50 / 591</td></tr>
-<tr><td class="label-cell">95% CI</td><td class="right mono">[0.117, 0.149]</td><td class="right mono">[0.065, 0.110]</td></tr>
+<tr><td class="label-cell">Proportion</td><td class="right mono">0.132</td><td class="right mono v-green">0.086</td></tr>
+<tr><td class="label-cell">Count</td><td class="right mono">229 / 1729</td><td class="right mono">51 / 591</td></tr>
+<tr><td class="label-cell">95% CI</td><td class="right mono">[0.117, 0.149]</td><td class="right mono">[0.066, 0.112]</td></tr>
 </tbody>
 </table>
 
@@ -67,9 +67,9 @@
 <tr><th class="label-cell">Test statistic</th><th class="right">Value</th></tr>
 </thead>
 <tbody>
-<tr><td class="label-cell">z statistic</td><td class="right mono">3.087</td></tr>
-<tr><td class="label-cell">p-value</td><td class="right mono">0.0020</td></tr>
-<tr><td class="label-cell">Cohen's h</td><td class="right mono">0.155</td></tr>
+<tr><td class="label-cell">z statistic</td><td class="right mono">2.973</td></tr>
+<tr><td class="label-cell">p-value</td><td class="right mono">0.0029</td></tr>
+<tr><td class="label-cell">Cohen's h</td><td class="right mono">0.149</td></tr>
 <tr><td class="label-cell">Effect size</td><td class="right">negligible</td></tr>
 </tbody>
 </table>
@@ -124,7 +124,7 @@
 
 <h3>Chi-Square Test: Task Completion Distribution</h3>
 
-<p><strong>Note:</strong> The full categorical breakdown includes 21 unique completion statuses. For clarity, simplified counts are shown below.</p>
+<p><strong>Note:</strong> The full categorical breakdown includes 4 unique completion statuses. For clarity, simplified counts are shown below.</p>
 
 <table>
 <thead>
@@ -132,10 +132,10 @@
 </thead>
 <tbody>
 <tr><td class="label-cell">Complete</td><td class="right mono">602</td><td class="right mono">236</td></tr>
-<tr><td class="label-cell">Partial</td><td class="right mono">691</td><td class="right mono">273</td></tr>
-<tr><td class="label-cell">Interrupted</td><td class="right mono">166</td><td class="right mono">29</td></tr>
-<tr><td class="label-cell">Failed</td><td class="right mono">229</td><td class="right mono">50</td></tr>
-<tr><td class="label-cell">Other</td><td class="right mono">41</td><td class="right mono">3</td></tr>
+<tr><td class="label-cell">Partial</td><td class="right mono">730</td><td class="right mono">275</td></tr>
+<tr><td class="label-cell">Interrupted</td><td class="right mono">168</td><td class="right mono">29</td></tr>
+<tr><td class="label-cell">Failed</td><td class="right mono">229</td><td class="right mono">51</td></tr>
+<tr><td class="label-cell">Other</td><td class="right mono">0</td><td class="right mono">0</td></tr>
 </tbody>
 </table>
 
@@ -144,15 +144,14 @@
 <tr><th class="label-cell">Test statistic</th><th class="right">Value</th></tr>
 </thead>
 <tbody>
-<tr><td class="label-cell">χ² statistic</td><td class="right mono">58.469</td></tr>
-<tr><td class="label-cell">Degrees of freedom</td><td class="right mono">20</td></tr>
+<tr><td class="label-cell">χ² statistic</td><td class="right mono">24.851</td></tr>
+<tr><td class="label-cell">Degrees of freedom</td><td class="right mono">3</td></tr>
 <tr><td class="label-cell">p-value</td><td class="right mono">0.000</td></tr>
-<tr><td class="label-cell">Cramér's V</td><td class="right mono">0.159</td></tr>
+<tr><td class="label-cell">Cramér's V</td><td class="right mono">0.103</td></tr>
 <tr><td class="label-cell">Effect size</td><td class="right">negligible</td></tr>
 </tbody>
 </table>
 
-<p><em>Warning: Some expected cell frequencies are below 5, which may affect test validity.</em></p>
 
 <h3>Bonferroni Correction</h3>
 
@@ -161,14 +160,14 @@
 <p><strong>Tests surviving Bonferroni correction (p < 0.0045):</strong></p>
 <ul>
 <li><strong>Alignment score:</strong> p = 0.000023 (significant)</li>
-<li><strong>Task completion distribution:</strong> p = 0.000012 (significant)</li>
+<li><strong>Task completion distribution:</strong> p = 0.000017 (significant)</li>
 </ul>
 
 <p><strong>Tests significant at α = 0.05 but not after correction:</strong></p>
 <ul>
 <li><strong>Satisfaction Rate:</strong> p = 0.0120 (marginal)</li>
 <li><strong>Complete Rate:</strong> p = 0.0254 (marginal)</li>
-<li><strong>Failed Rate:</strong> p = 0.0020 (marginal)</li>
+<li><strong>Failed Rate:</strong> p = 0.0029 (marginal)</li>
 <li><strong>Scope Expanded Rate:</strong> p = 0.0145 (marginal)</li>
 </ul>
 
