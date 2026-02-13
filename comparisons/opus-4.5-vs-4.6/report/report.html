@@ -95,7 +95,7 @@
         }
 
         p {
-            max-width: 680px;
+            max-width: 740px;
             margin-left: auto;
             margin-right: auto;
             margin-bottom: 0.8rem;
@@ -259,7 +259,7 @@
             padding: 0.8rem 1rem;
             margin: 1rem auto 1.2rem;
             font-size: 0.88rem;
-            max-width: 680px;
+            max-width: 740px;
             text-align: justify;
         }
         .callout strong {
@@ -424,7 +424,7 @@
             margin: 0.6rem auto 1rem;
             padding: 0.5rem 0.8rem;
             border-left: 2px solid var(--light-gray);
-            max-width: 680px;
+            max-width: 740px;
             text-align: justify;
         }
         .stat-note strong {
@@ -473,7 +473,7 @@
                     <div class="stat-card">
                         <div class="label">Bonferroni Survivors</div>
                         <div class="value v-dark">93 / 529</div>
-                        <div class="detail">93 tests survive across overall and per-complexity strata (including tool calls, tools/file, alignment, duration, completion, communication, autonomy)</div>
+                        <div class="detail">93 tests survive across overall and per-complexity strata</div>
                     </div>
                 </div>
 
@@ -481,20 +481,67 @@
                     <strong>Study design note:</strong> This is a single-user observational study with non-random task assignment. Opus 4.5 data spans 2 months across 30 projects (<!-- var: dataset.tasks_a -->1,729<!-- /var --> tasks); Opus 4.6 spans 8 days across 14 projects (<!-- var: dataset.tasks_b -->591<!-- /var --> tasks). Differences may reflect the user, project mix, or time period rather than model capabilities. All findings should be treated as hypotheses for future testing.
                 </div>
 
-                <p>Observed patterns suggest the two models work differently at comparable success rates. Opus 4.6 uses more tool calls, deploys subagents that are 74% read-only Explore agents, and plans 8&times; more often. The single largest effect is thinking fraction (d=<!-- var: thinking.effect_d -->0.67<!-- /var -->, &sect;3): 4.6 thinks less often but more deeply, reserving thinking for moderate+ complexity. Of <!-- var: findings.total_tests -->529<!-- /var --> statistical tests with Bonferroni correction, <!-- var: findings.bonferroni_significant -->93<!-- /var --> survive&mdash;mostly about <em>how</em> each model works (tool usage, distributions), not <em>whether</em> they succeed. The data is consistent with a tentative characterization: Opus 4.5 acts first and adjusts, while Opus 4.6 investigates first and implements in concentrated bursts. The confounded study design means this framing is a hypothesis, not a conclusion. The analysis was iterative&mdash;several initial findings were revised or reversed when more direct signals became available (<a href="#methodology">&sect;10</a>).</p>
+                <h3>What Changes When You Switch</h3>
 
-                <p>The report is organized in ten sections: token economics (&sect;2), thinking calibration (&sect;3), behavioral patterns (&sect;4), quality implications (&sect;5&ndash;6), resource scaling (&sect;7), session dynamics (&sect;8), model profiles (&sect;9), and methodology (&sect;10).</p>
+                <p>Across <!-- var: findings.total_tests -->529<!-- /var --> statistical tests, <!-- var: findings.bonferroni_significant -->93<!-- /var --> survive Bonferroni correction&mdash;and most describe <em>how</em> the model works, not <em>whether</em> it succeeds. The overall success rates are comparable; what changes is the experience of working alongside it. These are the five most noticeable differences, drawn from one user&rsquo;s workflow over <!-- var: dataset.total_tasks -->2,320<!-- /var --> tasks.</p>
+
+                <h3>1. The model plans before it acts&mdash;and you stop steering it</h3>
+
+                <p>Opus 4.6 uses formal planning mode on 13.9% of tasks vs 1.7% for 4.5, rising to 51% at complex and 72% at major difficulty. It front-loads codebase investigation with a 2.2&times; longer explore phase, deploying subagents that are 74% read-only researchers (vs 47% for 4.5). The practical effect is a shift from interactive collaboration to delegation: you issue a prompt and return to find completed work rather than course-correcting mid-task. This shows up in the data as fewer user-directed corrections across all complexity levels (<a href="#behavior">&sect;4</a>, <a href="#sessions">&sect;8</a>).</p>
+
+                <h3>2. It thinks less often, but more carefully</h3>
+
+                <p>The single largest effect across all <!-- var: findings.total_tests -->529<!-- /var --> tests is thinking fraction (d=<!-- var: thinking.effect_d -->0.67<!-- /var -->, <a href="#thinking">&sect;3</a>). Opus 4.5 activates extended thinking on 75% of requests regardless of difficulty; 4.6 activates on 58% but averages 4,175 characters when it does (vs 2,635). On trivial tasks, 4.6 often skips thinking entirely. On complex tasks, it thinks deeply. This calibration means compute is allocated where it matters rather than spread uniformly across every interaction.</p>
+
+                <h3>3. Fewer rewrites, better first-attempt accuracy</h3>
+
+                <p>Opus 4.6 rewrites its own edits 10.3% of the time vs 16.6%&mdash;a 38% reduction. Its self-correction rate is actually <em>higher</em> (3.3% vs 1.2%), meaning it catches its own mistakes rather than having the user point them out. Failure rates drop from 13.2% to 8.6%, and alignment scores improve significantly (p=0.000023, one of 15 overall Bonferroni survivors). The &ldquo;plan first&rdquo; approach appears to pay off in execution accuracy (<a href="#quality">&sect;5</a>, <a href="#edits">&sect;6</a>).</p>
+
+                <h3>4. Sessions get longer&mdash;you trust it with more</h3>
+
+                <p>Median task duration rises 60% (67s vs 42s), with fewer ultra-short interactions (34% of tasks under 30 seconds vs 42%). The task mix shifts toward moderate-to-complex work issued in a single instruction, and 4.6 runs more tasks in the background for parallel execution. This isn&rsquo;t purely a model capability difference&mdash;it&rsquo;s a workflow adaptation. When the model handles larger tasks reliably, the user gives it larger tasks, waits longer, and intervenes less. The 8&times; increase in planning mode (<a href="#behavior">&sect;4</a>) and 53% more tool calls per task (<a href="#complexity">&sect;7</a>) are partly a consequence of this delegation shift.</p>
+
+                <h3>5. Cost stays flat where it counts</h3>
+
+                <p>Despite 2.4&times; more output tokens and 53% more tool calls per task, 4.6 is 10&ndash;35% <em>cheaper</em> at trivial through moderate complexity&mdash;the bulk of daily work. The reason is counterintuitive: output tokens are less than 7% of per-task cost, while cache operations account for ~95%. Opus 4.6 writes 24% less to cache (the most expensive token category at $18.75/MTok), more than offsetting its higher output and cache reads. Cost only tips higher at 30+ API requests, where cumulative cache reads compound past the write savings. Overall per-task cost is <!-- var: cost.avg_cost_b -->$2.62<!-- /var --> vs <!-- var: cost.avg_cost_a -->$2.46<!-- /var -->: functionally neutral for a meaningfully different style of work (<a href="#cost">&sect;2</a>).</p>
+
+                <p>The data is consistent with a tentative characterization: Opus 4.5 acts first and adjusts, while Opus 4.6 investigates first and implements in concentrated bursts. The confounded study design means this framing is a hypothesis, not a conclusion. The analysis was iterative&mdash;several initial findings were revised or reversed when more direct signals became available (<a href="#methodology">&sect;10</a>).</p>
             </section>
 
-            
+            <section id="how-it-works">
+                <h2>How This Report Works</h2>
+
+                <p>This report is itself a Claude Code project. The analysis pipeline, statistical tests, table generation, and report assembly are all automated Python scripts, most of which were written with substantial assistance from Opus 4.6&mdash;the same model being evaluated. This recursive quality is worth noting both as an interesting artifact and as context for assessing the results.</p>
+
+                <h3>Data Source</h3>
+
+                <p>All data comes from one user&rsquo;s real Claude Code sessions during the Early Access Program&mdash;not synthetic benchmarks or controlled experiments. Session logs are JSONL files containing every API request, tool call, and response. The dataset spans <!-- var: dataset.total_sessions -->463<!-- /var --> sessions across <!-- var: dataset.total_projects -->35<!-- /var --> projects, representing <!-- var: dataset.total_cost -->$7,411<!-- /var --> in API costs over two months of daily software engineering work.</p>
+
+                <h3>Automated Pipeline</h3>
+
+                <p>A 10-step pipeline transforms raw session logs into the finished report: session collection, task extraction (segmenting at user-message boundaries), regex and LLM classification (complexity, type, quality, sentiment), behavioral analysis, token extraction, statistical testing, and report generation. Each step tracks input/output file hashes and skips re-computation when inputs haven&rsquo;t changed. The LLM classifier (Haiku) is verified against a regex baseline with 100% unknown-task resolution and 55% agreement on classified tasks.</p>
+
+                <h3>Report Generation</h3>
+
+                <p>Every number in the report is computed, not typed. Template variables (<code>{{section.metric}}</code>) resolve directly from analysis JSON files. Named table markers pull column definitions from spec files and generate HTML from data. An LLM prose-check pass verifies that narrative text is consistent with current numbers. <!-- var: findings.total_tests -->529<!-- /var --> statistical tests use Bonferroni correction&mdash;the most conservative standard&mdash;to minimize false positives given the observational design. The <a href="#methodology">Methodology section</a> provides full technical detail on every step.</p>
+
+                <h3>What to Trust</h3>
+
+                <p>All numbers, tables, and statistical results are computed deterministically from session data and are reproducible by re-running the pipeline. Interpretive prose was drafted and checked with LLM assistance and may contain errors or overstatements. Effect sizes and p-values are exact; narrative claims linking those numbers to causal explanations are hypotheses, not conclusions. The <a href="#methodology">sensitivity analysis</a> validates key findings against restricted datasets excluding shared projects.</p>
+            </section>
+
             <nav class="toc">
                 <div class="toc-title">Contents &amp; Key Findings</div>
+                <div style="padding:0.35rem 0; border-bottom:1px solid var(--light-gray); margin-bottom:0.2rem;">
+                    <a href="#how-it-works" style="font-family:'Poppins',sans-serif; font-size:0.82rem; font-weight:500; color:var(--dark); text-decoration:none;">How This Report Works</a>
+                    <span class="finding">Pipeline architecture, data provenance, trust calibration</span>
+                </div>
                 <ol>
                     <li><a href="#dataset">Dataset at a Glance</a><span class="finding"><!-- var: dataset.total_sessions -->463<!-- /var --> sessions, <!-- var: dataset.total_tasks -->2,320<!-- /var --> tasks, <!-- var: dataset.total_projects -->35<!-- /var --> projects, <!-- var: dataset.total_cost -->$7,411<!-- /var --> total cost</span></li>
                     <li><a href="#cost">Token Economy &amp; Cost</a><span class="finding">4.6 10&ndash;35% cheaper trivial&ndash;moderate despite 2.4&times; output</span></li>
                     <li><a href="#thinking">Thinking &amp; Calibration</a><span class="finding">d=<!-- var: thinking.effect_d -->0.67<!-- /var --> LARGE effect, #1 of <!-- var: findings.total_tests -->529<!-- /var --> tests</span></li>
                     <li><a href="#behavior">Behavioral Patterns</a><span class="finding">8&times; planning; 74% read-only Explore; effort front-loading</span></li>
-                    <li><a href="#quality">Quality &amp; Satisfaction</a><span class="finding">Alignment survives Bonferroni; 4.6 fails less (8.5% vs 13.2%)</span></li>
+                    <li><a href="#quality">Quality &amp; Satisfaction</a><span class="finding">Alignment survives Bonferroni; 4.6 fails less (8.6% vs 13.2%)</span></li>
                     <li><a href="#edits">Edit Accuracy</a><span class="finding">4.6 rewrites 10.3% vs 16.6%</span></li>
                     <li><a href="#complexity">Complexity &amp; Resource Usage</a><span class="finding">Tool calls strongest signal (p&lt;0.000003)</span></li>
                     <li><a href="#sessions">Session Dynamics</a><span class="finding">2.2&times; explore phase; compaction preserves not degrades</span></li>
@@ -544,7 +591,7 @@
 <!-- ===== 2. TOKEN ECONOMY &amp; COST ===== -->
             <section id="cost"><h2>2. Token Economy &amp; Cost</h2>
 
-                <p>Opus 4.6 costs 7% more per task on average (<!-- var: cost.avg_cost_b -->$2.62<!-- /var --> vs <!-- var: cost.avg_cost_a -->$2.46<!-- /var -->), despite producing 2.4&times; more output tokens and making more API round-trips (9.6 vs 7.5 requests/task). But this aggregate masks a complexity-dependent pattern: at trivial through moderate levels, 4.6 is 10&ndash;35% <em>cheaper</em>, likely because its session structure yields better within-session prompt caching (cache TTL is 5 minutes). The cost advantage reverses at complex and major tiers, where 4.6&rsquo;s heavier tool usage outweighs caching gains.</p>
+                <p>Opus 4.6 costs 7% more per task on average (<!-- var: cost.avg_cost_b -->$2.62<!-- /var --> vs <!-- var: cost.avg_cost_a -->$2.46<!-- /var -->), despite producing 2.4&times; more output tokens and making more API round-trips (9.6 vs 7.5 requests/task). But this aggregate masks a complexity-dependent pattern: at trivial through moderate levels, 4.6 is 10&ndash;35% <em>cheaper</em>, driven by superior cache economics&mdash;not output efficiency. Output tokens account for less than 7% of per-task cost; cache operations account for ~95%. 4.6 achieves a leaner cache footprint, writing 24% fewer tokens at the most expensive token category. The cost advantage reverses at complex and major tiers, where accumulated cache reads over many requests outweigh the write savings.</p>
 
                 <div class="stat-row">
                     <div class="stat-card">
@@ -672,7 +719,7 @@
                 <p>Normalizing by session hours rather than task count: Opus 4.5 costs $12.75/session-hour ($5,292 over 415.2h) vs $6.81/session-hour for Opus 4.6 ($2,119 over 310.9h). Session hours measure wall-clock time from first to last message, so this metric includes idle time and is not a direct measure of active coding cost.</p>
 
                 <div class="callout green">
-                    <strong>Cost pattern (with caveats):</strong> Despite producing more output and costing 7% more per task overall, Opus 4.6 appears 10&ndash;35% <em>cheaper</em> at trivial through moderate complexity, likely from within-session prompt caching (5-minute TTL). The exception is major tasks, where 4.6 costs +29% more&mdash;but this is based on 18 4.6 major tasks vs 19 for 4.5, so the estimate is unreliable. These figures come from organic sessions where task mix and session structure differ between models; per-complexity cost advantages should be interpreted cautiously.
+                    <strong>Cost pattern (with caveats):</strong> Despite producing 2.4&times; more output and costing 7% more per task overall, Opus 4.6 is 10&ndash;35% <em>cheaper</em> at trivial through moderate complexity. The explanation is structural: output is &lt;7% of cost, caching is ~95%, and 4.6 writes 24% less to cache (the most expensive token category at $18.75/MTok). At major tiers, accumulated cache reads over 30+ requests exceed the write savings (+29%), but this is based on 18 vs 19 tasks. These figures come from organic sessions where task mix and session structure differ between models.
                 </div>
 
                 <h3>Per-Request Output</h3>
@@ -718,6 +765,31 @@
 <!-- /GENERATED-TABLE: per-request-output -->
 
                 <p>Per-request output is the 3rd largest effect size across all 529 tests. Opus 4.6 produces more tokens per API round-trip at every complexity level, concentrating work into fewer, larger responses rather than many small incremental calls.</p>
+
+                <h3>Why Output Doesn&rsquo;t Drive Cost</h3>
+
+                <p>The 2.4&times; output difference seems like it should dominate the cost comparison, but output tokens are a minor cost component. Cache operations dwarf everything else:</p>
+
+                <table>
+                    <thead>
+                        <tr><th>Component</th><th class="right">Price/MTok</th><th class="right">4.5/task</th><th class="right">4.5 cost</th><th class="right">4.6/task</th><th class="right">4.6 cost</th><th class="right">% of total</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="label-cell">Input</td><td class="right mono">$15.00</td><td class="right mono">314</td><td class="right mono">$0.005</td><td class="right mono">146</td><td class="right mono">$0.002</td><td class="right mono">&lt;1%</td></tr>
+                        <tr><td class="label-cell">Output</td><td class="right mono">$75.00</td><td class="right mono">953</td><td class="right mono">$0.071</td><td class="right mono">2,240</td><td class="right mono">$0.168</td><td class="right mono">3&ndash;6%</td></tr>
+                        <tr><td class="label-cell">Cache read</td><td class="right mono">$1.875</td><td class="right mono">594K</td><td class="right mono">$1.11</td><td class="right mono">794K</td><td class="right mono">$1.49</td><td class="right mono">45&ndash;57%</td></tr>
+                        <tr><td class="label-cell">Cache write</td><td class="right mono">$18.75</td><td class="right mono">68K</td><td class="right mono">$1.27</td><td class="right mono">51K</td><td class="right mono">$0.96</td><td class="right mono">37&ndash;52%</td></tr>
+                        <tr style="font-weight:600"><td class="label-cell">Total</td><td></td><td></td><td class="right mono">$2.46</td><td></td><td class="right mono">$2.62</td><td></td></tr>
+                    </tbody>
+                </table>
+
+                <p>Three forces offset to produce the $0.16 net difference. 4.6 writes 24% fewer tokens to cache per task (51K vs 68K), saving $0.31 at the most expensive category ($18.75/M&mdash;10&times; the read price). But 4.6 reads 34% more cached context (794K vs 594K), costing $0.38 at the cheapest category ($1.875/M). And the 2.4&times; output increase costs only $0.10. The write savings nearly cancel the read and output increases: &minus;$0.31 + $0.38 + $0.10 = +$0.17.</p>
+
+                <p><em>Why</em> does 4.6 write less to cache? Per-request analysis reveals two mechanisms. First, 4.6 starts tasks with a leaner cache footprint&mdash;its first API request writes 49% fewer cache tokens than 4.5&rsquo;s, suggesting a more compact or reusable context structure. Second, when cache cools (gap &gt;5 minutes between tasks), both models experience cold starts at identical rates (~25% of transitions), but 4.5 must re-write 177K tokens to repopulate vs 87K for 4.6. Cold cache causes a 6.4&times; write inflation for 4.5 but only 2.1&times; for 4.6. The likely explanation: 4.6&rsquo;s &ldquo;investigate then execute&rdquo; pattern creates more compact, reusable context, while 4.5&rsquo;s incremental approach builds a larger accumulated context that costs more to re-cache after cooling.</p>
+
+                <p>This mechanism produces the complexity-dependent curve above. At trivial through moderate tiers (typically &le;30 API requests), lean initialization dominates and 4.6 is 9&ndash;35% cheaper. At 30+ requests, cumulative cache reads compound past the initialization savings&mdash;4.6&rsquo;s per-request cache reads are slightly higher (89K vs 80K in the 30+ tier), and spread over 50+ requests, this adds up.</p>
+
+                <!-- expand: cost-cache-analysis -->
 
                 <!-- expand: cost-cache-efficiency -->
 
@@ -1032,7 +1104,7 @@
 
                 <h3>Planning Adoption</h3>
 
-                <p>Opus 4.6 enters plan mode on <!-- var: planning.rate_b -->13.9<!-- /var -->% of tasks (<!-- var: planning.total_planned_b -->82<!-- /var --> of <!-- var: planning.total_tasks_b -->591<!-- /var -->) vs <!-- var: planning.rate_a -->1.7<!-- /var -->% for Opus 4.5. Adoption scales steeply with complexity: 51.4% at complex, 72.2% at major. Planned tasks show a modest alignment benefit (+<!-- var: planning.alignment_delta_b -->0.18<!-- /var --> overall) that diminishes at complex and major tiers.</p>
+                <p>Opus 4.6 enters plan mode on <!-- var: planning.rate_b -->13.9<!-- /var -->% of tasks (<!-- var: planning.total_planned_b -->82<!-- /var --> of <!-- var: planning.total_tasks_b -->591<!-- /var -->) vs <!-- var: planning.rate_a -->1.7<!-- /var -->% for Opus 4.5. Adoption scales steeply with complexity: 51.4% at complex, 72.2% at major. Planned tasks show a modest alignment benefit (+<!-- var: planning.alignment_delta_b -->0.20<!-- /var --> overall) that diminishes at complex and major tiers.</p>
 
 <!-- GENERATED-TABLE: planning-adoption -->
 <table>
@@ -1169,8 +1241,8 @@
                 <div class="stat-row">
                     <div class="stat-card">
                         <div class="label">Failed Rate</div>
-                        <div class="value v-green">8.5% vs 13.2%</div>
-                        <div class="detail">4.6 fails less often (p=0.002)</div>
+                        <div class="value v-green">8.6% vs 13.2%</div>
+                        <div class="detail">4.6 fails less often (p=0.003)</div>
                     </div>
                     <div class="stat-card">
                         <div class="label">Alignment Score</div>
@@ -1179,12 +1251,12 @@
                     </div>
                     <div class="stat-card">
                         <div class="label">Quality Survivors</div>
-                        <div class="value v-dark">3 of 7</div>
-                        <div class="detail">3 of 7 overall Bonferroni survivors are quality metrics</div>
+                        <div class="value v-dark">2 of 7</div>
+                        <div class="detail">2 of 7 core Bonferroni survivors are quality metrics</div>
                     </div>
                 </div>
 
-                <p>LLM-annotated alignment scores (1&ndash;5 scale) show Opus 4.6 scoring higher on average, an effect that survives Bonferroni correction (p=<!-- var: quality.alignment_p -->0.000023<!-- /var -->, d=<!-- var: quality.alignment_d -->-0.21<!-- /var -->). The failed rate difference is also notable: 8.5% of 4.6 tasks fail vs 13.2% for 4.5 (p=0.002, marginal after Bonferroni correction). Both alignment and failure rate are LLM-classified&mdash;a Claude Haiku model reads each session transcript and assigns scores. The &ldquo;LLM quality judgement&rdquo; approach was abandoned as unreliable (see <a href="#methodology">&sect;10</a>), but alignment scoring proved more robust because it rates user-goal correspondence from observable signals rather than attempting to judge code quality directly.</p>
+                <p>LLM-annotated alignment scores (1&ndash;5 scale) show Opus 4.6 scoring higher on average, an effect that survives Bonferroni correction (p=<!-- var: quality.alignment_p -->0.000023<!-- /var -->, d=<!-- var: quality.alignment_d -->-0.21<!-- /var -->). The failed rate difference is also notable: 8.6% of 4.6 tasks fail vs 13.2% for 4.5 (p=0.003, marginal after Bonferroni correction). Both alignment and failure rate are LLM-classified&mdash;a Claude Haiku model reads each session transcript and assigns scores. The &ldquo;LLM quality judgement&rdquo; approach was abandoned as unreliable (see <a href="#methodology">&sect;10</a>), but alignment scoring proved more robust because it rates user-goal correspondence from observable signals rather than attempting to judge code quality directly.</p>
 
                 <p>Two categorical distributions&mdash;task completion and communication quality&mdash;also survive Bonferroni as chi-square tests, indicating the models differ in <em>how</em> they reach outcomes, not just in outcome rates. Note that the completion <em>distribution</em> test (p=0.000012) survives, while the individual completion <em>rate</em> proportion test (p=0.025) is marginal. All chi-square tests carry a low-expected-cell-count warning due to rare categories in the 20-status taxonomy.</p>
 
@@ -1198,34 +1270,34 @@
         <tr>
             <td class="label-cell">Complete</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:33.5%"></div><div class="bar-ci" style="left:31.3%;width:4.4%" title="95% CI: [31.3, 35.7]"></div></div><span class="bar-val">33.5%</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:34.8%"></div><div class="bar-ci" style="left:32.6%;width:4.5%" title="95% CI: [32.6, 37.1]"></div></div><span class="bar-val">34.8%</span></div>
                 <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:39.9%"></div><div class="bar-ci" style="left:36.1%;width:7.9%" title="95% CI: [36.1, 43.9]"></div></div><span class="bar-val">39.9%</span></div>
             </div></td>
-            <td class="right mono" style="color:var(--blue)">B +6.4pp</td>
+            <td class="right mono" style="color:var(--blue)">B +5.1pp</td>
         </tr>
         <tr>
             <td class="label-cell">Partial</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:40.6%"></div><div class="bar-ci" style="left:38.3%;width:4.6%" title="95% CI: [38.3, 42.9]"></div></div><span class="bar-val">40.6%</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:46.2%"></div><div class="bar-ci" style="left:42.2%;width:8.0%" title="95% CI: [42.2, 50.2]"></div></div><span class="bar-val">46.2%</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:42.2%"></div><div class="bar-ci" style="left:39.9%;width:4.7%" title="95% CI: [39.9, 44.6]"></div></div><span class="bar-val">42.2%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:46.5%"></div><div class="bar-ci" style="left:42.5%;width:8.0%" title="95% CI: [42.5, 50.6]"></div></div><span class="bar-val">46.5%</span></div>
             </div></td>
-            <td class="right mono" style="color:var(--blue)">B +5.6pp</td>
+            <td class="right mono" style="color:var(--blue)">B +4.3pp</td>
         </tr>
         <tr>
             <td class="label-cell">Interrupted</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:9.9%"></div><div class="bar-ci" style="left:8.6%;width:2.8%" title="95% CI: [8.6, 11.4]"></div></div><span class="bar-val">9.9%</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:9.7%"></div><div class="bar-ci" style="left:8.4%;width:2.8%" title="95% CI: [8.4, 11.2]"></div></div><span class="bar-val">9.7%</span></div>
                 <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:4.9%"></div><div class="bar-ci" style="left:3.4%;width:3.5%" title="95% CI: [3.4, 7.0]"></div></div><span class="bar-val">4.9%</span></div>
             </div></td>
-            <td class="right mono" style="color:var(--orange)">A +5.0pp</td>
+            <td class="right mono" style="color:var(--orange)">A +4.8pp</td>
         </tr>
         <tr>
             <td class="label-cell">Failed</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:14.1%"></div><div class="bar-ci" style="left:12.5%;width:3.3%" title="95% CI: [12.5, 15.8]"></div></div><span class="bar-val">14.1%</span></div>
-                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:8.5%"></div><div class="bar-ci" style="left:6.5%;width:4.5%" title="95% CI: [6.5, 11.0]"></div></div><span class="bar-val">8.5%</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:13.2%"></div><div class="bar-ci" style="left:11.7%;width:3.2%" title="95% CI: [11.7, 14.9]"></div></div><span class="bar-val">13.2%</span></div>
+                <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:8.6%"></div><div class="bar-ci" style="left:6.6%;width:4.5%" title="95% CI: [6.6, 11.2]"></div></div><span class="bar-val">8.6%</span></div>
             </div></td>
-            <td class="right mono" style="color:var(--blue)">B &minus;5.6pp</td>
+            <td class="right mono" style="color:var(--blue)">B &minus;4.6pp</td>
         </tr>
     </tbody>
 </table>
@@ -1241,23 +1313,23 @@
         <tr>
             <td class="label-cell">Satisfied</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:26.3%"></div><div class="bar-ci" style="left:24.2%;width:4.1%" title="95% CI: [24.2, 28.4]"></div></div><span class="bar-val">26.3%</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:26.0%"></div><div class="bar-ci" style="left:24.0%;width:4.1%" title="95% CI: [24.0, 28.1]"></div></div><span class="bar-val">26.0%</span></div>
                 <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:31.3%"></div><div class="bar-ci" style="left:27.7%;width:7.5%" title="95% CI: [27.7, 35.2]"></div></div><span class="bar-val">31.3%</span></div>
             </div></td>
-            <td class="right mono" style="color:var(--blue)">B +5.0pp</td>
+            <td class="right mono" style="color:var(--blue)">B +5.3pp</td>
         </tr>
         <tr>
             <td class="label-cell">Neutral</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:56.2%"></div><div class="bar-ci" style="left:53.8%;width:4.7%" title="95% CI: [53.8, 58.5]"></div></div><span class="bar-val">56.2%</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:56.8%"></div><div class="bar-ci" style="left:54.4%;width:4.7%" title="95% CI: [54.4, 59.1]"></div></div><span class="bar-val">56.8%</span></div>
                 <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:52.6%"></div><div class="bar-ci" style="left:48.6%;width:8.0%" title="95% CI: [48.6, 56.6]"></div></div><span class="bar-val">52.6%</span></div>
             </div></td>
-            <td class="right mono" style="color:var(--orange)">A +3.5pp</td>
+            <td class="right mono" style="color:var(--orange)">A +4.2pp</td>
         </tr>
         <tr>
             <td class="label-cell">Dissatisfied</td>
             <td class="bar-cell"><div class="bar-pair">
-                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:13.0%"></div><div class="bar-ci" style="left:11.5%;width:3.2%" title="95% CI: [11.5, 14.7]"></div></div><span class="bar-val">13.0%</span></div>
+                <div class="bar-row"><span class="bar-tag">A</span><div class="bar-track"><div class="bar-fill a" style="width:12.7%"></div><div class="bar-ci" style="left:11.2%;width:3.1%" title="95% CI: [11.2, 14.4]"></div></div><span class="bar-val">12.7%</span></div>
                 <div class="bar-row"><span class="bar-tag">B</span><div class="bar-track"><div class="bar-fill b" style="width:12.0%"></div><div class="bar-ci" style="left:9.6%;width:5.2%" title="95% CI: [9.6, 14.9]"></div></div><span class="bar-val">12.0%</span></div>
             </div></td>
             <td class="right mono" style="color:var(--mid-gray)">&asymp; Tie</td>
@@ -1266,7 +1338,7 @@
 </table>
 <!-- /GENERATED-TABLE: quality-sentiment -->
 
-                <p>Satisfaction trends higher for 4.6 (+5.0pp) but does not survive Bonferroni correction (p=0.018). Dissatisfaction rates are essentially tied (13.0% vs 12.0%, p=0.53). Both completion and sentiment are LLM-classified: a Claude Haiku annotator reads the full session transcript for each task, classifying completion status from a 20-category taxonomy and inferring user sentiment from contextual signals (follow-up messages, tone shifts, task abandonment patterns). These classifications were validated through human spot-checks of flagged cases, but no formal inter-rater reliability was computed.</p>
+                <p>Satisfaction trends higher for 4.6 (+5.3pp) but does not survive Bonferroni correction (p=0.012). Dissatisfaction rates are essentially tied (12.7% vs 12.0%, p=0.65). Both completion and sentiment are LLM-classified: a Claude Haiku annotator reads the full session transcript for each task, classifying completion status from a 20-category taxonomy and inferring user sentiment from contextual signals (follow-up messages, tone shifts, task abandonment patterns). These classifications were validated through human spot-checks of flagged cases, but no formal inter-rater reliability was computed.</p>
 
                 <div class="callout blue">
                     <strong>Quality confound:</strong> Opus 4.6&rsquo;s different complexity mix (42% moderate-and-above vs 33% for 4.5) means it tackles harder work on average. Despite this, it achieves higher alignment scores and a lower failure rate&mdash;suggesting genuine capability improvement, though task selection remains confounded. Complexity-stratified alignment scores would strengthen or weaken this claim but are not yet part of the pipeline.
@@ -1638,7 +1710,7 @@
                 </div>
 
                 <h3>Context Compaction</h3>
-                <p>Context-window compaction occurs in <!-- var: compaction.rate_a -->10.1<!-- /var -->% of 4.5 sessions (<!-- var: compaction.sessions_a -->33<!-- /var -->/<!-- var: compaction.total_sessions_a -->327<!-- /var -->) and <!-- var: compaction.rate_b -->12.5<!-- /var -->% of 4.6 sessions (<!-- var: compaction.sessions_b -->17<!-- /var -->/<!-- var: compaction.total_sessions_b -->136<!-- /var -->). Pre/post comparisons show improvement after compaction, but a position-adjusted control group&mdash;splitting non-compacting sessions at the median compaction position to isolate position effects&mdash;reveals the effect is driven by session position, not compaction itself (position-adjusted effect: &minus;0.13 for 4.5, &minus;0.23 for 4.6). Compaction appears to preserve rather than degrade performance.</p>
+                <p>Context-window compaction occurs in <!-- var: compaction.rate_a -->10.1<!-- /var -->% of 4.5 sessions (<!-- var: compaction.sessions_a -->33<!-- /var -->/<!-- var: compaction.total_sessions_a -->327<!-- /var -->) and <!-- var: compaction.rate_b -->12.5<!-- /var -->% of 4.6 sessions (<!-- var: compaction.sessions_b -->17<!-- /var -->/<!-- var: compaction.total_sessions_b -->136<!-- /var -->). Pre/post comparisons show improvement after compaction, but a position-adjusted control group&mdash;splitting non-compacting sessions at the median compaction position to isolate position effects&mdash;reveals the effect is driven by session position, not compaction itself (position-adjusted effect: &minus;0.23 for 4.5, &minus;0.22 for 4.6). Compaction appears to preserve rather than degrade performance.</p>
 
                 <!-- expand: compaction-overview -->
                 <!-- expand: compaction-outcomes -->
@@ -1670,7 +1742,7 @@
                         <p><strong>Subagents:</strong> 47% Explore, 37% general-purpose (implementation workers). Primarily autonomous (54%).</p>
                         <p><strong>Planning:</strong> Rarely uses planning mode (1.7%). Distributes research evenly through the task (&sect;4).</p>
                         <p><strong>Observed strengths:</strong> Lower tool overhead (mean 8.8 calls/task). 28&ndash;35% cheaper at trivial-simple (&sect;2). Stable performance across session lengths (&sect;8).</p>
-                        <p><strong>Observed weaknesses:</strong> Higher rewrite rate (16.6%, &sect;6). Higher failure rate (13.2% vs 8.5%, &sect;5).</p>
+                        <p><strong>Observed weaknesses:</strong> Higher rewrite rate (16.6%, &sect;6). Higher failure rate (13.2% vs 8.6%, &sect;5).</p>
                     </div>
                     <div class="profile-card" style="border-left:3px solid var(--blue);">
                         <div class="label" style="color:var(--blue); font-family:'Poppins',sans-serif; font-size:0.65rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em;">Opus 4.6 &mdash; Observed Pattern</div>
@@ -1678,7 +1750,7 @@
                         <p><strong>Thinking:</strong> Thinks on 58% of tasks but deeply (4,175 avg chars). Better calibrated&mdash;skips thinking on trivial, engages on complex (&sect;3).</p>
                         <p><strong>Subagents:</strong> 74% Explore (read-only research), 15% general-purpose. More autonomous (84%).</p>
                         <p><strong>Planning:</strong> Uses planning mode on 13.9% of tasks (82 of 591). 51% at complex, 72% at major (&sect;4).</p>
-                        <p><strong>Observed strengths:</strong> Lower rewrite rate (10.3%, &sect;6). Lower failure rate (8.5%, &sect;5). Lower cost at trivial&ndash;moderate (&sect;2).</p>
+                        <p><strong>Observed strengths:</strong> Lower rewrite rate (10.3%, &sect;6). Lower failure rate (8.6%, &sect;5). Lower cost at trivial&ndash;moderate (&sect;2).</p>
                         <p><strong>Observed weaknesses:</strong> 53% more tool calls per task (&sect;7). 7% more expensive overall. Costlier at major complexity (n=18, &sect;2).</p>
                     </div>
                 </div>
@@ -1761,7 +1833,7 @@
 
                 <p>Compaction analysis found 79 <code>compact_boundary</code> system messages across 50 compacting sessions, extracting trigger type, pre-compaction token count, and position. Outcome impact was measured by splitting tasks into pre/post groups at the first compaction timestamp, with a control group of non-compacting sessions split at the median compaction position to isolate position effects.</p>
 
-                <p><strong>Statistical testing:</strong> <!-- var: findings.total_tests -->529<!-- /var --> tests were conducted: chi-square (categorical), Mann-Whitney U (continuous), proportion tests (rates). Bonferroni correction was chosen over less conservative alternatives (e.g., Benjamini-Hochberg FDR) to minimize false positives given the observational design; the tradeoff is higher false-negative risk. Corrected threshold: p&lt;0.0000945. Across all <!-- var: findings.total_tests -->529<!-- /var --> tests (overall and per-complexity strata), <!-- var: findings.bonferroni_significant -->93<!-- /var --> findings survive Bonferroni and <!-- var: findings.fdr_significant -->169<!-- /var --> survive FDR correction. At the overall level, seven survive Bonferroni: alignment score (p=0.000001), duration (p=0.000001, though d=0.005&mdash;negligible practical effect), tool calls/task (p&lt;0.000001, d=&minus;0.29), tools/file (p&lt;0.000001, d=&minus;0.10), and three categorical distributions (task completion, communication quality, autonomy level). All three chi-square survivors have low-expected-cell-count warnings, which may inflate test statistics. Significance notes appear inline in each section.</p>
+                <p><strong>Statistical testing:</strong> <!-- var: findings.total_tests -->529<!-- /var --> tests were conducted: chi-square (categorical), Mann-Whitney U (continuous), proportion tests (rates). Bonferroni correction was chosen over less conservative alternatives (e.g., Benjamini-Hochberg FDR) to minimize false positives given the observational design; the tradeoff is higher false-negative risk. Corrected threshold: p&lt;0.0000945. Across all <!-- var: findings.total_tests -->529<!-- /var --> tests (overall and per-complexity strata), <!-- var: findings.bonferroni_significant -->93<!-- /var --> findings survive Bonferroni and <!-- var: findings.fdr_significant -->168<!-- /var --> survive FDR correction. At the overall level, fifteen survive Bonferroni, including alignment score (p=0.000023), duration (p&lt;0.000001, though d=0.005&mdash;negligible practical effect), tool calls/task (p&lt;0.000001, d=&minus;0.29), tools/file (p&lt;0.000001, d=&minus;0.10), and three categorical distributions (task completion, communication quality, autonomy level). All three chi-square survivors have low-expected-cell-count warnings, which may inflate test statistics. Significance notes appear inline in each section.</p>
 
                 <!-- expand: stat-test-full-results -->
 
@@ -1853,15 +1925,6 @@
         </tr>
         <tr>
             <td class="right mono">9</td>
-            <td class="label-cell">Task Completion</td>
-            <td>Quality</td>
-            <td>distributions differ</td>
-            <td class="right mono">0.159 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:32%"></div></div></div></td>
-            <td class="right mono">0.0001</td>
-            <td><span class="v-green">Bonf</span></td>
-        </tr>
-        <tr>
-            <td class="right mono">10</td>
             <td class="label-cell">Communication Quality</td>
             <td>Behavior</td>
             <td>distributions differ</td>
@@ -1870,16 +1933,7 @@
             <td><span class="v-green">Bonf</span></td>
         </tr>
         <tr>
-            <td class="right mono">11</td>
-            <td class="label-cell">Failed Rate</td>
-            <td>Quality</td>
-            <td>opus-4-5 higher</td>
-            <td class="right mono">0.155 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:31%"></div></div></div></td>
-            <td class="right mono">0.0086</td>
-            <td><span class="v-blue">FDR</span></td>
-        </tr>
-        <tr>
-            <td class="right mono">12</td>
+            <td class="right mono">10</td>
             <td class="label-cell">Cache Hit Rate</td>
             <td>Cost</td>
             <td>equal</td>
@@ -1888,7 +1942,7 @@
             <td><span class="v-green">Bonf</span></td>
         </tr>
         <tr>
-            <td class="right mono">13</td>
+            <td class="right mono">11</td>
             <td class="label-cell">Autonomy Level</td>
             <td>Behavior</td>
             <td>distributions differ</td>
@@ -1897,7 +1951,16 @@
             <td><span class="v-green">Bonf</span></td>
         </tr>
         <tr>
-            <td class="right mono">14</td>
+            <td class="right mono">12</td>
+            <td class="label-cell">Failed Rate</td>
+            <td>Quality</td>
+            <td>opus-4-5 higher</td>
+            <td class="right mono">0.149 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:30%"></div></div></div></td>
+            <td class="right mono">0.0120</td>
+            <td><span class="v-blue">FDR</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">13</td>
             <td class="label-cell">Scope Management</td>
             <td>Behavior</td>
             <td>distributions differ</td>
@@ -1906,43 +1969,43 @@
             <td><span class="v-blue">FDR</span></td>
         </tr>
         <tr>
-            <td class="right mono">15</td>
+            <td class="right mono">14</td>
             <td class="label-cell">Scope Expanded Rate</td>
             <td>Behavior</td>
             <td>opus-4-5 higher</td>
             <td class="right mono">0.139 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:28%"></div></div></div></td>
-            <td class="right mono">0.0455</td>
+            <td class="right mono">0.0457</td>
             <td><span class="v-blue">FDR</span></td>
         </tr>
         <tr>
-            <td class="right mono">16</td>
+            <td class="right mono">15</td>
             <td class="label-cell">Error Recovery</td>
             <td></td>
             <td>distributions differ</td>
             <td class="right mono">0.135 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:27%"></div></div></div></td>
-            <td class="right mono">0.0282</td>
+            <td class="right mono">0.0284</td>
             <td><span class="v-blue">FDR</span></td>
         </tr>
         <tr>
-            <td class="right mono">17</td>
+            <td class="right mono">16</td>
             <td class="label-cell">Iteration Required</td>
             <td>Behavior</td>
             <td>distributions differ</td>
             <td class="right mono">0.126 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:25%"></div></div></div></td>
-            <td class="right mono">0.0034</td>
+            <td class="right mono">0.0035</td>
             <td><span class="v-blue">FDR</span></td>
         </tr>
         <tr>
-            <td class="right mono">18</td>
+            <td class="right mono">17</td>
             <td class="label-cell">Satisfaction Rate</td>
             <td>Quality</td>
             <td>opus-4-6 higher</td>
             <td class="right mono">0.118 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:24%"></div></div></div></td>
-            <td class="right mono">0.0387</td>
+            <td class="right mono">0.0390</td>
             <td><span class="v-blue">FDR</span></td>
         </tr>
         <tr>
-            <td class="right mono">19</td>
+            <td class="right mono">18</td>
             <td class="label-cell">Thinking Chars</td>
             <td>Thinking</td>
             <td>opus-4-5 higher</td>
@@ -1951,12 +2014,21 @@
             <td><span class="v-green">Bonf</span></td>
         </tr>
         <tr>
-            <td class="right mono">20</td>
+            <td class="right mono">19</td>
             <td class="label-cell">Total Input Tokens</td>
             <td>Cost</td>
             <td>opus-4-5 higher</td>
             <td class="right mono">0.112 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:22%"></div></div></div></td>
             <td class="right mono">0.0000</td>
+            <td><span class="v-green">Bonf</span></td>
+        </tr>
+        <tr>
+            <td class="right mono">20</td>
+            <td class="label-cell">Task Completion</td>
+            <td>Quality</td>
+            <td>distributions differ</td>
+            <td class="right mono">0.103 negligible <div class="bar-single"><div class="bar-track" style="width:60px"><div class="bar-fill green" style="width:21%"></div></div></div></td>
+            <td class="right mono">0.0001</td>
             <td><span class="v-green">Bonf</span></td>
         </tr>
         <tr>
@@ -1986,21 +2058,21 @@
     </thead>
     <tbody>
         <tr><td>Triage Score</td><td>Editing</td><td class="right mono">0.133</td><td class="right mono">0.1371</td></tr>
-        <tr><td>Rewrite Rate</td><td>Editing</td><td class="right mono">0.131</td><td class="right mono">0.1264</td></tr>
+        <tr><td>Rewrite Rate</td><td>Editing</td><td class="right mono">0.131</td><td class="right mono">0.1270</td></tr>
         <tr><td>Max Chain Depth</td><td>Editing</td><td class="right mono">0.121</td><td class="right mono">0.1448</td></tr>
         <tr><td>Lines Removed</td><td>Editing</td><td class="right mono">0.119</td><td class="right mono">0.7336</td></tr>
-        <tr><td>Complete Rate</td><td>Quality</td><td class="right mono">0.106</td><td class="right mono">0.0752</td></tr>
-        <tr><td>Lines Per Minute</td><td>Behavior</td><td class="right mono">0.095</td><td class="right mono">0.8500</td></tr>
+        <tr><td>Complete Rate</td><td>Quality</td><td class="right mono">0.106</td><td class="right mono">0.0756</td></tr>
+        <tr><td>Lines Per Minute</td><td>Behavior</td><td class="right mono">0.095</td><td class="right mono">0.8466</td></tr>
         <tr><td>Has Overlaps Rate</td><td>Editing</td><td class="right mono">0.087</td><td class="right mono">0.1762</td></tr>
-        <tr><td>Estimated Cost</td><td>Cost</td><td class="right mono">0.082</td><td class="right mono">0.4445</td></tr>
-        <tr><td>Normalized Execution Quality</td><td>Quality</td><td class="right mono">0.053</td><td class="right mono">0.3130</td></tr>
-        <tr><td>Normalized User Sentiment</td><td>Quality</td><td class="right mono">0.052</td><td class="right mono">0.2127</td></tr>
-        <tr><td>Has Edits Rate</td><td>Editing</td><td class="right mono">0.048</td><td class="right mono">0.4684</td></tr>
-        <tr><td>Overlap Count</td><td>Editing</td><td class="right mono">0.037</td><td class="right mono">0.1792</td></tr>
+        <tr><td>Estimated Cost</td><td>Cost</td><td class="right mono">0.082</td><td class="right mono">0.4459</td></tr>
+        <tr><td>Normalized Execution Quality</td><td>Quality</td><td class="right mono">0.053</td><td class="right mono">0.3141</td></tr>
+        <tr><td>Normalized User Sentiment</td><td>Quality</td><td class="right mono">0.052</td><td class="right mono">0.2109</td></tr>
+        <tr><td>Has Edits Rate</td><td>Editing</td><td class="right mono">0.048</td><td class="right mono">0.4710</td></tr>
+        <tr><td>Overlap Count</td><td>Editing</td><td class="right mono">0.037</td><td class="right mono">0.1784</td></tr>
         <tr><td>Good Execution Rate</td><td>Quality</td><td class="right mono">0.022</td><td class="right mono">0.7336</td></tr>
         <tr><td>Dissatisfaction Rate</td><td>Quality</td><td class="right mono">0.022</td><td class="right mono">0.7472</td></tr>
         <tr><td>One Shot Rate</td><td>Behavior</td><td class="right mono">0.019</td><td class="right mono">0.7782</td></tr>
-        <tr><td>Lines Added</td><td>Editing</td><td class="right mono">0.015</td><td class="right mono">0.3646</td></tr>
+        <tr><td>Lines Added</td><td>Editing</td><td class="right mono">0.015</td><td class="right mono">0.3658</td></tr>
     </tbody>
 </table>
 </details>

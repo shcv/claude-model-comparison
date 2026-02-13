@@ -1,0 +1,58 @@
+<!-- title: Cache Behavior Analysis -->
+<p>Two hypotheses were tested to explain 4.6's superior cache economics: (1) 4.6 front-loads reads, keeping cache warm for subsequent requests; (2) 4.5 experiences more cache cooling between turns, causing expensive re-writes.</p>
+
+<h3>Hypothesis 1: Front-Loading (Partially Supported)</h3>
+
+<p>The hypothesis that 4.6 front-loads cache <em>reads</em> is weakly supported&mdash;4.6 concentrates 17.8% of cache reads in the first request vs 15.2% for 4.5. But the dominant signal is on the <em>write</em> side: 4.6's first request writes 49% fewer cache tokens (24.6K vs 48.1K median), and its overall cache hit rate is 89.5% vs 81.3%.</p>
+
+<table>
+    <thead>
+        <tr><th>Metric</th><th class="right">Opus 4.5</th><th class="right">Opus 4.6</th><th class="right">Ratio</th></tr>
+    </thead>
+    <tbody>
+        <tr><td class="label-cell">First-request cache read (avg)</td><td class="right mono">52,486</td><td class="right mono">55,652</td><td class="right mono">1.06&times;</td></tr>
+        <tr><td class="label-cell">First-request cache write (avg)</td><td class="right mono">48,108</td><td class="right mono">24,561</td><td class="right mono v-green">0.51&times;</td></tr>
+        <tr><td class="label-cell">Overall cache hit rate</td><td class="right mono">81.3%</td><td class="right mono">89.5%</td><td class="right mono v-green">+8.2pp</td></tr>
+        <tr><td class="label-cell">Read/write ratio at position 15</td><td class="right mono">33.2</td><td class="right mono">46.7</td><td class="right mono v-green">1.4&times;</td></tr>
+    </tbody>
+</table>
+
+<p>As sessions extend, 4.6 maintains a better read/write ratio&mdash;by request position 15, it achieves 46.7&times; reads per write vs 33.2&times; for 4.5. This suggests 4.6 writes proportionally less new cache as sessions progress.</p>
+
+<h3>Cost Crossover by Request Count</h3>
+
+<p>Grouping tasks by API request count confirms the crossover at 30+ requests:</p>
+
+<table>
+    <thead>
+        <tr><th>Request tier</th><th class="right">4.5 avg cost</th><th class="right">4.6 avg cost</th><th class="right">&Delta;</th></tr>
+    </thead>
+    <tbody>
+        <tr><td class="label-cell">1 request</td><td class="right mono">$0.81</td><td class="right mono">$0.33</td><td class="right mono v-green">&minus;60%</td></tr>
+        <tr><td class="label-cell">2&ndash;3 requests</td><td class="right mono">$1.25</td><td class="right mono">$0.83</td><td class="right mono v-green">&minus;34%</td></tr>
+        <tr><td class="label-cell">4&ndash;10 requests</td><td class="right mono">$2.35</td><td class="right mono">$2.04</td><td class="right mono v-green">&minus;14%</td></tr>
+        <tr><td class="label-cell">11&ndash;30 requests</td><td class="right mono">$5.31</td><td class="right mono">$4.81</td><td class="right mono v-green">&minus;9%</td></tr>
+        <tr><td class="label-cell">30+ requests</td><td class="right mono">$11.61</td><td class="right mono">$13.16</td><td class="right mono v-orange">+13%</td></tr>
+    </tbody>
+</table>
+
+<p>4.6's advantage is largest on single-request tasks (&minus;60%), where its lean initialization is maximally visible, and erodes steadily as request count increases. At 30+ requests, 4.6 averages 52.7 requests/task vs 47.0 for 4.5, with slightly higher per-request cache reads (89K vs 80K)&mdash;enough to tip the balance.</p>
+
+<h3>Hypothesis 2: Cache Cooling (Mechanism Supported, Premise Not)</h3>
+
+<p>Both models experience cache cooling gaps (&gt;5 minutes between task transitions) at nearly identical rates&mdash;26.7% for 4.5 vs 24.4% for 4.6. So the premise that 4.5 &ldquo;stops more often&rdquo; is not supported. However, the <em>impact</em> of cooling differs dramatically:</p>
+
+<table>
+    <thead>
+        <tr><th>Condition</th><th class="right">4.5 cache write fraction</th><th class="right">4.6 cache write fraction</th></tr>
+    </thead>
+    <tbody>
+        <tr><td class="label-cell">After cold start (&gt;5 min gap)</td><td class="right mono">38.6%</td><td class="right mono">11.9%</td></tr>
+        <tr><td class="label-cell">After warm start (&le;5 min gap)</td><td class="right mono">6.0%</td><td class="right mono">5.7%</td></tr>
+        <tr><td class="label-cell">Cold/warm inflation</td><td class="right mono v-orange">6.4&times;</td><td class="right mono v-green">2.1&times;</td></tr>
+    </tbody>
+</table>
+
+<p>After warm starts, both models behave identically (~6% write fraction). After cold starts, 4.5&rsquo;s write fraction jumps to 38.6%&mdash;roughly 6.4&times; inflation&mdash;while 4.6 reaches only 11.9% (2.1&times;). In absolute terms: 4.5 re-writes 177K tokens after a cold start vs 87K for 4.6. This suggests 4.5 accumulates a larger context payload that is more expensive to reconstruct when cache expires.</p>
+
+<p>The combined picture: 4.6&rsquo;s &ldquo;lean initialization&rdquo; (fewer first-request writes) and &ldquo;cold resistance&rdquo; (smaller re-cache payload) together produce its cache advantage. Both effects point to the same underlying cause: 4.6&rsquo;s concentrated work style creates a more compact context that costs less to establish and re-establish.</p>
