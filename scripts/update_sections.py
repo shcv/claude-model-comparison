@@ -3252,6 +3252,8 @@ DATA_SOURCE_PATHS = {
     "timing": "analysis/timing-analysis.json",
     "scores": "analysis/scores-latest.json",
     "findings": "analysis/findings.json",
+    "eval": "analysis/task-type-eval.json",
+    "classify": "data/classification-summary.json",
 }
 
 

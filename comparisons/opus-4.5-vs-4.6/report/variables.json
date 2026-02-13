@@ -774,6 +774,245 @@
     "format": "{:.2f}"
   },
 
+  "timing.overlap_pairs": {
+    "source": "timing",
+    "path": "session_overlap.overlapping_pairs",
+    "format": "{:,}"
+  },
+  "timing.max_concurrency": {
+    "source": "timing",
+    "path": "session_overlap.max_concurrency",
+    "format": "{:,}"
+  },
+
+  "eval.agreement_rate": {
+    "source": "eval",
+    "path": "summary.agreement_rate",
+    "format": "pct"
+  },
+  "eval.unknown_resolution": {
+    "source": "eval",
+    "path": "summary.unknown_resolution_rate",
+    "format": "pct"
+  },
+
+  "classify.unknown_rate": {
+    "source": "classify",
+    "path": "combined.unknown_rate",
+    "format": "pct1"
+  },
+  "classify.unknown_rate_a": {
+    "source": "classify",
+    "path": "by_model.{model_a}.unknown_rate",
+    "format": "pct1"
+  },
+  "classify.unknown_rate_b": {
+    "source": "classify",
+    "path": "by_model.{model_b}.unknown_rate",
+    "format": "pct1"
+  },
+
+  "tokens.thinking_skip_a": {
+    "source": "tokens",
+    "path": "{model_a}.overall.thinking_skip_rate",
+    "format": "pct1"
+  },
+  "tokens.thinking_skip_b": {
+    "source": "tokens",
+    "path": "{model_b}.overall.thinking_skip_rate",
+    "format": "pct1"
+  },
+  "tokens.thinking_skip_trivial_a": {
+    "source": "tokens",
+    "path": "{model_a}.by_complexity.trivial.thinking_skip_rate",
+    "format": "pct1"
+  },
+  "tokens.thinking_skip_trivial_b": {
+    "source": "tokens",
+    "path": "{model_b}.by_complexity.trivial.thinking_skip_rate",
+    "format": "pct1"
+  },
+
+  "tokens.cost_input_pct_a": {
+    "source": "tokens",
+    "path": "{model_a}.overall.cost_composition.input_pct",
+    "format": "{:.1f}"
+  },
+  "tokens.cost_input_pct_b": {
+    "source": "tokens",
+    "path": "{model_b}.overall.cost_composition.input_pct",
+    "format": "{:.1f}"
+  },
+  "tokens.cost_output_pct_a": {
+    "source": "tokens",
+    "path": "{model_a}.overall.cost_composition.output_pct",
+    "format": "{:.1f}"
+  },
+  "tokens.cost_output_pct_b": {
+    "source": "tokens",
+    "path": "{model_b}.overall.cost_composition.output_pct",
+    "format": "{:.1f}"
+  },
+  "tokens.cost_cache_read_pct_a": {
+    "source": "tokens",
+    "path": "{model_a}.overall.cost_composition.cache_read_pct",
+    "format": "{:.1f}"
+  },
+  "tokens.cost_cache_read_pct_b": {
+    "source": "tokens",
+    "path": "{model_b}.overall.cost_composition.cache_read_pct",
+    "format": "{:.1f}"
+  },
+  "tokens.cost_cache_write_pct_a": {
+    "source": "tokens",
+    "path": "{model_a}.overall.cost_composition.cache_write_pct",
+    "format": "{:.1f}"
+  },
+  "tokens.cost_cache_write_pct_b": {
+    "source": "tokens",
+    "path": "{model_b}.overall.cost_composition.cache_write_pct",
+    "format": "{:.1f}"
+  },
+
+  "tokens.cold_write_ratio_a": {
+    "source": "tokens",
+    "path": "{model_a}.cold_cache_analysis.cold_write_ratio",
+    "format": "{:.1f}"
+  },
+  "tokens.cold_write_ratio_b": {
+    "source": "tokens",
+    "path": "{model_b}.cold_cache_analysis.cold_write_ratio",
+    "format": "{:.1f}"
+  },
+  "tokens.cold_first_write_a": {
+    "source": "tokens",
+    "path": "{model_a}.cold_cache_analysis.avg_first_request_cache_write",
+    "format": "{:,.0f}"
+  },
+  "tokens.cold_first_write_b": {
+    "source": "tokens",
+    "path": "{model_b}.cold_cache_analysis.avg_first_request_cache_write",
+    "format": "{:,.0f}"
+  },
+  "tokens.cold_subsequent_write_a": {
+    "source": "tokens",
+    "path": "{model_a}.cold_cache_analysis.avg_subsequent_cache_write",
+    "format": "{:,.0f}"
+  },
+  "tokens.cold_subsequent_write_b": {
+    "source": "tokens",
+    "path": "{model_b}.cold_cache_analysis.avg_subsequent_cache_write",
+    "format": "{:,.0f}"
+  },
+  "tokens.cold_first_read_a": {
+    "source": "tokens",
+    "path": "{model_a}.cold_cache_analysis.avg_first_request_cache_read",
+    "format": "{:,.0f}"
+  },
+  "tokens.cold_first_read_b": {
+    "source": "tokens",
+    "path": "{model_b}.cold_cache_analysis.avg_first_request_cache_read",
+    "format": "{:,.0f}"
+  },
+  "tokens.cold_subsequent_read_a": {
+    "source": "tokens",
+    "path": "{model_a}.cold_cache_analysis.avg_subsequent_cache_read",
+    "format": "{:,.0f}"
+  },
+  "tokens.cold_subsequent_read_b": {
+    "source": "tokens",
+    "path": "{model_b}.cold_cache_analysis.avg_subsequent_cache_read",
+    "format": "{:,.0f}"
+  },
+
+  "cost.trivial_cost_a": {
+    "source": "tokens",
+    "path": "{model_a}.by_complexity.trivial.avg_cost_usd",
+    "format": "${:.2f}"
+  },
+  "cost.trivial_cost_b": {
+    "source": "tokens",
+    "path": "{model_b}.by_complexity.trivial.avg_cost_usd",
+    "format": "${:.2f}"
+  },
+  "cost.moderate_cost_a": {
+    "source": "tokens",
+    "path": "{model_a}.by_complexity.moderate.avg_cost_usd",
+    "format": "${:.2f}"
+  },
+  "cost.moderate_cost_b": {
+    "source": "tokens",
+    "path": "{model_b}.by_complexity.moderate.avg_cost_usd",
+    "format": "${:.2f}"
+  },
+  "cost.major_cost_a": {
+    "source": "tokens",
+    "path": "{model_a}.by_complexity.major.avg_cost_usd",
+    "format": "${:.2f}"
+  },
+  "cost.major_cost_b": {
+    "source": "tokens",
+    "path": "{model_b}.by_complexity.major.avg_cost_usd",
+    "format": "${:.2f}"
+  },
+
+  "stats.overall_bonferroni_count": {
+    "source": "stats",
+    "path": "metadata.overall_bonferroni_significant",
+    "format": "{:,}"
+  },
+  "stats.total_tests": {
+    "source": "stats",
+    "path": "metadata.total_tests",
+    "format": "{:,}"
+  },
+  "stats.bonferroni_count": {
+    "source": "stats",
+    "path": "metadata.bonferroni_significant_count",
+    "format": "{:,}"
+  },
+
+  "stats.duration_investigation_median_a": {
+    "source": "stats",
+    "path": "duration_by_type.investigation.median_a",
+    "format": "{:.1f}"
+  },
+  "stats.duration_investigation_median_b": {
+    "source": "stats",
+    "path": "duration_by_type.investigation.median_b",
+    "format": "{:.1f}"
+  },
+  "stats.duration_bugfix_median_a": {
+    "source": "stats",
+    "path": "duration_by_type.bugfix.median_a",
+    "format": "{:.1f}"
+  },
+  "stats.duration_bugfix_median_b": {
+    "source": "stats",
+    "path": "duration_by_type.bugfix.median_b",
+    "format": "{:.1f}"
+  },
+  "stats.duration_refactor_median_a": {
+    "source": "stats",
+    "path": "duration_by_type.refactor.median_a",
+    "format": "{:.1f}"
+  },
+  "stats.duration_refactor_median_b": {
+    "source": "stats",
+    "path": "duration_by_type.refactor.median_b",
+    "format": "{:.1f}"
+  },
+  "stats.duration_feature_median_a": {
+    "source": "stats",
+    "path": "duration_by_type.feature.median_a",
+    "format": "{:.1f}"
+  },
+  "stats.duration_feature_median_b": {
+    "source": "stats",
+    "path": "duration_by_type.feature.median_b",
+    "format": "{:.1f}"
+  },
+
   "template_tables": {
     "findings-summary": {
       "spec": "findings-summary",

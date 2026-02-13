@@ -10,6 +10,7 @@
     "fdr_significant_count": 168,
     "bonferroni_threshold": 9.452e-05,
     "bonferroni_significant_count": 93,
+    "overall_bonferroni_significant": 15,
     "sample_sizes": {
       "opus-4-5": 1729,
       "opus-4-6": 591
@@ -8746,6 +8747,56 @@
       ]
     }
   ],
+  "duration_by_type": {
+    "investigation": {
+      "median_a": 41.002,
+      "median_b": 79.909,
+      "mean_a": 569.815,
+      "mean_b": 218.086,
+      "effect_size": 0.0535,
+      "p_value": 4e-06
+    },
+    "sysadmin": {
+      "median_a": 30.27,
+      "median_b": 45.942,
+      "mean_a": 74.139,
+      "mean_b": 114.437,
+      "effect_size": 0.1857,
+      "p_value": 0.114541
+    },
+    "refactor": {
+      "median_a": 106.672,
+      "median_b": 493.03,
+      "mean_a": 274.491,
+      "mean_b": 467.409,
+      "effect_size": 0.4607,
+      "p_value": 0.000335
+    },
+    "bugfix": {
+      "median_a": 56.359,
+      "median_b": 74.32,
+      "mean_a": 640.239,
+      "mean_b": 895.533,
+      "effect_size": 0.0408,
+      "p_value": 0.048452
+    },
+    "feature": {
+      "median_a": 145.699,
+      "median_b": 208.104,
+      "mean_a": 243.675,
+      "mean_b": 1116.732,
+      "effect_size": 0.2285,
+      "p_value": 0.010586
+    },
+    "greenfield": {
+      "median_a": 199.156,
+      "median_b": 440.173,
+      "mean_a": 359.714,
+      "mean_b": 647.974,
+      "effect_size": 0.4885,
+      "p_value": 0.329878
+    }
+  },
   "by_cross_cut": {
     "task_type:investigation": {
       "label": "task_type:investigation",

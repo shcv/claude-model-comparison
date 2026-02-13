@@ -82,6 +82,7 @@ class TaskTokens:
 
     # Request-level data
     request_count: int = 0
+    request_details: list = field(default_factory=list)  # per-request cache data
 
     # Cost estimate (USD)
     estimated_cost: float = 0.0
@@ -183,6 +184,12 @@ def extract_tokens_from_session(file_path: Path, model: str) -> list[TaskTokens]
                 current_task.cache_read_tokens += cache_read
                 current_task.cache_write_tokens += cache_write
 
+                # Store per-request cache data for cold/warm analysis
+                current_task.request_details.append({
+                    'cache_read': cache_read,
+                    'cache_write': cache_write,
+                })
+
             # For output_tokens, we need the LAST value per requestId
             # (it's a cumulative streaming counter)
             # Store per-request and take max later
@@ -255,6 +262,45 @@ def extract_tokens_from_session(file_path: Path, model: str) -> list[TaskTokens]
         task.estimated_cost = round(cost, 4)
 
     return tasks
+
+
+def compute_cold_cache_analysis(tasks: list[TaskTokens]) -> dict:
+    """Compute first-request (cold) vs subsequent (warm) cache behavior."""
+    first_writes = []
+    subsequent_writes = []
+    first_reads = []
+    subsequent_reads = []
+
+    for t in tasks:
+        if len(t.request_details) < 2:
+            continue
+        first = t.request_details[0]
+        rest = t.request_details[1:]
+
+        first_writes.append(first['cache_write'])
+        first_reads.append(first['cache_read'])
+        for r in rest:
+            subsequent_writes.append(r['cache_write'])
+            subsequent_reads.append(r['cache_read'])
+
+    if not first_writes or not subsequent_writes:
+        return {}
+
+    import numpy as np
+    avg_first_write = float(np.mean(first_writes))
+    avg_subsequent_write = float(np.mean(subsequent_writes))
+    avg_first_read = float(np.mean(first_reads))
+    avg_subsequent_read = float(np.mean(subsequent_reads))
+
+    return {
+        'tasks_analyzed': len([t for t in tasks if len(t.request_details) >= 2]),
+        'avg_first_request_cache_write': round(avg_first_write),
+        'avg_subsequent_cache_write': round(avg_subsequent_write),
+        'cold_write_ratio': round(avg_first_write / avg_subsequent_write, 2) if avg_subsequent_write > 0 else 0,
+        'avg_first_request_cache_read': round(avg_first_read),
+        'avg_subsequent_cache_read': round(avg_subsequent_read),
+        'warm_read_ratio': round(avg_subsequent_read / avg_first_read, 2) if avg_first_read > 0 else 0,
+    }
 
 
 def extract_all_tokens(sessions_file: Path, model: str, include_meta: bool = False) -> list[TaskTokens]:
@@ -334,6 +380,30 @@ def compute_aggregates(tasks: list[TaskTokens], classifications: dict) -> dict:
             for t in group
         ])
 
+        # Thinking skip rate: fraction of tasks with zero thinking
+        thinking_skip_rate = round(sum(1 for t in group if t.thinking_chars == 0) / n, 4)
+
+        # Cost composition: percentage breakdown by token type
+        total_cache_read = sum(t.cache_read_tokens for t in group)
+        total_cache_write = sum(t.cache_write_tokens for t in group)
+        # Use model from first task to look up pricing
+        model_key = group[0].model if group else 'opus-4-5'
+        pricing = PRICING.get(model_key, PRICING['opus-4-5'])
+        input_cost = (total_input / 1_000_000) * pricing['input']
+        output_cost = (total_output / 1_000_000) * pricing['output']
+        cache_read_cost = (total_cache_read / 1_000_000) * pricing['cache_read']
+        cache_write_cost = (total_cache_write / 1_000_000) * pricing['cache_write']
+        component_total = input_cost + output_cost + cache_read_cost + cache_write_cost
+        if component_total > 0:
+            cost_composition = {
+                'input_pct': round(input_cost / component_total * 100, 1),
+                'output_pct': round(output_cost / component_total * 100, 1),
+                'cache_read_pct': round(cache_read_cost / component_total * 100, 1),
+                'cache_write_pct': round(cache_write_cost / component_total * 100, 1),
+            }
+        else:
+            cost_composition = {'input_pct': 0, 'output_pct': 0, 'cache_read_pct': 0, 'cache_write_pct': 0}
+
         return {
             'count': n,
             'total_input_tokens': total_input,
@@ -349,6 +419,7 @@ def compute_aggregates(tasks: list[TaskTokens], classifications: dict) -> dict:
             'avg_thinking_chars': round(total_thinking_chars / n),
             'avg_text_chars': round(total_text_chars / n),
             'thinking_ratio': round(tasks_with_thinking / n, 3),
+            'thinking_skip_rate': thinking_skip_rate,
             'avg_thinking_chars_when_used': round(
                 total_thinking_chars / tasks_with_thinking
             ) if tasks_with_thinking else 0,
@@ -357,6 +428,7 @@ def compute_aggregates(tasks: list[TaskTokens], classifications: dict) -> dict:
             'avg_requests_per_task': round(sum(t.request_count for t in group) / n, 1),
             'cache_read_tokens': sum(t.cache_read_tokens for t in group),
             'cache_write_tokens': sum(t.cache_write_tokens for t in group),
+            'cost_composition': cost_composition,
             # Per-request averages
             'avg_output_per_request': round(total_output / total_requests) if total_requests else 0,
             'output_per_request_ci95': bootstrap_ci(per_request_outputs),
@@ -393,6 +465,9 @@ def compute_aggregates(tasks: list[TaskTokens], classifications: dict) -> dict:
 
     for task_type, group in sorted(type_groups.items()):
         results['by_type'][task_type] = stats_for_group(group)
+
+    # Cold cache analysis (first request vs subsequent)
+    results['cold_cache_analysis'] = compute_cold_cache_analysis(tasks)
 
     return results
 
@@ -446,9 +521,13 @@ def main():
         tasks = extract_all_tokens(sessions_file, model, include_meta=True)
         print(f"  Total tasks: {len(tasks)}")
 
-        # Save raw per-task token data
+        # Save raw per-task token data (exclude request_details to keep size down)
         raw_file = data_dir / f'tokens-{model}.json'
-        raw_data = [asdict(t) for t in tasks]
+        raw_data = []
+        for t in tasks:
+            d = asdict(t)
+            d.pop('request_details', None)
+            raw_data.append(d)
         with open(raw_file, 'w', encoding='utf-8') as f:
             json.dump(raw_data, f, indent=2)
         print(f"  Saved raw data to {raw_file}")

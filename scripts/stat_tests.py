@@ -858,6 +858,27 @@ def main():
     # Re-group for backward-compatible output
     overall, by_complexity, by_cross_cut = regroup_results(flat_tests)
 
+    # Count Bonferroni-significant tests in overall stratum only
+    overall_bonferroni = sum(
+        1 for t in flat_tests
+        if t.get("bonferroni_significant") and t.get("cross_cut") == "overall"
+    )
+
+    # Build duration_by_type: flatten duration medians from cross-cut results
+    duration_by_type = {}
+    for t in flat_tests:
+        cc = t.get("cross_cut", "")
+        if t.get("field") == "duration_seconds" and cc.startswith("task_type:"):
+            task_type = cc.split(":", 1)[1]
+            duration_by_type[task_type] = {
+                "median_a": t["median"][MODELS[0]],
+                "median_b": t["median"][MODELS[1]],
+                "mean_a": t["mean"][MODELS[0]],
+                "mean_b": t["mean"][MODELS[1]],
+                "effect_size": t.get("effect_size"),
+                "p_value": t["p_value"],
+            }
+
     # Build output
     output = {
         "metadata": {
@@ -868,11 +889,16 @@ def main():
             "fdr_significant_count": fdr_significant_count,
             "bonferroni_threshold": round(bonferroni_threshold, 8),
             "bonferroni_significant_count": bonferroni_count,
+            "overall_bonferroni_significant": overall_bonferroni,
             "sample_sizes": {model: len(data[model]) for model in MODELS},
         },
         "overall": overall,
         "by_complexity": by_complexity,
     }
+
+    # Add duration_by_type if any task_type cross-cuts were computed
+    if duration_by_type:
+        output["duration_by_type"] = duration_by_type
 
     # Add cross-cut results if any exist beyond complexity
     if by_cross_cut:

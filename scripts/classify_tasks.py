@@ -482,11 +482,36 @@ def print_distribution(tasks: list[dict], model: str):
         print(f"  {domain:<15} {count:3d} ({pct:5.1f}%)")
 
 
+def compute_classification_summary(tasks: list[dict]) -> dict:
+    """Compute summary statistics for classification output."""
+    total = len(tasks)
+    if total == 0:
+        return {}
+    type_counts = {}
+    for t in tasks:
+        task_type = t.get('classification', {}).get('type', 'unknown')
+        type_counts[task_type] = type_counts.get(task_type, 0) + 1
+    unknown_count = type_counts.get('unknown', 0)
+    return {
+        'total_tasks': total,
+        'unknown_count': unknown_count,
+        'unknown_rate': round(unknown_count / total, 4),
+        'type_distribution': type_counts,
+    }
+
+
 def save_classified(tasks: list[dict], output_file: Path):
-    """Save classified tasks."""
+    """Save classified tasks and summary."""
     with open(output_file, 'w') as f:
         json.dump(tasks, f, indent=2)
     print(f"\nSaved {len(tasks)} classified tasks to {output_file}")
+
+    # Save classification summary alongside
+    summary = compute_classification_summary(tasks)
+    summary_file = output_file.parent / output_file.name.replace('tasks-classified-', 'classification-summary-')
+    with open(summary_file, 'w') as f:
+        json.dump(summary, f, indent=2)
+    print(f"  Unknown rate: {summary.get('unknown_rate', 0):.1%} ({summary.get('unknown_count', 0)}/{summary.get('total_tasks', 0)})")
 
 
 def main():
@@ -510,6 +535,7 @@ def main():
 
     models = discover_models(args.data_dir, prefix="tasks-canonical") if args.model == 'both' else [args.model]
 
+    all_summaries = {}
     for model in models:
         tasks = load_and_classify(args.data_dir, model, use_llm=args.use_llm)
         if not tasks:
@@ -544,6 +570,24 @@ def main():
 
         output_file = args.data_dir / f'tasks-classified-{model}.json'
         save_classified(tasks, output_file)
+        all_summaries[model] = compute_classification_summary(tasks)
+
+    # Save combined classification summary
+    if all_summaries:
+        total_tasks = sum(s['total_tasks'] for s in all_summaries.values())
+        total_unknown = sum(s['unknown_count'] for s in all_summaries.values())
+        combined_summary = {
+            'by_model': all_summaries,
+            'combined': {
+                'total_tasks': total_tasks,
+                'unknown_count': total_unknown,
+                'unknown_rate': round(total_unknown / total_tasks, 4) if total_tasks else 0,
+            },
+        }
+        summary_file = args.data_dir / 'classification-summary.json'
+        with open(summary_file, 'w') as f:
+            json.dump(combined_summary, f, indent=2)
+        print(f"\nSaved combined summary to {summary_file}")
 
 
 if __name__ == '__main__':
