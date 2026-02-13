@@ -418,6 +418,362 @@
     "format": "{:,}"
   },
 
+  "stat.tool_calls_mean_a": {
+    "source": "stats",
+    "path": "overall.mann_whitney.[field=tool_calls].mean.{model_a}",
+    "format": "{:.1f}"
+  },
+  "stat.tool_calls_mean_b": {
+    "source": "stats",
+    "path": "overall.mann_whitney.[field=tool_calls].mean.{model_b}",
+    "format": "{:.1f}"
+  },
+  "stat.tool_calls_d": {
+    "source": "stats",
+    "path": "overall.mann_whitney.[field=tool_calls].cohens_d",
+    "format": "{:.2f}"
+  },
+  "stat.output_per_request_d": {
+    "source": "stats",
+    "path": "overall.mann_whitney.[field=output_per_request].cohens_d",
+    "format": "{:.2f}"
+  },
+  "stat.duration_d": {
+    "source": "stats",
+    "path": "overall.mann_whitney.[field=duration_seconds].cohens_d",
+    "format": "{:.3f}"
+  },
+  "stat.failed_rate_a": {
+    "source": "stats",
+    "path": "overall.proportions.[field=failed_rate].{model_a}.proportion",
+    "format": "{:.4f}"
+  },
+  "stat.failed_rate_b": {
+    "source": "stats",
+    "path": "overall.proportions.[field=failed_rate].{model_b}.proportion",
+    "format": "{:.4f}"
+  },
+  "stat.completion_chi_p": {
+    "source": "stats",
+    "path": "overall.chi_square.[field=task_completion].p_value",
+    "format": "{:.6f}"
+  },
+  "stat.autonomy_p": {
+    "source": "stats",
+    "path": "overall.chi_square.[field=autonomy_level].p_value",
+    "format": "{:.7f}"
+  },
+  "stat.autonomy_v": {
+    "source": "stats",
+    "path": "overall.chi_square.[field=autonomy_level].cramers_v",
+    "format": "{:.2f}"
+  },
+
+  "dataset.median_duration_a": {
+    "source": "dataset",
+    "path": "{model_a}.median_task_duration_sec",
+    "format": "{:.1f}"
+  },
+  "dataset.median_duration_b": {
+    "source": "dataset",
+    "path": "{model_b}.median_task_duration_sec",
+    "format": "{:.1f}"
+  },
+  "dataset.under30s_pct_a": {
+    "source": "dataset",
+    "path": "{model_a}.duration_distribution.buckets.under_30s.pct",
+    "format": "{:.0f}"
+  },
+  "dataset.under30s_pct_b": {
+    "source": "dataset",
+    "path": "{model_b}.duration_distribution.buckets.under_30s.pct",
+    "format": "{:.0f}"
+  },
+  "dataset.session_hours_a": {
+    "source": "dataset",
+    "path": "{model_a}.total_session_hours",
+    "format": "{:.1f}"
+  },
+  "dataset.session_hours_b": {
+    "source": "dataset",
+    "path": "{model_b}.total_session_hours",
+    "format": "{:.1f}"
+  },
+  "dataset.tasks_ratio": {
+    "source": "dataset",
+    "path": "combined.tasks",
+    "format": "{:,}"
+  },
+
+  "cost.avg_input_a": {
+    "source": "tokens",
+    "path": "{model_a}.overall.avg_input_tokens",
+    "format": "{:,.0f}"
+  },
+  "cost.avg_input_b": {
+    "source": "tokens",
+    "path": "{model_b}.overall.avg_input_tokens",
+    "format": "{:,.0f}"
+  },
+  "cost.count_a": {
+    "source": "tokens",
+    "path": "{model_a}.overall.count",
+    "format": "{:,.0f}"
+  },
+  "cost.count_b": {
+    "source": "tokens",
+    "path": "{model_b}.overall.count",
+    "format": "{:,.0f}"
+  },
+  "cost.cache_read_a": {
+    "source": "tokens",
+    "path": "{model_a}.overall.cache_read_tokens",
+    "format": "{:,.0f}"
+  },
+  "cost.cache_read_b": {
+    "source": "tokens",
+    "path": "{model_b}.overall.cache_read_tokens",
+    "format": "{:,.0f}"
+  },
+  "cost.cache_write_a": {
+    "source": "tokens",
+    "path": "{model_a}.overall.cache_write_tokens",
+    "format": "{:,.0f}"
+  },
+  "cost.cache_write_b": {
+    "source": "tokens",
+    "path": "{model_b}.overall.cache_write_tokens",
+    "format": "{:,.0f}"
+  },
+  "cost.major_count_a": {
+    "source": "tokens",
+    "path": "{model_a}.by_complexity.major.count",
+    "format": "{:,.0f}"
+  },
+  "cost.major_count_b": {
+    "source": "tokens",
+    "path": "{model_b}.by_complexity.major.count",
+    "format": "{:,.0f}"
+  },
+
+  "planning.complex_rate_b": {
+    "source": "planning",
+    "path": "{model_b}.by_complexity.complex.planning_rate_pct",
+    "format": "{:.1f}"
+  },
+  "planning.major_rate_b": {
+    "source": "planning",
+    "path": "{model_b}.by_complexity.major.planning_rate_pct",
+    "format": "{:.1f}"
+  },
+
+  "behavior.explore_count_a": {
+    "source": "behavior",
+    "path": "{model_a}.subagent_types.Explore",
+    "format": "{:,}"
+  },
+  "behavior.explore_count_b": {
+    "source": "behavior",
+    "path": "{model_b}.subagent_types.Explore",
+    "format": "{:,}"
+  },
+  "behavior.gp_count_a": {
+    "source": "behavior",
+    "path": "{model_a}.subagent_types.general-purpose",
+    "format": "{:,}"
+  },
+  "behavior.gp_count_b": {
+    "source": "behavior",
+    "path": "{model_b}.subagent_types.general-purpose",
+    "format": "{:,}"
+  },
+
+  "sessions.research_ratio_a": {
+    "source": "sessions",
+    "path": "effort_distribution.[model={model_a}].avg_research_ratio",
+    "format": "{:.3f}"
+  },
+  "sessions.research_ratio_b": {
+    "source": "sessions",
+    "path": "effort_distribution.[model={model_b}].avg_research_ratio",
+    "format": "{:.3f}"
+  },
+  "sessions.impl_ratio_a": {
+    "source": "sessions",
+    "path": "effort_distribution.[model={model_a}].avg_impl_ratio",
+    "format": "{:.3f}"
+  },
+  "sessions.impl_ratio_b": {
+    "source": "sessions",
+    "path": "effort_distribution.[model={model_b}].avg_impl_ratio",
+    "format": "{:.3f}"
+  },
+
+  "timing.cost_per_hour_5min_a": {
+    "source": "timing",
+    "path": "{model_a}.active_time_cost.by_threshold.5min.cost_per_active_hour",
+    "format": "${:.2f}"
+  },
+  "timing.cost_per_hour_5min_b": {
+    "source": "timing",
+    "path": "{model_b}.active_time_cost.by_threshold.5min.cost_per_active_hour",
+    "format": "${:.2f}"
+  },
+
+  "edits.tasks_with_edits_a": {
+    "source": "edits",
+    "path": "{model_a}.total_tasks",
+    "format": "{:,}"
+  },
+  "edits.tasks_with_edits_b": {
+    "source": "edits",
+    "path": "{model_b}.total_tasks",
+    "format": "{:,}"
+  },
+
+  "dataset.total_tool_calls_a": {
+    "source": "dataset",
+    "path": "{model_a}.total_tool_calls",
+    "format": "{:,}"
+  },
+  "dataset.total_tool_calls_b": {
+    "source": "dataset",
+    "path": "{model_b}.total_tool_calls",
+    "format": "{:,}"
+  },
+  "dataset.avg_requests_a": {
+    "source": "dataset",
+    "path": "{model_a}.avg_requests_per_task",
+    "format": "{:.1f}"
+  },
+  "dataset.avg_requests_b": {
+    "source": "dataset",
+    "path": "{model_b}.avg_requests_per_task",
+    "format": "{:.1f}"
+  },
+
+  "dataset.total_lines_added_a": {
+    "source": "dataset",
+    "path": "{model_a}.total_lines_added",
+    "format": "{:,}"
+  },
+  "dataset.total_lines_added_b": {
+    "source": "dataset",
+    "path": "{model_b}.total_lines_added",
+    "format": "{:,}"
+  },
+  "dataset.complexity_trivial_a": {
+    "source": "dataset",
+    "path": "{model_a}.complexity_distribution.trivial",
+    "format": "{:,}"
+  },
+  "dataset.complexity_trivial_b": {
+    "source": "dataset",
+    "path": "{model_b}.complexity_distribution.trivial",
+    "format": "{:,}"
+  },
+  "dataset.complexity_moderate_a": {
+    "source": "dataset",
+    "path": "{model_a}.complexity_distribution.moderate",
+    "format": "{:,}"
+  },
+  "dataset.complexity_moderate_b": {
+    "source": "dataset",
+    "path": "{model_b}.complexity_distribution.moderate",
+    "format": "{:,}"
+  },
+  "dataset.complexity_complex_a": {
+    "source": "dataset",
+    "path": "{model_a}.complexity_distribution.complex",
+    "format": "{:,}"
+  },
+  "dataset.complexity_complex_b": {
+    "source": "dataset",
+    "path": "{model_b}.complexity_distribution.complex",
+    "format": "{:,}"
+  },
+  "dataset.complexity_major_a": {
+    "source": "dataset",
+    "path": "{model_a}.complexity_distribution.major",
+    "format": "{:,}"
+  },
+  "dataset.complexity_major_b": {
+    "source": "dataset",
+    "path": "{model_b}.complexity_distribution.major",
+    "format": "{:,}"
+  },
+  "dataset.complexity_simple_a": {
+    "source": "dataset",
+    "path": "{model_a}.complexity_distribution.simple",
+    "format": "{:,}"
+  },
+  "dataset.complexity_simple_b": {
+    "source": "dataset",
+    "path": "{model_b}.complexity_distribution.simple",
+    "format": "{:,}"
+  },
+
+  "behavior.subagent_autonomous_a": {
+    "source": "behavior",
+    "path": "{model_a}.subagent_autonomous",
+    "format": "{:,}"
+  },
+  "behavior.subagent_autonomous_b": {
+    "source": "behavior",
+    "path": "{model_b}.subagent_autonomous",
+    "format": "{:,}"
+  },
+
+  "compaction.total_events_a": {
+    "source": "compaction",
+    "path": "{model_a}.total_events",
+    "format": "{:,}"
+  },
+  "compaction.total_events_b": {
+    "source": "compaction",
+    "path": "{model_b}.total_events",
+    "format": "{:,}"
+  },
+
+  "tokens.refactor_output_a": {
+    "source": "tokens",
+    "path": "{model_a}.by_type.refactor.avg_output_tokens",
+    "format": "{:,.0f}"
+  },
+  "tokens.refactor_output_b": {
+    "source": "tokens",
+    "path": "{model_b}.by_type.refactor.avg_output_tokens",
+    "format": "{:,.0f}"
+  },
+
+  "tokens.continuation_output_a": {
+    "source": "tokens",
+    "path": "{model_a}.by_type.continuation.avg_output_tokens",
+    "format": "{:,.0f}"
+  },
+  "tokens.continuation_output_b": {
+    "source": "tokens",
+    "path": "{model_b}.by_type.continuation.avg_output_tokens",
+    "format": "{:,.0f}"
+  },
+
+  "stat.tools_per_file_d": {
+    "source": "stats",
+    "path": "overall.mann_whitney.[field=tools_per_file].cohens_d",
+    "format": "{:.2f}"
+  },
+
+  "compaction.effect_alignment_a": {
+    "source": "compaction",
+    "path": "{model_a}.outcome_correlation.compaction_effect.avg_alignment",
+    "format": "{:.2f}"
+  },
+  "compaction.effect_alignment_b": {
+    "source": "compaction",
+    "path": "{model_b}.outcome_correlation.compaction_effect.avg_alignment",
+    "format": "{:.2f}"
+  },
+
   "template_tables": {
     "findings-summary": {
       "spec": "findings-summary",
