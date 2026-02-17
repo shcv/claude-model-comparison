@@ -1,9 +1,9 @@
 {
   "opus-4-5": {
-    "sessions": 327,
-    "tasks": 1729,
-    "tasks_per_session": 5.3,
-    "projects": 30,
+    "sessions": 329,
+    "tasks": 1913,
+    "tasks_per_session": 5.8,
+    "projects": 29,
     "project_names": [
       "-home-shcv",
       "-home-shcv-docs-finances-taxes-2025",
@@ -16,7 +16,6 @@
       "-home-shcv-projects-interruptions",
       "-home-shcv-projects-keynet",
       "-home-shcv-projects-kvl",
-      "-home-shcv-projects-portal",
       "-home-shcv-projects-prioritease",
       "-home-shcv-projects-triplicate",
       "-home-shcv-scratch-python-interview-prep",
@@ -38,88 +37,91 @@
     ],
     "date_range": {
       "start": "2025-12-05",
-      "end": "2026-02-10"
+      "end": "2026-02-13"
     },
-    "total_user_messages": 20538,
-    "total_assistant_messages": 38444,
-    "total_tool_calls": 18002,
-    "total_session_hours": 415.2,
-    "median_session_minutes": 14.3,
-    "total_files_touched": 2893,
-    "total_lines_added": 178794,
-    "total_lines_removed": 37493,
-    "avg_task_duration_sec": 399.2,
-    "median_task_duration_sec": 42.4,
+    "total_user_messages": 20834,
+    "total_human_messages": 1928,
+    "total_tool_result_messages": 18284,
+    "total_system_messages": 622,
+    "total_assistant_messages": 38811,
+    "total_tool_calls": 18298,
+    "total_session_hours": 415.4,
+    "median_session_minutes": 844.0,
+    "total_files_touched": 3196,
+    "total_lines_added": 200383,
+    "total_lines_removed": 43171,
+    "avg_task_duration_sec": 383.1,
+    "median_task_duration_sec": 42.9,
     "duration_distribution": {
-      "tasks_with_duration": 1683,
-      "mean_seconds": 399.2,
+      "tasks_with_duration": 1844,
+      "mean_seconds": 383.1,
       "percentiles": {
         "p10": 8.2,
         "p25": 15.3,
-        "p50": 42.4,
-        "p75": 119.0,
-        "p90": 270.7
+        "p50": 42.9,
+        "p75": 119.8,
+        "p90": 273.8
       },
       "buckets": {
         "under_30s": {
-          "count": 712,
-          "pct": 42.3
+          "count": 773,
+          "pct": 41.9
         },
         "30s_to_2m": {
-          "count": 553,
-          "pct": 32.9
+          "count": 610,
+          "pct": 33.1
         },
         "2m_to_10m": {
-          "count": 365,
-          "pct": 21.7
+          "count": 395,
+          "pct": 21.4
         },
         "10m_to_1h": {
-          "count": 43,
-          "pct": 2.6
+          "count": 56,
+          "pct": 3.0
         },
         "over_1h": {
           "count": 10,
-          "pct": 0.6
+          "pct": 0.5
         }
       }
     },
-    "total_cost_usd": 5292.01,
-    "total_input_tokens": 676988,
-    "total_output_tokens": 2052862,
-    "cache_read_tokens": 1278992053,
-    "cache_write_tokens": 145588000,
-    "estimated_thinking_tokens": 1419559,
-    "estimated_text_tokens": 674821,
-    "thinking_ratio": 0.751,
+    "total_cost_usd": 5307.7,
+    "total_input_tokens": 676964,
+    "total_output_tokens": 2053424,
+    "cache_read_tokens": 1284514993,
+    "cache_write_tokens": 145870576,
+    "estimated_thinking_tokens": 1418418,
+    "estimated_text_tokens": 681462,
+    "thinking_ratio": 0.749,
     "avg_requests_per_task": 7.5,
     "task_types": {
-      "continuation": 576,
-      "investigation": 437,
-      "feature": 192,
-      "bugfix": 190,
-      "sysadmin": 169,
-      "docs": 101,
-      "refactor": 48,
-      "greenfield": 13,
-      "port": 2,
-      "unknown": 1
+      "unknown": 667,
+      "investigation": 453,
+      "feature": 169,
+      "sysadmin": 157,
+      "greenfield": 135,
+      "bugfix": 123,
+      "refactor": 76,
+      "docs": 51,
+      "continuation": 45,
+      "port": 37
     },
     "complexity_distribution": {
-      "trivial": 808,
-      "simple": 345,
-      "moderate": 367,
-      "complex": 190,
-      "major": 19
+      "trivial": 887,
+      "simple": 382,
+      "moderate": 416,
+      "complex": 202,
+      "major": 26
     },
     "tool_usage": {
       "Bash": 5269,
-      "Read": 3340,
+      "Read": 3361,
       "Edit": 3007,
-      "Grep": 2595,
+      "Grep": 2868,
       "Write": 1036,
       "TodoWrite": 583,
       "Task": 460,
-      "Glob": 419,
+      "Glob": 421,
       "TaskList": 377,
       "TaskUpdate": 216,
       "WebSearch": 136,
@@ -130,80 +132,85 @@
     },
     "scope_by_complexity": {
       "trivial": {
-        "count": 808,
-        "avg_files_touched": 0.13,
+        "count": 887,
+        "avg_files_touched": 0.12,
         "avg_lines_added": 0.4,
         "avg_lines_removed": 0.3,
         "avg_tool_calls": 0.0,
-        "total_files_touched": 105,
-        "total_lines_added": 360,
-        "total_lines_removed": 270
+        "total_files_touched": 109,
+        "total_lines_added": 368,
+        "total_lines_removed": 277
       },
       "simple": {
-        "count": 345,
-        "avg_files_touched": 1.04,
-        "avg_lines_added": 14.1,
-        "avg_lines_removed": 7.9,
+        "count": 382,
+        "avg_files_touched": 1.03,
+        "avg_lines_added": 13.8,
+        "avg_lines_removed": 7.8,
         "avg_tool_calls": 0.0,
-        "total_files_touched": 359,
-        "total_lines_added": 4850,
-        "total_lines_removed": 2710
+        "total_files_touched": 394,
+        "total_lines_added": 5255,
+        "total_lines_removed": 2985
       },
       "moderate": {
-        "count": 367,
-        "avg_files_touched": 2.78,
-        "avg_lines_added": 111.3,
-        "avg_lines_removed": 37.4,
+        "count": 416,
+        "avg_files_touched": 2.75,
+        "avg_lines_added": 112.3,
+        "avg_lines_removed": 36.9,
         "avg_tool_calls": 0.0,
-        "total_files_touched": 1020,
-        "total_lines_added": 40830,
-        "total_lines_removed": 13723
+        "total_files_touched": 1145,
+        "total_lines_added": 46728,
+        "total_lines_removed": 15364
       },
       "complex": {
-        "count": 190,
+        "count": 202,
         "avg_files_touched": 5.61,
-        "avg_lines_added": 463.0,
-        "avg_lines_removed": 97.8,
+        "avg_lines_added": 474.6,
+        "avg_lines_removed": 103.4,
         "avg_tool_calls": 0.0,
-        "total_files_touched": 1065,
-        "total_lines_added": 87966,
-        "total_lines_removed": 18573
+        "total_files_touched": 1134,
+        "total_lines_added": 95863,
+        "total_lines_removed": 20895
       },
       "major": {
-        "count": 19,
-        "avg_files_touched": 18.11,
-        "avg_lines_added": 2357.3,
-        "avg_lines_removed": 116.7,
+        "count": 26,
+        "avg_files_touched": 15.92,
+        "avg_lines_added": 2006.5,
+        "avg_lines_removed": 140.4,
         "avg_tool_calls": 0.0,
-        "total_files_touched": 344,
-        "total_lines_added": 44788,
-        "total_lines_removed": 2217
+        "total_files_touched": 414,
+        "total_lines_added": 52169,
+        "total_lines_removed": 3650
       }
     },
     "data_cleaning": {
-      "total_extracted": 2141,
-      "included": 1729,
-      "excluded": 412,
-      "exclusion_rate": 0.1924,
+      "total_extracted": 2135,
+      "included": 1913,
+      "excluded": 222,
+      "exclusion_rate": 0.104,
       "exclusion_reasons": {
-        "system_continuation": 389,
+        "system_continuation": 198,
         "slash_command": 21,
-        "no_response_interrupt": 2
+        "no_response_interrupt": 2,
+        "empty_continuation": 1
       },
       "flag_counts": {
-        "no_project": 473,
-        "meta": 211,
-        "interrupted": 1
+        "no_project": 497,
+        "meta": 233,
+        "interrupted": 136,
+        "post_compaction": 45
       }
     }
   },
   "opus-4-6": {
-    "sessions": 136,
-    "tasks": 591,
-    "tasks_per_session": 4.3,
-    "projects": 14,
+    "sessions": 189,
+    "tasks": 904,
+    "tasks_per_session": 4.8,
+    "projects": 22,
     "project_names": [
       "-home-shcv",
+      "-home-shcv-config",
+      "-home-shcv-projects-aish",
+      "-home-shcv-projects-ampersand",
       "-home-shcv-projects-cc-mas",
       "-home-shcv-projects-cc-summarize",
       "-home-shcv-projects-claude-coach",
@@ -214,202 +221,219 @@
       "-home-shcv-projects-fact-reasoner",
       "-home-shcv-projects-interruptions",
       "-home-shcv-projects-kvl",
+      "-home-shcv-scratch-capabilities",
       "-home-shcv-work-invent-src-grocery-list",
       "-home-shcv-work-invent-src-inventory-line-size",
+      "-home-shcv-work-masr-papers-peach",
+      "-home-shcv-work-masr-papers-strabo",
+      "-home-shcv-work-masr-src",
+      "-home-shcv-work-masr-src-peach-main",
       "-home-shcv-work-masr-src-strabo-main"
     ],
     "date_range": {
       "start": "2026-02-03",
-      "end": "2026-02-11"
+      "end": "2026-02-16"
     },
-    "total_user_messages": 10712,
-    "total_assistant_messages": 16385,
-    "total_tool_calls": 9658,
-    "total_session_hours": 310.9,
-    "median_session_minutes": 21.6,
-    "total_files_touched": 1549,
-    "total_lines_added": 64673,
-    "total_lines_removed": 18186,
-    "avg_task_duration_sec": 379.6,
-    "median_task_duration_sec": 67.1,
+    "total_user_messages": 13861,
+    "total_human_messages": 855,
+    "total_tool_result_messages": 12444,
+    "total_system_messages": 562,
+    "total_assistant_messages": 21136,
+    "total_tool_calls": 12472,
+    "total_session_hours": 421.0,
+    "median_session_minutes": 71.4,
+    "total_files_touched": 2127,
+    "total_lines_added": 91953,
+    "total_lines_removed": 27589,
+    "avg_task_duration_sec": 336.5,
+    "median_task_duration_sec": 60.8,
     "duration_distribution": {
-      "tasks_with_duration": 568,
-      "mean_seconds": 379.6,
+      "tasks_with_duration": 871,
+      "mean_seconds": 336.5,
       "percentiles": {
         "p10": 9.8,
-        "p25": 20.7,
-        "p50": 67.1,
-        "p75": 207.0,
-        "p90": 476.7
+        "p25": 19.8,
+        "p50": 60.8,
+        "p75": 201.6,
+        "p90": 492.6
       },
       "buckets": {
         "under_30s": {
-          "count": 193,
-          "pct": 34.0
+          "count": 305,
+          "pct": 35.0
         },
         "30s_to_2m": {
-          "count": 164,
-          "pct": 28.9
+          "count": 255,
+          "pct": 29.3
         },
         "2m_to_10m": {
-          "count": 169,
-          "pct": 29.8
+          "count": 243,
+          "pct": 27.9
         },
         "10m_to_1h": {
-          "count": 37,
-          "pct": 6.5
+          "count": 60,
+          "pct": 6.9
         },
         "over_1h": {
-          "count": 5,
+          "count": 8,
           "pct": 0.9
         }
       }
     },
-    "total_cost_usd": 2119.26,
-    "total_input_tokens": 117901,
-    "total_output_tokens": 1810109,
-    "cache_read_tokens": 641665650,
-    "cache_write_tokens": 41525715,
-    "estimated_thinking_tokens": 656741,
-    "estimated_text_tokens": 347835,
-    "thinking_ratio": 0.584,
-    "avg_requests_per_task": 9.6,
+    "total_cost_usd": 2714.66,
+    "total_input_tokens": 156611,
+    "total_output_tokens": 2431208,
+    "cache_read_tokens": 833201816,
+    "cache_write_tokens": 51611585,
+    "estimated_thinking_tokens": 857317,
+    "estimated_text_tokens": 453934,
+    "thinking_ratio": 0.591,
+    "avg_requests_per_task": 9.4,
     "task_types": {
-      "continuation": 207,
-      "investigation": 133,
-      "sysadmin": 82,
-      "feature": 78,
-      "bugfix": 38,
-      "refactor": 25,
-      "docs": 14,
-      "greenfield": 13,
-      "unknown": 1
+      "unknown": 274,
+      "investigation": 210,
+      "sysadmin": 103,
+      "refactor": 63,
+      "bugfix": 62,
+      "feature": 59,
+      "greenfield": 56,
+      "continuation": 40,
+      "port": 25,
+      "docs": 12
     },
     "complexity_distribution": {
-      "trivial": 213,
-      "simple": 129,
-      "moderate": 157,
-      "complex": 74,
-      "major": 18
+      "trivial": 335,
+      "simple": 201,
+      "moderate": 235,
+      "complex": 111,
+      "major": 22
     },
     "tool_usage": {
-      "Bash": 3108,
-      "Read": 2278,
-      "Edit": 1399,
-      "Grep": 749,
-      "TaskUpdate": 483,
-      "Write": 402,
-      "Task": 311,
-      "TaskCreate": 262,
-      "Glob": 152,
-      "TaskOutput": 143,
-      "WebFetch": 68,
-      "ExitPlanMode": 62,
-      "EnterPlanMode": 50,
-      "WebSearch": 50,
-      "SendMessage": 28
+      "Bash": 3924,
+      "Read": 2986,
+      "Edit": 1954,
+      "Grep": 1111,
+      "TaskUpdate": 532,
+      "Write": 485,
+      "Task": 384,
+      "TaskCreate": 290,
+      "Glob": 221,
+      "TaskOutput": 149,
+      "WebFetch": 85,
+      "ExitPlanMode": 76,
+      "EnterPlanMode": 62,
+      "WebSearch": 59,
+      "AskUserQuestion": 36
     },
     "scope_by_complexity": {
       "trivial": {
-        "count": 213,
+        "count": 335,
         "avg_files_touched": 0.11,
-        "avg_lines_added": 0.4,
+        "avg_lines_added": 0.3,
         "avg_lines_removed": 0.2,
         "avg_tool_calls": 0.0,
-        "total_files_touched": 24,
-        "total_lines_added": 77,
-        "total_lines_removed": 33
+        "total_files_touched": 38,
+        "total_lines_added": 109,
+        "total_lines_removed": 63
       },
       "simple": {
-        "count": 129,
-        "avg_files_touched": 0.72,
-        "avg_lines_added": 10.3,
-        "avg_lines_removed": 3.8,
+        "count": 201,
+        "avg_files_touched": 0.68,
+        "avg_lines_added": 9.5,
+        "avg_lines_removed": 3.6,
         "avg_tool_calls": 0.0,
-        "total_files_touched": 93,
-        "total_lines_added": 1334,
-        "total_lines_removed": 494
+        "total_files_touched": 136,
+        "total_lines_added": 1902,
+        "total_lines_removed": 718
       },
       "moderate": {
-        "count": 157,
-        "avg_files_touched": 3.11,
-        "avg_lines_added": 84.6,
-        "avg_lines_removed": 26.6,
+        "count": 235,
+        "avg_files_touched": 2.95,
+        "avg_lines_added": 80.5,
+        "avg_lines_removed": 25.3,
         "avg_tool_calls": 0.0,
-        "total_files_touched": 489,
-        "total_lines_added": 13288,
-        "total_lines_removed": 4173
+        "total_files_touched": 693,
+        "total_lines_added": 18917,
+        "total_lines_removed": 5940
       },
       "complex": {
-        "count": 74,
-        "avg_files_touched": 7.66,
-        "avg_lines_added": 427.3,
-        "avg_lines_removed": 119.5,
+        "count": 111,
+        "avg_files_touched": 7.2,
+        "avg_lines_added": 424.0,
+        "avg_lines_removed": 132.1,
         "avg_tool_calls": 0.0,
-        "total_files_touched": 567,
-        "total_lines_added": 31621,
-        "total_lines_removed": 8844
+        "total_files_touched": 799,
+        "total_lines_added": 47067,
+        "total_lines_removed": 14665
       },
       "major": {
-        "count": 18,
-        "avg_files_touched": 20.89,
-        "avg_lines_added": 1019.6,
-        "avg_lines_removed": 257.9,
+        "count": 22,
+        "avg_files_touched": 20.95,
+        "avg_lines_added": 1089.0,
+        "avg_lines_removed": 282.0,
         "avg_tool_calls": 0.0,
-        "total_files_touched": 376,
-        "total_lines_added": 18353,
-        "total_lines_removed": 4642
+        "total_files_touched": 461,
+        "total_lines_added": 23958,
+        "total_lines_removed": 6203
       }
     },
     "data_cleaning": {
-      "total_extracted": 764,
-      "included": 591,
-      "excluded": 173,
-      "exclusion_rate": 0.2264,
+      "total_extracted": 1018,
+      "included": 904,
+      "excluded": 114,
+      "exclusion_rate": 0.112,
       "exclusion_reasons": {
-        "system_continuation": 168,
+        "system_continuation": 106,
+        "no_response_interrupt": 4,
         "slash_command": 3,
-        "no_response_interrupt": 2
+        "empty_continuation": 1
       },
       "flag_counts": {
-        "meta": 132,
-        "no_project": 102
+        "meta": 160,
+        "no_project": 147,
+        "interrupted": 66,
+        "post_compaction": 26
       }
     }
   },
   "combined": {
-    "projects": 35,
-    "sessions": 463,
-    "tasks": 2320,
-    "total_cost_usd": 7411.27,
-    "total_user_messages": 31250,
-    "total_assistant_messages": 54829,
-    "total_tool_calls": 27660,
-    "total_input_tokens": 794889,
-    "total_output_tokens": 3862971,
-    "cache_read_tokens": 1920657703,
-    "cache_write_tokens": 187113715,
-    "total_files_touched": 4442,
-    "total_lines_added": 243467,
-    "total_lines_removed": 55679,
+    "projects": 41,
+    "sessions": 518,
+    "tasks": 2817,
+    "total_cost_usd": 8022.36,
+    "total_user_messages": 34695,
+    "total_human_messages": 2783,
+    "total_tool_result_messages": 30728,
+    "total_system_messages": 1184,
+    "total_assistant_messages": 59947,
+    "total_tool_calls": 30770,
+    "total_input_tokens": 833575,
+    "total_output_tokens": 4484632,
+    "cache_read_tokens": 2117716809,
+    "cache_write_tokens": 197482161,
+    "total_files_touched": 5323,
+    "total_lines_added": 292336,
+    "total_lines_removed": 70760,
     "date_range": {
       "start": "2025-12-05",
-      "end": "2026-02-11"
+      "end": "2026-02-16"
     },
     "data_cleaning": {
-      "total_extracted": 2905,
-      "included": 2320,
-      "excluded": 585,
-      "exclusion_rate": 0.2014,
+      "total_extracted": 3153,
+      "included": 2817,
+      "excluded": 336,
+      "exclusion_rate": 0.1066,
       "exclusion_reasons": {
-        "system_continuation": 557,
+        "system_continuation": 304,
         "slash_command": 24,
-        "no_response_interrupt": 4
+        "no_response_interrupt": 6,
+        "empty_continuation": 2
       },
       "flag_counts": {
-        "no_project": 575,
-        "meta": 343,
-        "interrupted": 1
+        "no_project": 644,
+        "meta": 393,
+        "interrupted": 202,
+        "post_compaction": 71
       }
     }
   }

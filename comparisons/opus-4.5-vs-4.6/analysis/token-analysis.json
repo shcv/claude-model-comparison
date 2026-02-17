@@ -2,1764 +2,1764 @@
   "opus-4-5": {
     "overall": {
       "count": 2154,
-      "total_input_tokens": 676988,
-      "total_output_tokens": 2052862,
-      "total_cost_usd": 5292.01,
+      "total_input_tokens": 676964,
+      "total_output_tokens": 2053424,
+      "total_cost_usd": 5307.7,
       "avg_input_tokens": 314,
       "avg_output_tokens": 953,
-      "avg_cost_usd": 2.4568,
+      "avg_cost_usd": 2.4641,
       "cost_ci95": [
-        2.3093,
-        2.6255
+        2.3168,
+        2.6327
       ],
       "output_ci95": [
-        824.6676,
-        1091.3343
+        824.9643,
+        1091.5826
       ],
-      "median_cost_usd": 1.0722,
+      "median_cost_usd": 1.0796,
       "median_output_tokens": 14,
-      "avg_thinking_chars": 1978,
-      "avg_text_chars": 1254,
-      "thinking_ratio": 0.751,
-      "thinking_skip_rate": 0.2493,
-      "avg_thinking_chars_when_used": 2635,
-      "estimated_thinking_tokens": 1419559,
-      "estimated_text_tokens": 674821,
+      "avg_thinking_chars": 1976,
+      "avg_text_chars": 1267,
+      "thinking_ratio": 0.749,
+      "thinking_skip_rate": 0.2507,
+      "avg_thinking_chars_when_used": 2637,
+      "estimated_thinking_tokens": 1418418,
+      "estimated_text_tokens": 681462,
       "avg_requests_per_task": 7.5,
-      "cache_read_tokens": 1278992053,
-      "cache_write_tokens": 145588000,
+      "cache_read_tokens": 1284514993,
+      "cache_write_tokens": 145870576,
       "cost_composition": {
         "input_pct": 0.2,
         "output_pct": 2.9,
-        "cache_read_pct": 45.3,
-        "cache_write_pct": 51.6
+        "cache_read_pct": 45.4,
+        "cache_write_pct": 51.5
       },
-      "avg_output_per_request": 128,
+      "avg_output_per_request": 127,
       "output_per_request_ci95": [
-        88.2076,
-        109.693
+        87.6812,
+        108.6351
       ],
-      "avg_text_chars_per_request": 168,
+      "avg_text_chars_per_request": 169,
       "text_chars_per_request_ci95": [
-        344.0101,
-        414.2409
+        342.55,
+        415.2432
       ],
-      "avg_tool_use_chars": 5458,
+      "avg_tool_use_chars": 5474,
       "avg_edit_content_chars": 1971,
       "avg_write_content_chars": 2039,
       "avg_bash_command_chars": 404,
       "avg_agent_prompt_chars": 206,
-      "avg_search_chars": 130
+      "avg_search_chars": 144
     },
     "by_complexity": {
       "complex": {
-        "count": 190,
-        "total_input_tokens": 282026,
-        "total_output_tokens": 741483,
-        "total_cost_usd": 1376.6,
-        "avg_input_tokens": 1484,
-        "avg_output_tokens": 3903,
-        "avg_cost_usd": 7.2452,
+        "count": 202,
+        "total_input_tokens": 265047,
+        "total_output_tokens": 797125,
+        "total_cost_usd": 1494.0,
+        "avg_input_tokens": 1312,
+        "avg_output_tokens": 3946,
+        "avg_cost_usd": 7.396,
         "cost_ci95": [
-          6.6887,
-          7.8159
+          6.801,
+          8.0244
         ],
         "output_ci95": [
-          3099.6947,
-          4812.1842
+          3160.6287,
+          4817.1733
         ],
         "median_cost_usd": 6.8628,
-        "median_output_tokens": 143,
-        "avg_thinking_chars": 5500,
-        "avg_text_chars": 3366,
-        "thinking_ratio": 0.758,
-        "thinking_skip_rate": 0.2421,
-        "avg_thinking_chars_when_used": 7257,
-        "estimated_thinking_tokens": 348313,
-        "estimated_text_tokens": 159803,
-        "avg_requests_per_task": 26.3,
-        "cache_read_tokens": 398887340,
-        "cache_write_tokens": 30338120,
+        "median_output_tokens": 149,
+        "avg_thinking_chars": 5813,
+        "avg_text_chars": 3229,
+        "thinking_ratio": 0.772,
+        "thinking_skip_rate": 0.2277,
+        "avg_thinking_chars_when_used": 7527,
+        "estimated_thinking_tokens": 391376,
+        "estimated_text_tokens": 162969,
+        "avg_requests_per_task": 26.2,
+        "cache_read_tokens": 431820117,
+        "cache_write_tokens": 33097426,
         "cost_composition": {
           "input_pct": 0.3,
           "output_pct": 4.0,
-          "cache_read_pct": 54.3,
-          "cache_write_pct": 41.3
+          "cache_read_pct": 54.2,
+          "cache_write_pct": 41.5
         },
-        "avg_output_per_request": 148,
+        "avg_output_per_request": 150,
         "output_per_request_ci95": [
-          147.114,
-          261.539
+          163.1783,
+          284.6883
         ],
-        "avg_text_chars_per_request": 128,
+        "avg_text_chars_per_request": 123,
         "text_chars_per_request_ci95": [
-          138.3551,
-          181.2599
+          132.5287,
+          174.781
         ],
-        "avg_tool_use_chars": 23995,
-        "avg_edit_content_chars": 8852,
-        "avg_write_content_chars": 10064,
-        "avg_bash_command_chars": 1117,
-        "avg_agent_prompt_chars": 423,
-        "avg_search_chars": 891
+        "avg_tool_use_chars": 24367,
+        "avg_edit_content_chars": 9089,
+        "avg_write_content_chars": 9997,
+        "avg_bash_command_chars": 1151,
+        "avg_agent_prompt_chars": 478,
+        "avg_search_chars": 849
       },
       "major": {
-        "count": 19,
-        "total_input_tokens": 38388,
-        "total_output_tokens": 160827,
-        "total_cost_usd": 237.61,
-        "avg_input_tokens": 2020,
-        "avg_output_tokens": 8465,
-        "avg_cost_usd": 12.5057,
+        "count": 26,
+        "total_input_tokens": 39570,
+        "total_output_tokens": 227598,
+        "total_cost_usd": 354.78,
+        "avg_input_tokens": 1522,
+        "avg_output_tokens": 8754,
+        "avg_cost_usd": 13.6455,
         "cost_ci95": [
-          9.2555,
-          16.5772
+          8.4926,
+          19.7552
         ],
         "output_ci95": [
-          2685.8421,
-          15355.2632
+          3681.0385,
+          14605.8462
         ],
-        "median_cost_usd": 11.7514,
-        "median_output_tokens": 273,
-        "avg_thinking_chars": 8656,
-        "avg_text_chars": 4066,
-        "thinking_ratio": 0.737,
-        "thinking_skip_rate": 0.2632,
-        "avg_thinking_chars_when_used": 11747,
-        "estimated_thinking_tokens": 54816,
-        "estimated_text_tokens": 19307,
-        "avg_requests_per_task": 52.4,
-        "cache_read_tokens": 75729116,
-        "cache_write_tokens": 4425494,
+        "median_cost_usd": 8.9456,
+        "median_output_tokens": 297,
+        "avg_thinking_chars": 6955,
+        "avg_text_chars": 4150,
+        "thinking_ratio": 0.654,
+        "thinking_skip_rate": 0.3462,
+        "avg_thinking_chars_when_used": 10637,
+        "estimated_thinking_tokens": 60271,
+        "estimated_text_tokens": 26966,
+        "avg_requests_per_task": 54.0,
+        "cache_read_tokens": 120344090,
+        "cache_write_tokens": 5945276,
         "cost_composition": {
           "input_pct": 0.2,
-          "output_pct": 5.1,
-          "cache_read_pct": 59.8,
-          "cache_write_pct": 34.9
+          "output_pct": 4.8,
+          "cache_read_pct": 63.6,
+          "cache_write_pct": 31.4
         },
-        "avg_output_per_request": 161,
+        "avg_output_per_request": 162,
         "output_per_request_ci95": [
-          45.5984,
-          387.2737
+          77.2128,
+          441.5746
         ],
-        "avg_text_chars_per_request": 78,
+        "avg_text_chars_per_request": 77,
         "text_chars_per_request_ci95": [
-          70.14,
-          154.5373
+          87.7403,
+          183.4972
         ],
-        "avg_tool_use_chars": 86226,
-        "avg_edit_content_chars": 9109,
-        "avg_write_content_chars": 63304,
-        "avg_bash_command_chars": 1360,
-        "avg_agent_prompt_chars": 952,
-        "avg_search_chars": 1553
+        "avg_tool_use_chars": 60052,
+        "avg_edit_content_chars": 9725,
+        "avg_write_content_chars": 38253,
+        "avg_bash_command_chars": 900,
+        "avg_agent_prompt_chars": 1404,
+        "avg_search_chars": 2335
       },
       "moderate": {
-        "count": 367,
-        "total_input_tokens": 220481,
-        "total_output_tokens": 552866,
-        "total_cost_usd": 1291.84,
-        "avg_input_tokens": 601,
-        "avg_output_tokens": 1506,
-        "avg_cost_usd": 3.52,
+        "count": 416,
+        "total_input_tokens": 237735,
+        "total_output_tokens": 610954,
+        "total_cost_usd": 1537.74,
+        "avg_input_tokens": 571,
+        "avg_output_tokens": 1469,
+        "avg_cost_usd": 3.6965,
         "cost_ci95": [
-          3.2787,
-          3.7798
+          3.4395,
+          3.9808
         ],
         "output_ci95": [
-          1287.9428,
-          1742.4251
+          1258.1058,
+          1694.0673
         ],
-        "median_cost_usd": 2.9103,
-        "median_output_tokens": 50,
-        "avg_thinking_chars": 3364,
-        "avg_text_chars": 1677,
-        "thinking_ratio": 0.891,
-        "thinking_skip_rate": 0.109,
-        "avg_thinking_chars_when_used": 3775,
-        "estimated_thinking_tokens": 411408,
-        "estimated_text_tokens": 153766,
+        "median_cost_usd": 2.9714,
+        "median_output_tokens": 49,
+        "avg_thinking_chars": 3463,
+        "avg_text_chars": 1580,
+        "thinking_ratio": 0.899,
+        "thinking_skip_rate": 0.101,
+        "avg_thinking_chars_when_used": 3851,
+        "estimated_thinking_tokens": 480018,
+        "estimated_text_tokens": 164169,
         "avg_requests_per_task": 11.4,
-        "cache_read_tokens": 340364172,
-        "cache_write_tokens": 32473672,
+        "cache_read_tokens": 393699905,
+        "cache_write_tokens": 40009046,
         "cost_composition": {
-          "input_pct": 0.3,
-          "output_pct": 3.2,
-          "cache_read_pct": 49.4,
-          "cache_write_pct": 47.1
-        },
-        "avg_output_per_request": 132,
-        "output_per_request_ci95": [
-          135.3802,
-          201.0822
-        ],
-        "avg_text_chars_per_request": 147,
-        "text_chars_per_request_ci95": [
-          173.8911,
-          232.2246
-        ],
-        "avg_tool_use_chars": 7434,
-        "avg_edit_content_chars": 3518,
-        "avg_write_content_chars": 1726,
-        "avg_bash_command_chars": 732,
-        "avg_agent_prompt_chars": 260,
-        "avg_search_chars": 134
-      },
-      "simple": {
-        "count": 345,
-        "total_input_tokens": 47170,
-        "total_output_tokens": 177392,
-        "total_cost_usd": 772.03,
-        "avg_input_tokens": 137,
-        "avg_output_tokens": 514,
-        "avg_cost_usd": 2.2378,
-        "cost_ci95": [
-          2.0332,
-          2.4489
-        ],
-        "output_ci95": [
-          439.458,
-          593.2551
-        ],
-        "median_cost_usd": 1.3691,
-        "median_output_tokens": 31,
-        "avg_thinking_chars": 1567,
-        "avg_text_chars": 1046,
-        "thinking_ratio": 0.913,
-        "thinking_skip_rate": 0.087,
-        "avg_thinking_chars_when_used": 1717,
-        "estimated_thinking_tokens": 180152,
-        "estimated_text_tokens": 90077,
-        "avg_requests_per_task": 5.7,
-        "cache_read_tokens": 151960902,
-        "cache_write_tokens": 25231330,
-        "cost_composition": {
-          "input_pct": 0.1,
-          "output_pct": 1.7,
-          "cache_read_pct": 36.9,
-          "cache_write_pct": 61.3
-        },
-        "avg_output_per_request": 90,
-        "output_per_request_ci95": [
-          84.2646,
-          119.7192
-        ],
-        "avg_text_chars_per_request": 184,
-        "text_chars_per_request_ci95": [
-          176.1937,
-          257.5194
-        ],
-        "avg_tool_use_chars": 1618,
-        "avg_edit_content_chars": 752,
-        "avg_write_content_chars": 78,
-        "avg_bash_command_chars": 380,
-        "avg_agent_prompt_chars": 104,
-        "avg_search_chars": 42
-      },
-      "trivial": {
-        "count": 808,
-        "total_input_tokens": 11217,
-        "total_output_tokens": 78289,
-        "total_cost_usd": 695.67,
-        "avg_input_tokens": 14,
-        "avg_output_tokens": 97,
-        "avg_cost_usd": 0.861,
-        "cost_ci95": [
-          0.7745,
-          0.9507
-        ],
-        "output_ci95": [
-          78.3614,
-          117.0879
-        ],
-        "median_cost_usd": 0.2913,
-        "median_output_tokens": 5,
-        "avg_thinking_chars": 662,
-        "avg_text_chars": 923,
-        "thinking_ratio": 0.766,
-        "thinking_skip_rate": 0.2339,
-        "avg_thinking_chars_when_used": 864,
-        "estimated_thinking_tokens": 178140,
-        "estimated_text_tokens": 186113,
-        "avg_requests_per_task": 1.6,
-        "cache_read_tokens": 77171412,
-        "cache_write_tokens": 29062920,
-        "cost_composition": {
-          "input_pct": 0.0,
-          "output_pct": 0.8,
-          "cache_read_pct": 20.8,
-          "cache_write_pct": 78.3
-        },
-        "avg_output_per_request": 62,
-        "output_per_request_ci95": [
-          43.3382,
-          67.1875
-        ],
-        "avg_text_chars_per_request": 593,
-        "text_chars_per_request_ci95": [
-          666.1192,
-          840.1502
-        ],
-        "avg_tool_use_chars": 177,
-        "avg_edit_content_chars": 30,
-        "avg_write_content_chars": 1,
-        "avg_bash_command_chars": 81,
-        "avg_agent_prompt_chars": 27,
-        "avg_search_chars": 2
-      },
-      "unknown": {
-        "count": 425,
-        "total_input_tokens": 77706,
-        "total_output_tokens": 342005,
-        "total_cost_usd": 918.27,
-        "avg_input_tokens": 183,
-        "avg_output_tokens": 805,
-        "avg_cost_usd": 2.1606,
-        "cost_ci95": [
-          1.7064,
-          2.6866
-        ],
-        "output_ci95": [
-          505.8894,
-          1142.8824
-        ],
-        "median_cost_usd": 0.1416,
-        "median_output_tokens": 2,
-        "avg_thinking_chars": 1742,
-        "avg_text_chars": 620,
-        "thinking_ratio": 0.466,
-        "thinking_skip_rate": 0.5341,
-        "avg_thinking_chars_when_used": 3739,
-        "estimated_thinking_tokens": 246730,
-        "estimated_text_tokens": 65755,
-        "avg_requests_per_task": 6.2,
-        "cache_read_tokens": 234879111,
-        "cache_write_tokens": 24056464,
-        "cost_composition": {
-          "input_pct": 0.1,
-          "output_pct": 2.8,
+          "input_pct": 0.2,
+          "output_pct": 3.0,
           "cache_read_pct": 48.0,
-          "cache_write_pct": 49.1
+          "cache_write_pct": 48.8
         },
         "avg_output_per_request": 129,
         "output_per_request_ci95": [
-          49.0243,
-          93.6912
+          138.1239,
+          197.45
         ],
-        "avg_text_chars_per_request": 99,
+        "avg_text_chars_per_request": 139,
         "text_chars_per_request_ci95": [
-          52.2382,
-          78.7183
+          162.7675,
+          216.6129
         ],
-        "avg_tool_use_chars": 5010,
-        "avg_edit_content_chars": 1920,
-        "avg_write_content_chars": 1451,
-        "avg_bash_command_chars": 394,
-        "avg_agent_prompt_chars": 451,
+        "avg_tool_use_chars": 7650,
+        "avg_edit_content_chars": 3470,
+        "avg_write_content_chars": 1791,
+        "avg_bash_command_chars": 883,
+        "avg_agent_prompt_chars": 280,
+        "avg_search_chars": 125
+      },
+      "simple": {
+        "count": 382,
+        "total_input_tokens": 61015,
+        "total_output_tokens": 193490,
+        "total_cost_usd": 847.3,
+        "avg_input_tokens": 160,
+        "avg_output_tokens": 507,
+        "avg_cost_usd": 2.2181,
+        "cost_ci95": [
+          2.0252,
+          2.4238
+        ],
+        "output_ci95": [
+          436.0288,
+          578.9346
+        ],
+        "median_cost_usd": 1.3738,
+        "median_output_tokens": 29,
+        "avg_thinking_chars": 1545,
+        "avg_text_chars": 980,
+        "thinking_ratio": 0.914,
+        "thinking_skip_rate": 0.0864,
+        "avg_thinking_chars_when_used": 1691,
+        "estimated_thinking_tokens": 196566,
+        "estimated_text_tokens": 93425,
+        "avg_requests_per_task": 5.6,
+        "cache_read_tokens": 167731393,
+        "cache_write_tokens": 27593304,
+        "cost_composition": {
+          "input_pct": 0.1,
+          "output_pct": 1.7,
+          "cache_read_pct": 37.1,
+          "cache_write_pct": 61.1
+        },
+        "avg_output_per_request": 91,
+        "output_per_request_ci95": [
+          86.0525,
+          122.3966
+        ],
+        "avg_text_chars_per_request": 175,
+        "text_chars_per_request_ci95": [
+          165.9064,
+          239.0918
+        ],
+        "avg_tool_use_chars": 1647,
+        "avg_edit_content_chars": 742,
+        "avg_write_content_chars": 78,
+        "avg_bash_command_chars": 391,
+        "avg_agent_prompt_chars": 127,
+        "avg_search_chars": 40
+      },
+      "trivial": {
+        "count": 887,
+        "total_input_tokens": 12101,
+        "total_output_tokens": 81728,
+        "total_cost_usd": 778.56,
+        "avg_input_tokens": 14,
+        "avg_output_tokens": 92,
+        "avg_cost_usd": 0.8777,
+        "cost_ci95": [
+          0.7916,
+          0.9653
+        ],
+        "output_ci95": [
+          74.7745,
+          111.3236
+        ],
+        "median_cost_usd": 0.2897,
+        "median_output_tokens": 5,
+        "avg_thinking_chars": 644,
+        "avg_text_chars": 848,
+        "thinking_ratio": 0.76,
+        "thinking_skip_rate": 0.2401,
+        "avg_thinking_chars_when_used": 848,
+        "estimated_thinking_tokens": 190307,
+        "estimated_text_tokens": 187757,
+        "avg_requests_per_task": 1.5,
+        "cache_read_tokens": 84090071,
+        "cache_write_tokens": 32777584,
+        "cost_composition": {
+          "input_pct": 0.0,
+          "output_pct": 0.8,
+          "cache_read_pct": 20.3,
+          "cache_write_pct": 78.9
+        },
+        "avg_output_per_request": 61,
+        "output_per_request_ci95": [
+          41.6634,
+          63.5411
+        ],
+        "avg_text_chars_per_request": 558,
+        "text_chars_per_request_ci95": [
+          611.6967,
+          775.8697
+        ],
+        "avg_tool_use_chars": 177,
+        "avg_edit_content_chars": 28,
+        "avg_write_content_chars": 1,
+        "avg_bash_command_chars": 80,
+        "avg_agent_prompt_chars": 28,
+        "avg_search_chars": 2
+      },
+      "unknown": {
+        "count": 241,
+        "total_input_tokens": 61496,
+        "total_output_tokens": 142529,
+        "total_cost_usd": 295.32,
+        "avg_input_tokens": 255,
+        "avg_output_tokens": 591,
+        "avg_cost_usd": 1.2254,
+        "cost_ci95": [
+          0.8599,
+          1.6541
+        ],
+        "output_ci95": [
+          272.4647,
+          1002.7427
+        ],
+        "median_cost_usd": 0.0,
+        "median_output_tokens": 0,
+        "avg_thinking_chars": 1244,
+        "avg_text_chars": 767,
+        "thinking_ratio": 0.183,
+        "thinking_skip_rate": 0.8174,
+        "avg_thinking_chars_when_used": 6811,
+        "estimated_thinking_tokens": 99880,
+        "estimated_text_tokens": 46176,
+        "avg_requests_per_task": 5.2,
+        "cache_read_tokens": 86829417,
+        "cache_write_tokens": 6447940,
+        "cost_composition": {
+          "input_pct": 0.3,
+          "output_pct": 3.6,
+          "cache_read_pct": 55.1,
+          "cache_write_pct": 40.9
+        },
+        "avg_output_per_request": 113,
+        "output_per_request_ci95": [
+          12.3159,
+          36.6826
+        ],
+        "avg_text_chars_per_request": 147,
+        "text_chars_per_request_ci95": [
+          36.851,
+          70.2675
+        ],
+        "avg_tool_use_chars": 5555,
+        "avg_edit_content_chars": 1681,
+        "avg_write_content_chars": 2502,
+        "avg_bash_command_chars": 113,
+        "avg_agent_prompt_chars": 497,
         "avg_search_chars": 36
       }
     },
     "by_type": {
       "bugfix": {
-        "count": 110,
-        "total_input_tokens": 43013,
-        "total_output_tokens": 90736,
-        "total_cost_usd": 316.47,
-        "avg_input_tokens": 391,
-        "avg_output_tokens": 825,
-        "avg_cost_usd": 2.877,
+        "count": 123,
+        "total_input_tokens": 30594,
+        "total_output_tokens": 91664,
+        "total_cost_usd": 371.05,
+        "avg_input_tokens": 249,
+        "avg_output_tokens": 745,
+        "avg_cost_usd": 3.0166,
         "cost_ci95": [
-          2.35,
-          3.5054
+          2.3832,
+          3.7553
         ],
         "output_ci95": [
-          439.2909,
-          1353.5
+          391.561,
+          1220.5691
         ],
-        "median_cost_usd": 1.7218,
-        "median_output_tokens": 29,
-        "avg_thinking_chars": 2701,
-        "avg_text_chars": 1123,
-        "thinking_ratio": 0.955,
-        "thinking_skip_rate": 0.0455,
-        "avg_thinking_chars_when_used": 2829,
-        "estimated_thinking_tokens": 98996,
-        "estimated_text_tokens": 30844,
-        "avg_requests_per_task": 8.9,
-        "cache_read_tokens": 76963452,
-        "cache_write_tokens": 8784430,
+        "median_cost_usd": 1.6141,
+        "median_output_tokens": 22,
+        "avg_thinking_chars": 2859,
+        "avg_text_chars": 1053,
+        "thinking_ratio": 0.951,
+        "thinking_skip_rate": 0.0488,
+        "avg_thinking_chars_when_used": 3006,
+        "estimated_thinking_tokens": 117196,
+        "estimated_text_tokens": 32340,
+        "avg_requests_per_task": 9.1,
+        "cache_read_tokens": 93294706,
+        "cache_write_tokens": 10068506,
         "cost_composition": {
-          "input_pct": 0.2,
-          "output_pct": 2.2,
-          "cache_read_pct": 45.6,
-          "cache_write_pct": 52.0
+          "input_pct": 0.1,
+          "output_pct": 1.9,
+          "cache_read_pct": 47.1,
+          "cache_write_pct": 50.9
         },
-        "avg_output_per_request": 93,
+        "avg_output_per_request": 82,
         "output_per_request_ci95": [
-          50.1748,
-          104.6681
+          49.0102,
+          98.1935
         ],
-        "avg_text_chars_per_request": 126,
+        "avg_text_chars_per_request": 116,
         "text_chars_per_request_ci95": [
-          162.8784,
-          266.2774
+          155.8367,
+          249.0102
         ],
-        "avg_tool_use_chars": 6160,
-        "avg_edit_content_chars": 3532,
-        "avg_write_content_chars": 1300,
-        "avg_bash_command_chars": 273,
-        "avg_agent_prompt_chars": 142,
-        "avg_search_chars": 100
+        "avg_tool_use_chars": 6677,
+        "avg_edit_content_chars": 3504,
+        "avg_write_content_chars": 1558,
+        "avg_bash_command_chars": 315,
+        "avg_agent_prompt_chars": 176,
+        "avg_search_chars": 98
       },
       "continuation": {
-        "count": 41,
-        "total_input_tokens": 3096,
-        "total_output_tokens": 52142,
-        "total_cost_usd": 129.4,
-        "avg_input_tokens": 76,
-        "avg_output_tokens": 1272,
-        "avg_cost_usd": 3.1562,
+        "count": 45,
+        "total_input_tokens": 3322,
+        "total_output_tokens": 52876,
+        "total_cost_usd": 156.71,
+        "avg_input_tokens": 74,
+        "avg_output_tokens": 1175,
+        "avg_cost_usd": 3.4825,
         "cost_ci95": [
-          1.9795,
-          4.4772
+          2.0936,
+          5.1349
         ],
         "output_ci95": [
-          394.0732,
-          2406.3659
+          350.5333,
+          2278.6889
         ],
         "median_cost_usd": 0.9263,
-        "median_output_tokens": 43,
-        "avg_thinking_chars": 1720,
-        "avg_text_chars": 979,
-        "thinking_ratio": 0.976,
-        "thinking_skip_rate": 0.0244,
-        "avg_thinking_chars_when_used": 1763,
-        "estimated_thinking_tokens": 23499,
-        "estimated_text_tokens": 10026,
-        "avg_requests_per_task": 10.9,
-        "cache_read_tokens": 44536921,
-        "cache_write_tokens": 2236832,
+        "median_output_tokens": 40,
+        "avg_thinking_chars": 1640,
+        "avg_text_chars": 898,
+        "thinking_ratio": 0.978,
+        "thinking_skip_rate": 0.0222,
+        "avg_thinking_chars_when_used": 1677,
+        "estimated_thinking_tokens": 24587,
+        "estimated_text_tokens": 10089,
+        "avg_requests_per_task": 10.6,
+        "cache_read_tokens": 47564077,
+        "cache_write_tokens": 3387516,
         "cost_composition": {
           "input_pct": 0.0,
-          "output_pct": 3.0,
-          "cache_read_pct": 64.5,
-          "cache_write_pct": 32.4
+          "output_pct": 2.5,
+          "cache_read_pct": 56.9,
+          "cache_write_pct": 40.5
         },
-        "avg_output_per_request": 117,
+        "avg_output_per_request": 111,
         "output_per_request_ci95": [
-          33.7266,
-          101.8185
+          34.0319,
+          94.6616
         ],
-        "avg_text_chars_per_request": 90,
+        "avg_text_chars_per_request": 85,
         "text_chars_per_request_ci95": [
-          95.8796,
-          205.1996
+          86.8902,
+          187.1223
         ],
-        "avg_tool_use_chars": 6217,
-        "avg_edit_content_chars": 3032,
-        "avg_write_content_chars": 1763,
-        "avg_bash_command_chars": 617,
+        "avg_tool_use_chars": 5751,
+        "avg_edit_content_chars": 2773,
+        "avg_write_content_chars": 1606,
+        "avg_bash_command_chars": 619,
         "avg_agent_prompt_chars": 0,
-        "avg_search_chars": 20
+        "avg_search_chars": 18
       },
       "docs": {
-        "count": 50,
-        "total_input_tokens": 143201,
-        "total_output_tokens": 16558,
-        "total_cost_usd": 279.42,
-        "avg_input_tokens": 2864,
-        "avg_output_tokens": 331,
-        "avg_cost_usd": 5.5883,
+        "count": 51,
+        "total_input_tokens": 143211,
+        "total_output_tokens": 16562,
+        "total_cost_usd": 280.64,
+        "avg_input_tokens": 2808,
+        "avg_output_tokens": 325,
+        "avg_cost_usd": 5.5027,
         "cost_ci95": [
-          4.7227,
-          6.501
+          4.5996,
+          6.3467
         ],
         "output_ci95": [
-          218.34,
-          460.46
+          214.6078,
+          450.3529
         ],
-        "median_cost_usd": 5.6959,
+        "median_cost_usd": 5.5448,
         "median_output_tokens": 164,
-        "avg_thinking_chars": 167,
-        "avg_text_chars": 5476,
-        "thinking_ratio": 0.1,
-        "thinking_skip_rate": 0.9,
-        "avg_thinking_chars_when_used": 1674,
-        "estimated_thinking_tokens": 2789,
+        "avg_thinking_chars": 207,
+        "avg_text_chars": 5369,
+        "thinking_ratio": 0.118,
+        "thinking_skip_rate": 0.8824,
+        "avg_thinking_chars_when_used": 1758,
+        "estimated_thinking_tokens": 3515,
         "estimated_text_tokens": 68434,
-        "avg_requests_per_task": 15.6,
+        "avg_requests_per_task": 15.3,
         "cache_read_tokens": 56216329,
-        "cache_write_tokens": 9099700,
+        "cache_write_tokens": 9164882,
         "cost_composition": {
           "input_pct": 0.8,
           "output_pct": 0.4,
-          "cache_read_pct": 37.7,
-          "cache_write_pct": 61.1
+          "cache_read_pct": 37.6,
+          "cache_write_pct": 61.2
         },
         "avg_output_per_request": 21,
         "output_per_request_ci95": [
-          19.5134,
-          93.3581
+          18.2543,
+          90.5482
         ],
-        "avg_text_chars_per_request": 351,
+        "avg_text_chars_per_request": 350,
         "text_chars_per_request_ci95": [
-          335.1264,
-          453.797
+          325.7449,
+          448.4622
         ],
-        "avg_tool_use_chars": 3847,
-        "avg_edit_content_chars": 58,
-        "avg_write_content_chars": 229,
-        "avg_bash_command_chars": 152,
-        "avg_agent_prompt_chars": 140,
-        "avg_search_chars": 2525
+        "avg_tool_use_chars": 3771,
+        "avg_edit_content_chars": 57,
+        "avg_write_content_chars": 224,
+        "avg_bash_command_chars": 149,
+        "avg_agent_prompt_chars": 137,
+        "avg_search_chars": 2476
       },
       "feature": {
-        "count": 145,
-        "total_input_tokens": 29103,
-        "total_output_tokens": 241217,
-        "total_cost_usd": 491.98,
-        "avg_input_tokens": 201,
-        "avg_output_tokens": 1664,
-        "avg_cost_usd": 3.393,
+        "count": 169,
+        "total_input_tokens": 32252,
+        "total_output_tokens": 262315,
+        "total_cost_usd": 559.61,
+        "avg_input_tokens": 191,
+        "avg_output_tokens": 1552,
+        "avg_cost_usd": 3.3113,
         "cost_ci95": [
-          2.8131,
-          4.0592
+          2.7791,
+          3.9309
         ],
         "output_ci95": [
-          983.4276,
-          2510.0552
+          962.3728,
+          2292.6154
         ],
-        "median_cost_usd": 2.4135,
-        "median_output_tokens": 68,
-        "avg_thinking_chars": 2605,
-        "avg_text_chars": 1264,
-        "thinking_ratio": 0.917,
-        "thinking_skip_rate": 0.0828,
-        "avg_thinking_chars_when_used": 2840,
-        "estimated_thinking_tokens": 125879,
-        "estimated_text_tokens": 45785,
-        "avg_requests_per_task": 10.4,
-        "cache_read_tokens": 130933647,
-        "cache_write_tokens": 12157692,
+        "median_cost_usd": 2.0125,
+        "median_output_tokens": 45,
+        "avg_thinking_chars": 2579,
+        "avg_text_chars": 1159,
+        "thinking_ratio": 0.893,
+        "thinking_skip_rate": 0.1065,
+        "avg_thinking_chars_when_used": 2886,
+        "estimated_thinking_tokens": 145230,
+        "estimated_text_tokens": 48907,
+        "avg_requests_per_task": 9.7,
+        "cache_read_tokens": 142352533,
+        "cache_write_tokens": 14535638,
         "cost_composition": {
           "input_pct": 0.1,
-          "output_pct": 3.7,
-          "cache_read_pct": 49.9,
-          "cache_write_pct": 46.3
+          "output_pct": 3.5,
+          "cache_read_pct": 47.7,
+          "cache_write_pct": 48.7
         },
         "avg_output_per_request": 160,
         "output_per_request_ci95": [
-          115.1604,
-          214.556
+          116.6781,
+          208.0244
         ],
-        "avg_text_chars_per_request": 121,
+        "avg_text_chars_per_request": 119,
         "text_chars_per_request_ci95": [
-          250.8327,
-          631.5396
+          232.298,
+          557.5605
         ],
-        "avg_tool_use_chars": 9845,
-        "avg_edit_content_chars": 3712,
-        "avg_write_content_chars": 4345,
-        "avg_bash_command_chars": 409,
-        "avg_agent_prompt_chars": 243,
-        "avg_search_chars": 61
+        "avg_tool_use_chars": 9310,
+        "avg_edit_content_chars": 3424,
+        "avg_write_content_chars": 4057,
+        "avg_bash_command_chars": 398,
+        "avg_agent_prompt_chars": 299,
+        "avg_search_chars": 54
       },
       "greenfield": {
-        "count": 119,
-        "total_input_tokens": 43679,
-        "total_output_tokens": 218821,
-        "total_cost_usd": 409.01,
-        "avg_input_tokens": 367,
-        "avg_output_tokens": 1839,
-        "avg_cost_usd": 3.4371,
+        "count": 135,
+        "total_input_tokens": 43173,
+        "total_output_tokens": 228758,
+        "total_cost_usd": 510.15,
+        "avg_input_tokens": 320,
+        "avg_output_tokens": 1695,
+        "avg_cost_usd": 3.7789,
         "cost_ci95": [
-          2.8498,
-          4.0708
+          2.8474,
+          5.0858
         ],
         "output_ci95": [
-          974.7647,
-          2915.9076
+          923.1333,
+          2634.6889
         ],
-        "median_cost_usd": 2.7148,
-        "median_output_tokens": 59,
-        "avg_thinking_chars": 2450,
-        "avg_text_chars": 1799,
-        "thinking_ratio": 0.798,
-        "thinking_skip_rate": 0.2017,
-        "avg_thinking_chars_when_used": 3068,
-        "estimated_thinking_tokens": 97131,
-        "estimated_text_tokens": 53478,
-        "avg_requests_per_task": 11.7,
-        "cache_read_tokens": 95363707,
-        "cache_write_tokens": 11367304,
-        "cost_composition": {
-          "input_pct": 0.2,
-          "output_pct": 4.0,
-          "cache_read_pct": 43.7,
-          "cache_write_pct": 52.1
-        },
-        "avg_output_per_request": 157,
-        "output_per_request_ci95": [
-          89.478,
-          245.9705
-        ],
-        "avg_text_chars_per_request": 154,
-        "text_chars_per_request_ci95": [
-          266.8476,
-          482.3126
-        ],
-        "avg_tool_use_chars": 13229,
-        "avg_edit_content_chars": 2461,
-        "avg_write_content_chars": 7831,
-        "avg_bash_command_chars": 447,
-        "avg_agent_prompt_chars": 304,
-        "avg_search_chars": 430
-      },
-      "investigation": {
-        "count": 417,
-        "total_input_tokens": 201026,
-        "total_output_tokens": 427182,
-        "total_cost_usd": 950.28,
-        "avg_input_tokens": 482,
-        "avg_output_tokens": 1024,
-        "avg_cost_usd": 2.2788,
-        "cost_ci95": [
-          1.9856,
-          2.5868
-        ],
-        "output_ci95": [
-          776.0647,
-          1298.4388
-        ],
-        "median_cost_usd": 1.2384,
-        "median_output_tokens": 15,
-        "avg_thinking_chars": 2149,
-        "avg_text_chars": 1931,
-        "thinking_ratio": 0.784,
-        "thinking_skip_rate": 0.2158,
-        "avg_thinking_chars_when_used": 2741,
-        "estimated_thinking_tokens": 298640,
-        "estimated_text_tokens": 201177,
-        "avg_requests_per_task": 6.9,
-        "cache_read_tokens": 201705528,
-        "cache_write_tokens": 28641380,
-        "cost_composition": {
-          "input_pct": 0.3,
-          "output_pct": 3.4,
-          "cache_read_pct": 39.8,
-          "cache_write_pct": 56.5
-        },
-        "avg_output_per_request": 148,
-        "output_per_request_ci95": [
-          89.389,
-          138.7185
-        ],
-        "avg_text_chars_per_request": 279,
-        "text_chars_per_request_ci95": [
-          728.3023,
-          974.5565
-        ],
-        "avg_tool_use_chars": 4020,
-        "avg_edit_content_chars": 1423,
-        "avg_write_content_chars": 1277,
-        "avg_bash_command_chars": 434,
-        "avg_agent_prompt_chars": 202,
-        "avg_search_chars": 92
-      },
-      "port": {
-        "count": 33,
-        "total_input_tokens": 22318,
-        "total_output_tokens": 81176,
-        "total_cost_usd": 115.87,
-        "avg_input_tokens": 676,
-        "avg_output_tokens": 2460,
-        "avg_cost_usd": 3.5112,
-        "cost_ci95": [
-          2.0303,
-          5.1743
-        ],
-        "output_ci95": [
-          726.0909,
-          4712.9394
-        ],
-        "median_cost_usd": 2.0614,
-        "median_output_tokens": 35,
-        "avg_thinking_chars": 3106,
-        "avg_text_chars": 1603,
-        "thinking_ratio": 0.939,
-        "thinking_skip_rate": 0.0606,
-        "avg_thinking_chars_when_used": 3307,
-        "estimated_thinking_tokens": 34157,
-        "estimated_text_tokens": 13215,
-        "avg_requests_per_task": 14.0,
-        "cache_read_tokens": 36534550,
-        "cache_write_tokens": 2183742,
-        "cost_composition": {
-          "input_pct": 0.3,
-          "output_pct": 5.3,
-          "cache_read_pct": 59.1,
-          "cache_write_pct": 35.3
-        },
-        "avg_output_per_request": 175,
-        "output_per_request_ci95": [
-          91.0055,
-          456.8212
-        ],
-        "avg_text_chars_per_request": 114,
-        "text_chars_per_request_ci95": [
-          260.059,
-          804.3113
-        ],
-        "avg_tool_use_chars": 20456,
-        "avg_edit_content_chars": 5414,
-        "avg_write_content_chars": 12098,
-        "avg_bash_command_chars": 784,
-        "avg_agent_prompt_chars": 86,
-        "avg_search_chars": 29
-      },
-      "refactor": {
-        "count": 69,
-        "total_input_tokens": 23451,
-        "total_output_tokens": 90422,
-        "total_cost_usd": 250.62,
-        "avg_input_tokens": 340,
-        "avg_output_tokens": 1310,
-        "avg_cost_usd": 3.6322,
-        "cost_ci95": [
-          2.8527,
-          4.4844
-        ],
-        "output_ci95": [
-          713.7246,
-          2038.3333
-        ],
-        "median_cost_usd": 2.5464,
-        "median_output_tokens": 30,
-        "avg_thinking_chars": 2899,
-        "avg_text_chars": 1285,
-        "thinking_ratio": 0.855,
-        "thinking_skip_rate": 0.1449,
-        "avg_thinking_chars_when_used": 3390,
-        "estimated_thinking_tokens": 66660,
-        "estimated_text_tokens": 22138,
-        "avg_requests_per_task": 11.7,
-        "cache_read_tokens": 64115725,
-        "cache_write_tokens": 6574326,
+        "median_cost_usd": 2.6778,
+        "median_output_tokens": 40,
+        "avg_thinking_chars": 2275,
+        "avg_text_chars": 1708,
+        "thinking_ratio": 0.807,
+        "thinking_skip_rate": 0.1926,
+        "avg_thinking_chars_when_used": 2817,
+        "estimated_thinking_tokens": 102317,
+        "estimated_text_tokens": 57616,
+        "avg_requests_per_task": 12.7,
+        "cache_read_tokens": 131834477,
+        "cache_write_tokens": 13075102,
         "cost_composition": {
           "input_pct": 0.1,
-          "output_pct": 2.7,
-          "cache_read_pct": 48.0,
-          "cache_write_pct": 49.2
+          "output_pct": 3.4,
+          "cache_read_pct": 48.5,
+          "cache_write_pct": 48.1
         },
-        "avg_output_per_request": 112,
+        "avg_output_per_request": 134,
         "output_per_request_ci95": [
-          61.7976,
-          153.8932
+          84.3963,
+          217.5648
         ],
-        "avg_text_chars_per_request": 110,
+        "avg_text_chars_per_request": 135,
         "text_chars_per_request_ci95": [
-          150.7413,
-          316.9382
+          253.1116,
+          443.9142
         ],
-        "avg_tool_use_chars": 12138,
-        "avg_edit_content_chars": 4318,
-        "avg_write_content_chars": 5916,
-        "avg_bash_command_chars": 434,
-        "avg_agent_prompt_chars": 139,
-        "avg_search_chars": 67
+        "avg_tool_use_chars": 8921,
+        "avg_edit_content_chars": 2204,
+        "avg_write_content_chars": 4115,
+        "avg_bash_command_chars": 406,
+        "avg_agent_prompt_chars": 371,
+        "avg_search_chars": 536
       },
-      "sysadmin": {
-        "count": 141,
-        "total_input_tokens": 31608,
-        "total_output_tokens": 83896,
-        "total_cost_usd": 265.23,
-        "avg_input_tokens": 224,
-        "avg_output_tokens": 595,
-        "avg_cost_usd": 1.881,
+      "investigation": {
+        "count": 453,
+        "total_input_tokens": 219619,
+        "total_output_tokens": 465860,
+        "total_cost_usd": 1072.84,
+        "avg_input_tokens": 485,
+        "avg_output_tokens": 1028,
+        "avg_cost_usd": 2.3683,
         "cost_ci95": [
-          1.5003,
-          2.329
+          2.0827,
+          2.6745
         ],
         "output_ci95": [
-          330.4397,
-          947.6383
+          779.7748,
+          1286.0353
         ],
-        "median_cost_usd": 0.997,
+        "median_cost_usd": 1.3104,
         "median_output_tokens": 14,
-        "avg_thinking_chars": 1255,
-        "avg_text_chars": 724,
-        "thinking_ratio": 0.801,
-        "thinking_skip_rate": 0.1986,
-        "avg_thinking_chars_when_used": 1567,
-        "estimated_thinking_tokens": 58968,
-        "estimated_text_tokens": 25485,
-        "avg_requests_per_task": 5.6,
-        "cache_read_tokens": 60586565,
-        "cache_write_tokens": 7725930,
+        "avg_thinking_chars": 2217,
+        "avg_text_chars": 1860,
+        "thinking_ratio": 0.781,
+        "thinking_skip_rate": 0.2185,
+        "avg_thinking_chars_when_used": 2837,
+        "estimated_thinking_tokens": 334666,
+        "estimated_text_tokens": 210471,
+        "avg_requests_per_task": 6.9,
+        "cache_read_tokens": 223216972,
+        "cache_write_tokens": 32857412,
+        "cost_composition": {
+          "input_pct": 0.3,
+          "output_pct": 3.3,
+          "cache_read_pct": 39.0,
+          "cache_write_pct": 57.4
+        },
+        "avg_output_per_request": 149,
+        "output_per_request_ci95": [
+          90.5632,
+          137.1481
+        ],
+        "avg_text_chars_per_request": 270,
+        "text_chars_per_request_ci95": [
+          671.1692,
+          903.3798
+        ],
+        "avg_tool_use_chars": 4222,
+        "avg_edit_content_chars": 1509,
+        "avg_write_content_chars": 1227,
+        "avg_bash_command_chars": 528,
+        "avg_agent_prompt_chars": 224,
+        "avg_search_chars": 109
+      },
+      "port": {
+        "count": 37,
+        "total_input_tokens": 15868,
+        "total_output_tokens": 116972,
+        "total_cost_usd": 136.13,
+        "avg_input_tokens": 429,
+        "avg_output_tokens": 3161,
+        "avg_cost_usd": 3.6793,
+        "cost_ci95": [
+          2.3309,
+          5.2914
+        ],
+        "output_ci95": [
+          1309.2973,
+          5429.7297
+        ],
+        "median_cost_usd": 2.0691,
+        "median_output_tokens": 47,
+        "avg_thinking_chars": 2991,
+        "avg_text_chars": 1390,
+        "thinking_ratio": 0.946,
+        "thinking_skip_rate": 0.0541,
+        "avg_thinking_chars_when_used": 3162,
+        "estimated_thinking_tokens": 36882,
+        "estimated_text_tokens": 12844,
+        "avg_requests_per_task": 12.9,
+        "cache_read_tokens": 39703498,
+        "cache_write_tokens": 2809564,
         "cost_composition": {
           "input_pct": 0.2,
-          "output_pct": 2.4,
-          "cache_read_pct": 42.8,
-          "cache_write_pct": 54.6
+          "output_pct": 6.4,
+          "cache_read_pct": 54.7,
+          "cache_write_pct": 38.7
         },
-        "avg_output_per_request": 106,
+        "avg_output_per_request": 244,
         "output_per_request_ci95": [
-          47.7388,
-          88.493
+          164.3334,
+          662.579
         ],
-        "avg_text_chars_per_request": 128,
+        "avg_text_chars_per_request": 107,
         "text_chars_per_request_ci95": [
-          207.7905,
-          354.9991
+          237.5178,
+          758.4618
         ],
-        "avg_tool_use_chars": 2044,
-        "avg_edit_content_chars": 668,
-        "avg_write_content_chars": 420,
-        "avg_bash_command_chars": 465,
-        "avg_agent_prompt_chars": 58,
+        "avg_tool_use_chars": 20990,
+        "avg_edit_content_chars": 4737,
+        "avg_write_content_chars": 13292,
+        "avg_bash_command_chars": 680,
+        "avg_agent_prompt_chars": 142,
+        "avg_search_chars": 25
+      },
+      "refactor": {
+        "count": 76,
+        "total_input_tokens": 26453,
+        "total_output_tokens": 93975,
+        "total_cost_usd": 283.56,
+        "avg_input_tokens": 348,
+        "avg_output_tokens": 1237,
+        "avg_cost_usd": 3.731,
+        "cost_ci95": [
+          2.9457,
+          4.5833
+        ],
+        "output_ci95": [
+          662.5395,
+          1917.0526
+        ],
+        "median_cost_usd": 2.7866,
+        "median_output_tokens": 31,
+        "avg_thinking_chars": 3036,
+        "avg_text_chars": 1233,
+        "thinking_ratio": 0.855,
+        "thinking_skip_rate": 0.1447,
+        "avg_thinking_chars_when_used": 3550,
+        "estimated_thinking_tokens": 76899,
+        "estimated_text_tokens": 23403,
+        "avg_requests_per_task": 11.8,
+        "cache_read_tokens": 74865398,
+        "cache_write_tokens": 7239564,
+        "cost_composition": {
+          "input_pct": 0.1,
+          "output_pct": 2.5,
+          "cache_read_pct": 49.5,
+          "cache_write_pct": 47.9
+        },
+        "avg_output_per_request": 105,
+        "output_per_request_ci95": [
+          59.8812,
+          144.4187
+        ],
+        "avg_text_chars_per_request": 104,
+        "text_chars_per_request_ci95": [
+          140.925,
+          290.9172
+        ],
+        "avg_tool_use_chars": 12834,
+        "avg_edit_content_chars": 5251,
+        "avg_write_content_chars": 5588,
+        "avg_bash_command_chars": 467,
+        "avg_agent_prompt_chars": 136,
+        "avg_search_chars": 68
+      },
+      "sysadmin": {
+        "count": 157,
+        "total_input_tokens": 34573,
+        "total_output_tokens": 90200,
+        "total_cost_usd": 300.87,
+        "avg_input_tokens": 220,
+        "avg_output_tokens": 575,
+        "avg_cost_usd": 1.9163,
+        "cost_ci95": [
+          1.5709,
+          2.3224
+        ],
+        "output_ci95": [
+          335.0701,
+          867.9363
+        ],
+        "median_cost_usd": 1.0283,
+        "median_output_tokens": 14,
+        "avg_thinking_chars": 1238,
+        "avg_text_chars": 673,
+        "thinking_ratio": 0.815,
+        "thinking_skip_rate": 0.1847,
+        "avg_thinking_chars_when_used": 1519,
+        "estimated_thinking_tokens": 64766,
+        "estimated_text_tokens": 26369,
+        "avg_requests_per_task": 5.5,
+        "cache_read_tokens": 65432168,
+        "cache_write_tokens": 9114470,
+        "cost_composition": {
+          "input_pct": 0.2,
+          "output_pct": 2.2,
+          "cache_read_pct": 40.8,
+          "cache_write_pct": 56.8
+        },
+        "avg_output_per_request": 105,
+        "output_per_request_ci95": [
+          49.0185,
+          87.8324
+        ],
+        "avg_text_chars_per_request": 123,
+        "text_chars_per_request_ci95": [
+          188.4224,
+          324.3556
+        ],
+        "avg_tool_use_chars": 1933,
+        "avg_edit_content_chars": 658,
+        "avg_write_content_chars": 378,
+        "avg_bash_command_chars": 438,
+        "avg_agent_prompt_chars": 52,
         "avg_search_chars": 7
       },
       "unknown": {
-        "count": 1029,
-        "total_input_tokens": 136493,
-        "total_output_tokens": 750712,
-        "total_cost_usd": 2083.73,
-        "avg_input_tokens": 133,
-        "avg_output_tokens": 730,
-        "avg_cost_usd": 2.025,
+        "count": 908,
+        "total_input_tokens": 127899,
+        "total_output_tokens": 634242,
+        "total_cost_usd": 1636.14,
+        "avg_input_tokens": 141,
+        "avg_output_tokens": 699,
+        "avg_cost_usd": 1.8019,
         "cost_ci95": [
-          1.7885,
-          2.2747
+          1.6033,
+          2.0133
         ],
         "output_ci95": [
-          571.689,
-          895.9485
+          538.0033,
+          889.9559
         ],
-        "median_cost_usd": 0.58,
-        "median_output_tokens": 7,
-        "avg_thinking_chars": 1787,
-        "avg_text_chars": 795,
-        "thinking_ratio": 0.689,
-        "thinking_skip_rate": 0.311,
-        "avg_thinking_chars_when_used": 2594,
-        "estimated_thinking_tokens": 612840,
-        "estimated_text_tokens": 204239,
-        "avg_requests_per_task": 5.8,
-        "cache_read_tokens": 512035629,
-        "cache_write_tokens": 56816664,
+        "median_cost_usd": 0.4615,
+        "median_output_tokens": 6,
+        "avg_thinking_chars": 1693,
+        "avg_text_chars": 842,
+        "thinking_ratio": 0.666,
+        "thinking_skip_rate": 0.3337,
+        "avg_thinking_chars_when_used": 2542,
+        "estimated_thinking_tokens": 512360,
+        "estimated_text_tokens": 190989,
+        "avg_requests_per_task": 5.6,
+        "cache_read_tokens": 410034835,
+        "cache_write_tokens": 43617922,
         "cost_composition": {
           "input_pct": 0.1,
-          "output_pct": 2.7,
-          "cache_read_pct": 46.1,
-          "cache_write_pct": 51.1
+          "output_pct": 2.9,
+          "cache_read_pct": 47.0,
+          "cache_write_pct": 50.0
         },
         "avg_output_per_request": 125,
         "output_per_request_ci95": [
-          68.8846,
-          95.3397
+          61.761,
+          86.4231
         ],
-        "avg_text_chars_per_request": 136,
+        "avg_text_chars_per_request": 150,
         "text_chars_per_request_ci95": [
-          196.0016,
-          268.6423
+          209.1387,
+          293.8073
         ],
-        "avg_tool_use_chars": 4035,
-        "avg_edit_content_chars": 1686,
-        "avg_write_content_chars": 1171,
-        "avg_bash_command_chars": 381,
-        "avg_agent_prompt_chars": 237,
-        "avg_search_chars": 35
+        "avg_tool_use_chars": 4155,
+        "avg_edit_content_chars": 1597,
+        "avg_write_content_chars": 1481,
+        "avg_bash_command_chars": 336,
+        "avg_agent_prompt_chars": 208,
+        "avg_search_chars": 37
       }
     },
     "cold_cache_analysis": {
-      "tasks_analyzed": 1413,
-      "avg_first_request_cache_write": 48042,
-      "avg_subsequent_cache_write": 4175,
-      "cold_write_ratio": 11.51,
-      "avg_first_request_cache_read": 49343,
-      "avg_subsequent_cache_read": 83754,
-      "warm_read_ratio": 1.7
+      "tasks_analyzed": 1416,
+      "avg_first_request_cache_write": 47985,
+      "avg_subsequent_cache_write": 4157,
+      "cold_write_ratio": 11.54,
+      "avg_first_request_cache_read": 49268,
+      "avg_subsequent_cache_read": 83456,
+      "warm_read_ratio": 1.69
     }
   },
   "opus-4-6": {
     "overall": {
-      "count": 808,
-      "total_input_tokens": 117901,
-      "total_output_tokens": 1810109,
-      "total_cost_usd": 2119.26,
+      "count": 1073,
+      "total_input_tokens": 156611,
+      "total_output_tokens": 2431208,
+      "total_cost_usd": 2714.66,
       "avg_input_tokens": 146,
-      "avg_output_tokens": 2240,
-      "avg_cost_usd": 2.6228,
+      "avg_output_tokens": 2266,
+      "avg_cost_usd": 2.53,
       "cost_ci95": [
-        2.3512,
-        2.9109
+        2.274,
+        2.7944
       ],
       "output_ci95": [
-        1928.2054,
-        2581.4257
+        1963.1594,
+        2580.1454
       ],
-      "median_cost_usd": 0.9621,
-      "median_output_tokens": 370,
-      "avg_thinking_chars": 2439,
-      "avg_text_chars": 1723,
-      "thinking_ratio": 0.584,
-      "thinking_skip_rate": 0.4158,
-      "avg_thinking_chars_when_used": 4175,
-      "estimated_thinking_tokens": 656741,
-      "estimated_text_tokens": 347835,
-      "avg_requests_per_task": 9.6,
-      "cache_read_tokens": 641665650,
-      "cache_write_tokens": 41525715,
+      "median_cost_usd": 0.9084,
+      "median_output_tokens": 343,
+      "avg_thinking_chars": 2398,
+      "avg_text_chars": 1693,
+      "thinking_ratio": 0.591,
+      "thinking_skip_rate": 0.4091,
+      "avg_thinking_chars_when_used": 4058,
+      "estimated_thinking_tokens": 857317,
+      "estimated_text_tokens": 453934,
+      "avg_requests_per_task": 9.4,
+      "cache_read_tokens": 833201816,
+      "cache_write_tokens": 51611585,
       "cost_composition": {
         "input_pct": 0.1,
-        "output_pct": 6.4,
-        "cache_read_pct": 56.8,
-        "cache_write_pct": 36.7
+        "output_pct": 6.7,
+        "cache_read_pct": 57.5,
+        "cache_write_pct": 35.6
       },
-      "avg_output_per_request": 233,
+      "avg_output_per_request": 240,
       "output_per_request_ci95": [
-        143.1699,
-        185.6344
+        146.3566,
+        184.8985
       ],
       "avg_text_chars_per_request": 179,
       "text_chars_per_request_ci95": [
-        237.079,
-        313.2959
+        290.0301,
+        379.8509
       ],
-      "avg_tool_use_chars": 6899,
-      "avg_edit_content_chars": 2278,
-      "avg_write_content_chars": 2115,
-      "avg_bash_command_chars": 821,
-      "avg_agent_prompt_chars": 454,
-      "avg_search_chars": 93
+      "avg_tool_use_chars": 6806,
+      "avg_edit_content_chars": 2412,
+      "avg_write_content_chars": 2014,
+      "avg_bash_command_chars": 765,
+      "avg_agent_prompt_chars": 422,
+      "avg_search_chars": 103
     },
     "by_complexity": {
       "complex": {
-        "count": 74,
-        "total_input_tokens": 36228,
-        "total_output_tokens": 696818,
-        "total_cost_usd": 541.36,
-        "avg_input_tokens": 490,
-        "avg_output_tokens": 9416,
-        "avg_cost_usd": 7.3156,
+        "count": 111,
+        "total_input_tokens": 51721,
+        "total_output_tokens": 1017982,
+        "total_cost_usd": 885.95,
+        "avg_input_tokens": 466,
+        "avg_output_tokens": 9171,
+        "avg_cost_usd": 7.9815,
         "cost_ci95": [
-          6.5139,
-          8.1696
+          7.213,
+          8.8141
         ],
         "output_ci95": [
-          7687.6622,
-          11400.7703
+          7918.0631,
+          10666.9279
         ],
-        "median_cost_usd": 6.4671,
-        "median_output_tokens": 7881,
-        "avg_thinking_chars": 8532,
-        "avg_text_chars": 3779,
-        "thinking_ratio": 0.932,
-        "thinking_skip_rate": 0.0676,
-        "avg_thinking_chars_when_used": 9150,
-        "estimated_thinking_tokens": 210434,
-        "estimated_text_tokens": 69881,
-        "avg_requests_per_task": 29.7,
-        "cache_read_tokens": 166212049,
-        "cache_write_tokens": 9434966,
+        "median_cost_usd": 6.9221,
+        "median_output_tokens": 7530,
+        "avg_thinking_chars": 9375,
+        "avg_text_chars": 3787,
+        "thinking_ratio": 0.946,
+        "thinking_skip_rate": 0.0541,
+        "avg_thinking_chars_when_used": 9911,
+        "estimated_thinking_tokens": 346857,
+        "estimated_text_tokens": 105051,
+        "avg_requests_per_task": 30.1,
+        "cache_read_tokens": 281899181,
+        "cache_write_tokens": 14947272,
         "cost_composition": {
           "input_pct": 0.1,
-          "output_pct": 9.7,
-          "cache_read_pct": 57.6,
-          "cache_write_pct": 32.7
+          "output_pct": 8.6,
+          "cache_read_pct": 59.7,
+          "cache_write_pct": 31.6
         },
-        "avg_output_per_request": 317,
+        "avg_output_per_request": 305,
         "output_per_request_ci95": [
-          277.889,
-          459.8166
+          292.1655,
+          432.7447
         ],
-        "avg_text_chars_per_request": 127,
+        "avg_text_chars_per_request": 126,
         "text_chars_per_request_ci95": [
-          126.428,
-          160.72
+          123.7922,
+          153.052
         ],
-        "avg_tool_use_chars": 26976,
-        "avg_edit_content_chars": 10077,
-        "avg_write_content_chars": 9308,
-        "avg_bash_command_chars": 1973,
-        "avg_agent_prompt_chars": 1354,
-        "avg_search_chars": 307
+        "avg_tool_use_chars": 27686,
+        "avg_edit_content_chars": 11088,
+        "avg_write_content_chars": 9242,
+        "avg_bash_command_chars": 2189,
+        "avg_agent_prompt_chars": 1227,
+        "avg_search_chars": 367
       },
       "major": {
-        "count": 18,
-        "total_input_tokens": 8583,
-        "total_output_tokens": 287474,
-        "total_cost_usd": 291.31,
-        "avg_input_tokens": 477,
-        "avg_output_tokens": 15971,
-        "avg_cost_usd": 16.1838,
+        "count": 22,
+        "total_input_tokens": 8906,
+        "total_output_tokens": 386779,
+        "total_cost_usd": 379.5,
+        "avg_input_tokens": 405,
+        "avg_output_tokens": 17581,
+        "avg_cost_usd": 17.2502,
         "cost_ci95": [
-          12.5283,
-          19.8495
+          13.6805,
+          21.0075
         ],
         "output_ci95": [
-          11195.1111,
-          21075.9444
+          12191.1818,
+          23380.0909
         ],
-        "median_cost_usd": 15.9991,
+        "median_cost_usd": 16.2067,
         "median_output_tokens": 18177,
-        "avg_thinking_chars": 5600,
-        "avg_text_chars": 7980,
-        "thinking_ratio": 0.778,
-        "thinking_skip_rate": 0.2222,
-        "avg_thinking_chars_when_used": 7199,
-        "estimated_thinking_tokens": 33593,
-        "estimated_text_tokens": 35904,
-        "avg_requests_per_task": 66.3,
-        "cache_read_tokens": 102675728,
-        "cache_write_tokens": 4112094,
+        "avg_thinking_chars": 7688,
+        "avg_text_chars": 8099,
+        "thinking_ratio": 0.818,
+        "thinking_skip_rate": 0.1818,
+        "avg_thinking_chars_when_used": 9396,
+        "estimated_thinking_tokens": 56374,
+        "estimated_text_tokens": 44539,
+        "avg_requests_per_task": 68.4,
+        "cache_read_tokens": 135920253,
+        "cache_write_tokens": 5093992,
         "cost_composition": {
           "input_pct": 0.0,
-          "output_pct": 7.4,
-          "cache_read_pct": 66.1,
-          "cache_write_pct": 26.5
+          "output_pct": 7.6,
+          "cache_read_pct": 67.2,
+          "cache_write_pct": 25.2
         },
-        "avg_output_per_request": 241,
+        "avg_output_per_request": 257,
         "output_per_request_ci95": [
-          177.8856,
-          319.646
+          192.2365,
+          350.6246
         ],
-        "avg_text_chars_per_request": 120,
+        "avg_text_chars_per_request": 118,
         "text_chars_per_request_ci95": [
-          90.5709,
-          150.9624
+          93.2878,
+          144.9561
         ],
-        "avg_tool_use_chars": 55492,
-        "avg_edit_content_chars": 19850,
-        "avg_write_content_chars": 22438,
-        "avg_bash_command_chars": 4983,
-        "avg_agent_prompt_chars": 926,
-        "avg_search_chars": 667
+        "avg_tool_use_chars": 59675,
+        "avg_edit_content_chars": 20289,
+        "avg_write_content_chars": 25262,
+        "avg_bash_command_chars": 5920,
+        "avg_agent_prompt_chars": 874,
+        "avg_search_chars": 831
       },
       "moderate": {
-        "count": 157,
-        "total_input_tokens": 41876,
-        "total_output_tokens": 403643,
-        "total_cost_usd": 501.41,
-        "avg_input_tokens": 267,
-        "avg_output_tokens": 2571,
-        "avg_cost_usd": 3.1937,
+        "count": 235,
+        "total_input_tokens": 67680,
+        "total_output_tokens": 631470,
+        "total_cost_usd": 744.45,
+        "avg_input_tokens": 288,
+        "avg_output_tokens": 2687,
+        "avg_cost_usd": 3.1679,
         "cost_ci95": [
-          2.9028,
-          3.5272
+          2.9104,
+          3.438
         ],
         "output_ci95": [
-          2196.0828,
-          3023.758
+          2354.3277,
+          3055.834
         ],
-        "median_cost_usd": 2.7519,
-        "median_output_tokens": 1982,
-        "avg_thinking_chars": 3594,
-        "avg_text_chars": 2380,
-        "thinking_ratio": 0.904,
-        "thinking_skip_rate": 0.0955,
-        "avg_thinking_chars_when_used": 3974,
-        "estimated_thinking_tokens": 188038,
-        "estimated_text_tokens": 93341,
-        "avg_requests_per_task": 11.8,
-        "cache_read_tokens": 148904765,
-        "cache_write_tokens": 10203397,
+        "median_cost_usd": 2.5526,
+        "median_output_tokens": 2004,
+        "avg_thinking_chars": 3511,
+        "avg_text_chars": 2227,
+        "thinking_ratio": 0.915,
+        "thinking_skip_rate": 0.0851,
+        "avg_thinking_chars_when_used": 3838,
+        "estimated_thinking_tokens": 274982,
+        "estimated_text_tokens": 130766,
+        "avg_requests_per_task": 11.9,
+        "cache_read_tokens": 220438032,
+        "cache_write_tokens": 15079957,
         "cost_composition": {
           "input_pct": 0.1,
-          "output_pct": 6.0,
-          "cache_read_pct": 55.7,
-          "cache_write_pct": 38.2
+          "output_pct": 6.4,
+          "cache_read_pct": 55.5,
+          "cache_write_pct": 38.0
         },
-        "avg_output_per_request": 217,
+        "avg_output_per_request": 227,
         "output_per_request_ci95": [
-          208.5472,
-          290.4603
+          236.0261,
+          346.996
         ],
-        "avg_text_chars_per_request": 201,
+        "avg_text_chars_per_request": 188,
         "text_chars_per_request_ci95": [
-          202.1375,
-          380.6255
+          199.4386,
+          323.8534
         ],
-        "avg_tool_use_chars": 8064,
-        "avg_edit_content_chars": 2172,
-        "avg_write_content_chars": 2007,
-        "avg_bash_command_chars": 1091,
-        "avg_agent_prompt_chars": 770,
-        "avg_search_chars": 128
+        "avg_tool_use_chars": 7926,
+        "avg_edit_content_chars": 2115,
+        "avg_write_content_chars": 1908,
+        "avg_bash_command_chars": 1037,
+        "avg_agent_prompt_chars": 877,
+        "avg_search_chars": 120
       },
       "simple": {
-        "count": 129,
-        "total_input_tokens": 20482,
-        "total_output_tokens": 98151,
-        "total_cost_usd": 208.43,
-        "avg_input_tokens": 159,
-        "avg_output_tokens": 761,
-        "avg_cost_usd": 1.6157,
+        "count": 201,
+        "total_input_tokens": 22385,
+        "total_output_tokens": 153434,
+        "total_cost_usd": 297.33,
+        "avg_input_tokens": 111,
+        "avg_output_tokens": 763,
+        "avg_cost_usd": 1.4792,
         "cost_ci95": [
-          1.3615,
-          1.908
+          1.3007,
+          1.6932
         ],
         "output_ci95": [
-          631.1473,
-          908.2791
+          637.5771,
+          922.592
         ],
-        "median_cost_usd": 1.034,
-        "median_output_tokens": 516,
-        "avg_thinking_chars": 914,
-        "avg_text_chars": 1477,
-        "thinking_ratio": 0.589,
-        "thinking_skip_rate": 0.4109,
-        "avg_thinking_chars_when_used": 1551,
-        "estimated_thinking_tokens": 39264,
-        "estimated_text_tokens": 47594,
-        "avg_requests_per_task": 5.3,
-        "cache_read_tokens": 53455132,
-        "cache_write_tokens": 5361732,
+        "median_cost_usd": 1.022,
+        "median_output_tokens": 487,
+        "avg_thinking_chars": 961,
+        "avg_text_chars": 1205,
+        "thinking_ratio": 0.602,
+        "thinking_skip_rate": 0.398,
+        "avg_thinking_chars_when_used": 1597,
+        "estimated_thinking_tokens": 64378,
+        "estimated_text_tokens": 60452,
+        "avg_requests_per_task": 5.2,
+        "cache_read_tokens": 78244380,
+        "cache_write_tokens": 7401398,
         "cost_composition": {
           "input_pct": 0.1,
-          "output_pct": 3.5,
-          "cache_read_pct": 48.1,
-          "cache_write_pct": 48.2
+          "output_pct": 3.9,
+          "cache_read_pct": 49.3,
+          "cache_write_pct": 46.7
         },
-        "avg_output_per_request": 142,
+        "avg_output_per_request": 147,
         "output_per_request_ci95": [
-          120.6325,
-          196.5074
+          122.6556,
+          206.4872
         ],
-        "avg_text_chars_per_request": 276,
+        "avg_text_chars_per_request": 232,
         "text_chars_per_request_ci95": [
-          247.0012,
-          484.4882
+          205.9618,
+          364.3163
         ],
-        "avg_tool_use_chars": 2025,
-        "avg_edit_content_chars": 370,
-        "avg_write_content_chars": 225,
+        "avg_tool_use_chars": 1864,
+        "avg_edit_content_chars": 331,
+        "avg_write_content_chars": 203,
         "avg_bash_command_chars": 620,
-        "avg_agent_prompt_chars": 225,
-        "avg_search_chars": 28
+        "avg_agent_prompt_chars": 221,
+        "avg_search_chars": 27
       },
       "trivial": {
-        "count": 213,
-        "total_input_tokens": 3249,
-        "total_output_tokens": 39100,
-        "total_cost_usd": 118.58,
-        "avg_input_tokens": 15,
-        "avg_output_tokens": 184,
-        "avg_cost_usd": 0.5567,
+        "count": 335,
+        "total_input_tokens": 4691,
+        "total_output_tokens": 54534,
+        "total_cost_usd": 178.03,
+        "avg_input_tokens": 14,
+        "avg_output_tokens": 163,
+        "avg_cost_usd": 0.5314,
         "cost_ci95": [
-          0.4504,
-          0.6871
+          0.4445,
+          0.6305
         ],
         "output_ci95": [
-          140.6901,
-          232.9671
+          127.194,
+          201.4239
         ],
-        "median_cost_usd": 0.2925,
-        "median_output_tokens": 27,
-        "avg_thinking_chars": 347,
-        "avg_text_chars": 836,
-        "thinking_ratio": 0.427,
-        "thinking_skip_rate": 0.5728,
-        "avg_thinking_chars_when_used": 811,
-        "estimated_thinking_tokens": 24581,
-        "estimated_text_tokens": 44434,
-        "avg_requests_per_task": 1.8,
-        "cache_read_tokens": 23667684,
-        "cache_write_tokens": 3798628,
+        "median_cost_usd": 0.2787,
+        "median_output_tokens": 21,
+        "avg_thinking_chars": 484,
+        "avg_text_chars": 913,
+        "thinking_ratio": 0.439,
+        "thinking_skip_rate": 0.5612,
+        "avg_thinking_chars_when_used": 1103,
+        "estimated_thinking_tokens": 54023,
+        "estimated_text_tokens": 76320,
+        "avg_requests_per_task": 1.7,
+        "cache_read_tokens": 37425928,
+        "cache_write_tokens": 5530644,
         "cost_composition": {
           "input_pct": 0.0,
-          "output_pct": 2.5,
-          "cache_read_pct": 37.4,
-          "cache_write_pct": 60.1
+          "output_pct": 2.3,
+          "cache_read_pct": 39.4,
+          "cache_write_pct": 58.2
         },
-        "avg_output_per_request": 105,
+        "avg_output_per_request": 93,
         "output_per_request_ci95": [
-          66.8858,
-          117.2494
+          58.8799,
+          94.0994
         ],
-        "avg_text_chars_per_request": 476,
+        "avg_text_chars_per_request": 522,
         "text_chars_per_request_ci95": [
-          392.2785,
-          573.1814
+          517.2836,
+          762.9809
         ],
-        "avg_tool_use_chars": 324,
-        "avg_edit_content_chars": 17,
-        "avg_write_content_chars": 6,
-        "avg_bash_command_chars": 71,
-        "avg_agent_prompt_chars": 119,
-        "avg_search_chars": 4
+        "avg_tool_use_chars": 298,
+        "avg_edit_content_chars": 18,
+        "avg_write_content_chars": 4,
+        "avg_bash_command_chars": 80,
+        "avg_agent_prompt_chars": 109,
+        "avg_search_chars": 3
       },
       "unknown": {
-        "count": 217,
-        "total_input_tokens": 7483,
-        "total_output_tokens": 284923,
-        "total_cost_usd": 458.17,
-        "avg_input_tokens": 34,
-        "avg_output_tokens": 1313,
-        "avg_cost_usd": 2.1114,
+        "count": 169,
+        "total_input_tokens": 1228,
+        "total_output_tokens": 187009,
+        "total_cost_usd": 229.4,
+        "avg_input_tokens": 7,
+        "avg_output_tokens": 1107,
+        "avg_cost_usd": 1.3574,
         "cost_ci95": [
-          1.5245,
-          2.8079
+          0.7065,
+          2.1971
         ],
         "output_ci95": [
-          900.2857,
-          1803.2995
+          542.8698,
+          1853.7574
         ],
         "median_cost_usd": 0.0,
         "median_output_tokens": 0,
-        "avg_thinking_chars": 2224,
-        "avg_text_chars": 1045,
-        "thinking_ratio": 0.369,
-        "thinking_skip_rate": 0.6313,
-        "avg_thinking_chars_when_used": 6032,
-        "estimated_thinking_tokens": 160831,
-        "estimated_text_tokens": 56681,
-        "avg_requests_per_task": 6.7,
-        "cache_read_tokens": 146750292,
-        "cache_write_tokens": 8614898,
+        "avg_thinking_chars": 1078,
+        "avg_text_chars": 871,
+        "thinking_ratio": 0.166,
+        "thinking_skip_rate": 0.8343,
+        "avg_thinking_chars_when_used": 6505,
+        "estimated_thinking_tokens": 60703,
+        "estimated_text_tokens": 36806,
+        "avg_requests_per_task": 5.2,
+        "cache_read_tokens": 79274042,
+        "cache_write_tokens": 3558322,
         "cost_composition": {
           "input_pct": 0.0,
-          "output_pct": 4.7,
-          "cache_read_pct": 60.1,
-          "cache_write_pct": 35.3
+          "output_pct": 6.1,
+          "cache_read_pct": 64.8,
+          "cache_write_pct": 29.1
         },
-        "avg_output_per_request": 196,
+        "avg_output_per_request": 215,
         "output_per_request_ci95": [
-          58.975,
-          156.9707
+          19.9689,
+          67.5759
         ],
-        "avg_text_chars_per_request": 156,
+        "avg_text_chars_per_request": 169,
         "text_chars_per_request_ci95": [
-          54.3342,
-          94.2994
+          34.5527,
+          85.8254
         ],
-        "avg_tool_use_chars": 4528,
-        "avg_edit_content_chars": 1593,
-        "avg_write_content_chars": 1249,
-        "avg_bash_command_chars": 743,
-        "avg_agent_prompt_chars": 342,
-        "avg_search_chars": 73
+        "avg_tool_use_chars": 3429,
+        "avg_edit_content_chars": 2019,
+        "avg_write_content_chars": 526,
+        "avg_bash_command_chars": 314,
+        "avg_agent_prompt_chars": 62,
+        "avg_search_chars": 96
       }
     },
     "by_type": {
       "bugfix": {
-        "count": 40,
-        "total_input_tokens": 6278,
-        "total_output_tokens": 172433,
-        "total_cost_usd": 136.25,
-        "avg_input_tokens": 157,
-        "avg_output_tokens": 4311,
-        "avg_cost_usd": 3.4061,
+        "count": 62,
+        "total_input_tokens": 12682,
+        "total_output_tokens": 260145,
+        "total_cost_usd": 218.32,
+        "avg_input_tokens": 205,
+        "avg_output_tokens": 4196,
+        "avg_cost_usd": 3.5213,
         "cost_ci95": [
-          2.2291,
-          4.8973
+          2.5272,
+          4.6917
         ],
         "output_ci95": [
-          2320.825,
-          6922.5
+          2538.4032,
+          6261.9516
         ],
-        "median_cost_usd": 1.9495,
-        "median_output_tokens": 1007,
-        "avg_thinking_chars": 4934,
-        "avg_text_chars": 2046,
-        "thinking_ratio": 0.725,
-        "thinking_skip_rate": 0.275,
-        "avg_thinking_chars_when_used": 6805,
-        "estimated_thinking_tokens": 65772,
-        "estimated_text_tokens": 20444,
-        "avg_requests_per_task": 15.6,
-        "cache_read_tokens": 41464016,
-        "cache_write_tokens": 2425284,
+        "median_cost_usd": 2.175,
+        "median_output_tokens": 943,
+        "avg_thinking_chars": 4233,
+        "avg_text_chars": 2035,
+        "thinking_ratio": 0.758,
+        "thinking_skip_rate": 0.2419,
+        "avg_thinking_chars_when_used": 5584,
+        "estimated_thinking_tokens": 87471,
+        "estimated_text_tokens": 31526,
+        "avg_requests_per_task": 14.5,
+        "cache_read_tokens": 64578556,
+        "cache_write_tokens": 4135168,
         "cost_composition": {
           "input_pct": 0.1,
-          "output_pct": 9.5,
-          "cache_read_pct": 57.1,
-          "cache_write_pct": 33.4
+          "output_pct": 8.9,
+          "cache_read_pct": 55.5,
+          "cache_write_pct": 35.5
         },
-        "avg_output_per_request": 277,
+        "avg_output_per_request": 288,
         "output_per_request_ci95": [
-          158.6997,
-          321.6313
+          158.2218,
+          274.4702
         ],
-        "avg_text_chars_per_request": 131,
+        "avg_text_chars_per_request": 140,
         "text_chars_per_request_ci95": [
-          127.5235,
-          292.075
+          131.3485,
+          237.7782
         ],
-        "avg_tool_use_chars": 10023,
-        "avg_edit_content_chars": 3281,
-        "avg_write_content_chars": 2675,
-        "avg_bash_command_chars": 1357,
-        "avg_agent_prompt_chars": 394,
-        "avg_search_chars": 76
+        "avg_tool_use_chars": 11515,
+        "avg_edit_content_chars": 4194,
+        "avg_write_content_chars": 2903,
+        "avg_bash_command_chars": 1225,
+        "avg_agent_prompt_chars": 929,
+        "avg_search_chars": 106
       },
       "continuation": {
-        "count": 27,
-        "total_input_tokens": 348,
-        "total_output_tokens": 62892,
-        "total_cost_usd": 77.1,
-        "avg_input_tokens": 13,
-        "avg_output_tokens": 2329,
-        "avg_cost_usd": 2.8556,
+        "count": 40,
+        "total_input_tokens": 497,
+        "total_output_tokens": 110910,
+        "total_cost_usd": 109.2,
+        "avg_input_tokens": 12,
+        "avg_output_tokens": 2773,
+        "avg_cost_usd": 2.73,
         "cost_ci95": [
-          1.6707,
-          4.3709
+          1.7056,
+          3.9499
         ],
         "output_ci95": [
-          1030.9259,
-          4165.1111
+          1446.175,
+          4390.65
         ],
-        "median_cost_usd": 1.2606,
-        "median_output_tokens": 923,
-        "avg_thinking_chars": 1607,
-        "avg_text_chars": 1675,
-        "thinking_ratio": 0.667,
-        "thinking_skip_rate": 0.3333,
-        "avg_thinking_chars_when_used": 2411,
-        "estimated_thinking_tokens": 14461,
-        "estimated_text_tokens": 11293,
-        "avg_requests_per_task": 10.7,
-        "cache_read_tokens": 24159581,
-        "cache_write_tokens": 1444278,
+        "median_cost_usd": 1.1772,
+        "median_output_tokens": 731,
+        "avg_thinking_chars": 2465,
+        "avg_text_chars": 1452,
+        "thinking_ratio": 0.6,
+        "thinking_skip_rate": 0.4,
+        "avg_thinking_chars_when_used": 4109,
+        "estimated_thinking_tokens": 32862,
+        "estimated_text_tokens": 14503,
+        "avg_requests_per_task": 9.7,
+        "cache_read_tokens": 34121115,
+        "cache_write_tokens": 1967856,
         "cost_composition": {
           "input_pct": 0.0,
-          "output_pct": 6.1,
-          "cache_read_pct": 58.8,
-          "cache_write_pct": 35.1
+          "output_pct": 7.6,
+          "cache_read_pct": 58.6,
+          "cache_write_pct": 33.8
         },
-        "avg_output_per_request": 218,
+        "avg_output_per_request": 287,
         "output_per_request_ci95": [
-          121.8182,
-          230.7044
+          147.1487,
+          503.9565
         ],
-        "avg_text_chars_per_request": 157,
+        "avg_text_chars_per_request": 150,
         "text_chars_per_request_ci95": [
-          107.5827,
-          346.1139
+          112.5041,
+          281.435
         ],
-        "avg_tool_use_chars": 7579,
-        "avg_edit_content_chars": 2622,
-        "avg_write_content_chars": 2313,
-        "avg_bash_command_chars": 946,
-        "avg_agent_prompt_chars": 275,
-        "avg_search_chars": 86
+        "avg_tool_use_chars": 6085,
+        "avg_edit_content_chars": 2159,
+        "avg_write_content_chars": 1748,
+        "avg_bash_command_chars": 795,
+        "avg_agent_prompt_chars": 203,
+        "avg_search_chars": 73
       },
       "docs": {
-        "count": 10,
-        "total_input_tokens": 12421,
-        "total_output_tokens": 6592,
-        "total_cost_usd": 26.34,
-        "avg_input_tokens": 1242,
-        "avg_output_tokens": 659,
-        "avg_cost_usd": 2.6336,
+        "count": 12,
+        "total_input_tokens": 12439,
+        "total_output_tokens": 9818,
+        "total_cost_usd": 30.47,
+        "avg_input_tokens": 1037,
+        "avg_output_tokens": 818,
+        "avg_cost_usd": 2.539,
         "cost_ci95": [
-          1.2292,
-          4.1732
+          1.3674,
+          3.9212
         ],
         "output_ci95": [
-          253.6,
-          1142.2
+          398.1667,
+          1291.8333
         ],
-        "median_cost_usd": 1.629,
-        "median_output_tokens": 317,
-        "avg_thinking_chars": 4522,
-        "avg_text_chars": 2852,
-        "thinking_ratio": 0.7,
-        "thinking_skip_rate": 0.3,
-        "avg_thinking_chars_when_used": 6459,
-        "estimated_thinking_tokens": 15069,
-        "estimated_text_tokens": 7130,
-        "avg_requests_per_task": 12.2,
-        "cache_read_tokens": 6944095,
-        "cache_write_tokens": 673872,
+        "median_cost_usd": 1.6778,
+        "median_output_tokens": 432,
+        "avg_thinking_chars": 3951,
+        "avg_text_chars": 2435,
+        "thinking_ratio": 0.667,
+        "thinking_skip_rate": 0.3333,
+        "avg_thinking_chars_when_used": 5927,
+        "estimated_thinking_tokens": 15802,
+        "estimated_text_tokens": 7304,
+        "avg_requests_per_task": 11.3,
+        "cache_read_tokens": 7942468,
+        "cache_write_tokens": 781472,
         "cost_composition": {
-          "input_pct": 0.7,
-          "output_pct": 1.9,
-          "cache_read_pct": 49.4,
-          "cache_write_pct": 48.0
+          "input_pct": 0.6,
+          "output_pct": 2.4,
+          "cache_read_pct": 48.9,
+          "cache_write_pct": 48.1
         },
-        "avg_output_per_request": 54,
+        "avg_output_per_request": 72,
         "output_per_request_ci95": [
-          27.9793,
-          173.6935
+          52.7545,
+          195.2288
         ],
-        "avg_text_chars_per_request": 234,
+        "avg_text_chars_per_request": 215,
         "text_chars_per_request_ci95": [
-          178.6708,
-          696.188
+          151.8171,
+          597.0908
         ],
-        "avg_tool_use_chars": 5930,
-        "avg_edit_content_chars": 754,
+        "avg_tool_use_chars": 5642,
+        "avg_edit_content_chars": 1290,
         "avg_write_content_chars": 0,
-        "avg_bash_command_chars": 923,
-        "avg_agent_prompt_chars": 1437,
-        "avg_search_chars": 1120
+        "avg_bash_command_chars": 769,
+        "avg_agent_prompt_chars": 1197,
+        "avg_search_chars": 936
       },
       "feature": {
-        "count": 37,
-        "total_input_tokens": 594,
-        "total_output_tokens": 117821,
-        "total_cost_usd": 141.4,
-        "avg_input_tokens": 16,
-        "avg_output_tokens": 3184,
-        "avg_cost_usd": 3.8215,
+        "count": 59,
+        "total_input_tokens": 12870,
+        "total_output_tokens": 182638,
+        "total_cost_usd": 204.7,
+        "avg_input_tokens": 218,
+        "avg_output_tokens": 3096,
+        "avg_cost_usd": 3.4694,
         "cost_ci95": [
-          2.8255,
-          4.9267
+          2.693,
+          4.3264
         ],
         "output_ci95": [
-          1883.8378,
-          4805.2973
+          2060.8983,
+          4308.8136
         ],
-        "median_cost_usd": 2.7681,
+        "median_cost_usd": 2.319,
         "median_output_tokens": 1857,
-        "avg_thinking_chars": 4129,
-        "avg_text_chars": 2111,
-        "thinking_ratio": 0.811,
-        "thinking_skip_rate": 0.1892,
-        "avg_thinking_chars_when_used": 5093,
-        "estimated_thinking_tokens": 50916,
-        "estimated_text_tokens": 19516,
-        "avg_requests_per_task": 13.7,
-        "cache_read_tokens": 44540624,
-        "cache_write_tokens": 2615284,
+        "avg_thinking_chars": 4349,
+        "avg_text_chars": 1979,
+        "thinking_ratio": 0.797,
+        "thinking_skip_rate": 0.2034,
+        "avg_thinking_chars_when_used": 5460,
+        "estimated_thinking_tokens": 85516,
+        "estimated_text_tokens": 29162,
+        "avg_requests_per_task": 11.6,
+        "cache_read_tokens": 61018644,
+        "cache_write_tokens": 4074414,
         "cost_composition": {
-          "input_pct": 0.0,
-          "output_pct": 6.2,
-          "cache_read_pct": 59.1,
-          "cache_write_pct": 34.7
+          "input_pct": 0.1,
+          "output_pct": 6.7,
+          "cache_read_pct": 55.9,
+          "cache_write_pct": 37.3
         },
-        "avg_output_per_request": 233,
+        "avg_output_per_request": 267,
         "output_per_request_ci95": [
-          137.7696,
-          229.3469
+          178.013,
+          384.7378
         ],
-        "avg_text_chars_per_request": 154,
+        "avg_text_chars_per_request": 171,
         "text_chars_per_request_ci95": [
-          116.0198,
-          711.1875
+          209.6961,
+          868.0761
         ],
-        "avg_tool_use_chars": 8624,
-        "avg_edit_content_chars": 2683,
-        "avg_write_content_chars": 2870,
-        "avg_bash_command_chars": 596,
-        "avg_agent_prompt_chars": 483,
-        "avg_search_chars": 142
+        "avg_tool_use_chars": 8817,
+        "avg_edit_content_chars": 2781,
+        "avg_write_content_chars": 3488,
+        "avg_bash_command_chars": 525,
+        "avg_agent_prompt_chars": 459,
+        "avg_search_chars": 131
       },
       "greenfield": {
-        "count": 34,
-        "total_input_tokens": 2848,
-        "total_output_tokens": 251223,
-        "total_cost_usd": 202.08,
-        "avg_input_tokens": 84,
-        "avg_output_tokens": 7389,
-        "avg_cost_usd": 5.9434,
+        "count": 56,
+        "total_input_tokens": 3323,
+        "total_output_tokens": 387713,
+        "total_cost_usd": 311.39,
+        "avg_input_tokens": 59,
+        "avg_output_tokens": 6923,
+        "avg_cost_usd": 5.5606,
         "cost_ci95": [
-          4.0679,
-          8.0206
+          4.0111,
+          7.2877
         ],
         "output_ci95": [
-          4566.0294,
-          10506.5294
+          4570.7857,
+          9688.375
         ],
-        "median_cost_usd": 4.411,
-        "median_output_tokens": 3068,
-        "avg_thinking_chars": 5319,
-        "avg_text_chars": 2878,
-        "thinking_ratio": 0.706,
-        "thinking_skip_rate": 0.2941,
-        "avg_thinking_chars_when_used": 7536,
-        "estimated_thinking_tokens": 60279,
-        "estimated_text_tokens": 24454,
-        "avg_requests_per_task": 22.3,
-        "cache_read_tokens": 57754094,
-        "cache_write_tokens": 3994832,
+        "median_cost_usd": 2.6918,
+        "median_output_tokens": 2018,
+        "avg_thinking_chars": 5181,
+        "avg_text_chars": 2463,
+        "thinking_ratio": 0.732,
+        "thinking_skip_rate": 0.2679,
+        "avg_thinking_chars_when_used": 7076,
+        "estimated_thinking_tokens": 96697,
+        "estimated_text_tokens": 34458,
+        "avg_requests_per_task": 20.9,
+        "cache_read_tokens": 93249292,
+        "cache_write_tokens": 5729088,
         "cost_composition": {
           "input_pct": 0.0,
           "output_pct": 9.3,
-          "cache_read_pct": 53.6,
-          "cache_write_pct": 37.1
+          "cache_read_pct": 56.1,
+          "cache_write_pct": 34.5
         },
         "avg_output_per_request": 331,
         "output_per_request_ci95": [
-          223.3298,
-          424.5043
+          214.0255,
+          352.5511
         ],
-        "avg_text_chars_per_request": 129,
+        "avg_text_chars_per_request": 118,
         "text_chars_per_request_ci95": [
-          106.1115,
-          315.6304
+          107.0834,
+          416.9919
         ],
-        "avg_tool_use_chars": 20710,
-        "avg_edit_content_chars": 7968,
-        "avg_write_content_chars": 7889,
-        "avg_bash_command_chars": 1716,
-        "avg_agent_prompt_chars": 677,
-        "avg_search_chars": 62
+        "avg_tool_use_chars": 19603,
+        "avg_edit_content_chars": 7044,
+        "avg_write_content_chars": 7738,
+        "avg_bash_command_chars": 1793,
+        "avg_agent_prompt_chars": 832,
+        "avg_search_chars": 96
       },
       "investigation": {
-        "count": 130,
-        "total_input_tokens": 46483,
-        "total_output_tokens": 313980,
-        "total_cost_usd": 319.42,
-        "avg_input_tokens": 358,
-        "avg_output_tokens": 2415,
-        "avg_cost_usd": 2.4571,
+        "count": 210,
+        "total_input_tokens": 68982,
+        "total_output_tokens": 403486,
+        "total_cost_usd": 452.41,
+        "avg_input_tokens": 328,
+        "avg_output_tokens": 1921,
+        "avg_cost_usd": 2.1543,
         "cost_ci95": [
-          2.0257,
-          2.94
+          1.8146,
+          2.5287
         ],
         "output_ci95": [
-          1766.3077,
-          3208.4692
+          1446.6381,
+          2466.5143
         ],
-        "median_cost_usd": 1.4249,
-        "median_output_tokens": 731,
-        "avg_thinking_chars": 2044,
-        "avg_text_chars": 2984,
-        "thinking_ratio": 0.846,
-        "thinking_skip_rate": 0.1538,
-        "avg_thinking_chars_when_used": 2416,
-        "estimated_thinking_tokens": 88535,
-        "estimated_text_tokens": 96944,
-        "avg_requests_per_task": 8.5,
-        "cache_read_tokens": 85772302,
-        "cache_write_tokens": 7165346,
+        "median_cost_usd": 1.2869,
+        "median_output_tokens": 567,
+        "avg_thinking_chars": 2065,
+        "avg_text_chars": 2664,
+        "thinking_ratio": 0.833,
+        "thinking_skip_rate": 0.1667,
+        "avg_thinking_chars_when_used": 2478,
+        "estimated_thinking_tokens": 144470,
+        "estimated_text_tokens": 139785,
+        "avg_requests_per_task": 8.0,
+        "cache_read_tokens": 120446627,
+        "cache_write_tokens": 10414910,
         "cost_composition": {
           "input_pct": 0.2,
-          "output_pct": 7.4,
-          "cache_read_pct": 50.3,
-          "cache_write_pct": 42.1
+          "output_pct": 6.7,
+          "cache_read_pct": 49.9,
+          "cache_write_pct": 43.2
         },
-        "avg_output_per_request": 283,
+        "avg_output_per_request": 242,
         "output_per_request_ci95": [
-          213.8785,
-          344.2898
+          167.76,
+          258.5165
         ],
-        "avg_text_chars_per_request": 350,
+        "avg_text_chars_per_request": 335,
         "text_chars_per_request_ci95": [
-          551.9677,
-          853.8463
+          606.7109,
+          927.7244
         ],
-        "avg_tool_use_chars": 6110,
-        "avg_edit_content_chars": 1808,
-        "avg_write_content_chars": 1721,
-        "avg_bash_command_chars": 656,
-        "avg_agent_prompt_chars": 746,
-        "avg_search_chars": 113
+        "avg_tool_use_chars": 5030,
+        "avg_edit_content_chars": 1538,
+        "avg_write_content_chars": 1289,
+        "avg_bash_command_chars": 514,
+        "avg_agent_prompt_chars": 637,
+        "avg_search_chars": 130
       },
       "port": {
-        "count": 15,
-        "total_input_tokens": 15440,
-        "total_output_tokens": 51649,
-        "total_cost_usd": 59.53,
-        "avg_input_tokens": 1029,
-        "avg_output_tokens": 3443,
-        "avg_cost_usd": 3.9686,
+        "count": 25,
+        "total_input_tokens": 15546,
+        "total_output_tokens": 65093,
+        "total_cost_usd": 72.22,
+        "avg_input_tokens": 622,
+        "avg_output_tokens": 2604,
+        "avg_cost_usd": 2.8889,
         "cost_ci95": [
-          2.0326,
-          6.1396
+          1.6559,
+          4.3772
         ],
         "output_ci95": [
-          1284.4667,
-          5892.9333
+          1224.84,
+          4292.36
         ],
-        "median_cost_usd": 2.9185,
+        "median_cost_usd": 2.0822,
         "median_output_tokens": 399,
-        "avg_thinking_chars": 6509,
-        "avg_text_chars": 2347,
-        "thinking_ratio": 0.933,
-        "thinking_skip_rate": 0.0667,
-        "avg_thinking_chars_when_used": 6974,
-        "estimated_thinking_tokens": 32541,
-        "estimated_text_tokens": 8796,
-        "avg_requests_per_task": 18.9,
-        "cache_read_tokens": 18599396,
-        "cache_write_tokens": 1095998,
+        "avg_thinking_chars": 5200,
+        "avg_text_chars": 1896,
+        "thinking_ratio": 0.88,
+        "thinking_skip_rate": 0.12,
+        "avg_thinking_chars_when_used": 5910,
+        "estimated_thinking_tokens": 43332,
+        "estimated_text_tokens": 11838,
+        "avg_requests_per_task": 13.6,
+        "cache_read_tokens": 21943035,
+        "cache_write_tokens": 1384704,
         "cost_composition": {
-          "input_pct": 0.4,
-          "output_pct": 6.5,
-          "cache_read_pct": 58.6,
-          "cache_write_pct": 34.5
+          "input_pct": 0.3,
+          "output_pct": 6.8,
+          "cache_read_pct": 57.0,
+          "cache_write_pct": 35.9
         },
-        "avg_output_per_request": 182,
+        "avg_output_per_request": 191,
         "output_per_request_ci95": [
-          57.8195,
-          187.9692
+          80.7607,
+          258.2974
         ],
-        "avg_text_chars_per_request": 124,
+        "avg_text_chars_per_request": 139,
         "text_chars_per_request_ci95": [
-          130.8058,
-          343.6438
+          131.2129,
+          805.8983
         ],
-        "avg_tool_use_chars": 12911,
-        "avg_edit_content_chars": 4842,
-        "avg_write_content_chars": 4186,
-        "avg_bash_command_chars": 1107,
-        "avg_agent_prompt_chars": 753,
-        "avg_search_chars": 39
+        "avg_tool_use_chars": 9461,
+        "avg_edit_content_chars": 3694,
+        "avg_write_content_chars": 3159,
+        "avg_bash_command_chars": 789,
+        "avg_agent_prompt_chars": 452,
+        "avg_search_chars": 35
       },
       "refactor": {
-        "count": 43,
-        "total_input_tokens": 15638,
-        "total_output_tokens": 243826,
-        "total_cost_usd": 255.95,
-        "avg_input_tokens": 364,
-        "avg_output_tokens": 5670,
-        "avg_cost_usd": 5.9522,
+        "count": 63,
+        "total_input_tokens": 16223,
+        "total_output_tokens": 313622,
+        "total_cost_usd": 344.02,
+        "avg_input_tokens": 258,
+        "avg_output_tokens": 4978,
+        "avg_cost_usd": 5.4606,
         "cost_ci95": [
-          4.1578,
-          8.0059
+          4.0524,
+          6.9785
         ],
         "output_ci95": [
-          3284.5349,
-          8417.1395
+          3287.8889,
+          7012.0952
         ],
-        "median_cost_usd": 3.4929,
-        "median_output_tokens": 1929,
-        "avg_thinking_chars": 4182,
-        "avg_text_chars": 2811,
-        "thinking_ratio": 0.744,
-        "thinking_skip_rate": 0.2558,
-        "avg_thinking_chars_when_used": 5620,
-        "estimated_thinking_tokens": 59936,
-        "estimated_text_tokens": 30199,
-        "avg_requests_per_task": 22.7,
-        "cache_read_tokens": 83372711,
-        "cache_write_tokens": 4325363,
+        "median_cost_usd": 3.1303,
+        "median_output_tokens": 1854,
+        "avg_thinking_chars": 3676,
+        "avg_text_chars": 2420,
+        "thinking_ratio": 0.683,
+        "thinking_skip_rate": 0.3175,
+        "avg_thinking_chars_when_used": 5386,
+        "estimated_thinking_tokens": 77189,
+        "estimated_text_tokens": 38089,
+        "avg_requests_per_task": 19.7,
+        "cache_read_tokens": 110384585,
+        "cache_write_tokens": 6041705,
         "cost_composition": {
           "input_pct": 0.1,
-          "output_pct": 7.1,
-          "cache_read_pct": 61.1,
-          "cache_write_pct": 31.7
+          "output_pct": 6.8,
+          "cache_read_pct": 60.2,
+          "cache_write_pct": 32.9
         },
-        "avg_output_per_request": 249,
+        "avg_output_per_request": 253,
         "output_per_request_ci95": [
-          155.5493,
-          257.5264
+          155.3499,
+          256.6722
         ],
-        "avg_text_chars_per_request": 124,
+        "avg_text_chars_per_request": 123,
         "text_chars_per_request_ci95": [
-          120.9087,
-          362.4346
+          107.5146,
+          282.9097
         ],
-        "avg_tool_use_chars": 22029,
-        "avg_edit_content_chars": 7719,
-        "avg_write_content_chars": 7670,
-        "avg_bash_command_chars": 1162,
-        "avg_agent_prompt_chars": 1335,
-        "avg_search_chars": 164
+        "avg_tool_use_chars": 18626,
+        "avg_edit_content_chars": 6871,
+        "avg_write_content_chars": 6433,
+        "avg_bash_command_chars": 987,
+        "avg_agent_prompt_chars": 973,
+        "avg_search_chars": 163
       },
       "sysadmin": {
-        "count": 64,
-        "total_input_tokens": 3949,
-        "total_output_tokens": 54510,
-        "total_cost_usd": 123.17,
-        "avg_input_tokens": 62,
-        "avg_output_tokens": 852,
-        "avg_cost_usd": 1.9245,
+        "count": 103,
+        "total_input_tokens": 4319,
+        "total_output_tokens": 101816,
+        "total_cost_usd": 203.92,
+        "avg_input_tokens": 42,
+        "avg_output_tokens": 989,
+        "avg_cost_usd": 1.9798,
         "cost_ci95": [
-          1.4448,
-          2.5022
+          1.5468,
+          2.4764
         ],
         "output_ci95": [
-          520.5781,
-          1288.8594
+          668.6311,
+          1377.2136
         ],
-        "median_cost_usd": 1.0031,
-        "median_output_tokens": 360,
-        "avg_thinking_chars": 710,
-        "avg_text_chars": 632,
-        "thinking_ratio": 0.344,
-        "thinking_skip_rate": 0.6562,
-        "avg_thinking_chars_when_used": 2065,
-        "estimated_thinking_tokens": 15136,
-        "estimated_text_tokens": 10081,
-        "avg_requests_per_task": 5.9,
-        "cache_read_tokens": 32436394,
-        "cache_write_tokens": 3104104,
+        "median_cost_usd": 0.9798,
+        "median_output_tokens": 386,
+        "avg_thinking_chars": 1019,
+        "avg_text_chars": 659,
+        "thinking_ratio": 0.388,
+        "thinking_skip_rate": 0.6117,
+        "avg_thinking_chars_when_used": 2623,
+        "estimated_thinking_tokens": 34967,
+        "estimated_text_tokens": 16938,
+        "avg_requests_per_task": 6.5,
+        "cache_read_tokens": 60487524,
+        "cache_write_tokens": 4416200,
         "cost_composition": {
           "input_pct": 0.0,
-          "output_pct": 3.3,
-          "cache_read_pct": 49.4,
-          "cache_write_pct": 47.3
+          "output_pct": 3.7,
+          "cache_read_pct": 55.6,
+          "cache_write_pct": 40.6
         },
-        "avg_output_per_request": 143,
+        "avg_output_per_request": 152,
         "output_per_request_ci95": [
-          76.3458,
-          198.888
+          87.3588,
+          169.0756
         ],
-        "avg_text_chars_per_request": 106,
+        "avg_text_chars_per_request": 102,
         "text_chars_per_request_ci95": [
-          75.2445,
-          267.5053
+          70.3644,
+          185.3595
         ],
-        "avg_tool_use_chars": 1731,
-        "avg_edit_content_chars": 472,
-        "avg_write_content_chars": 82,
-        "avg_bash_command_chars": 932,
-        "avg_agent_prompt_chars": 6,
-        "avg_search_chars": 0
+        "avg_tool_use_chars": 2338,
+        "avg_edit_content_chars": 606,
+        "avg_write_content_chars": 322,
+        "avg_bash_command_chars": 1013,
+        "avg_agent_prompt_chars": 37,
+        "avg_search_chars": 13
       },
       "unknown": {
-        "count": 408,
-        "total_input_tokens": 13902,
-        "total_output_tokens": 535183,
-        "total_cost_usd": 778.04,
-        "avg_input_tokens": 34,
-        "avg_output_tokens": 1312,
-        "avg_cost_usd": 1.907,
+        "count": 443,
+        "total_input_tokens": 9730,
+        "total_output_tokens": 595967,
+        "total_cost_usd": 768.01,
+        "avg_input_tokens": 22,
+        "avg_output_tokens": 1345,
+        "avg_cost_usd": 1.7337,
         "cost_ci95": [
-          1.5245,
-          2.3248
+          1.3597,
+          2.1633
         ],
         "output_ci95": [
-          999.9583,
-          1653.7647
+          1009.5688,
+          1729.3476
         ],
-        "median_cost_usd": 0.319,
-        "median_output_tokens": 27,
-        "avg_thinking_chars": 1869,
-        "avg_text_chars": 1167,
-        "thinking_ratio": 0.456,
-        "thinking_skip_rate": 0.5441,
-        "avg_thinking_chars_when_used": 4099,
-        "estimated_thinking_tokens": 254096,
-        "estimated_text_tokens": 118978,
-        "avg_requests_per_task": 6.7,
-        "cache_read_tokens": 246622437,
-        "cache_write_tokens": 14681354,
+        "median_cost_usd": 0.2355,
+        "median_output_tokens": 11,
+        "avg_thinking_chars": 1619,
+        "avg_text_chars": 1178,
+        "thinking_ratio": 0.422,
+        "thinking_skip_rate": 0.5779,
+        "avg_thinking_chars_when_used": 3836,
+        "estimated_thinking_tokens": 239011,
+        "estimated_text_tokens": 130331,
+        "avg_requests_per_task": 6.6,
+        "cache_read_tokens": 259029970,
+        "cache_write_tokens": 12666068,
         "cost_composition": {
           "input_pct": 0.0,
-          "output_pct": 5.2,
-          "cache_read_pct": 59.4,
-          "cache_write_pct": 35.4
+          "output_pct": 5.8,
+          "cache_read_pct": 63.2,
+          "cache_write_pct": 30.9
         },
-        "avg_output_per_request": 197,
+        "avg_output_per_request": 204,
         "output_per_request_ci95": [
-          82.4341,
-          138.8181
+          79.1263,
+          136.8244
         ],
-        "avg_text_chars_per_request": 175,
+        "avg_text_chars_per_request": 178,
         "text_chars_per_request_ci95": [
-          140.7659,
-          212.7325
+          182.5142,
+          283.6026
         ],
-        "avg_tool_use_chars": 4510,
-        "avg_edit_content_chars": 1449,
-        "avg_write_content_chars": 1333,
-        "avg_bash_command_chars": 692,
-        "avg_agent_prompt_chars": 299,
-        "avg_search_chars": 71
+        "avg_tool_use_chars": 4408,
+        "avg_edit_content_chars": 1708,
+        "avg_write_content_chars": 1093,
+        "avg_bash_command_chars": 629,
+        "avg_agent_prompt_chars": 201,
+        "avg_search_chars": 82
       }
     },
     "cold_cache_analysis": {
-      "tasks_analyzed": 592,
-      "avg_first_request_cache_write": 27163,
-      "avg_subsequent_cache_write": 3466,
-      "cold_write_ratio": 7.84,
-      "avg_first_request_cache_read": 53816,
-      "avg_subsequent_cache_read": 85256,
+      "tasks_analyzed": 784,
+      "avg_first_request_cache_write": 23956,
+      "avg_subsequent_cache_write": 3410,
+      "cold_write_ratio": 7.02,
+      "avg_first_request_cache_read": 53899,
+      "avg_subsequent_cache_read": 85029,
       "warm_read_ratio": 1.58
     }
   }

@@ -1,25 +1,25 @@
 {
   "opus-4-5": {
-    "total_tasks": 1729,
-    "total_planned": 29,
-    "planning_rate_pct": 1.7,
+    "total_tasks": 1913,
+    "total_planned": 35,
+    "planning_rate_pct": 1.8,
     "by_complexity": {
       "trivial": {
-        "n": 808,
+        "n": 887,
         "planned": 0,
-        "unplanned": 808,
+        "unplanned": 887,
         "planning_rate_pct": 0.0,
         "alignment_planned": null,
-        "alignment_unplanned": 2.7166,
+        "alignment_unplanned": 2.7193,
         "alignment_delta": null,
         "n_scored_planned": 0,
-        "n_scored_unplanned": 808
+        "n_scored_unplanned": 805
       },
       "simple": {
-        "n": 345,
-        "planned": 1,
-        "unplanned": 344,
-        "planning_rate_pct": 0.3,
+        "n": 382,
+        "planned": 3,
+        "unplanned": 379,
+        "planning_rate_pct": 0.8,
         "alignment_planned": 3.0,
         "alignment_unplanned": 3.2994,
         "alignment_delta": -0.2994,
@@ -27,10 +27,10 @@
         "n_scored_unplanned": 344
       },
       "moderate": {
-        "n": 367,
-        "planned": 8,
-        "unplanned": 359,
-        "planning_rate_pct": 2.2,
+        "n": 416,
+        "planned": 10,
+        "unplanned": 406,
+        "planning_rate_pct": 2.4,
         "alignment_planned": 3.875,
         "alignment_unplanned": 3.337,
         "alignment_delta": 0.538,
@@ -38,46 +38,46 @@
         "n_scored_unplanned": 359
       },
       "complex": {
-        "n": 190,
+        "n": 202,
         "planned": 14,
-        "unplanned": 176,
-        "planning_rate_pct": 7.4,
-        "alignment_planned": 3.0714,
+        "unplanned": 188,
+        "planning_rate_pct": 6.9,
+        "alignment_planned": 3.0,
         "alignment_unplanned": 3.3977,
-        "alignment_delta": -0.3263,
-        "n_scored_planned": 14,
+        "alignment_delta": -0.3977,
+        "n_scored_planned": 11,
         "n_scored_unplanned": 176
       },
       "major": {
-        "n": 19,
-        "planned": 6,
-        "unplanned": 13,
-        "planning_rate_pct": 31.6,
-        "alignment_planned": 3.8333,
+        "n": 26,
+        "planned": 8,
+        "unplanned": 18,
+        "planning_rate_pct": 30.8,
+        "alignment_planned": 3.6667,
         "alignment_unplanned": 3.1538,
-        "alignment_delta": 0.6795,
-        "n_scored_planned": 6,
+        "alignment_delta": 0.5128,
+        "n_scored_planned": 3,
         "n_scored_unplanned": 13
       }
     },
-    "overall_alignment_planned": 3.4483,
-    "overall_alignment_unplanned": 3.0394,
-    "overall_alignment_delta": 0.4089,
+    "overall_alignment_planned": 3.3913,
+    "overall_alignment_unplanned": 3.0412,
+    "overall_alignment_delta": 0.3501,
     "coverage": {
-      "tasks_with_alignment": 1729,
-      "pct": 100.0
+      "tasks_with_alignment": 1720,
+      "pct": 89.9
     }
   },
   "opus-4-6": {
-    "total_tasks": 591,
-    "total_planned": 82,
-    "planning_rate_pct": 13.9,
+    "total_tasks": 904,
+    "total_planned": 115,
+    "planning_rate_pct": 12.7,
     "by_complexity": {
       "trivial": {
-        "n": 213,
-        "planned": 0,
-        "unplanned": 213,
-        "planning_rate_pct": 0.0,
+        "n": 335,
+        "planned": 3,
+        "unplanned": 332,
+        "planning_rate_pct": 0.9,
         "alignment_planned": null,
         "alignment_unplanned": 3.1315,
         "alignment_delta": null,
@@ -85,10 +85,10 @@
         "n_scored_unplanned": 213
       },
       "simple": {
-        "n": 129,
-        "planned": 4,
-        "unplanned": 125,
-        "planning_rate_pct": 3.1,
+        "n": 201,
+        "planned": 6,
+        "unplanned": 195,
+        "planning_rate_pct": 3.0,
         "alignment_planned": 3.25,
         "alignment_unplanned": 3.184,
         "alignment_delta": 0.066,
@@ -96,10 +96,10 @@
         "n_scored_unplanned": 125
       },
       "moderate": {
-        "n": 157,
-        "planned": 27,
-        "unplanned": 130,
-        "planning_rate_pct": 17.2,
+        "n": 235,
+        "planned": 43,
+        "unplanned": 192,
+        "planning_rate_pct": 18.3,
         "alignment_planned": 3.5556,
         "alignment_unplanned": 3.5154,
         "alignment_delta": 0.0402,
@@ -107,10 +107,10 @@
         "n_scored_unplanned": 130
       },
       "complex": {
-        "n": 74,
-        "planned": 38,
-        "unplanned": 36,
-        "planning_rate_pct": 51.4,
+        "n": 111,
+        "planned": 48,
+        "unplanned": 63,
+        "planning_rate_pct": 43.2,
         "alignment_planned": 3.4474,
         "alignment_unplanned": 3.5,
         "alignment_delta": -0.0526,
@@ -118,10 +118,10 @@
         "n_scored_unplanned": 36
       },
       "major": {
-        "n": 18,
-        "planned": 13,
-        "unplanned": 5,
-        "planning_rate_pct": 72.2,
+        "n": 22,
+        "planned": 15,
+        "unplanned": 7,
+        "planning_rate_pct": 68.2,
         "alignment_planned": 3.4615,
         "alignment_unplanned": 4.2,
         "alignment_delta": -0.7385,
@@ -134,7 +134,7 @@
     "overall_alignment_delta": 0.1966,
     "coverage": {
       "tasks_with_alignment": 591,
-      "pct": 100.0
+      "pct": 65.4
     }
   }
 }

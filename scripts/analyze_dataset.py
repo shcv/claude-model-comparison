@@ -175,6 +175,9 @@ def analyze_model(data_dir: Path, analysis_dir: Path, model: str) -> dict:
     # Projects and messages
     projects = sorted(set(s.get("project_path", "") for s in sessions))
     total_user = sum(s.get("user_message_count", 0) for s in sessions)
+    total_human = sum(s.get("human_message_count", 0) for s in sessions)
+    total_tool_results = sum(s.get("tool_result_count", 0) for s in sessions)
+    total_system_msgs = sum(s.get("system_message_count", 0) for s in sessions)
     total_asst = sum(s.get("assistant_message_count", 0) for s in sessions)
     total_tools = sum(s.get("tool_call_count", 0) for s in sessions)
 
@@ -189,6 +192,9 @@ def analyze_model(data_dir: Path, analysis_dir: Path, model: str) -> dict:
             "end": dates[-1] if dates else None,
         },
         "total_user_messages": total_user,
+        "total_human_messages": total_human,
+        "total_tool_result_messages": total_tool_results,
+        "total_system_messages": total_system_msgs,
         "total_assistant_messages": total_asst,
         "total_tool_calls": total_tools,
         "total_session_hours": round(sum(durations) / 60, 1),
@@ -258,7 +264,9 @@ def main():
     combined = {"projects": len(all_projects)}
     sum_fields = [
         "sessions", "tasks", "total_cost_usd", "total_user_messages",
-        "total_assistant_messages", "total_tool_calls", "total_input_tokens",
+        "total_human_messages", "total_tool_result_messages",
+        "total_system_messages", "total_assistant_messages",
+        "total_tool_calls", "total_input_tokens",
         "total_output_tokens", "cache_read_tokens", "cache_write_tokens",
         "total_files_touched", "total_lines_added", "total_lines_removed",
     ]

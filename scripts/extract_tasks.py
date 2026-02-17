@@ -240,7 +240,12 @@ CONTINUATION_PATTERNS = [
 
 def categorize_user_response(text: str) -> tuple[str, str]:
     """Categorize user response and extract evidence."""
-    # First check if this is system-generated content - don't extract sentiment
+    # Interrupts are distinct from other system content — they signal
+    # deliberate user action (correction, redirection, accidental, etc.)
+    if re.match(r'^\[Request interrupted', text.strip()):
+        return 'interrupted', 'user interrupt'
+
+    # Other system-generated content - don't extract sentiment
     if is_system_generated(text):
         return 'system_continuation', 'auto-generated'
 
@@ -852,15 +857,15 @@ def classify_data_cleaning(task: 'CanonicalTask') -> None:
 
     Exclusion rules (task removed from primary analysis):
     1. Slash commands: user_prompt is a /command or <command-name> tag
-    2. System continuations: outcome_category == 'system_continuation'
-       OR user_prompt matches SYSTEM_CONTENT_PATTERNS
+    2. System-generated prompts: user_prompt matches SYSTEM_CONTENT_PATTERNS
+       (session continuations, plan implementations, interrupts, etc.)
     3. Empty bare continuations: bare ack ("ok","continue") with 0 tools and <5s
     4. No-response interrupts: 0 tools, 0 duration, session_end outcome
 
     Flags (informational, task still included):
     - meta: from claude-investigations project
     - no_project: session run from home dir (no specific project)
-    - interrupted: user interrupted the agent mid-work
+    - interrupted: user interrupted the agent mid-work (outcome_category == 'interrupted')
     - post_compaction: task started after a compaction event
     """
     prompt = (task.user_prompt or '').strip()
@@ -873,10 +878,7 @@ def classify_data_cleaning(task: 'CanonicalTask') -> None:
         task.exclude_reason = 'slash_command'
         return
 
-    # 2. System continuations
-    if task.outcome_category == 'system_continuation':
-        task.exclude_reason = 'system_continuation'
-        return
+    # 2. System-generated prompts (the task's own prompt is system content)
     if is_system_generated(prompt):
         task.exclude_reason = 'system_continuation'
         return
@@ -902,7 +904,7 @@ def classify_data_cleaning(task: 'CanonicalTask') -> None:
     if not task.project_path or task.project_path == '-home-shcv':
         task.flags.append('no_project')
 
-    if '[Request interrupted' in prompt:
+    if task.outcome_category == 'interrupted':
         task.flags.append('interrupted')
 
     if task.compaction_events_before:
@@ -994,7 +996,7 @@ def _merge_task_into(target: CanonicalTask, source: CanonicalTask) -> None:
             target.flags.append(flag)
 
 
-def merge_plan_continuations(tasks: list[CanonicalTask]) -> list[CanonicalTask]:
+def merge_continuations(tasks: list[CanonicalTask]) -> list[CanonicalTask]:
     """Merge plan-mode continuation chains into their parent tasks.
 
     When plan mode is used, the implementation phase creates a separate 'task'
@@ -1004,9 +1006,14 @@ def merge_plan_continuations(tasks: list[CanonicalTask]) -> list[CanonicalTask]:
 
     Patterns handled:
     1. parent(used_planning) -> [Request interrupted...] -> Implement plan
-       -> all merged into parent
+       -> all merged into parent, parent inherits implementation's outcome
     2. [Request interrupted...] -> Implement plan (no parent in session)
        -> interrupt absorbed, plan implementation promoted to included task
+
+    Standalone interrupts are NOT merged — they're kept as excluded tasks
+    while the preceding task gets flagged with outcome_category='interrupted'.
+    Interrupts are heterogeneous (accidental, corrections, redirections) and
+    merit separate analysis.
     """
     from collections import defaultdict
 
@@ -1051,6 +1058,10 @@ def merge_plan_continuations(tasks: list[CanonicalTask]) -> list[CanonicalTask]:
                     absorbed.add(intr.task_id)
                 _merge_task_into(parent, task)
                 absorbed.add(task.task_id)
+                # Propagate outcome from the implementation (end of chain)
+                parent.next_user_message = task.next_user_message
+                parent.outcome_category = task.outcome_category
+                parent.outcome_evidence = task.outcome_evidence
             else:
                 # No parent in session — promote plan implementation
                 for intr in interrupts:
@@ -1103,7 +1114,7 @@ def extract_all_canonical(sessions_file: Path, model: str,
         classify_data_cleaning(task)
 
     # Merge plan-mode continuations back into parent tasks
-    all_tasks = merge_plan_continuations(all_tasks)
+    all_tasks = merge_continuations(all_tasks)
 
     excluded = sum(1 for t in all_tasks if t.exclude_reason)
     if excluded:

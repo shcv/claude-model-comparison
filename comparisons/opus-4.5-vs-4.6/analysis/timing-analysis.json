@@ -1,177 +1,177 @@
 {
   "session_overlap": {
-    "session_count": 463,
-    "overlapping_pairs": 1773,
+    "session_count": 518,
+    "overlapping_pairs": 1953,
     "max_concurrency": 11,
     "activity_periods": {
-      "count": 22,
-      "total_hours": 1239.9942,
+      "count": 25,
+      "total_hours": 1311.5347,
       "period_hours": {
-        "count": 22,
-        "mean": 56.363,
-        "median": 0.412,
-        "stdev": 136.972,
-        "p10": 0.025,
-        "p25": 0.061,
-        "p50": 0.412,
-        "p75": 7.85,
-        "p90": 148.792
+        "count": 25,
+        "mean": 52.461,
+        "median": 0.377,
+        "stdev": 138.546,
+        "p10": 0.026,
+        "p25": 0.049,
+        "p50": 0.377,
+        "p75": 1.856,
+        "p90": 140.533
       }
     },
     "gap_classification": {
       "true_idle": {
-        "count": 188,
+        "count": 209,
         "stats_seconds": {
-          "count": 188,
-          "mean": 4423.715,
-          "median": 104.745,
-          "stdev": 33015.236,
-          "p10": 18.896,
-          "p25": 35.446,
-          "p50": 104.745,
-          "p75": 296.796,
-          "p90": 2060.203
+          "count": 209,
+          "mean": 3971.984,
+          "median": 106.057,
+          "stdev": 31331.179,
+          "p10": 18.495,
+          "p25": 33.671,
+          "p50": 106.057,
+          "p75": 257.645,
+          "p90": 1209.37
         }
       },
       "context_switch": {
-        "count": 1649,
+        "count": 2060,
         "stats_seconds": {
-          "count": 1649,
-          "mean": 5368.268,
-          "median": 114.994,
-          "stdev": 43795.825,
-          "p10": 11.222,
-          "p25": 36.663,
-          "p50": 114.994,
-          "p75": 484.884,
-          "p90": 2715.598
+          "count": 2060,
+          "mean": 4518.869,
+          "median": 102.247,
+          "stdev": 39235.069,
+          "p10": 11.712,
+          "p25": 34.298,
+          "p50": 102.247,
+          "p75": 453.155,
+          "p90": 2488.641
         }
       }
     }
   },
   "opus-4-5": {
     "explore_phase": {
-      "tasks_with_edits": 701,
-      "tasks_with_explore_data": 701,
-      "explore_only_tasks": 196,
+      "tasks_with_edits": 774,
+      "tasks_with_explore_data": 774,
+      "explore_only_tasks": 215,
       "explore_duration_seconds": {
-        "count": 701,
-        "mean": 62.134,
-        "median": 31.32,
-        "stdev": 98.589,
-        "p10": 10.151,
-        "p25": 16.552,
-        "p50": 31.32,
-        "p75": 63.896,
-        "p90": 127.076
+        "count": 774,
+        "mean": 67.33,
+        "median": 31.491,
+        "stdev": 109.738,
+        "p10": 10.162,
+        "p25": 16.586,
+        "p50": 31.491,
+        "p75": 68.407,
+        "p90": 144.052
       },
       "explore_ratio": {
-        "count": 701,
-        "mean": 0.453,
-        "median": 0.419,
-        "stdev": 0.273,
-        "p10": 0.106,
-        "p25": 0.211,
-        "p50": 0.419,
-        "p75": 0.692,
-        "p90": 0.847
+        "count": 774,
+        "mean": 0.451,
+        "median": 0.417,
+        "stdev": 0.274,
+        "p10": 0.107,
+        "p25": 0.21,
+        "p50": 0.417,
+        "p75": 0.688,
+        "p90": 0.85
       },
       "by_complexity": {
         "unknown": {
           "explore_duration_seconds": {
-            "count": 701,
-            "mean": 62.134,
-            "median": 31.32,
-            "stdev": 98.589,
-            "p10": 10.151,
-            "p25": 16.552,
-            "p50": 31.32,
-            "p75": 63.896,
-            "p90": 127.076
+            "count": 774,
+            "mean": 67.33,
+            "median": 31.491,
+            "stdev": 109.738,
+            "p10": 10.162,
+            "p25": 16.586,
+            "p50": 31.491,
+            "p75": 68.407,
+            "p90": 144.052
           },
           "explore_ratio": {
-            "count": 701,
-            "mean": 0.453,
-            "median": 0.419,
-            "stdev": 0.273,
-            "p10": 0.106,
-            "p25": 0.211,
-            "p50": 0.419,
-            "p75": 0.692,
-            "p90": 0.847
+            "count": 774,
+            "mean": 0.451,
+            "median": 0.417,
+            "stdev": 0.274,
+            "p10": 0.107,
+            "p25": 0.21,
+            "p50": 0.417,
+            "p75": 0.688,
+            "p90": 0.85
           }
         }
       }
     },
     "request_timing": {
-      "tasks_with_turn_duration": 667,
+      "tasks_with_turn_duration": 676,
       "turn_duration_ms": {
-        "count": 667,
-        "mean": 312790.148,
-        "median": 94002,
-        "stdev": 3461925.628,
-        "p10": 38346.0,
-        "p25": 54654.0,
-        "p50": 94002.0,
-        "p75": 187646.5,
-        "p90": 334670.4
+        "count": 676,
+        "mean": 311222.178,
+        "median": 94572.5,
+        "stdev": 3438843.912,
+        "p10": 38309.5,
+        "p25": 54360.75,
+        "p50": 94572.5,
+        "p75": 191956.0,
+        "p90": 335089.5
       },
       "request_streaming_seconds": {
-        "count": 13413,
-        "mean": 3.687,
-        "median": 1.633,
-        "stdev": 7.985,
-        "p10": 0.347,
-        "p25": 0.817,
-        "p50": 1.633,
-        "p75": 3.467,
-        "p90": 7.609
+        "count": 15177,
+        "mean": 3.653,
+        "median": 1.601,
+        "stdev": 7.861,
+        "p10": 0.138,
+        "p25": 0.785,
+        "p50": 1.601,
+        "p75": 3.451,
+        "p90": 7.601
       },
       "first_request_duration_seconds": {
-        "count": 1673,
-        "mean": 3.766,
-        "median": 1.748,
-        "stdev": 10.217,
-        "p10": 0.042,
-        "p25": 0.781,
-        "p50": 1.748,
-        "p75": 3.542,
-        "p90": 7.745
+        "count": 1834,
+        "mean": 3.762,
+        "median": 1.75,
+        "stdev": 10.08,
+        "p10": 0.07,
+        "p25": 0.79,
+        "p50": 1.75,
+        "p75": 3.534,
+        "p90": 7.664
       },
       "model_time_ratio": {
-        "count": 46,
-        "mean": 0.804,
-        "median": 0.978,
-        "stdev": 0.305,
-        "p10": 0.294,
-        "p25": 0.774,
-        "p50": 0.978,
-        "p75": 0.996,
-        "p90": 0.999
+        "count": 49,
+        "mean": 0.739,
+        "median": 0.927,
+        "stdev": 0.317,
+        "p10": 0.259,
+        "p25": 0.475,
+        "p50": 0.927,
+        "p75": 0.99,
+        "p90": 0.998
       },
       "by_complexity": {
         "unknown": {
           "turn_duration_ms": {
-            "count": 667,
-            "mean": 312790.148,
-            "median": 94002,
-            "stdev": 3461925.628,
-            "p10": 38346.0,
-            "p25": 54654.0,
-            "p50": 94002.0,
-            "p75": 187646.5,
-            "p90": 334670.4
+            "count": 676,
+            "mean": 311222.178,
+            "median": 94572.5,
+            "stdev": 3438843.912,
+            "p10": 38309.5,
+            "p25": 54360.75,
+            "p50": 94572.5,
+            "p75": 191956.0,
+            "p90": 335089.5
           },
           "request_duration_seconds": {
-            "count": 13413,
-            "mean": 3.687,
-            "median": 1.633,
-            "stdev": 7.985,
-            "p10": 0.347,
-            "p25": 0.817,
-            "p50": 1.633,
-            "p75": 3.467,
-            "p90": 7.609
+            "count": 15177,
+            "mean": 3.653,
+            "median": 1.601,
+            "stdev": 7.861,
+            "p10": 0.138,
+            "p25": 0.785,
+            "p50": 1.601,
+            "p75": 3.451,
+            "p90": 7.601
           }
         }
       }
@@ -179,147 +179,147 @@
     "active_time_cost": {
       "by_threshold": {
         "2min": {
-          "total_active_hours": 195.7175,
-          "total_cost": 4373.7317,
-          "cost_per_active_hour": 22.3472,
-          "session_count": 326,
+          "total_active_hours": 206.7152,
+          "total_cost": 5064.0583,
+          "cost_per_active_hour": 24.4978,
+          "session_count": 329,
           "per_session_rate": {
-            "count": 326,
-            "mean": 96.996,
-            "median": 76.22,
-            "stdev": 99.163,
-            "p10": 22.23,
-            "p25": 42.96,
-            "p50": 76.22,
-            "p75": 115.579,
-            "p90": 176.47
+            "count": 329,
+            "mean": 96.597,
+            "median": 74.693,
+            "stdev": 98.439,
+            "p10": 23.228,
+            "p25": 44.261,
+            "p50": 74.693,
+            "p75": 116.254,
+            "p90": 176.079
           }
         },
         "5min": {
-          "total_active_hours": 208.6469,
-          "total_cost": 4373.7317,
-          "cost_per_active_hour": 20.9624,
-          "session_count": 326,
+          "total_active_hours": 220.9757,
+          "total_cost": 5064.0583,
+          "cost_per_active_hour": 22.9168,
+          "session_count": 329,
           "per_session_rate": {
-            "count": 326,
-            "mean": 93.13,
-            "median": 70.9,
-            "stdev": 100.051,
-            "p10": 20.005,
-            "p25": 39.595,
-            "p50": 70.9,
-            "p75": 106.845,
-            "p90": 176.114
+            "count": 329,
+            "mean": 92.506,
+            "median": 68.65,
+            "stdev": 99.409,
+            "p10": 20.634,
+            "p25": 39.077,
+            "p50": 68.65,
+            "p75": 107.376,
+            "p90": 175.797
           }
         },
         "10min": {
-          "total_active_hours": 224.5654,
-          "total_cost": 4373.7317,
-          "cost_per_active_hour": 19.4764,
-          "session_count": 326,
+          "total_active_hours": 238.4534,
+          "total_cost": 5064.0583,
+          "cost_per_active_hour": 21.2371,
+          "session_count": 329,
           "per_session_rate": {
-            "count": 326,
-            "mean": 88.935,
-            "median": 62.98,
-            "stdev": 100.759,
-            "p10": 19.282,
-            "p25": 34.76,
-            "p50": 62.98,
-            "p75": 103.263,
-            "p90": 175.894
+            "count": 329,
+            "mean": 88.119,
+            "median": 62.803,
+            "stdev": 100.062,
+            "p10": 19.071,
+            "p25": 33.642,
+            "p50": 62.803,
+            "p75": 100.483,
+            "p90": 172.877
           }
         },
         "20min": {
-          "total_active_hours": 245.1689,
-          "total_cost": 4373.7317,
-          "cost_per_active_hour": 17.8397,
-          "session_count": 326,
+          "total_active_hours": 261.5707,
+          "total_cost": 5064.0583,
+          "cost_per_active_hour": 19.3602,
+          "session_count": 329,
           "per_session_rate": {
-            "count": 326,
-            "mean": 85.372,
-            "median": 58.447,
-            "stdev": 101.745,
-            "p10": 15.244,
-            "p25": 27.952,
-            "p50": 58.447,
-            "p75": 99.284,
-            "p90": 173.948
+            "count": 329,
+            "mean": 84.527,
+            "median": 57.091,
+            "stdev": 100.867,
+            "p10": 16.049,
+            "p25": 28.193,
+            "p50": 57.091,
+            "p75": 95.66,
+            "p90": 168.433
           }
         },
         "30min": {
-          "total_active_hours": 260.2535,
-          "total_cost": 4373.7317,
-          "cost_per_active_hour": 16.8057,
-          "session_count": 326,
+          "total_active_hours": 275.9278,
+          "total_cost": 5064.0583,
+          "cost_per_active_hour": 18.3528,
+          "session_count": 329,
           "per_session_rate": {
-            "count": 326,
-            "mean": 83.71,
-            "median": 54.28,
-            "stdev": 102.365,
-            "p10": 14.463,
-            "p25": 26.66,
-            "p50": 54.28,
-            "p75": 95.425,
-            "p90": 173.948
+            "count": 329,
+            "mean": 83.156,
+            "median": 54.65,
+            "stdev": 101.384,
+            "p10": 15.662,
+            "p25": 27.422,
+            "p50": 54.65,
+            "p75": 94.721,
+            "p90": 168.433
           }
         },
         "60min": {
-          "total_active_hours": 295.4812,
-          "total_cost": 4373.7317,
-          "cost_per_active_hour": 14.8021,
-          "session_count": 326,
+          "total_active_hours": 308.8168,
+          "total_cost": 5064.0583,
+          "cost_per_active_hour": 16.3983,
+          "session_count": 329,
           "per_session_rate": {
-            "count": 326,
-            "mean": 81.674,
-            "median": 52.373,
-            "stdev": 103.203,
-            "p10": 12.268,
-            "p25": 23.564,
-            "p50": 52.373,
-            "p75": 94.53,
-            "p90": 173.948
+            "count": 329,
+            "mean": 81.517,
+            "median": 52.884,
+            "stdev": 102.122,
+            "p10": 13.019,
+            "p25": 24.904,
+            "p50": 52.884,
+            "p75": 93.956,
+            "p90": 168.433
           }
         }
       },
       "gap_classification": {
-        "total_gaps": 1379,
+        "total_gaps": 1555,
         "all_gaps_seconds": {
-          "count": 1379,
-          "mean": 6355.74,
-          "median": 116.509,
-          "stdev": 48757.808,
-          "p10": 13.461,
-          "p25": 39.44,
-          "p50": 116.509,
-          "p75": 469.591,
-          "p90": 2883.281
+          "count": 1555,
+          "mean": 5633.758,
+          "median": 103.058,
+          "stdev": 45873.596,
+          "p10": 12.85,
+          "p25": 35.112,
+          "p50": 103.058,
+          "p75": 403.341,
+          "p90": 2441.863
         },
         "short_gaps_lte_5min": {
-          "count": 945,
+          "count": 1102,
           "stats": {
-            "count": 945,
-            "mean": 83.869,
-            "median": 61.598,
-            "stdev": 75.001,
-            "p10": 9.087,
-            "p25": 23.987,
-            "p50": 61.598,
-            "p75": 121.929,
-            "p90": 201.737
+            "count": 1102,
+            "mean": 80.833,
+            "median": 55.859,
+            "stdev": 73.8,
+            "p10": 9.305,
+            "p25": 22.732,
+            "p50": 55.859,
+            "p75": 117.834,
+            "p90": 195.998
           }
         },
         "long_gaps_gt_5min": {
-          "count": 434,
+          "count": 453,
           "stats": {
-            "count": 434,
-            "mean": 20012.234,
-            "median": 1167.455,
-            "stdev": 85398.578,
-            "p10": 368.45,
-            "p25": 517.928,
-            "p50": 1167.455,
-            "p75": 5819.306,
-            "p90": 43179.632
+            "count": 453,
+            "mean": 19142.199,
+            "median": 1094.672,
+            "stdev": 83527.967,
+            "p10": 370.397,
+            "p25": 503.737,
+            "p50": 1094.672,
+            "p75": 5612.091,
+            "p90": 41449.904
           }
         }
       }
@@ -327,127 +327,127 @@
   },
   "opus-4-6": {
     "explore_phase": {
-      "tasks_with_edits": 247,
-      "tasks_with_explore_data": 247,
-      "explore_only_tasks": 74,
+      "tasks_with_edits": 358,
+      "tasks_with_explore_data": 358,
+      "explore_only_tasks": 116,
       "explore_duration_seconds": {
-        "count": 247,
-        "mean": 166.029,
-        "median": 68.68,
-        "stdev": 259.644,
-        "p10": 11.642,
-        "p25": 26.617,
-        "p50": 68.68,
-        "p75": 192.262,
-        "p90": 435.715
+        "count": 358,
+        "mean": 197.134,
+        "median": 72.582,
+        "stdev": 368.369,
+        "p10": 12.302,
+        "p25": 27.116,
+        "p50": 72.582,
+        "p75": 197.858,
+        "p90": 518.866
       },
       "explore_ratio": {
-        "count": 247,
-        "mean": 0.523,
-        "median": 0.491,
-        "stdev": 0.296,
+        "count": 358,
+        "mean": 0.536,
+        "median": 0.523,
+        "stdev": 0.299,
         "p10": 0.165,
-        "p25": 0.256,
-        "p50": 0.491,
-        "p75": 0.794,
-        "p90": 0.966
+        "p25": 0.269,
+        "p50": 0.523,
+        "p75": 0.817,
+        "p90": 0.971
       },
       "by_complexity": {
         "unknown": {
           "explore_duration_seconds": {
-            "count": 247,
-            "mean": 166.029,
-            "median": 68.68,
-            "stdev": 259.644,
-            "p10": 11.642,
-            "p25": 26.617,
-            "p50": 68.68,
-            "p75": 192.262,
-            "p90": 435.715
+            "count": 358,
+            "mean": 197.134,
+            "median": 72.582,
+            "stdev": 368.369,
+            "p10": 12.302,
+            "p25": 27.116,
+            "p50": 72.582,
+            "p75": 197.858,
+            "p90": 518.866
           },
           "explore_ratio": {
-            "count": 247,
-            "mean": 0.523,
-            "median": 0.491,
-            "stdev": 0.296,
+            "count": 358,
+            "mean": 0.536,
+            "median": 0.523,
+            "stdev": 0.299,
             "p10": 0.165,
-            "p25": 0.256,
-            "p50": 0.491,
-            "p75": 0.794,
-            "p90": 0.966
+            "p25": 0.269,
+            "p50": 0.523,
+            "p75": 0.817,
+            "p90": 0.971
           }
         }
       }
     },
     "request_timing": {
-      "tasks_with_turn_duration": 314,
+      "tasks_with_turn_duration": 442,
       "turn_duration_ms": {
-        "count": 314,
-        "mean": 219432.85,
-        "median": 126474.0,
-        "stdev": 277083.389,
-        "p10": 44072.9,
-        "p25": 65272.0,
-        "p50": 126474.0,
-        "p75": 274135.75,
-        "p90": 478927.9
+        "count": 442,
+        "mean": 204964.054,
+        "median": 114087.5,
+        "stdev": 257071.915,
+        "p10": 39399.9,
+        "p25": 58004.0,
+        "p50": 114087.5,
+        "p75": 240974.0,
+        "p90": 462389.8
       },
       "request_streaming_seconds": {
-        "count": 6318,
-        "mean": 3.166,
-        "median": 0.768,
-        "stdev": 10.049,
+        "count": 9250,
+        "mean": 3.384,
+        "median": 0.799,
+        "stdev": 11.245,
         "p10": 0.0,
         "p25": 0.0,
-        "p50": 0.768,
-        "p75": 2.547,
-        "p90": 6.994
+        "p50": 0.799,
+        "p75": 2.551,
+        "p90": 7.128
       },
       "first_request_duration_seconds": {
-        "count": 564,
-        "mean": 7.206,
-        "median": 3.082,
-        "stdev": 20.664,
+        "count": 867,
+        "mean": 8.668,
+        "median": 3.091,
+        "stdev": 25.339,
         "p10": 0.0,
-        "p25": 0.164,
-        "p50": 3.082,
-        "p75": 7.062,
-        "p90": 15.827
+        "p25": 0.392,
+        "p50": 3.091,
+        "p75": 7.072,
+        "p90": 17.518
       },
       "model_time_ratio": {
-        "count": 68,
-        "mean": 0.898,
-        "median": 0.997,
-        "stdev": 0.233,
-        "p10": 0.639,
-        "p25": 0.959,
-        "p50": 0.997,
+        "count": 85,
+        "mean": 0.907,
+        "median": 0.996,
+        "stdev": 0.225,
+        "p10": 0.678,
+        "p25": 0.962,
+        "p50": 0.996,
         "p75": 1.0,
         "p90": 1.0
       },
       "by_complexity": {
         "unknown": {
           "turn_duration_ms": {
-            "count": 314,
-            "mean": 219432.85,
-            "median": 126474.0,
-            "stdev": 277083.389,
-            "p10": 44072.9,
-            "p25": 65272.0,
-            "p50": 126474.0,
-            "p75": 274135.75,
-            "p90": 478927.9
+            "count": 442,
+            "mean": 204964.054,
+            "median": 114087.5,
+            "stdev": 257071.915,
+            "p10": 39399.9,
+            "p25": 58004.0,
+            "p50": 114087.5,
+            "p75": 240974.0,
+            "p90": 462389.8
           },
           "request_duration_seconds": {
-            "count": 6318,
-            "mean": 3.166,
-            "median": 0.768,
-            "stdev": 10.049,
+            "count": 9250,
+            "mean": 3.384,
+            "median": 0.799,
+            "stdev": 11.245,
             "p10": 0.0,
             "p25": 0.0,
-            "p50": 0.768,
-            "p75": 2.547,
-            "p90": 6.994
+            "p50": 0.799,
+            "p75": 2.551,
+            "p90": 7.128
           }
         }
       }
@@ -455,147 +455,147 @@
     "active_time_cost": {
       "by_threshold": {
         "2min": {
-          "total_active_hours": 62.5176,
-          "total_cost": 1661.089,
-          "cost_per_active_hour": 26.5699,
-          "session_count": 133,
+          "total_active_hours": 85.7279,
+          "total_cost": 2483.1695,
+          "cost_per_active_hour": 28.9657,
+          "session_count": 188,
           "per_session_rate": {
-            "count": 133,
-            "mean": 88.978,
-            "median": 51.233,
-            "stdev": 203.031,
-            "p10": 17.204,
-            "p25": 33.536,
-            "p50": 51.233,
-            "p75": 74.141,
-            "p90": 113.731
+            "count": 188,
+            "mean": 82.523,
+            "median": 50.077,
+            "stdev": 191.974,
+            "p10": 15.048,
+            "p25": 29.774,
+            "p50": 50.077,
+            "p75": 71.126,
+            "p90": 104.672
           }
         },
         "5min": {
-          "total_active_hours": 66.207,
-          "total_cost": 1661.089,
-          "cost_per_active_hour": 25.0893,
-          "session_count": 133,
+          "total_active_hours": 91.6885,
+          "total_cost": 2483.1695,
+          "cost_per_active_hour": 27.0827,
+          "session_count": 188,
           "per_session_rate": {
-            "count": 133,
-            "mean": 82.829,
-            "median": 44.769,
-            "stdev": 203.62,
-            "p10": 15.869,
-            "p25": 31.288,
-            "p50": 44.769,
-            "p75": 66.74,
-            "p90": 99.219
+            "count": 188,
+            "mean": 77.331,
+            "median": 42.687,
+            "stdev": 192.422,
+            "p10": 14.07,
+            "p25": 27.977,
+            "p50": 42.687,
+            "p75": 62.885,
+            "p90": 94.922
           }
         },
         "10min": {
-          "total_active_hours": 71.586,
-          "total_cost": 1661.089,
-          "cost_per_active_hour": 23.2041,
-          "session_count": 133,
+          "total_active_hours": 99.6409,
+          "total_cost": 2483.1695,
+          "cost_per_active_hour": 24.9212,
+          "session_count": 188,
           "per_session_rate": {
-            "count": 133,
-            "mean": 78.097,
-            "median": 39.061,
-            "stdev": 204.374,
-            "p10": 14.677,
-            "p25": 24.567,
-            "p50": 39.061,
-            "p75": 59.478,
-            "p90": 96.126
+            "count": 188,
+            "mean": 73.252,
+            "median": 37.915,
+            "stdev": 193.097,
+            "p10": 12.025,
+            "p25": 22.12,
+            "p50": 37.915,
+            "p75": 58.763,
+            "p90": 91.737
           }
         },
         "20min": {
-          "total_active_hours": 77.2643,
-          "total_cost": 1661.089,
-          "cost_per_active_hour": 21.4988,
-          "session_count": 133,
+          "total_active_hours": 110.7687,
+          "total_cost": 2483.1695,
+          "cost_per_active_hour": 22.4176,
+          "session_count": 188,
           "per_session_rate": {
-            "count": 133,
-            "mean": 75.347,
-            "median": 36.907,
-            "stdev": 204.841,
-            "p10": 10.38,
-            "p25": 22.341,
-            "p50": 36.907,
-            "p75": 58.218,
-            "p90": 96.126
+            "count": 188,
+            "mean": 70.351,
+            "median": 34.765,
+            "stdev": 193.55,
+            "p10": 9.945,
+            "p25": 17.972,
+            "p50": 34.765,
+            "p75": 53.785,
+            "p90": 90.01
           }
         },
         "30min": {
-          "total_active_hours": 84.2759,
-          "total_cost": 1661.089,
-          "cost_per_active_hour": 19.7101,
-          "session_count": 133,
+          "total_active_hours": 120.2921,
+          "total_cost": 2483.1695,
+          "cost_per_active_hour": 20.6428,
+          "session_count": 188,
           "per_session_rate": {
-            "count": 133,
-            "mean": 73.493,
-            "median": 35.818,
-            "stdev": 205.137,
-            "p10": 9.855,
-            "p25": 17.513,
-            "p50": 35.818,
-            "p75": 56.982,
-            "p90": 94.441
+            "count": 188,
+            "mean": 68.539,
+            "median": 33.625,
+            "stdev": 193.713,
+            "p10": 9.652,
+            "p25": 16.92,
+            "p50": 33.625,
+            "p75": 52.217,
+            "p90": 87.832
           }
         },
         "60min": {
-          "total_active_hours": 97.2938,
-          "total_cost": 1661.089,
-          "cost_per_active_hour": 17.0729,
-          "session_count": 133,
+          "total_active_hours": 144.0888,
+          "total_cost": 2483.1695,
+          "cost_per_active_hour": 17.2336,
+          "session_count": 188,
           "per_session_rate": {
-            "count": 133,
-            "mean": 71.515,
-            "median": 31.288,
-            "stdev": 205.592,
-            "p10": 8.802,
-            "p25": 15.96,
-            "p50": 31.288,
-            "p75": 55.694,
-            "p90": 94.441
+            "count": 188,
+            "mean": 65.712,
+            "median": 28.99,
+            "stdev": 194.207,
+            "p10": 7.067,
+            "p25": 13.6,
+            "p50": 28.99,
+            "p75": 50.792,
+            "p90": 86.786
           }
         }
       },
       "gap_classification": {
-        "total_gaps": 458,
+        "total_gaps": 714,
         "all_gaps_seconds": {
-          "count": 458,
-          "mean": 2007.351,
-          "median": 95.62,
-          "stdev": 13437.184,
-          "p10": 6.662,
-          "p25": 28.239,
-          "p50": 95.62,
-          "p75": 463.959,
-          "p90": 2086.562
+          "count": 714,
+          "mean": 1930.7,
+          "median": 104.866,
+          "stdev": 11658.826,
+          "p10": 10.047,
+          "p25": 32.023,
+          "p50": 104.866,
+          "p75": 507.555,
+          "p90": 2435.603
         },
         "short_gaps_lte_5min": {
-          "count": 316,
+          "count": 487,
           "stats": {
-            "count": 316,
-            "mean": 71.932,
-            "median": 47.465,
-            "stdev": 70.233,
-            "p10": 1.777,
-            "p25": 18.691,
-            "p50": 47.465,
-            "p75": 110.175,
-            "p90": 183.356
+            "count": 487,
+            "mean": 75.921,
+            "median": 49.527,
+            "stdev": 74.157,
+            "p10": 5.056,
+            "p25": 20.896,
+            "p50": 49.527,
+            "p75": 112.84,
+            "p90": 193.914
           }
         },
         "long_gaps_gt_5min": {
-          "count": 142,
+          "count": 227,
           "stats": {
-            "count": 142,
-            "mean": 6314.339,
-            "median": 1356.307,
-            "stdev": 23624.665,
-            "p10": 384.132,
-            "p25": 541.923,
-            "p50": 1356.307,
-            "p75": 3670.551,
-            "p90": 9966.52
+            "count": 227,
+            "mean": 5909.898,
+            "median": 1201.16,
+            "stdev": 20137.19,
+            "p10": 378.971,
+            "p25": 561.528,
+            "p50": 1201.16,
+            "p75": 3645.443,
+            "p90": 9763.368
           }
         }
       }

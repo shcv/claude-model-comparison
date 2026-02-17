@@ -275,6 +275,336 @@
     "context": "Edit@290 -> Edit@293"
   },
   {
+    "file_path": "/home/shcv/work/masr/src/strabo/main/demos/config.py",
+    "edit_a_index": 175,
+    "edit_b_index": 507,
+    "edit_a_task": "b5975f1c-e829-48ad-9711-e7e938dc8382-task-2",
+    "edit_b_task": "b5975f1c-e829-48ad-9711-e7e938dc8382-task-8",
+    "tier": "containment",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.717391304347826,
+    "context": "Edit@175 -> Edit@507"
+  },
+  {
+    "file_path": "/home/shcv/work/masr/src/strabo/main/demos/atomic/platform/gateway.py",
+    "edit_a_index": 830,
+    "edit_b_index": 858,
+    "edit_a_task": "b5975f1c-e829-48ad-9711-e7e938dc8382-task-8",
+    "edit_b_task": "b5975f1c-e829-48ad-9711-e7e938dc8382-task-8",
+    "tier": "exact",
+    "classification": "error_recovery",
+    "overlap_ratio": 1.0,
+    "context": "Edit@830 -> Edit@858"
+  },
+  {
+    "file_path": "/home/shcv/work/masr/src/strabo/main/demos/run.py",
+    "edit_a_index": 870,
+    "edit_b_index": 876,
+    "edit_a_task": "b5975f1c-e829-48ad-9711-e7e938dc8382-task-8",
+    "edit_b_task": "b5975f1c-e829-48ad-9711-e7e938dc8382-task-8",
+    "tier": "line_overlap",
+    "classification": "self_correction",
+    "overlap_ratio": 0.6666666666666666,
+    "context": "Edit@870 -> Edit@876"
+  },
+  {
+    "file_path": "/home/shcv/work/masr/src/strabo/main/demos/atomic/platform/gateway.py",
+    "edit_a_index": 932,
+    "edit_b_index": 1202,
+    "edit_a_task": "b5975f1c-e829-48ad-9711-e7e938dc8382-task-8",
+    "edit_b_task": "b5975f1c-e829-48ad-9711-e7e938dc8382-task-11",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.75,
+    "context": "Edit@932 -> Edit@1202"
+  },
+  {
+    "file_path": "/home/shcv/projects/emux/README.org",
+    "edit_a_index": 89,
+    "edit_b_index": 153,
+    "edit_a_task": "9221cb09-d0be-4404-9c68-d5b125c2bff0-task-1",
+    "edit_b_task": "9221cb09-d0be-4404-9c68-d5b125c2bff0-task-2",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.6666666666666666,
+    "context": "Edit@89 -> Edit@153"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.plugin.zsh",
+    "edit_a_index": 48,
+    "edit_b_index": 79,
+    "edit_a_task": "b13165a3-546c-4df5-8850-3043aa677c27-task-1",
+    "edit_b_task": "b13165a3-546c-4df5-8850-3043aa677c27-task-1",
+    "tier": "line_overlap",
+    "classification": "self_correction",
+    "overlap_ratio": 1.0,
+    "context": "Edit@48 -> Edit@79"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.fish",
+    "edit_a_index": 58,
+    "edit_b_index": 82,
+    "edit_a_task": "b13165a3-546c-4df5-8850-3043aa677c27-task-1",
+    "edit_b_task": "b13165a3-546c-4df5-8850-3043aa677c27-task-1",
+    "tier": "line_overlap",
+    "classification": "self_correction",
+    "overlap_ratio": 1.0,
+    "context": "Edit@58 -> Edit@82"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.plugin.zsh",
+    "edit_a_index": 123,
+    "edit_b_index": 187,
+    "edit_a_task": "b13165a3-546c-4df5-8850-3043aa677c27-task-2",
+    "edit_b_task": "b13165a3-546c-4df5-8850-3043aa677c27-task-4",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@123 -> Edit@187"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.fish",
+    "edit_a_index": 135,
+    "edit_b_index": 195,
+    "edit_a_task": "b13165a3-546c-4df5-8850-3043aa677c27-task-2",
+    "edit_b_task": "b13165a3-546c-4df5-8850-3043aa677c27-task-4",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@135 -> Edit@195"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.plugin.zsh",
+    "edit_a_index": 126,
+    "edit_b_index": 199,
+    "edit_a_task": "b13165a3-546c-4df5-8850-3043aa677c27-task-2",
+    "edit_b_task": "b13165a3-546c-4df5-8850-3043aa677c27-task-4",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@126 -> Edit@199"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.fish",
+    "edit_a_index": 138,
+    "edit_b_index": 202,
+    "edit_a_task": "b13165a3-546c-4df5-8850-3043aa677c27-task-2",
+    "edit_b_task": "b13165a3-546c-4df5-8850-3043aa677c27-task-4",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@138 -> Edit@202"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.plugin.zsh",
+    "edit_a_index": 418,
+    "edit_b_index": 458,
+    "edit_a_task": "b13165a3-546c-4df5-8850-3043aa677c27-task-12",
+    "edit_b_task": "b13165a3-546c-4df5-8850-3043aa677c27-task-13",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@418 -> Edit@458"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.fish",
+    "edit_a_index": 431,
+    "edit_b_index": 461,
+    "edit_a_task": "b13165a3-546c-4df5-8850-3043aa677c27-task-12",
+    "edit_b_task": "b13165a3-546c-4df5-8850-3043aa677c27-task-13",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@431 -> Edit@461"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.plugin.zsh",
+    "edit_a_index": 18,
+    "edit_b_index": 156,
+    "edit_a_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-2",
+    "edit_b_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-11",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.5,
+    "context": "Edit@18 -> Edit@156"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.plugin.zsh",
+    "edit_a_index": 18,
+    "edit_b_index": 256,
+    "edit_a_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-2",
+    "edit_b_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-12",
+    "tier": "containment",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.5448275862068965,
+    "context": "Edit@18 -> Edit@256"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.plugin.zsh",
+    "edit_a_index": 24,
+    "edit_b_index": 262,
+    "edit_a_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-2",
+    "edit_b_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-12",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.4,
+    "context": "Edit@24 -> Edit@262"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.plugin.zsh",
+    "edit_a_index": 27,
+    "edit_b_index": 265,
+    "edit_a_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-2",
+    "edit_b_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-12",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.4,
+    "context": "Edit@27 -> Edit@265"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.plugin.zsh",
+    "edit_a_index": 30,
+    "edit_b_index": 268,
+    "edit_a_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-2",
+    "edit_b_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-12",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@30 -> Edit@268"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.plugin.zsh",
+    "edit_a_index": 33,
+    "edit_b_index": 271,
+    "edit_a_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-2",
+    "edit_b_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-12",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@33 -> Edit@271"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.plugin.zsh",
+    "edit_a_index": 36,
+    "edit_b_index": 274,
+    "edit_a_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-2",
+    "edit_b_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-12",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.75,
+    "context": "Edit@36 -> Edit@274"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.fish",
+    "edit_a_index": 40,
+    "edit_b_index": 303,
+    "edit_a_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-2",
+    "edit_b_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-12",
+    "tier": "containment",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.63,
+    "context": "Edit@40 -> Edit@303"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.fish",
+    "edit_a_index": 46,
+    "edit_b_index": 309,
+    "edit_a_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-2",
+    "edit_b_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-12",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.5,
+    "context": "Edit@46 -> Edit@309"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.fish",
+    "edit_a_index": 49,
+    "edit_b_index": 312,
+    "edit_a_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-2",
+    "edit_b_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-12",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.5,
+    "context": "Edit@49 -> Edit@312"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.fish",
+    "edit_a_index": 52,
+    "edit_b_index": 315,
+    "edit_a_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-2",
+    "edit_b_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-12",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@52 -> Edit@315"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.fish",
+    "edit_a_index": 55,
+    "edit_b_index": 318,
+    "edit_a_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-2",
+    "edit_b_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-12",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@55 -> Edit@318"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.fish",
+    "edit_a_index": 58,
+    "edit_b_index": 321,
+    "edit_a_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-2",
+    "edit_b_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-12",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@58 -> Edit@321"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/CLAUDE.md",
+    "edit_a_index": 62,
+    "edit_b_index": 324,
+    "edit_a_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-2",
+    "edit_b_task": "d5bb2892-2ed2-4366-bddd-9a3f4f70d68e-task-12",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@62 -> Edit@324"
+  },
+  {
+    "file_path": "/home/shcv/projects/aish/aish.plugin.zsh",
+    "edit_a_index": 23,
+    "edit_b_index": 26,
+    "edit_a_task": "e5178579-188b-4738-9c85-d7e1b154ae2e-task-1",
+    "edit_b_task": "e5178579-188b-4738-9c85-d7e1b154ae2e-task-1",
+    "tier": "line_overlap",
+    "classification": "self_correction",
+    "overlap_ratio": 0.5,
+    "context": "Edit@23 -> Edit@26"
+  },
+  {
+    "file_path": "/home/shcv/config/guix/channel/shcv/home/services/yubikey.scm",
+    "edit_a_index": 328,
+    "edit_b_index": 432,
+    "edit_a_task": "ad4addfd-c199-4807-b705-ec46050a1594-task-1",
+    "edit_b_task": "ad4addfd-c199-4807-b705-ec46050a1594-task-6",
+    "tier": "containment",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.4421768707482993,
+    "context": "Edit@328 -> Edit@432"
+  },
+  {
+    "file_path": "/home/shcv/src/systems/zenbook-config.scm",
+    "edit_a_index": 303,
+    "edit_b_index": 573,
+    "edit_a_task": "7ca39fdf-6da3-4b5f-9c36-2a210dcc9c1c-task-2",
+    "edit_b_task": "7ca39fdf-6da3-4b5f-9c36-2a210dcc9c1c-task-7",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@303 -> Edit@573"
+  },
+  {
     "file_path": "/home/shcv/src/systems/custom/packages/pam-ssh-agent-auth.scm",
     "edit_a_index": 843,
     "edit_b_index": 859,
@@ -306,6 +636,182 @@
     "classification": "user_directed",
     "overlap_ratio": 0.39,
     "context": "Edit@301 -> Edit@399"
+  },
+  {
+    "file_path": "/home/shcv/projects/cc-summarize/src/summarizer.py",
+    "edit_a_index": 20,
+    "edit_b_index": 48,
+    "edit_a_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-1",
+    "edit_b_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-1",
+    "tier": "exact",
+    "classification": "self_correction",
+    "overlap_ratio": 1.0,
+    "context": "Edit@20 -> Edit@48"
+  },
+  {
+    "file_path": "/home/shcv/projects/cc-summarize/src/summarizer.py",
+    "edit_a_index": 99,
+    "edit_b_index": 102,
+    "edit_a_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-2",
+    "edit_b_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-2",
+    "tier": "line_overlap",
+    "classification": "self_correction",
+    "overlap_ratio": 0.5,
+    "context": "Edit@99 -> Edit@102"
+  },
+  {
+    "file_path": "/home/shcv/projects/cc-summarize/src/summarizer.py",
+    "edit_a_index": 99,
+    "edit_b_index": 141,
+    "edit_a_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-2",
+    "edit_b_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-3",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@99 -> Edit@141"
+  },
+  {
+    "file_path": "/home/shcv/projects/cc-summarize/src/summarizer.py",
+    "edit_a_index": 102,
+    "edit_b_index": 141,
+    "edit_a_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-2",
+    "edit_b_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-3",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@102 -> Edit@141"
+  },
+  {
+    "file_path": "/home/shcv/projects/cc-summarize/src/summarizer.py",
+    "edit_a_index": 105,
+    "edit_b_index": 144,
+    "edit_a_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-2",
+    "edit_b_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-3",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@105 -> Edit@144"
+  },
+  {
+    "file_path": "/home/shcv/projects/cc-summarize/src/summarizer.py",
+    "edit_a_index": 99,
+    "edit_b_index": 195,
+    "edit_a_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-2",
+    "edit_b_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-5",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@99 -> Edit@195"
+  },
+  {
+    "file_path": "/home/shcv/projects/cc-summarize/src/summarizer.py",
+    "edit_a_index": 141,
+    "edit_b_index": 195,
+    "edit_a_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-3",
+    "edit_b_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-5",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@141 -> Edit@195"
+  },
+  {
+    "file_path": "/home/shcv/projects/cc-summarize/src/summarizer.py",
+    "edit_a_index": 144,
+    "edit_b_index": 198,
+    "edit_a_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-3",
+    "edit_b_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-5",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@144 -> Edit@198"
+  },
+  {
+    "file_path": "/home/shcv/projects/cc-summarize/src/summarizer.py",
+    "edit_a_index": 27,
+    "edit_b_index": 270,
+    "edit_a_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-1",
+    "edit_b_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-6",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@27 -> Edit@270"
+  },
+  {
+    "file_path": "/home/shcv/projects/cc-summarize/src/summarizer.py",
+    "edit_a_index": 198,
+    "edit_b_index": 287,
+    "edit_a_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-5",
+    "edit_b_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-6",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@198 -> Edit@287"
+  },
+  {
+    "file_path": "/home/shcv/projects/cc-summarize/src/summarizer.py",
+    "edit_a_index": 48,
+    "edit_b_index": 295,
+    "edit_a_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-1",
+    "edit_b_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-6",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@48 -> Edit@295"
+  },
+  {
+    "file_path": "/home/shcv/projects/cc-summarize/src/summarizer.py",
+    "edit_a_index": 99,
+    "edit_b_index": 302,
+    "edit_a_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-2",
+    "edit_b_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-6",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@99 -> Edit@302"
+  },
+  {
+    "file_path": "/home/shcv/projects/cc-summarize/src/summarizer.py",
+    "edit_a_index": 266,
+    "edit_b_index": 334,
+    "edit_a_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-6",
+    "edit_b_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-9",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@266 -> Edit@334"
+  },
+  {
+    "file_path": "/home/shcv/projects/cc-summarize/src/summarizer.py",
+    "edit_a_index": 287,
+    "edit_b_index": 382,
+    "edit_a_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-6",
+    "edit_b_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-10",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.5,
+    "context": "Edit@287 -> Edit@382"
+  },
+  {
+    "file_path": "/home/shcv/projects/cc-summarize/src/summarizer.py",
+    "edit_a_index": 382,
+    "edit_b_index": 607,
+    "edit_a_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-10",
+    "edit_b_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-11",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@382 -> Edit@607"
+  },
+  {
+    "file_path": "/home/shcv/projects/cc-summarize/src/summarizer.py",
+    "edit_a_index": 607,
+    "edit_b_index": 647,
+    "edit_a_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-11",
+    "edit_b_task": "63cedeca-588e-4abc-859f-536cbac08dc1-task-13",
+    "tier": "containment",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.945,
+    "context": "Edit@607 -> Edit@647"
   },
   {
     "file_path": "/home/shcv/projects/cc-summarize/src/summarizer.py",
@@ -484,6 +990,50 @@
     "context": "Edit@189 -> Edit@247"
   },
   {
+    "file_path": "/home/shcv/work/invent/src/grocery-list/app/lib/data/database.dart",
+    "edit_a_index": 166,
+    "edit_b_index": 170,
+    "edit_a_task": "9714251e-e9c4-47bf-bfe9-4f04f69069b0-task-2",
+    "edit_b_task": "9714251e-e9c4-47bf-bfe9-4f04f69069b0-task-2",
+    "tier": "line_overlap",
+    "classification": "self_correction",
+    "overlap_ratio": 0.5,
+    "context": "Edit@166 -> Edit@170"
+  },
+  {
+    "file_path": "/home/shcv/work/invent/src/grocery-list/app/lib/screens/shopping_screen.dart",
+    "edit_a_index": 145,
+    "edit_b_index": 177,
+    "edit_a_task": "2a413866-2d15-4abd-ab9c-a0f1ddbe1490-task-2",
+    "edit_b_task": "2a413866-2d15-4abd-ab9c-a0f1ddbe1490-task-2",
+    "tier": "containment",
+    "classification": "self_correction",
+    "overlap_ratio": 0.9,
+    "context": "Edit@145 -> Edit@177"
+  },
+  {
+    "file_path": "/home/shcv/work/invent/src/grocery-list/app/lib/screens/shopping_screen.dart",
+    "edit_a_index": 193,
+    "edit_b_index": 201,
+    "edit_a_task": "2a413866-2d15-4abd-ab9c-a0f1ddbe1490-task-2",
+    "edit_b_task": "2a413866-2d15-4abd-ab9c-a0f1ddbe1490-task-2",
+    "tier": "exact",
+    "classification": "self_correction",
+    "overlap_ratio": 1.0,
+    "context": "Edit@193 -> Edit@201"
+  },
+  {
+    "file_path": "/home/shcv/work/invent/src/grocery-list/app/lib/screens/shopping_screen.dart",
+    "edit_a_index": 201,
+    "edit_b_index": 213,
+    "edit_a_task": "2a413866-2d15-4abd-ab9c-a0f1ddbe1490-task-2",
+    "edit_b_task": "2a413866-2d15-4abd-ab9c-a0f1ddbe1490-task-2",
+    "tier": "exact",
+    "classification": "self_correction",
+    "overlap_ratio": 1.0,
+    "context": "Edit@201 -> Edit@213"
+  },
+  {
     "file_path": "/home/shcv/work/invent/src/grocery-list/app/lib/screens/pantry_screen.dart",
     "edit_a_index": 74,
     "edit_b_index": 164,
@@ -537,6 +1087,17 @@
     "classification": "self_correction",
     "overlap_ratio": 1.0,
     "context": "Edit@391 -> Edit@420"
+  },
+  {
+    "file_path": "/home/shcv/work/invent/src/grocery-list/app/lib/screens/shopping_screen.dart",
+    "edit_a_index": 205,
+    "edit_b_index": 209,
+    "edit_a_task": "fd5d7cb0-bd05-4655-a0e8-42256f869b52-task-2",
+    "edit_b_task": "fd5d7cb0-bd05-4655-a0e8-42256f869b52-task-2",
+    "tier": "line_overlap",
+    "classification": "self_correction",
+    "overlap_ratio": 0.5,
+    "context": "Edit@205 -> Edit@209"
   },
   {
     "file_path": "/home/shcv/work/invent/src/grocery-list/app/assets/unit_type_defaults.json",
@@ -636,6 +1197,17 @@
     "classification": "self_correction",
     "overlap_ratio": 0.3333333333333333,
     "context": "Edit@1267 -> Edit@1278"
+  },
+  {
+    "file_path": "/home/shcv/work/invent/src/grocery-list/app/lib/screens/shopping_screen.dart",
+    "edit_a_index": 333,
+    "edit_b_index": 340,
+    "edit_a_task": "2f7a606f-9bc3-4ca3-a02f-ae4d5b8acb67-task-2",
+    "edit_b_task": "2f7a606f-9bc3-4ca3-a02f-ae4d5b8acb67-task-2",
+    "tier": "line_overlap",
+    "classification": "self_correction",
+    "overlap_ratio": 1.0,
+    "context": "Edit@333 -> Edit@340"
   },
   {
     "file_path": "/home/shcv/work/invent/src/grocery-list/app/lib/screens/shopping_screen.dart",
@@ -749,6 +1321,17 @@
   },
   {
     "file_path": "/home/shcv/projects/claude-investigations/tools/sync.py",
+    "edit_a_index": 452,
+    "edit_b_index": 662,
+    "edit_a_task": "452a617b-d0cf-41b6-a3c4-a6f00939748b-task-3",
+    "edit_b_task": "452a617b-d0cf-41b6-a3c4-a6f00939748b-task-4",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.3333333333333333,
+    "context": "Edit@452 -> Edit@662"
+  },
+  {
+    "file_path": "/home/shcv/projects/claude-investigations/tools/sync.py",
     "edit_a_index": 76,
     "edit_b_index": 81,
     "edit_a_task": "dee1b4b7-5705-4ba4-8ea4-652710237a6c-task-2",
@@ -781,6 +1364,28 @@
     "context": "Edit@154 -> Edit@188"
   },
   {
+    "file_path": "/home/shcv/projects/claude-investigations/model-comparison/dist/public/report.html",
+    "edit_a_index": 3879,
+    "edit_b_index": 4169,
+    "edit_a_task": "2f649308-8fe9-4328-9e1f-8509765d2f80-task-10",
+    "edit_b_task": "2f649308-8fe9-4328-9e1f-8509765d2f80-task-12",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@3879 -> Edit@4169"
+  },
+  {
+    "file_path": "/home/shcv/projects/claude-investigations/model-comparison/dist/public/report.html",
+    "edit_a_index": 3884,
+    "edit_b_index": 4191,
+    "edit_a_task": "2f649308-8fe9-4328-9e1f-8509765d2f80-task-10",
+    "edit_b_task": "2f649308-8fe9-4328-9e1f-8509765d2f80-task-12",
+    "tier": "containment",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.515,
+    "context": "Edit@3884 -> Edit@4191"
+  },
+  {
     "file_path": "/home/shcv/projects/claude-investigations/model-comparison/prompts/report-generation.md",
     "edit_a_index": 842,
     "edit_b_index": 4203,
@@ -792,6 +1397,61 @@
     "context": "Edit@842 -> Edit@4203"
   },
   {
+    "file_path": "/home/shcv/projects/claude-investigations/model-comparison/dist/public/report.html",
+    "edit_a_index": 799,
+    "edit_b_index": 4469,
+    "edit_a_task": "2f649308-8fe9-4328-9e1f-8509765d2f80-task-5",
+    "edit_b_task": "2f649308-8fe9-4328-9e1f-8509765d2f80-task-13",
+    "tier": "containment",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.705,
+    "context": "Edit@799 -> Edit@4469"
+  },
+  {
+    "file_path": "/home/shcv/projects/claude-investigations/model-comparison/dist/public/report.html",
+    "edit_a_index": 804,
+    "edit_b_index": 4490,
+    "edit_a_task": "2f649308-8fe9-4328-9e1f-8509765d2f80-task-5",
+    "edit_b_task": "2f649308-8fe9-4328-9e1f-8509765d2f80-task-13",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@804 -> Edit@4490"
+  },
+  {
+    "file_path": "/home/shcv/projects/claude-investigations/model-comparison/prompts/report-generation.md",
+    "edit_a_index": 4203,
+    "edit_b_index": 4496,
+    "edit_a_task": "2f649308-8fe9-4328-9e1f-8509765d2f80-task-12",
+    "edit_b_task": "2f649308-8fe9-4328-9e1f-8509765d2f80-task-13",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@4203 -> Edit@4496"
+  },
+  {
+    "file_path": "/home/shcv/projects/claude-investigations/model-comparison/dist/public/report.html",
+    "edit_a_index": 4191,
+    "edit_b_index": 4536,
+    "edit_a_task": "2f649308-8fe9-4328-9e1f-8509765d2f80-task-12",
+    "edit_b_task": "2f649308-8fe9-4328-9e1f-8509765d2f80-task-13",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@4191 -> Edit@4536"
+  },
+  {
+    "file_path": "/home/shcv/projects/claude-investigations/model-comparison/prompts/report-generation.md",
+    "edit_a_index": 4203,
+    "edit_b_index": 4542,
+    "edit_a_task": "2f649308-8fe9-4328-9e1f-8509765d2f80-task-12",
+    "edit_b_task": "2f649308-8fe9-4328-9e1f-8509765d2f80-task-13",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.6666666666666666,
+    "context": "Edit@4203 -> Edit@4542"
+  },
+  {
     "file_path": "/home/shcv/projects/claude-investigations/model-comparison/prompts/report-generation.md",
     "edit_a_index": 4214,
     "edit_b_index": 4731,
@@ -801,6 +1461,28 @@
     "classification": "iterative_refinement",
     "overlap_ratio": 1.0,
     "context": "Edit@4214 -> Edit@4731"
+  },
+  {
+    "file_path": "/home/shcv/projects/claude-investigations/tools/sync.py",
+    "edit_a_index": 3474,
+    "edit_b_index": 3479,
+    "edit_a_task": "02d69ac1-64df-4a2c-a3a6-7cadd6b8923d-task-10",
+    "edit_b_task": "02d69ac1-64df-4a2c-a3a6-7cadd6b8923d-task-10",
+    "tier": "exact",
+    "classification": "self_correction",
+    "overlap_ratio": 1.0,
+    "context": "Edit@3474 -> Edit@3479"
+  },
+  {
+    "file_path": "/home/shcv/projects/claude-investigations/tools/sync.py",
+    "edit_a_index": 3479,
+    "edit_b_index": 3484,
+    "edit_a_task": "02d69ac1-64df-4a2c-a3a6-7cadd6b8923d-task-10",
+    "edit_b_task": "02d69ac1-64df-4a2c-a3a6-7cadd6b8923d-task-10",
+    "tier": "exact",
+    "classification": "self_correction",
+    "overlap_ratio": 1.0,
+    "context": "Edit@3479 -> Edit@3484"
   },
   {
     "file_path": "/home/shcv/.claude/plugins/marketplaces/claude-plugins-official/external_plugins/playwright/.mcp.json",
@@ -856,6 +1538,28 @@
     "classification": "iterative_refinement",
     "overlap_ratio": 1.0,
     "context": "Edit@481 -> Edit@510"
+  },
+  {
+    "file_path": "/home/shcv/projects/emux/emux.el",
+    "edit_a_index": 464,
+    "edit_b_index": 529,
+    "edit_a_task": "578b67d1-94cc-4a30-8490-e0ef9d9ae10e-task-5",
+    "edit_b_task": "578b67d1-94cc-4a30-8490-e0ef9d9ae10e-task-5",
+    "tier": "exact",
+    "classification": "self_correction",
+    "overlap_ratio": 1.0,
+    "context": "Edit@464 -> Edit@529"
+  },
+  {
+    "file_path": "/home/shcv/projects/emux/emux.el",
+    "edit_a_index": 529,
+    "edit_b_index": 542,
+    "edit_a_task": "578b67d1-94cc-4a30-8490-e0ef9d9ae10e-task-5",
+    "edit_b_task": "578b67d1-94cc-4a30-8490-e0ef9d9ae10e-task-5",
+    "tier": "exact",
+    "classification": "self_correction",
+    "overlap_ratio": 1.0,
+    "context": "Edit@529 -> Edit@542"
   },
   {
     "file_path": "/home/shcv/projects/emux/emux",
@@ -977,6 +1681,50 @@
     "classification": "self_correction",
     "overlap_ratio": 0.5,
     "context": "Edit@122 -> Edit@128"
+  },
+  {
+    "file_path": "/home/shcv/projects/astdiff/src/diff/parallel_matching_v2.rs",
+    "edit_a_index": 1126,
+    "edit_b_index": 1190,
+    "edit_a_task": "368f4dd5-be4b-4711-af0d-0cb884e398a6-task-4",
+    "edit_b_task": "368f4dd5-be4b-4711-af0d-0cb884e398a6-task-4",
+    "tier": "exact",
+    "classification": "error_recovery",
+    "overlap_ratio": 1.0,
+    "context": "Edit@1126 -> Edit@1190"
+  },
+  {
+    "file_path": "/home/shcv/projects/astdiff/src/diff/parallel_matching_v2.rs",
+    "edit_a_index": 1190,
+    "edit_b_index": 1252,
+    "edit_a_task": "368f4dd5-be4b-4711-af0d-0cb884e398a6-task-4",
+    "edit_b_task": "368f4dd5-be4b-4711-af0d-0cb884e398a6-task-4",
+    "tier": "exact",
+    "classification": "self_correction",
+    "overlap_ratio": 1.0,
+    "context": "Edit@1190 -> Edit@1252"
+  },
+  {
+    "file_path": "/home/shcv/projects/astdiff/src/diff/mod.rs",
+    "edit_a_index": 1585,
+    "edit_b_index": 1591,
+    "edit_a_task": "368f4dd5-be4b-4711-af0d-0cb884e398a6-task-4",
+    "edit_b_task": "368f4dd5-be4b-4711-af0d-0cb884e398a6-task-4",
+    "tier": "exact",
+    "classification": "self_correction",
+    "overlap_ratio": 1.0,
+    "context": "Edit@1585 -> Edit@1591"
+  },
+  {
+    "file_path": "/home/shcv/projects/astdiff/src/canonicalizer/mod.rs",
+    "edit_a_index": 1857,
+    "edit_b_index": 1871,
+    "edit_a_task": "368f4dd5-be4b-4711-af0d-0cb884e398a6-task-4",
+    "edit_b_task": "368f4dd5-be4b-4711-af0d-0cb884e398a6-task-4",
+    "tier": "containment",
+    "classification": "self_correction",
+    "overlap_ratio": 0.385,
+    "context": "Edit@1857 -> Edit@1871"
   },
   {
     "file_path": "/home/shcv/work/invent/src/inventory/line-size/app/lib/screens/settings_screen.dart",
@@ -1155,6 +1903,17 @@
     "context": "Edit@312 -> Edit@315"
   },
   {
+    "file_path": "/home/shcv/config/.gitmodules",
+    "edit_a_index": 232,
+    "edit_b_index": 263,
+    "edit_a_task": "306fc2f5-9bdb-4138-9126-4c71ca2bc9b3-task-5",
+    "edit_b_task": "306fc2f5-9bdb-4138-9126-4c71ca2bc9b3-task-7",
+    "tier": "containment",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.3087248322147651,
+    "context": "Edit@232 -> Edit@263"
+  },
+  {
     "file_path": "/home/shcv/projects/mcp-server/lisp/mcp-claude-code.el",
     "edit_a_index": 66,
     "edit_b_index": 70,
@@ -1175,6 +1934,17 @@
     "classification": "self_correction",
     "overlap_ratio": 0.5,
     "context": "Edit@111 -> Edit@115"
+  },
+  {
+    "file_path": "/home/shcv/projects/mcp-server/test/mcp-claude-code-protocol-test.el",
+    "edit_a_index": 309,
+    "edit_b_index": 317,
+    "edit_a_task": "627078d6-250f-4c0a-b164-728eb4b2a9e4-task-4",
+    "edit_b_task": "627078d6-250f-4c0a-b164-728eb4b2a9e4-task-4",
+    "tier": "line_overlap",
+    "classification": "self_correction",
+    "overlap_ratio": 0.5,
+    "context": "Edit@309 -> Edit@317"
   },
   {
     "file_path": "/home/shcv/projects/interruptions/experiments/cascading_interrupts.py",
@@ -1263,6 +2033,39 @@
     "classification": "self_correction",
     "overlap_ratio": 0.98,
     "context": "Edit@276 -> Edit@290"
+  },
+  {
+    "file_path": "/home/shcv/projects/claude-coder/hooks/claude-coder-hook.sh",
+    "edit_a_index": 241,
+    "edit_b_index": 318,
+    "edit_a_task": "c4f4f555-a30d-48a9-8645-b39cfe556908-task-12",
+    "edit_b_task": "c4f4f555-a30d-48a9-8645-b39cfe556908-task-14",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@241 -> Edit@318"
+  },
+  {
+    "file_path": "/home/shcv/projects/claude-coder/hooks/claude-coder-hook.sh",
+    "edit_a_index": 318,
+    "edit_b_index": 329,
+    "edit_a_task": "c4f4f555-a30d-48a9-8645-b39cfe556908-task-14",
+    "edit_b_task": "c4f4f555-a30d-48a9-8645-b39cfe556908-task-14",
+    "tier": "exact",
+    "classification": "self_correction",
+    "overlap_ratio": 1.0,
+    "context": "Edit@318 -> Edit@329"
+  },
+  {
+    "file_path": "/home/shcv/projects/claude-coder/hooks/claude-coder-hook.sh",
+    "edit_a_index": 329,
+    "edit_b_index": 371,
+    "edit_a_task": "c4f4f555-a30d-48a9-8645-b39cfe556908-task-14",
+    "edit_b_task": "c4f4f555-a30d-48a9-8645-b39cfe556908-task-17",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@329 -> Edit@371"
   },
   {
     "file_path": "/home/shcv/projects/claude-coder/internal/game/configview.go",

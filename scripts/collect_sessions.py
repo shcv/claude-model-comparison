@@ -8,11 +8,15 @@ and groups sessions by dominant model (opus-4-5 vs opus-4-6).
 
 import json
 import os
+import sys
 from collections import defaultdict
 from dataclasses import dataclass, asdict
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from session_utils import extract_user_text, should_skip_message, is_tool_result, is_system_generated
 
 # Model name mapping
 MODEL_NAMES = {
@@ -38,10 +42,13 @@ class SessionMetadata:
     start_time: str
     end_time: str
     duration_minutes: float
-    user_message_count: int
+    user_message_count: int       # Raw API "user" type messages (includes tool results)
     assistant_message_count: int
     tool_call_count: int
     tools_used: dict        # Tool -> count
+    human_message_count: int = 0  # Genuine human-typed messages
+    tool_result_count: int = 0    # Tool result round-trips
+    system_message_count: int = 0 # System-generated (skip patterns + system content)
     project_path: str = ""  # Decoded project path (e.g., /home/shcv/projects/grocery-list)
     is_meta: bool = False   # True if project is claude-investigations (meta/self-referential)
 
@@ -72,6 +79,9 @@ def parse_session_file(file_path: Path) -> Optional[SessionMetadata]:
     user_messages = 0
     assistant_messages = 0
     tool_calls = 0
+    human_messages = 0
+    tool_result_messages = 0
+    system_messages = 0
     timestamps = []
 
     try:
@@ -95,6 +105,15 @@ def parse_session_file(file_path: Path) -> Optional[SessionMetadata]:
 
                 if msg_type == 'user':
                     user_messages += 1
+                    content = obj.get('message', {}).get('content', [])
+                    if is_tool_result(content):
+                        tool_result_messages += 1
+                    else:
+                        text = extract_user_text(content)
+                        if should_skip_message(text) or is_system_generated(text):
+                            system_messages += 1
+                        else:
+                            human_messages += 1
                 elif msg_type == 'assistant':
                     assistant_messages += 1
                     # Model is in message.model
@@ -146,7 +165,10 @@ def parse_session_file(file_path: Path) -> Optional[SessionMetadata]:
             user_message_count=user_messages,
             assistant_message_count=assistant_messages,
             tool_call_count=tool_calls,
-            tools_used=dict(tool_counts)
+            tools_used=dict(tool_counts),
+            human_message_count=human_messages,
+            tool_result_count=tool_result_messages,
+            system_message_count=system_messages,
         )
     except Exception as e:
         print(f"Error parsing {file_path}: {e}")
@@ -234,6 +256,9 @@ def print_summary(sessions: dict):
         total_duration = sum(s.duration_minutes for s in session_list)
         total_tools = sum(s.tool_call_count for s in session_list)
         total_user = sum(s.user_message_count for s in session_list)
+        total_human = sum(s.human_message_count for s in session_list)
+        total_tool_results = sum(s.tool_result_count for s in session_list)
+        total_system = sum(s.system_message_count for s in session_list)
         total_assistant = sum(s.assistant_message_count for s in session_list)
         meta_sessions = sum(1 for s in session_list if s.is_meta)
 
@@ -252,7 +277,8 @@ def print_summary(sessions: dict):
         print(f"\n{model_type.upper()}:")
         print(f"  Sessions: {len(session_list)} ({meta_sessions} meta)")
         print(f"  Total duration: {total_duration:.1f} minutes")
-        print(f"  User messages: {total_user}")
+        print(f"  Human messages: {total_human}")
+        print(f"    (API turns: {total_user} = {total_human} human + {total_tool_results} tool results + {total_system} system)")
         print(f"  Assistant messages: {total_assistant}")
         print(f"  Tool calls: {total_tools}")
         print(f"  Projects: {dict(sorted(projects.items(), key=lambda x: -x[1]))}")
