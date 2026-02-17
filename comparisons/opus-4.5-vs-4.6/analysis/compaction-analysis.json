@@ -1,174 +1,174 @@
 {
   "opus-4-5": {
-    "total_sessions": 329,
-    "sessions_with_compaction": 33,
-    "compaction_rate_pct": 10.0,
-    "total_events": 52,
+    "total_sessions": 327,
+    "sessions_with_compaction": 32,
+    "compaction_rate_pct": 9.8,
+    "total_events": 51,
     "trigger_breakdown": {
-      "auto": 37,
+      "auto": 36,
       "manual": 15
     },
-    "avg_events_per_compacting_session": 1.58,
-    "avg_pre_tokens": 156799,
-    "avg_position_pct": 59.4,
-    "events_per_hour": 0.61,
+    "avg_events_per_compacting_session": 1.59,
+    "avg_pre_tokens": 156823,
+    "avg_position_pct": 59.2,
+    "events_per_hour": 0.86,
     "outcome_correlation": {
       "compacting": {
         "pre": {
-          "n": 406,
-          "avg_alignment": 2.948,
+          "n": 401,
+          "avg_alignment": 2.943,
           "median_alignment": 3,
-          "satisfaction_rate": 0.2161,
-          "dissatisfaction_rate": 0.1585,
-          "completion_rate": 0.3228,
-          "user_correction_rate": 0.0117,
-          "total_edits": 686,
+          "satisfaction_rate": 0.192,
+          "dissatisfaction_rate": 0.1446,
+          "completion_rate": 0.3791,
+          "user_correction_rate": 0.0123,
+          "total_edits": 648,
           "total_user_corrections": 8
         },
         "post": {
-          "n": 509,
-          "avg_alignment": 3.033,
+          "n": 507,
+          "avg_alignment": 3.02,
           "median_alignment": 3,
-          "satisfaction_rate": 0.2737,
-          "dissatisfaction_rate": 0.1744,
-          "completion_rate": 0.3245,
-          "user_correction_rate": 0.0447,
-          "total_edits": 918,
+          "satisfaction_rate": 0.2426,
+          "dissatisfaction_rate": 0.1598,
+          "completion_rate": 0.3787,
+          "user_correction_rate": 0.0449,
+          "total_edits": 914,
           "total_user_corrections": 41
         },
         "delta": {
-          "avg_alignment": 0.085,
-          "satisfaction_rate": 0.0576,
-          "dissatisfaction_rate": 0.0159,
-          "completion_rate": 0.0017,
-          "user_correction_rate": 0.033
+          "avg_alignment": 0.077,
+          "satisfaction_rate": 0.0506,
+          "dissatisfaction_rate": 0.0152,
+          "completion_rate": -0.0004,
+          "user_correction_rate": 0.0326
         }
       },
       "control": {
         "pre": {
-          "n": 609,
+          "n": 589,
           "avg_alignment": 2.975,
           "median_alignment": 3,
-          "satisfaction_rate": 0.2541,
-          "dissatisfaction_rate": 0.0937,
-          "completion_rate": 0.3171,
-          "user_correction_rate": 0.0031,
-          "total_edits": 641,
+          "satisfaction_rate": 0.2343,
+          "dissatisfaction_rate": 0.0866,
+          "completion_rate": 0.3616,
+          "user_correction_rate": 0.0032,
+          "total_edits": 630,
           "total_user_corrections": 2
         },
         "post": {
-          "n": 389,
-          "avg_alignment": 3.263,
+          "n": 403,
+          "avg_alignment": 3.218,
           "median_alignment": 3,
-          "satisfaction_rate": 0.2904,
-          "dissatisfaction_rate": 0.0904,
-          "completion_rate": 0.4493,
-          "user_correction_rate": 0.0063,
-          "total_edits": 474,
+          "satisfaction_rate": 0.2705,
+          "dissatisfaction_rate": 0.0868,
+          "completion_rate": 0.4516,
+          "user_correction_rate": 0.0062,
+          "total_edits": 482,
           "total_user_corrections": 3
         },
         "delta": {
-          "avg_alignment": 0.288,
-          "satisfaction_rate": 0.0363,
-          "dissatisfaction_rate": -0.0033,
-          "completion_rate": 0.1322,
-          "user_correction_rate": 0.0032
+          "avg_alignment": 0.243,
+          "satisfaction_rate": 0.0362,
+          "dissatisfaction_rate": 0.0002,
+          "completion_rate": 0.09,
+          "user_correction_rate": 0.003
         }
       },
       "compaction_effect": {
-        "avg_alignment": -0.203,
-        "satisfaction_rate": 0.0213,
-        "dissatisfaction_rate": 0.0192,
-        "completion_rate": -0.1305,
-        "user_correction_rate": 0.0298
+        "avg_alignment": -0.166,
+        "satisfaction_rate": 0.0144,
+        "dissatisfaction_rate": 0.015,
+        "completion_rate": -0.0904,
+        "user_correction_rate": 0.0296
       },
-      "median_split_position_pct": 60.5
+      "median_split_position_pct": 59.5
     }
   },
   "opus-4-6": {
     "total_sessions": 188,
-    "sessions_with_compaction": 20,
-    "compaction_rate_pct": 10.6,
-    "total_events": 33,
+    "sessions_with_compaction": 22,
+    "compaction_rate_pct": 11.7,
+    "total_events": 35,
     "trigger_breakdown": {
-      "auto": 26,
+      "auto": 28,
       "manual": 7
     },
-    "avg_events_per_compacting_session": 1.65,
-    "avg_pre_tokens": 164450,
-    "avg_position_pct": 58.1,
-    "events_per_hour": 1.16,
+    "avg_events_per_compacting_session": 1.59,
+    "avg_pre_tokens": 164617,
+    "avg_position_pct": 60.0,
+    "events_per_hour": 1.17,
     "outcome_correlation": {
       "compacting": {
         "pre": {
-          "n": 102,
-          "avg_alignment": 3.125,
-          "median_alignment": 3.0,
-          "satisfaction_rate": 0.2639,
-          "dissatisfaction_rate": 0.1806,
-          "completion_rate": 0.2917,
+          "n": 117,
+          "avg_alignment": 3.06,
+          "median_alignment": 3,
+          "satisfaction_rate": 0.1709,
+          "dissatisfaction_rate": 0.1368,
+          "completion_rate": 0.547,
           "user_correction_rate": 0.0,
-          "total_edits": 301,
+          "total_edits": 340,
           "total_user_corrections": 0
         },
         "post": {
-          "n": 87,
-          "avg_alignment": 3.197,
-          "median_alignment": 3,
-          "satisfaction_rate": 0.3115,
-          "dissatisfaction_rate": 0.0984,
-          "completion_rate": 0.3443,
+          "n": 88,
+          "avg_alignment": 3.136,
+          "median_alignment": 3.0,
+          "satisfaction_rate": 0.2273,
+          "dissatisfaction_rate": 0.0682,
+          "completion_rate": 0.5341,
           "user_correction_rate": 0.0,
-          "total_edits": 191,
+          "total_edits": 196,
           "total_user_corrections": 0
         },
         "delta": {
-          "avg_alignment": 0.072,
-          "satisfaction_rate": 0.0476,
-          "dissatisfaction_rate": -0.0822,
-          "completion_rate": 0.0526,
+          "avg_alignment": 0.076,
+          "satisfaction_rate": 0.0564,
+          "dissatisfaction_rate": -0.0686,
+          "completion_rate": -0.0129,
           "user_correction_rate": 0.0
         }
       },
       "control": {
         "pre": {
-          "n": 411,
-          "avg_alignment": 3.221,
+          "n": 464,
+          "avg_alignment": 3.123,
           "median_alignment": 3.0,
-          "satisfaction_rate": 0.2748,
-          "dissatisfaction_rate": 0.1374,
-          "completion_rate": 0.3588,
+          "satisfaction_rate": 0.1767,
+          "dissatisfaction_rate": 0.1207,
+          "completion_rate": 0.5927,
           "user_correction_rate": 0.0011,
-          "total_edits": 878,
+          "total_edits": 905,
           "total_user_corrections": 1
         },
         "post": {
-          "n": 304,
-          "avg_alignment": 3.52,
-          "median_alignment": 4.0,
-          "satisfaction_rate": 0.3827,
-          "dissatisfaction_rate": 0.0816,
-          "completion_rate": 0.5102,
+          "n": 268,
+          "avg_alignment": 3.366,
+          "median_alignment": 3.0,
+          "satisfaction_rate": 0.25,
+          "dissatisfaction_rate": 0.0858,
+          "completion_rate": 0.6903,
           "user_correction_rate": 0.0,
-          "total_edits": 336,
+          "total_edits": 324,
           "total_user_corrections": 0
         },
         "delta": {
-          "avg_alignment": 0.299,
-          "satisfaction_rate": 0.1079,
-          "dissatisfaction_rate": -0.0558,
-          "completion_rate": 0.1514,
+          "avg_alignment": 0.243,
+          "satisfaction_rate": 0.0733,
+          "dissatisfaction_rate": -0.0349,
+          "completion_rate": 0.0976,
           "user_correction_rate": -0.0011
         }
       },
       "compaction_effect": {
-        "avg_alignment": -0.227,
-        "satisfaction_rate": -0.0603,
-        "dissatisfaction_rate": -0.0264,
-        "completion_rate": -0.0988,
+        "avg_alignment": -0.167,
+        "satisfaction_rate": -0.0169,
+        "dissatisfaction_rate": -0.0337,
+        "completion_rate": -0.1105,
         "user_correction_rate": 0.0011
       },
-      "median_split_position_pct": 64.4
+      "median_split_position_pct": 67.4
     }
   }
 }

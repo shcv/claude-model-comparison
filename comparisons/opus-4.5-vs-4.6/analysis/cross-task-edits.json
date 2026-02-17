@@ -1,13 +1,13 @@
 {
   "opus-4-5": {
-    "total_projects": 28,
-    "total_sequential_pairs": 1388,
-    "pairs_with_file_overlap": 213,
-    "pairs_with_content_overlap": 79,
-    "file_overlap_rate": 0.1535,
-    "content_overlap_rate": 0.0569,
+    "total_projects": 26,
+    "total_sequential_pairs": 1377,
+    "pairs_with_file_overlap": 212,
+    "pairs_with_content_overlap": 78,
+    "file_overlap_rate": 0.154,
+    "content_overlap_rate": 0.0566,
     "by_classification": {
-      "iterative_development": 193,
+      "iterative_development": 192,
       "correction": 20
     },
     "by_project": {
@@ -60,13 +60,6 @@
         "content_overlaps": 0,
         "corrections": 0
       },
-      "-home-shcv-docs-finances-taxes-2025": {
-        "tasks": 6,
-        "pairs": 5,
-        "file_overlaps": 0,
-        "content_overlaps": 0,
-        "corrections": 0
-      },
       "-home-shcv-projects-cc-summarize": {
         "tasks": 67,
         "pairs": 66,
@@ -93,13 +86,6 @@
         "pairs": 233,
         "file_overlaps": 17,
         "content_overlaps": 4,
-        "corrections": 0
-      },
-      "-home-shcv-work-masr-src-bspl-rs-main": {
-        "tasks": 7,
-        "pairs": 6,
-        "file_overlaps": 1,
-        "content_overlaps": 1,
         "corrections": 0
       },
       "-home-shcv-src-github-cli": {
@@ -792,6 +778,13 @@
         ],
         "content_overlaps": [
           {
+            "file": "/home/shcv/projects/cc-summarize/CLAUDE.md",
+            "tier": "containment",
+            "ratio": 0.3314,
+            "t1_edit_idx": 1,
+            "t2_edit_idx": 0
+          },
+          {
             "file": "/home/shcv/projects/cc-summarize/cc_summarize.py",
             "tier": "line_overlap",
             "ratio": 0.6667,
@@ -804,18 +797,11 @@
             "ratio": 0.945,
             "t1_edit_idx": 8,
             "t2_edit_idx": 2
-          },
-          {
-            "file": "/home/shcv/projects/cc-summarize/CLAUDE.md",
-            "tier": "containment",
-            "ratio": 0.3314,
-            "t1_edit_idx": 1,
-            "t2_edit_idx": 0
           }
         ],
         "classification": "iterative_development",
         "classification_confidence": "high",
-        "classification_reasoning": "Task B builds on Task A by refining the previous changes\u2014removing the 'sdk' prefix from code that no longer needs distinction\u2014rather than fixing errors or undoing work from Task A."
+        "classification_reasoning": "Task B builds on Task A by refining the implementation with a new requirement (removing the sdk prefix), rather than fixing problems with Task A's output; the user's prompt indicates forward progress rather than dissatisfaction."
       },
       {
         "project": "-home-shcv-projects-cc-summarize",
@@ -1005,13 +991,6 @@
         ],
         "content_overlaps": [
           {
-            "file": "/home/shcv/work/masr/src/bspl/bspl-main/src/bspl/parsers/bspl/__init__.py",
-            "tier": "exact",
-            "ratio": 1.0,
-            "t1_edit_idx": 0,
-            "t2_edit_idx": 0
-          },
-          {
             "file": "/home/shcv/work/masr/src/bspl/bspl-main/src/bspl/parsers/bspl/bspl.gr",
             "tier": "exact",
             "ratio": 1.0,
@@ -1024,6 +1003,13 @@
             "ratio": 0.5,
             "t1_edit_idx": 0,
             "t2_edit_idx": 4
+          },
+          {
+            "file": "/home/shcv/work/masr/src/bspl/bspl-main/src/bspl/parsers/bspl/__init__.py",
+            "tier": "exact",
+            "ratio": 1.0,
+            "t1_edit_idx": 0,
+            "t2_edit_idx": 0
           }
         ],
         "classification": "iterative_development",
@@ -1236,13 +1222,6 @@
             "t2_edit_idx": 1
           },
           {
-            "file": "/home/shcv/work/invent/src/grocery-list/app/pubspec.yaml",
-            "tier": "containment",
-            "ratio": 0.7356,
-            "t1_edit_idx": 0,
-            "t2_edit_idx": 0
-          },
-          {
             "file": "/home/shcv/work/invent/src/grocery-list/app/lib/screens/settings_screen.dart",
             "tier": "exact",
             "ratio": 1.0,
@@ -1255,11 +1234,18 @@
             "ratio": 1.0,
             "t1_edit_idx": 1,
             "t2_edit_idx": 1
+          },
+          {
+            "file": "/home/shcv/work/invent/src/grocery-list/app/pubspec.yaml",
+            "tier": "containment",
+            "ratio": 0.7356,
+            "t1_edit_idx": 0,
+            "t2_edit_idx": 0
           }
         ],
         "classification": "iterative_development",
-        "classification_confidence": "low",
-        "classification_reasoning": "LLM call failed"
+        "classification_confidence": "high",
+        "classification_reasoning": "Task B has an identical prompt to Task A and appears to be a repeat/continuation of the same work session rather than a correction of problems, indicating the same feature work is being performed across sessions with natural code overlap in shared infrastructure."
       },
       {
         "project": "-home-shcv-work-invent-src-grocery-list",
@@ -1700,56 +1686,6 @@
         "classification_reasoning": "Task B builds on Task A's foundation by introducing a new analytical dimension (distinguishing agents per direction and task count) rather than fixing problems with Task A's approach; both tasks work on the same analysis infrastructure but pursue distinct analytical goals."
       },
       {
-        "project": "-home-shcv-work-masr-src-bspl-rs-main",
-        "task_a_id": "ae6c040c-8fdb-4c6f-adff-1fbe2dac97cd-task-2",
-        "task_b_id": "ae6c040c-8fdb-4c6f-adff-1fbe2dac97cd-task-3",
-        "cross_session": false,
-        "time_gap_seconds": 32699.2,
-        "shared_files": [
-          "/home/shcv/work/masr/src/bspl-rs/main/src/parser.rs"
-        ],
-        "content_overlaps": [
-          {
-            "file": "/home/shcv/work/masr/src/bspl-rs/main/src/parser.rs",
-            "tier": "exact",
-            "ratio": 1.0,
-            "t1_edit_idx": 5,
-            "t2_edit_idx": 0
-          },
-          {
-            "file": "/home/shcv/work/masr/src/bspl-rs/main/src/parser.rs",
-            "tier": "exact",
-            "ratio": 1.0,
-            "t1_edit_idx": 6,
-            "t2_edit_idx": 1
-          },
-          {
-            "file": "/home/shcv/work/masr/src/bspl-rs/main/src/parser.rs",
-            "tier": "exact",
-            "ratio": 1.0,
-            "t1_edit_idx": 10,
-            "t2_edit_idx": 3
-          },
-          {
-            "file": "/home/shcv/work/masr/src/bspl-rs/main/src/parser.rs",
-            "tier": "exact",
-            "ratio": 1.0,
-            "t1_edit_idx": 12,
-            "t2_edit_idx": 5
-          },
-          {
-            "file": "/home/shcv/work/masr/src/bspl-rs/main/src/parser.rs",
-            "tier": "exact",
-            "ratio": 1.0,
-            "t1_edit_idx": 13,
-            "t2_edit_idx": 6
-          }
-        ],
-        "classification": "iterative_development",
-        "classification_confidence": "high",
-        "classification_reasoning": "Task B is debugging a real-world file (purchase.bspl) that doesn't parse correctly after Task A's changes, and the user's goal is to improve error messages and fix the underlying parsing issue\u2014this is natural forward progress, not a correction of Task A's mistakes."
-      },
-      {
         "project": "-home-shcv-work-masr-src-peach-main",
         "task_a_id": "495ea59f-1d41-43e0-b02d-60b30a13d4d9-task-3",
         "task_b_id": "495ea59f-1d41-43e0-b02d-60b30a13d4d9-task-4",
@@ -1811,20 +1747,6 @@
         ],
         "content_overlaps": [
           {
-            "file": "/home/shcv/work/masr/src/peach/main/examples/purchase/run.py",
-            "tier": "exact",
-            "ratio": 1.0,
-            "t1_edit_idx": 0,
-            "t2_edit_idx": 1
-          },
-          {
-            "file": "/home/shcv/work/masr/src/peach/main/examples/purchase/run.py",
-            "tier": "exact",
-            "ratio": 1.0,
-            "t1_edit_idx": 1,
-            "t2_edit_idx": 2
-          },
-          {
             "file": "/home/shcv/work/masr/src/peach/main/peach/executors/sync.py",
             "tier": "exact",
             "ratio": 1.0,
@@ -1837,6 +1759,20 @@
             "ratio": 1.0,
             "t1_edit_idx": 1,
             "t2_edit_idx": 1
+          },
+          {
+            "file": "/home/shcv/work/masr/src/peach/main/examples/purchase/run.py",
+            "tier": "exact",
+            "ratio": 1.0,
+            "t1_edit_idx": 0,
+            "t2_edit_idx": 1
+          },
+          {
+            "file": "/home/shcv/work/masr/src/peach/main/examples/purchase/run.py",
+            "tier": "exact",
+            "ratio": 1.0,
+            "t1_edit_idx": 1,
+            "t2_edit_idx": 2
           }
         ],
         "classification": "iterative_development",
@@ -2284,14 +2220,14 @@
         ],
         "content_overlaps": [
           {
-            "file": "/home/shcv/projects/prioritease/lib/screens/tier_detail_screen.dart",
+            "file": "/home/shcv/projects/prioritease/lib/screens/home_screen.dart",
             "tier": "exact",
             "ratio": 1.0,
             "t1_edit_idx": 0,
             "t2_edit_idx": 0
           },
           {
-            "file": "/home/shcv/projects/prioritease/lib/screens/home_screen.dart",
+            "file": "/home/shcv/projects/prioritease/lib/screens/tier_detail_screen.dart",
             "tier": "exact",
             "ratio": 1.0,
             "t1_edit_idx": 0,
@@ -2299,8 +2235,8 @@
           }
         ],
         "classification": "iterative_development",
-        "classification_confidence": "low",
-        "classification_reasoning": "LLM call failed"
+        "classification_confidence": "high",
+        "classification_reasoning": "Task B builds on Task A's foundation by adding new features (usage ordering and graphs) rather than fixing problems; the user says 'actually, we can order' (new idea) not 'this isn't working' (correction), and the overlap in home_screen.dart is expected since both tasks work on the dashboard feature."
       },
       {
         "project": "-home-shcv-projects-prioritease",
@@ -2315,13 +2251,6 @@
           "/home/shcv/projects/prioritease/pubspec.yaml"
         ],
         "content_overlaps": [
-          {
-            "file": "/home/shcv/projects/prioritease/pubspec.yaml",
-            "tier": "containment",
-            "ratio": 0.3293,
-            "t1_edit_idx": 0,
-            "t2_edit_idx": 0
-          },
           {
             "file": "/home/shcv/projects/prioritease/lib/screens/settings_screen.dart",
             "tier": "exact",
@@ -2342,11 +2271,18 @@
             "ratio": 1.0,
             "t1_edit_idx": 1,
             "t2_edit_idx": 1
+          },
+          {
+            "file": "/home/shcv/projects/prioritease/pubspec.yaml",
+            "tier": "containment",
+            "ratio": 0.3293,
+            "t1_edit_idx": 0,
+            "t2_edit_idx": 0
           }
         ],
         "classification": "iterative_development",
-        "classification_confidence": "low",
-        "classification_reasoning": "LLM call failed"
+        "classification_confidence": "high",
+        "classification_reasoning": "Task B builds on Task A's feedback system foundation by adding gesture-based triggering (shake detection) to access the submission UI from anywhere, rather than fixing problems with Task A's implementation."
       },
       {
         "project": "-home-shcv-projects-prioritease",
@@ -4419,11 +4355,11 @@
   },
   "opus-4-6": {
     "total_projects": 21,
-    "total_sequential_pairs": 733,
+    "total_sequential_pairs": 739,
     "pairs_with_file_overlap": 62,
     "pairs_with_content_overlap": 24,
-    "file_overlap_rate": 0.0846,
-    "content_overlap_rate": 0.0327,
+    "file_overlap_rate": 0.0839,
+    "content_overlap_rate": 0.0325,
     "by_classification": {
       "iterative_development": 59,
       "correction": 3
@@ -4486,8 +4422,8 @@
         "corrections": 2
       },
       "-home-shcv-work-masr-papers-peach": {
-        "tasks": 2,
-        "pairs": 1,
+        "tasks": 4,
+        "pairs": 3,
         "file_overlaps": 0,
         "content_overlaps": 0,
         "corrections": 0
@@ -4514,8 +4450,8 @@
         "corrections": 0
       },
       "-home-shcv-config": {
-        "tasks": 16,
-        "pairs": 15,
+        "tasks": 17,
+        "pairs": 16,
         "file_overlaps": 0,
         "content_overlaps": 0,
         "corrections": 0
@@ -4542,8 +4478,8 @@
         "corrections": 0
       },
       "-home-shcv-projects-ampersand": {
-        "tasks": 2,
-        "pairs": 1,
+        "tasks": 5,
+        "pairs": 4,
         "file_overlaps": 0,
         "content_overlaps": 0,
         "corrections": 0
@@ -4642,6 +4578,13 @@
             "t2_edit_idx": 8
           },
           {
+            "file": "/home/shcv/work/masr/src/peach/main/peach/semantics.py",
+            "tier": "exact",
+            "ratio": 1.0,
+            "t1_edit_idx": 0,
+            "t2_edit_idx": 0
+          },
+          {
             "file": "/home/shcv/work/masr/src/peach/main/peach/adapter.py",
             "tier": "line_overlap",
             "ratio": 0.6667,
@@ -4675,13 +4618,6 @@
             "ratio": 1.0,
             "t1_edit_idx": 7,
             "t2_edit_idx": 9
-          },
-          {
-            "file": "/home/shcv/work/masr/src/peach/main/peach/semantics.py",
-            "tier": "exact",
-            "ratio": 1.0,
-            "t1_edit_idx": 0,
-            "t2_edit_idx": 0
           }
         ],
         "classification": "iterative_development",
@@ -4722,14 +4658,14 @@
         ],
         "content_overlaps": [
           {
-            "file": "/home/shcv/projects/aish/aish.plugin.zsh",
+            "file": "/home/shcv/projects/aish/aish.fish",
             "tier": "exact",
             "ratio": 1.0,
             "t1_edit_idx": 1,
             "t2_edit_idx": 0
           },
           {
-            "file": "/home/shcv/projects/aish/aish.fish",
+            "file": "/home/shcv/projects/aish/aish.plugin.zsh",
             "tier": "exact",
             "ratio": 1.0,
             "t1_edit_idx": 1,
@@ -5178,13 +5114,6 @@
         ],
         "content_overlaps": [
           {
-            "file": "/home/shcv/projects/claude-investigations/model-comparison/dist/public/report.html",
-            "tier": "exact",
-            "ratio": 1.0,
-            "t1_edit_idx": 4,
-            "t2_edit_idx": 4
-          },
-          {
             "file": "/home/shcv/projects/claude-investigations/model-comparison/prompts/report-generation.md",
             "tier": "line_overlap",
             "ratio": 1.0,
@@ -5196,6 +5125,13 @@
             "tier": "line_overlap",
             "ratio": 0.6667,
             "t1_edit_idx": 0,
+            "t2_edit_idx": 4
+          },
+          {
+            "file": "/home/shcv/projects/claude-investigations/model-comparison/dist/public/report.html",
+            "tier": "exact",
+            "ratio": 1.0,
+            "t1_edit_idx": 4,
             "t2_edit_idx": 4
           }
         ],
@@ -5238,23 +5174,23 @@
         ],
         "content_overlaps": [
           {
-            "file": "/home/shcv/work/invent/src/inventory/line-size/app/integration_test/helpers/fake_theme_service.dart",
-            "tier": "exact",
-            "ratio": 1.0,
-            "t1_edit_idx": 0,
-            "t2_edit_idx": 0
-          },
-          {
             "file": "/home/shcv/work/invent/src/inventory/line-size/app/lib/services/theme_service.dart",
             "tier": "exact",
             "ratio": 1.0,
             "t1_edit_idx": 1,
             "t2_edit_idx": 0
+          },
+          {
+            "file": "/home/shcv/work/invent/src/inventory/line-size/app/integration_test/helpers/fake_theme_service.dart",
+            "tier": "exact",
+            "ratio": 1.0,
+            "t1_edit_idx": 0,
+            "t2_edit_idx": 0
           }
         ],
         "classification": "iterative_development",
         "classification_confidence": "high",
-        "classification_reasoning": "Task B builds on Task A by addressing new refinements (icon size, sample line matching) rather than fixing problems with Task A's implementation; both tasks work toward improving the compact display options with distinct focus areas."
+        "classification_reasoning": "Task B builds on Task A's work with new refinements (smaller icon, matching sample line sizes) rather than fixing mistakes; the user is incrementally improving the UI layout based on how the previous changes look."
       },
       {
         "project": "-home-shcv-work-invent-src-inventory-line-size",

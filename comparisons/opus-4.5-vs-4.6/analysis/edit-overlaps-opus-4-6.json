@@ -594,6 +594,94 @@
     "context": "Edit@328 -> Edit@432"
   },
   {
+    "file_path": "/home/shcv/config/guix/channel/shcv/home/services/yubikey-touch-notify.sh",
+    "edit_a_index": 757,
+    "edit_b_index": 761,
+    "edit_a_task": "ad4addfd-c199-4807-b705-ec46050a1594-task-10",
+    "edit_b_task": "ad4addfd-c199-4807-b705-ec46050a1594-task-10",
+    "tier": "exact",
+    "classification": "self_correction",
+    "overlap_ratio": 1.0,
+    "context": "Edit@757 -> Edit@761"
+  },
+  {
+    "file_path": "/home/shcv/config/guix/channel/shcv/home/services/yubikey-touch-notify.sh",
+    "edit_a_index": 706,
+    "edit_b_index": 820,
+    "edit_a_task": "ad4addfd-c199-4807-b705-ec46050a1594-task-10",
+    "edit_b_task": "ad4addfd-c199-4807-b705-ec46050a1594-task-11",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.8,
+    "context": "Edit@706 -> Edit@820"
+  },
+  {
+    "file_path": "/home/shcv/config/guix/channel/shcv/home/services/yubikey-touch-notify.sh",
+    "edit_a_index": 820,
+    "edit_b_index": 960,
+    "edit_a_task": "ad4addfd-c199-4807-b705-ec46050a1594-task-11",
+    "edit_b_task": "ad4addfd-c199-4807-b705-ec46050a1594-task-12",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@820 -> Edit@960"
+  },
+  {
+    "file_path": "/home/shcv/config/guix/channel/shcv/home/services/yubikey-touch-notify.sh",
+    "edit_a_index": 964,
+    "edit_b_index": 975,
+    "edit_a_task": "ad4addfd-c199-4807-b705-ec46050a1594-task-12",
+    "edit_b_task": "ad4addfd-c199-4807-b705-ec46050a1594-task-12",
+    "tier": "line_overlap",
+    "classification": "self_correction",
+    "overlap_ratio": 0.6666666666666666,
+    "context": "Edit@964 -> Edit@975"
+  },
+  {
+    "file_path": "/home/shcv/config/guix/channel/shcv/home/services/yubikey-touch-notify.sh",
+    "edit_a_index": 964,
+    "edit_b_index": 1468,
+    "edit_a_task": "ad4addfd-c199-4807-b705-ec46050a1594-task-12",
+    "edit_b_task": "ad4addfd-c199-4807-b705-ec46050a1594-task-21",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@964 -> Edit@1468"
+  },
+  {
+    "file_path": "/home/shcv/config/guix/channel/shcv/home/services/yubikey-touch-notify.sh",
+    "edit_a_index": 975,
+    "edit_b_index": 1468,
+    "edit_a_task": "ad4addfd-c199-4807-b705-ec46050a1594-task-12",
+    "edit_b_task": "ad4addfd-c199-4807-b705-ec46050a1594-task-21",
+    "tier": "line_overlap",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 0.6666666666666666,
+    "context": "Edit@975 -> Edit@1468"
+  },
+  {
+    "file_path": "/home/shcv/config/guix/channel/shcv/home/services/yubikey-touch-notify.sh",
+    "edit_a_index": 968,
+    "edit_b_index": 1472,
+    "edit_a_task": "ad4addfd-c199-4807-b705-ec46050a1594-task-12",
+    "edit_b_task": "ad4addfd-c199-4807-b705-ec46050a1594-task-21",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@968 -> Edit@1472"
+  },
+  {
+    "file_path": "/home/shcv/config/guix/channel/shcv/home/services/yubikey-touch-notify.sh",
+    "edit_a_index": 975,
+    "edit_b_index": 1476,
+    "edit_a_task": "ad4addfd-c199-4807-b705-ec46050a1594-task-12",
+    "edit_b_task": "ad4addfd-c199-4807-b705-ec46050a1594-task-21",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@975 -> Edit@1476"
+  },
+  {
     "file_path": "/home/shcv/src/systems/zenbook-config.scm",
     "edit_a_index": 303,
     "edit_b_index": 573,
@@ -636,6 +724,17 @@
     "classification": "user_directed",
     "overlap_ratio": 0.39,
     "context": "Edit@301 -> Edit@399"
+  },
+  {
+    "file_path": "/home/shcv/src/systems/zenbook-config.scm",
+    "edit_a_index": 640,
+    "edit_b_index": 970,
+    "edit_a_task": "c6751047-b986-4fe2-b3fa-8ead2eb34f02-task-4",
+    "edit_b_task": "c6751047-b986-4fe2-b3fa-8ead2eb34f02-task-12",
+    "tier": "exact",
+    "classification": "iterative_refinement",
+    "overlap_ratio": 1.0,
+    "context": "Edit@640 -> Edit@970"
   },
   {
     "file_path": "/home/shcv/projects/cc-summarize/src/summarizer.py",
@@ -1945,6 +2044,28 @@
     "classification": "self_correction",
     "overlap_ratio": 0.5,
     "context": "Edit@309 -> Edit@317"
+  },
+  {
+    "file_path": "/home/shcv/projects/ampersand/androidApp/build.gradle.kts",
+    "edit_a_index": 1568,
+    "edit_b_index": 1575,
+    "edit_a_task": "503d1570-14bb-4174-b471-ea01d04a451c-task-2",
+    "edit_b_task": "503d1570-14bb-4174-b471-ea01d04a451c-task-2",
+    "tier": "line_overlap",
+    "classification": "self_correction",
+    "overlap_ratio": 0.6666666666666666,
+    "context": "Edit@1568 -> Edit@1575"
+  },
+  {
+    "file_path": "/home/shcv/projects/ampersand/gradle/wrapper/gradle-wrapper.properties",
+    "edit_a_index": 472,
+    "edit_b_index": 479,
+    "edit_a_task": "de16f39d-503f-4146-b8b1-7b5dd4bcbf77-task-3",
+    "edit_b_task": "de16f39d-503f-4146-b8b1-7b5dd4bcbf77-task-3",
+    "tier": "exact",
+    "classification": "error_recovery",
+    "overlap_ratio": 1.0,
+    "context": "Edit@472 -> Edit@479"
   },
   {
     "file_path": "/home/shcv/projects/interruptions/experiments/cascading_interrupts.py",

@@ -1013,6 +1013,42 @@
     "format": "{:.1f}"
   },
 
+  "stat.alignment_d": {
+    "source": "stats",
+    "path": "overall.mann_whitney.[field=alignment_score].cohens_d",
+    "format": "{:.2f}"
+  },
+  "stat.cc_tool_calls_iteration_sig_d": {
+    "source": "stats",
+    "path": "by_cross_cut.iteration:significant.mann_whitney.[field=tool_calls].cohens_d",
+    "format": "{:.2f}"
+  },
+  "stat.cc_tool_calls_trivial_d": {
+    "source": "stats",
+    "path": "by_complexity.[label=complexity:trivial].mann_whitney.[field=tool_calls].cohens_d",
+    "format": "{:.2f}"
+  },
+  "stat.cc_duration_sig_median_a": {
+    "source": "stats",
+    "path": "by_cross_cut.iteration:significant.mann_whitney.[field=duration_seconds].median.{model_a}",
+    "format": "{:.1f}"
+  },
+  "stat.cc_duration_sig_median_b": {
+    "source": "stats",
+    "path": "by_cross_cut.iteration:significant.mann_whitney.[field=duration_seconds].median.{model_b}",
+    "format": "{:.1f}"
+  },
+  "stat.cc_duration_investigation_median_a": {
+    "source": "stats",
+    "path": "by_cross_cut.task_type:investigation.mann_whitney.[field=duration_seconds].median.{model_a}",
+    "format": "{:.1f}"
+  },
+  "stat.cc_duration_investigation_median_b": {
+    "source": "stats",
+    "path": "by_cross_cut.task_type:investigation.mann_whitney.[field=duration_seconds].median.{model_b}",
+    "format": "{:.1f}"
+  },
+
   "template_tables": {
     "findings-summary": {
       "spec": "findings-summary",

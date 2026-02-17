@@ -1,7 +1,7 @@
 {
   "opus-4-5": {
     "sessions": 329,
-    "tasks": 1913,
+    "tasks": 1900,
     "tasks_per_session": 5.8,
     "projects": 29,
     "project_names": [
@@ -47,70 +47,70 @@
     "total_tool_calls": 18298,
     "total_session_hours": 415.4,
     "median_session_minutes": 844.0,
-    "total_files_touched": 3196,
-    "total_lines_added": 200383,
-    "total_lines_removed": 43171,
-    "avg_task_duration_sec": 383.1,
-    "median_task_duration_sec": 42.9,
+    "total_files_touched": 3162,
+    "total_lines_added": 197538,
+    "total_lines_removed": 42320,
+    "avg_task_duration_sec": 335.4,
+    "median_task_duration_sec": 42.4,
     "duration_distribution": {
-      "tasks_with_duration": 1844,
-      "mean_seconds": 383.1,
+      "tasks_with_duration": 1832,
+      "mean_seconds": 335.4,
       "percentiles": {
-        "p10": 8.2,
-        "p25": 15.3,
-        "p50": 42.9,
-        "p75": 119.8,
-        "p90": 273.8
+        "p10": 8.1,
+        "p25": 15.2,
+        "p50": 42.4,
+        "p75": 119.2,
+        "p90": 273.0
       },
       "buckets": {
         "under_30s": {
-          "count": 773,
-          "pct": 41.9
+          "count": 772,
+          "pct": 42.1
         },
         "30s_to_2m": {
-          "count": 610,
-          "pct": 33.1
+          "count": 604,
+          "pct": 33.0
         },
         "2m_to_10m": {
-          "count": 395,
+          "count": 392,
           "pct": 21.4
         },
         "10m_to_1h": {
-          "count": 56,
+          "count": 55,
           "pct": 3.0
         },
         "over_1h": {
-          "count": 10,
+          "count": 9,
           "pct": 0.5
         }
       }
     },
-    "total_cost_usd": 5307.7,
-    "total_input_tokens": 676964,
-    "total_output_tokens": 2053424,
-    "cache_read_tokens": 1284514993,
-    "cache_write_tokens": 145870576,
-    "estimated_thinking_tokens": 1418418,
-    "estimated_text_tokens": 681462,
-    "thinking_ratio": 0.749,
-    "avg_requests_per_task": 7.5,
+    "total_cost_usd": 5221.55,
+    "total_input_tokens": 666412,
+    "total_output_tokens": 1996471,
+    "cache_read_tokens": 1260206221,
+    "cache_write_tokens": 143942762,
+    "estimated_thinking_tokens": 1375051,
+    "estimated_text_tokens": 672072,
+    "thinking_ratio": 0.748,
+    "avg_requests_per_task": 7.4,
     "task_types": {
-      "unknown": 667,
-      "investigation": 453,
-      "feature": 169,
-      "sysadmin": 157,
-      "greenfield": 135,
-      "bugfix": 123,
-      "refactor": 76,
-      "docs": 51,
-      "continuation": 45,
-      "port": 37
+      "continuation": 587,
+      "investigation": 463,
+      "feature": 216,
+      "bugfix": 205,
+      "sysadmin": 188,
+      "docs": 102,
+      "refactor": 54,
+      "unknown": 50,
+      "greenfield": 30,
+      "port": 5
     },
     "complexity_distribution": {
-      "trivial": 887,
-      "simple": 382,
-      "moderate": 416,
-      "complex": 202,
+      "trivial": 882,
+      "simple": 381,
+      "moderate": 413,
+      "complex": 198,
       "major": 26
     },
     "tool_usage": {
@@ -132,7 +132,7 @@
     },
     "scope_by_complexity": {
       "trivial": {
-        "count": 887,
+        "count": 882,
         "avg_files_touched": 0.12,
         "avg_lines_added": 0.4,
         "avg_lines_removed": 0.3,
@@ -142,34 +142,34 @@
         "total_lines_removed": 277
       },
       "simple": {
-        "count": 382,
+        "count": 381,
         "avg_files_touched": 1.03,
         "avg_lines_added": 13.8,
         "avg_lines_removed": 7.8,
         "avg_tool_calls": 0.0,
-        "total_files_touched": 394,
+        "total_files_touched": 392,
         "total_lines_added": 5255,
         "total_lines_removed": 2985
       },
       "moderate": {
-        "count": 416,
+        "count": 413,
         "avg_files_touched": 2.75,
-        "avg_lines_added": 112.3,
-        "avg_lines_removed": 36.9,
+        "avg_lines_added": 112.0,
+        "avg_lines_removed": 37.0,
         "avg_tool_calls": 0.0,
-        "total_files_touched": 1145,
-        "total_lines_added": 46728,
-        "total_lines_removed": 15364
+        "total_files_touched": 1136,
+        "total_lines_added": 46257,
+        "total_lines_removed": 15268
       },
       "complex": {
-        "count": 202,
+        "count": 198,
         "avg_files_touched": 5.61,
-        "avg_lines_added": 474.6,
-        "avg_lines_removed": 103.4,
+        "avg_lines_added": 472.2,
+        "avg_lines_removed": 101.7,
         "avg_tool_calls": 0.0,
-        "total_files_touched": 1134,
-        "total_lines_added": 95863,
-        "total_lines_removed": 20895
+        "total_files_touched": 1111,
+        "total_lines_added": 93489,
+        "total_lines_removed": 20140
       },
       "major": {
         "count": 26,
@@ -183,12 +183,12 @@
       }
     },
     "data_cleaning": {
-      "total_extracted": 2135,
-      "included": 1913,
-      "excluded": 222,
-      "exclusion_rate": 0.104,
+      "total_extracted": 2120,
+      "included": 1900,
+      "excluded": 220,
+      "exclusion_rate": 0.1038,
       "exclusion_reasons": {
-        "system_continuation": 198,
+        "system_continuation": 196,
         "slash_command": 21,
         "no_response_interrupt": 2,
         "empty_continuation": 1
@@ -196,15 +196,15 @@
       "flag_counts": {
         "no_project": 497,
         "meta": 233,
-        "interrupted": 136,
-        "post_compaction": 45
+        "interrupted": 135,
+        "post_compaction": 44
       }
     }
   },
   "opus-4-6": {
     "sessions": 189,
-    "tasks": 904,
-    "tasks_per_session": 4.8,
+    "tasks": 937,
+    "tasks_per_session": 5.0,
     "projects": 22,
     "project_names": [
       "-home-shcv",
@@ -242,71 +242,71 @@
     "total_tool_calls": 12472,
     "total_session_hours": 421.0,
     "median_session_minutes": 71.4,
-    "total_files_touched": 2127,
-    "total_lines_added": 91953,
-    "total_lines_removed": 27589,
-    "avg_task_duration_sec": 336.5,
-    "median_task_duration_sec": 60.8,
+    "total_files_touched": 2183,
+    "total_lines_added": 93984,
+    "total_lines_removed": 28173,
+    "avg_task_duration_sec": 336.0,
+    "median_task_duration_sec": 61.8,
     "duration_distribution": {
-      "tasks_with_duration": 871,
-      "mean_seconds": 336.5,
+      "tasks_with_duration": 902,
+      "mean_seconds": 336.0,
       "percentiles": {
         "p10": 9.8,
-        "p25": 19.8,
-        "p50": 60.8,
-        "p75": 201.6,
+        "p25": 20.1,
+        "p50": 61.8,
+        "p75": 201.5,
         "p90": 492.6
       },
       "buckets": {
         "under_30s": {
-          "count": 305,
-          "pct": 35.0
+          "count": 310,
+          "pct": 34.4
         },
         "30s_to_2m": {
-          "count": 255,
-          "pct": 29.3
+          "count": 270,
+          "pct": 29.9
         },
         "2m_to_10m": {
-          "count": 243,
+          "count": 252,
           "pct": 27.9
         },
         "10m_to_1h": {
-          "count": 60,
-          "pct": 6.9
+          "count": 61,
+          "pct": 6.8
         },
         "over_1h": {
-          "count": 8,
-          "pct": 0.9
+          "count": 9,
+          "pct": 1.0
         }
       }
     },
-    "total_cost_usd": 2714.66,
-    "total_input_tokens": 156611,
-    "total_output_tokens": 2431208,
-    "cache_read_tokens": 833201816,
-    "cache_write_tokens": 51611585,
-    "estimated_thinking_tokens": 857317,
-    "estimated_text_tokens": 453934,
-    "thinking_ratio": 0.591,
-    "avg_requests_per_task": 9.4,
+    "total_cost_usd": 2838.61,
+    "total_input_tokens": 157109,
+    "total_output_tokens": 2543197,
+    "cache_read_tokens": 878688294,
+    "cache_write_tokens": 53225091,
+    "estimated_thinking_tokens": 885062,
+    "estimated_text_tokens": 464654,
+    "thinking_ratio": 0.589,
+    "avg_requests_per_task": 9.5,
     "task_types": {
-      "unknown": 274,
-      "investigation": 210,
-      "sysadmin": 103,
-      "refactor": 63,
-      "bugfix": 62,
-      "feature": 59,
-      "greenfield": 56,
-      "continuation": 40,
-      "port": 25,
-      "docs": 12
+      "continuation": 225,
+      "investigation": 217,
+      "sysadmin": 129,
+      "feature": 104,
+      "unknown": 96,
+      "bugfix": 61,
+      "refactor": 48,
+      "greenfield": 33,
+      "docs": 16,
+      "port": 8
     },
     "complexity_distribution": {
-      "trivial": 335,
-      "simple": 201,
-      "moderate": 235,
-      "complex": 111,
-      "major": 22
+      "trivial": 346,
+      "simple": 209,
+      "moderate": 247,
+      "complex": 112,
+      "major": 23
     },
     "tool_usage": {
       "Bash": 3924,
@@ -327,110 +327,110 @@
     },
     "scope_by_complexity": {
       "trivial": {
-        "count": 335,
+        "count": 346,
         "avg_files_touched": 0.11,
         "avg_lines_added": 0.3,
         "avg_lines_removed": 0.2,
         "avg_tool_calls": 0.0,
-        "total_files_touched": 38,
-        "total_lines_added": 109,
-        "total_lines_removed": 63
+        "total_files_touched": 39,
+        "total_lines_added": 111,
+        "total_lines_removed": 65
       },
       "simple": {
-        "count": 201,
-        "avg_files_touched": 0.68,
-        "avg_lines_added": 9.5,
-        "avg_lines_removed": 3.6,
+        "count": 209,
+        "avg_files_touched": 0.67,
+        "avg_lines_added": 9.6,
+        "avg_lines_removed": 3.4,
         "avg_tool_calls": 0.0,
-        "total_files_touched": 136,
-        "total_lines_added": 1902,
-        "total_lines_removed": 718
+        "total_files_touched": 139,
+        "total_lines_added": 1999,
+        "total_lines_removed": 720
       },
       "moderate": {
-        "count": 235,
-        "avg_files_touched": 2.95,
-        "avg_lines_added": 80.5,
-        "avg_lines_removed": 25.3,
+        "count": 247,
+        "avg_files_touched": 2.85,
+        "avg_lines_added": 79.2,
+        "avg_lines_removed": 26.1,
         "avg_tool_calls": 0.0,
-        "total_files_touched": 693,
-        "total_lines_added": 18917,
-        "total_lines_removed": 5940
+        "total_files_touched": 703,
+        "total_lines_added": 19554,
+        "total_lines_removed": 6455
       },
       "complex": {
-        "count": 111,
-        "avg_files_touched": 7.2,
-        "avg_lines_added": 424.0,
-        "avg_lines_removed": 132.1,
+        "count": 112,
+        "avg_files_touched": 7.21,
+        "avg_lines_added": 420.5,
+        "avg_lines_removed": 131.2,
         "avg_tool_calls": 0.0,
-        "total_files_touched": 799,
-        "total_lines_added": 47067,
-        "total_lines_removed": 14665
+        "total_files_touched": 808,
+        "total_lines_added": 47101,
+        "total_lines_removed": 14691
       },
       "major": {
-        "count": 22,
-        "avg_files_touched": 20.95,
-        "avg_lines_added": 1089.0,
-        "avg_lines_removed": 282.0,
+        "count": 23,
+        "avg_files_touched": 21.48,
+        "avg_lines_added": 1096.5,
+        "avg_lines_removed": 271.4,
         "avg_tool_calls": 0.0,
-        "total_files_touched": 461,
-        "total_lines_added": 23958,
-        "total_lines_removed": 6203
+        "total_files_touched": 494,
+        "total_lines_added": 25219,
+        "total_lines_removed": 6242
       }
     },
     "data_cleaning": {
-      "total_extracted": 1018,
-      "included": 904,
-      "excluded": 114,
-      "exclusion_rate": 0.112,
+      "total_extracted": 1054,
+      "included": 937,
+      "excluded": 117,
+      "exclusion_rate": 0.111,
       "exclusion_reasons": {
-        "system_continuation": 106,
+        "system_continuation": 109,
         "no_response_interrupt": 4,
         "slash_command": 3,
         "empty_continuation": 1
       },
       "flag_counts": {
+        "no_project": 174,
         "meta": 160,
-        "no_project": 147,
-        "interrupted": 66,
-        "post_compaction": 26
+        "interrupted": 67,
+        "post_compaction": 27
       }
     }
   },
   "combined": {
     "projects": 41,
     "sessions": 518,
-    "tasks": 2817,
-    "total_cost_usd": 8022.36,
+    "tasks": 2837,
+    "total_cost_usd": 8060.16,
     "total_user_messages": 34695,
     "total_human_messages": 2783,
     "total_tool_result_messages": 30728,
     "total_system_messages": 1184,
     "total_assistant_messages": 59947,
     "total_tool_calls": 30770,
-    "total_input_tokens": 833575,
-    "total_output_tokens": 4484632,
-    "cache_read_tokens": 2117716809,
-    "cache_write_tokens": 197482161,
-    "total_files_touched": 5323,
-    "total_lines_added": 292336,
-    "total_lines_removed": 70760,
+    "total_input_tokens": 823521,
+    "total_output_tokens": 4539668,
+    "cache_read_tokens": 2138894515,
+    "cache_write_tokens": 197167853,
+    "total_files_touched": 5345,
+    "total_lines_added": 291522,
+    "total_lines_removed": 70493,
     "date_range": {
       "start": "2025-12-05",
       "end": "2026-02-16"
     },
     "data_cleaning": {
-      "total_extracted": 3153,
-      "included": 2817,
-      "excluded": 336,
-      "exclusion_rate": 0.1066,
+      "total_extracted": 3174,
+      "included": 2837,
+      "excluded": 337,
+      "exclusion_rate": 0.1062,
       "exclusion_reasons": {
-        "system_continuation": 304,
+        "system_continuation": 305,
         "slash_command": 24,
         "no_response_interrupt": 6,
         "empty_continuation": 2
       },
       "flag_counts": {
-        "no_project": 644,
+        "no_project": 671,
         "meta": 393,
         "interrupted": 202,
         "post_compaction": 71
