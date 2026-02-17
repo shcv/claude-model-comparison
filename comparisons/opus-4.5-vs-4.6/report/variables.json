@@ -1013,6 +1013,17 @@
     "format": "{:.1f}"
   },
 
+  "dataset.span_days_a": {
+    "source": "dataset",
+    "path": "{model_a}.span_days",
+    "format": "{:.0f}"
+  },
+  "dataset.span_days_b": {
+    "source": "dataset",
+    "path": "{model_b}.span_days",
+    "format": "{:.0f}"
+  },
+
   "stat.alignment_d": {
     "source": "stats",
     "path": "overall.mann_whitney.[field=alignment_score].cohens_d",

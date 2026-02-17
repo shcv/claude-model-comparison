@@ -10,6 +10,7 @@ import argparse
 import json
 import sys
 from collections import Counter
+from datetime import datetime
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -191,6 +192,7 @@ def analyze_model(data_dir: Path, analysis_dir: Path, model: str) -> dict:
             "start": dates[0] if dates else None,
             "end": dates[-1] if dates else None,
         },
+        "span_days": (datetime.strptime(dates[-1], "%Y-%m-%d") - datetime.strptime(dates[0], "%Y-%m-%d")).days if len(dates) >= 2 else 0,
         "total_user_messages": total_user,
         "total_human_messages": total_human,
         "total_tool_result_messages": total_tool_results,
