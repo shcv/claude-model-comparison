@@ -42,12 +42,12 @@ STEPS = [
 LLM_STEPS = {
     "annotate": {
         "description": "LLM task annotation (Haiku)",
-        "cost_estimate": "$0.50–2.00",
+        "cost_estimate": "~$7.50",
         "fallback": "skip",
     },
     "update": {
-        "description": "LLM expression authoring (Opus/Sonnet)",
-        "cost_estimate": "$0.10–0.50",
+        "description": "LLM expression authoring (Opus)",
+        "cost_estimate": "~$2.00",
         "fallback": "tables-only",
     },
 }

@@ -5454,19 +5454,21 @@ python scripts/run_pipeline.py --data-dir comparisons/opus-4.5-vs-4.6/data --che
         <tr><td>collect</td><td>No</td><td>$0</td><td>Runs normally</td></tr>
         <tr><td>extract</td><td>No</td><td>$0</td><td>Runs normally</td></tr>
         <tr><td>classify</td><td>No</td><td>$0</td><td>Runs normally</td></tr>
-        <tr><td>annotate</td><td>Yes (Haiku)</td><td>$0.50&ndash;2.00</td><td>Skipped (uses cached annotations)</td></tr>
+        <tr><td>annotate</td><td>Yes (Haiku)</td><td>~$7.50</td><td>Skipped (uses cached annotations)</td></tr>
         <tr><td>analyze</td><td>No</td><td>$0</td><td>Runs normally</td></tr>
         <tr><td>tokens</td><td>No</td><td>$0</td><td>Runs normally</td></tr>
         <tr><td>enrich</td><td>No</td><td>$0</td><td>Runs normally</td></tr>
         <tr><td>stats</td><td>No</td><td>$0</td><td>Runs normally</td></tr>
         <tr><td>findings</td><td>No</td><td>$0</td><td>Runs normally</td></tr>
         <tr><td>dataset</td><td>No</td><td>$0</td><td>Runs normally</td></tr>
-        <tr><td>update</td><td>Partial (Opus/Sonnet)</td><td>$0.10&ndash;0.50</td><td>Tables only, no prose check</td></tr>
-        <tr><td>review</td><td>Yes (Opus/Sonnet)</td><td>$0.50&ndash;2.00</td><td>Skipped</td></tr>
+        <tr><td>update</td><td>Partial (Opus)</td><td>~$2.00</td><td>Tables only, no LLM expression authoring</td></tr>
         <tr><td>report</td><td>No</td><td>$0</td><td>Runs normally</td></tr>
     </tbody>
 </table></div>
-<p>All statistical results, tables, and charts are deterministic (no LLM). Only task annotation, prose fact-checking, and quality review use LLM calls. The <code>--no-llm</code> flag produces identical quantitative results at zero API cost.</p>
+<p>All statistical results, tables, and charts are deterministic (no LLM). Only task annotation and expression authoring use LLM calls. The <code>--no-llm</code> flag produces identical quantitative results at zero API cost. Total full-pipeline LLM cost: <strong>~$9.50</strong>.</p>
+
+<h4>Cost methodology</h4>
+<p>Annotate cost estimated by reconstructing all 3,153 annotation prompts from canonical task data, measuring character counts of prompts (~3,700 chars median) and cached responses (~1,500 chars median), converting at ~4 chars/token, and applying Haiku 4.5 pricing ($0.80/MTok input, $4.00/MTok output). Includes ~20% backfill rate for task-type classification calls. Update cost estimated from the annotated template size (~490K chars, ~122K tokens input) with Opus 4.6 pricing ($15/MTok input, $75/MTok output); one LLM call per pipeline run.</p>
 
     </div>
 </details>
